@@ -1,0 +1,357 @@
+stac_version: 1.0.0-beta.2      # schema version
+stac_extensions:  # stac exension required
+  - dl-model      # deep-learning model extension
+  - eo            # eo extesnion
+  - scientific    # scientific extension required for citations
+  - provider      # metadata about providers
+id: 11234         # Some ID for this item
+type: Feature     # Required by STAC item
+geometry:         # Required by STAC item
+  type: Polygon
+  coordinates:
+    - - - 180.0
+        - 90.0
+      - - -180.0
+        - -90
+      - - -180.0
+        - 90.0
+      - - 180.0
+        - 90.0
+      - - 180.0
+        - -90.0
+bbox:             # Required by STAC item
+  - -180.0
+  - -90.0
+  - 180.0
+  - 90 
+collection: a eo model catalog  # name of the model catalog
+#
+# Links and assets (part of the core specs)
+#
+links:
+  - rel: self
+    href: https://landsat-stac.s3.amazonaws.com/some-eo-models/example-thelper-item.json
+  - rel: collection
+    href: https://landsat-stac.s3.amazonaws.com/some-eo-models/catalog.json
+assets:
+  - model_archive:
+      href: https://drive.google.com/file/d/1PYyZVgH95454sb9LYHSfchbg8GuT__fR/view?usp=sharing
+      type: application/zip
+      title: model archive
+      description: model archive as a google drive link
+      role: 
+        - model artefact
+properties:
+  #
+  # General properties defined in the item core schema
+  # 
+  datetime: "2016-05-03T13:22:30Z"
+  title: resnet18+unet_scse        # short name of the model
+  description: >-                  # short description
+    UNet architecture with a resnet18 backbone and a SCSE layer
+    fine-tuned on Pleiade imagery        
+  license: MIT                      # license of utilisation
+  created: 2020-12-12T00:00:01Z
+  updated: 2021-01-04T00:30:55Z
+  providers:                    # optional provider information (data, etc.)
+    - name: Effigis Inc.
+      roles:
+        - image licensor
+      url: https://effigis.com/en/
+    - name: Airbus Inc.
+      roles:
+        - image provider
+      url: https://www.intelligence-airbusds.com/
+  # Section on instruments (core stac item)
+  platform: Pleiade
+  gsd: 0.50
+  # eo extension fields (describe the sensor spectal bands)
+  eo:bands:
+    - name: 50-cm panchromatic
+      common_name: pancro
+      center_wavelength: 400
+    - name: blue
+      common_name: blue
+      center_wavelength: 490
+    - name: green
+      common_name: green
+      center_wavelength: 500
+    - name: red
+      common_name: red
+      center_wavelength: 660
+    - name: Near Infrared
+      common_name: nir
+      center_wavelength: 850
+  #
+  # Scientific references
+  # Based on STAC scientific extension
+  #
+  sci:publications:                   # relevant publications
+    - citation: >-
+        Abhijit Guha Roy and Nassir Navab and Christian Wachinger (2018). 
+        Concurrent Spatial and Channel Squeeze & Excitation in Fully Convolutional Networks, 
+        arXiv 1803.02579
+  #
+  #     Runtime metadata
+  #     Describes the runtime environment
+  #
+  dlm:runtime:                              
+    framework: PyTorch                 # deep learning framework used
+    version: 1.5                       # framework version
+    model_handler: thelper.cli.inference_session
+    model_src_url: https://github.com/crim-ca/gin-model-repo
+    model_commit_hash:
+    requirement_file:
+    #
+    # Docker specifications (optional)
+    #  
+    docker:
+      docker_file: https://github.com/crim-ca/CCCOT03/blob/main/docker/thelper-geo.dockerfile # link to the docker file
+      image_name: thelper-geo:latest # official image name for the inference
+      tag: 
+      gpu: true     # we specify if this image needs a gpu or not
+      working_dir: /workspace  # docker instance working directory  
+      run:  thelper infer --config /workspace/config.yml --save-dir /workspace --ckpt-path /workspace/ckpt.best.pth
+  #
+  # Describe the content of the model archive
+  #
+  dlm:archive:                            
+    - name: config.yml
+      role:
+      - config file
+    - name: ./test_pleiade/256/input_test.tif
+      role:
+      - test set
+    - name: ckpt.best.pth
+      role:
+      - model weight
+  #
+  # EO data description (required)
+  #
+  dlm:data:
+    process_level: ortho # expected processing level
+    dtype: uint16        # data type (enum)
+    number_of_bands: 4  # number of bands in the test file
+    useful_bands: # describes the bands that should be loaded
+      - index: 2
+        name: red
+      - index: 1
+        name: green
+      - index: 3
+        name: nir
+    nodata_value: 0
+    test_file: input_test.tif # name of a test file in the model archive
+    item_examples: # points toward relevant eo items
+      - title: a pleiade stac item
+        url: https://example.com/stac/pleiade/item.json
+  #
+  # Model input description (required)
+  #
+  dlm:inputs:         
+    name: data        # expected variable name
+    input_tensors:
+      batch: 1    # batch size
+      channels: 3 # number of channels
+      height: 224 # tensor height
+      width: 224  # tensor width
+    scaling_factor: 0.003921569  # scaling factor (usually 1/255)
+    normalization:mean:        # input statistical normalization (mean)
+      - 0.245
+      - 0.34
+      - 0.67
+    normalization:std:        # input statistical normalization (std)
+      - 0.1
+      - 0.1
+      - 0.2
+    selected_bands:           # selected bands (0 is the first band)
+      - 0
+      - 1
+      - 3
+    pre_processing_function: 
+  #
+  # Model output description (required)
+  #
+  dlm:outputs:
+    task: semantic segmentation   # describe the ML task (enum)
+    number_of_classes: 5          # number of classes
+    dont_care_index: 0            # Index value used for the excluded segments (don't care data)
+    final_layer_size:                         # size of the output
+      - 1
+      - 5
+      - 64
+      - 64            
+    class_name_mapping:                # mapping to short class names
+      - 0: dontcare
+      - 1: Bare Exposed Rock
+      - 2: High density Residential
+      - 3: Cropland
+      - 4: Mixed Forest Land
+      - 5: Lake
+    post_processing_function: 
+  #
+  # Describes the model architecture
+  #
+  dlm:architecture:                         # describe the model architecture
+    total_nb_parameters: 42813873                 # total number of parameters
+    estimated_total_size_mb: 183.72         # Total memory size in MB
+    type: unet-resnet-18-scse                        # type of architecture 
+    pretrained: imagenet
+    summary: >-
+      ----------------------------------------------------------------
+              Layer (type)               Output Shape         Param
+      ================================================================
+                  Conv2d-1           [-1, 64, 32, 32]           9,408
+            BatchNorm2d-2           [-1, 64, 32, 32]             128
+                    ReLU-3           [-1, 64, 32, 32]               0
+              MaxPool2d-4           [-1, 64, 16, 16]               0
+                  Conv2d-5           [-1, 64, 16, 16]          36,864
+            BatchNorm2d-6           [-1, 64, 16, 16]             128
+                    ReLU-7           [-1, 64, 16, 16]               0
+                  Conv2d-8           [-1, 64, 16, 16]          36,864
+            BatchNorm2d-9           [-1, 64, 16, 16]             128
+                  ReLU-10           [-1, 64, 16, 16]               0
+            BasicBlock-11           [-1, 64, 16, 16]               0
+                Conv2d-12           [-1, 64, 16, 16]          36,864
+            BatchNorm2d-13           [-1, 64, 16, 16]             128
+                  ReLU-14           [-1, 64, 16, 16]               0
+                Conv2d-15           [-1, 64, 16, 16]          36,864
+            BatchNorm2d-16           [-1, 64, 16, 16]             128
+                  ReLU-17           [-1, 64, 16, 16]               0
+            BasicBlock-18           [-1, 64, 16, 16]               0
+                Conv2d-19            [-1, 128, 8, 8]          73,728
+            BatchNorm2d-20            [-1, 128, 8, 8]             256
+                  ReLU-21            [-1, 128, 8, 8]               0
+                Conv2d-22            [-1, 128, 8, 8]         147,456
+            BatchNorm2d-23            [-1, 128, 8, 8]             256
+                Conv2d-24            [-1, 128, 8, 8]           8,192
+            BatchNorm2d-25            [-1, 128, 8, 8]             256
+                  ReLU-26            [-1, 128, 8, 8]               0
+            BasicBlock-27            [-1, 128, 8, 8]               0
+                Conv2d-28            [-1, 128, 8, 8]         147,456
+            BatchNorm2d-29            [-1, 128, 8, 8]             256
+                  ReLU-30            [-1, 128, 8, 8]               0
+                Conv2d-31            [-1, 128, 8, 8]         147,456
+            BatchNorm2d-32            [-1, 128, 8, 8]             256
+                  ReLU-33            [-1, 128, 8, 8]               0
+            BasicBlock-34            [-1, 128, 8, 8]               0
+                Conv2d-35            [-1, 256, 4, 4]         294,912
+            BatchNorm2d-36            [-1, 256, 4, 4]             512
+                  ReLU-37            [-1, 256, 4, 4]               0
+                Conv2d-38            [-1, 256, 4, 4]         589,824
+            BatchNorm2d-39            [-1, 256, 4, 4]             512
+                Conv2d-40            [-1, 256, 4, 4]          32,768
+            BatchNorm2d-41            [-1, 256, 4, 4]             512
+                  ReLU-42            [-1, 256, 4, 4]               0
+            BasicBlock-43            [-1, 256, 4, 4]               0
+                Conv2d-44            [-1, 256, 4, 4]         589,824
+            BatchNorm2d-45            [-1, 256, 4, 4]             512
+                  ReLU-46            [-1, 256, 4, 4]               0
+                Conv2d-47            [-1, 256, 4, 4]         589,824
+            BatchNorm2d-48            [-1, 256, 4, 4]             512
+                  ReLU-49            [-1, 256, 4, 4]               0
+            BasicBlock-50            [-1, 256, 4, 4]               0
+                Conv2d-51            [-1, 512, 2, 2]       1,179,648
+            BatchNorm2d-52            [-1, 512, 2, 2]           1,024
+                  ReLU-53            [-1, 512, 2, 2]               0
+                Conv2d-54            [-1, 512, 2, 2]       2,359,296
+            BatchNorm2d-55            [-1, 512, 2, 2]           1,024
+                Conv2d-56            [-1, 512, 2, 2]         131,072
+            BatchNorm2d-57            [-1, 512, 2, 2]           1,024
+                  ReLU-58            [-1, 512, 2, 2]               0
+            BasicBlock-59            [-1, 512, 2, 2]               0
+                Conv2d-60            [-1, 512, 2, 2]       2,359,296
+            BatchNorm2d-61            [-1, 512, 2, 2]           1,024
+                  ReLU-62            [-1, 512, 2, 2]               0
+                Conv2d-63            [-1, 512, 2, 2]       2,359,296
+            BatchNorm2d-64            [-1, 512, 2, 2]           1,024
+                  ReLU-65            [-1, 512, 2, 2]               0
+            BasicBlock-66            [-1, 512, 2, 2]               0
+              MaxPool2d-67            [-1, 512, 1, 1]               0
+                Conv2d-68           [-1, 1024, 1, 1]       4,719,616
+            BatchNorm2d-69           [-1, 1024, 1, 1]           2,048
+                  ReLU-70           [-1, 1024, 1, 1]               0
+      _ActivatedBatchNorm-71           [-1, 1024, 1, 1]               0
+      AdaptiveAvgPool2d-72           [-1, 1024, 1, 1]               0
+                Linear-73                   [-1, 64]          65,600
+                  ReLU-74                   [-1, 64]               0
+                Linear-75                 [-1, 1024]          66,560
+                Conv2d-76              [-1, 1, 1, 1]           1,024
+              SCSEBlock-77           [-1, 1024, 1, 1]               0
+        ConvTranspose2d-78            [-1, 512, 2, 2]       8,389,120
+        DecoderUnetSCSE-79            [-1, 512, 2, 2]               0
+                Conv2d-80           [-1, 1024, 2, 2]       9,438,208
+            BatchNorm2d-81           [-1, 1024, 2, 2]           2,048
+                  ReLU-82           [-1, 1024, 2, 2]               0
+      _ActivatedBatchNorm-83           [-1, 1024, 2, 2]               0
+      AdaptiveAvgPool2d-84           [-1, 1024, 1, 1]               0
+                Linear-85                   [-1, 64]          65,600
+                  ReLU-86                   [-1, 64]               0
+                Linear-87                 [-1, 1024]          66,560
+                Conv2d-88              [-1, 1, 2, 2]           1,024
+              SCSEBlock-89           [-1, 1024, 2, 2]               0
+        ConvTranspose2d-90            [-1, 256, 4, 4]       4,194,560
+        DecoderUnetSCSE-91            [-1, 256, 4, 4]               0
+                Conv2d-92            [-1, 512, 4, 4]       2,359,808
+            BatchNorm2d-93            [-1, 512, 4, 4]           1,024
+                  ReLU-94            [-1, 512, 4, 4]               0
+      _ActivatedBatchNorm-95            [-1, 512, 4, 4]               0
+      AdaptiveAvgPool2d-96            [-1, 512, 1, 1]               0
+                Linear-97                   [-1, 32]          16,416
+                  ReLU-98                   [-1, 32]               0
+                Linear-99                  [-1, 512]          16,896
+                Conv2d-100              [-1, 1, 4, 4]             512
+            SCSEBlock-101            [-1, 512, 4, 4]               0
+      ConvTranspose2d-102            [-1, 128, 8, 8]       1,048,704
+      DecoderUnetSCSE-103            [-1, 128, 8, 8]               0
+                Conv2d-104            [-1, 256, 8, 8]         590,080
+          BatchNorm2d-105            [-1, 256, 8, 8]             512
+                  ReLU-106            [-1, 256, 8, 8]               0
+      _ActivatedBatchNorm-107            [-1, 256, 8, 8]               0
+      AdaptiveAvgPool2d-108            [-1, 256, 1, 1]               0
+                Linear-109                   [-1, 16]           4,112
+                  ReLU-110                   [-1, 16]               0
+                Linear-111                  [-1, 256]           4,352
+                Conv2d-112              [-1, 1, 8, 8]             256
+            SCSEBlock-113            [-1, 256, 8, 8]               0
+      ConvTranspose2d-114           [-1, 64, 16, 16]         262,208
+      DecoderUnetSCSE-115           [-1, 64, 16, 16]               0
+                Conv2d-116          [-1, 128, 16, 16]         147,584
+          BatchNorm2d-117          [-1, 128, 16, 16]             256
+                  ReLU-118          [-1, 128, 16, 16]               0
+      _ActivatedBatchNorm-119          [-1, 128, 16, 16]               0
+      AdaptiveAvgPool2d-120            [-1, 128, 1, 1]               0
+                Linear-121                    [-1, 8]           1,032
+                  ReLU-122                    [-1, 8]               0
+                Linear-123                  [-1, 128]           1,152
+                Conv2d-124            [-1, 1, 16, 16]             128
+            SCSEBlock-125          [-1, 128, 16, 16]               0
+      ConvTranspose2d-126           [-1, 32, 32, 32]          65,568
+      DecoderUnetSCSE-127           [-1, 32, 32, 32]               0
+                Conv2d-128           [-1, 64, 32, 32]          55,360
+          BatchNorm2d-129           [-1, 64, 32, 32]             128
+                  ReLU-130           [-1, 64, 32, 32]               0
+      _ActivatedBatchNorm-131           [-1, 64, 32, 32]               0
+      AdaptiveAvgPool2d-132             [-1, 64, 1, 1]               0
+                Linear-133                    [-1, 4]             260
+                  ReLU-134                    [-1, 4]               0
+                Linear-135                   [-1, 64]             320
+                Conv2d-136            [-1, 1, 32, 32]              64
+            SCSEBlock-137           [-1, 64, 32, 32]               0
+      ConvTranspose2d-138           [-1, 16, 64, 64]          16,400
+      DecoderUnetSCSE-139           [-1, 16, 64, 64]               0
+                Conv2d-140           [-1, 64, 64, 64]          31,808
+          BatchNorm2d-141           [-1, 64, 64, 64]             128
+                  ReLU-142           [-1, 64, 64, 64]               0
+      _ActivatedBatchNorm-143           [-1, 64, 64, 64]               0
+                Conv2d-144            [-1, 5, 64, 64]             325
+      EncoderDecoderNet-145            [-1, 5, 64, 64]               0
+      ================================================================
+      Total params= 42,813,873
+      Trainable params= 42,813,873
+      Non-trainable params= 0
+      ----------------------------------------------------------------
+      Input size (MB)= 0.05
+      Forward/backward pass size (MB)= 20.35
+      Params size (MB)= 163.32
+      Estimated Total Size (MB)= 183.72
+      ----------------------------------------------------------------
