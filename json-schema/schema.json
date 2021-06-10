@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://stac-extensions.github.io/template/v1.0.0/schema.json#",
+  "title": "Template Extension",
+  "description": "STAC Template Extension for STAC Items and STAC Collections.",
+  "oneOf": [
+    {
+      "$comment": "This is the schema for STAC Items. Remove this object if this extension only applies to Collections.",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "properties",
+            "assets"
+          ],
+          "properties": {
+            "type": {
+              "const": "Feature"
+            },
+            "properties": {
+              "allOf": [
+                {
+                  "$comment": "Require fields here for item properties.",
+                  "required": [
+                    "template:new_field"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/fields"
+                }
+              ]
+            },
+            "assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fields"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/stac_extensions"
+        }
+      ]
+    },
+    {
+      "$comment": "This is the schema for STAC Collections. Remove this object if this extension does not define top-level fields for Collections AND can't be used in collection assets or item asset defintions.",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fields"
+              }
+            },
+            "item_assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fields"
+              }
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/stac_extensions"
+        },
+        {
+          "$comment": "Remove this object if this extension does not define top-level fields for Collections.",
+          "$ref": "#/definitions/fields"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "stac_extensions": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "const": "https://stac-extensions.github.io/template/v1.0.0/schema.json"
+          }
+        }
+      }
+    },
+    "fields": {
+      "$comment": "Add your new fields here. Don't require them here, do that above in the item schema.",
+      "type": "object",
+      "properties": {
+        "template:new_field": {
+          "type": "string"
+        },
+        "template:xyz": {
+          "type": "object",
+          "required": [
+            "x",
+            "y",
+            "z"
+          ],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "z": {
+              "type": "number"
+            }
+          }
+        }, 
+        "template:another_one": {
+          "type": "array", 
+          "items": {
+            "type": "number"
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!template:)": {
+          "$comment": "Above, change `template` to the prefix of this extension"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

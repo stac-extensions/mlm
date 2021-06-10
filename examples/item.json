@@ -1,0 +1,67 @@
+{
+  "stac_version": "1.0.0-rc.1",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/template/v1.0.0/schema.json"
+  ],
+  "type": "Feature",
+  "id": "item",
+  "bbox": [
+    172.9,
+    1.3,
+    173,
+    1.4
+  ],
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          172.9,
+          1.3
+        ],
+        [
+          173,
+          1.3
+        ],
+        [
+          173,
+          1.4
+        ],
+        [
+          172.9,
+          1.4
+        ],
+        [
+          172.9,
+          1.3
+        ]
+      ]
+    ]
+  },
+  "properties": {
+    "datetime": "2020-12-11T22:38:32Z",
+    "template:new_field": "test",
+    "template:xyz": {
+      "x": 1,
+      "y": 2,
+      "z": 3
+    },
+    "template:another_one": [
+      1,
+      2,
+      3
+    ]
+  },
+  "links": [
+    {
+      "href": "https://example.com/examples/item.json",
+      "rel": "self"
+    }
+  ],
+  "assets": {
+    "data": {
+      "href": "https://example.com/examples/file.xyz",
+      "template:new_field": "test"
+    }
+  }
+}
