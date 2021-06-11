@@ -10,17 +10,18 @@
 - **Owner**: @sfoucher  @person2
 
 This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
-This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. The main objective is to be able to build model collections that can be searched and that are containing enough information to be able to deploy an inference service. When Deep Learning models are trained using satellite imagery, it is important to track essential information if you want to make them searchable and reusable:
+This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. 
+The main objective is to be able to build model collections that can be searched and that are containing enough information to be able to deploy an inference service. When Deep Learning models are trained using satellite imagery, it is important to track essential information if you want to make them searchable and reusable:
 1. Input data origin and specifications
-1. Model base transforms
-1. Model output and its semantic interpretation
-1. Runtime environment to be able to run the model
-1. Scientific references
+2. Model base transforms
+3. Model output and its semantic interpretation
+4. Runtime environment to be able to run the model
+5. Scientific references
 
 ![](https://i.imgur.com/cVAg5sA.png)
 
 - Examples:
-  - [Example with a UNet trained with thelper](examples/example-thelper-item.json)
+  - [Example with a UNet trained with thelper](examples/item.json)
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
 - [JSON Schema](json-schema/schema.json)
 - [Changelog](./CHANGELOG.md)
@@ -36,9 +37,9 @@ This document explains the fields of the STAC Deep Learning Model (dlm) Extensio
 | dlm:outputs       | \[[Outputs Object](#outputs-object)] | Describes the model output and how to interpret it. |
 
 In addition, fields from the following extensions must be imported in the item:
-* the [Scientific Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md) to describe relevant publications.
-* the [EO Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) to describe eo data.
-* the [Version Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md) to define version tags.
+- the [Scientific Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md) to describe relevant publications.
+- the [EO Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) to describe eo data.
+- the [Version Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md) to define version tags.
 
 ### Data Object
 
