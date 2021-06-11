@@ -39,10 +39,13 @@ When Deep Learning models are trained using satellite imagery, it is important t
 | dlm:outputs       | \[[Outputs Object](#outputs-object)] | Describes the model output and how to interpret it. |
 
 In addition, fields from the following extensions must be imported in the item:
-- the [Scientific Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md)
+- the [Scientific Extension Specification]
+(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md)
  to describe relevant publications.
-- the [EO Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) to describe eo data.
-- the [Version Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md)
+- the [EO Extension Specification]
+(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) to describe eo data.
+- the [Version Extension Specification]
+(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md)
  to define version tags.
 
 ### Data Object
@@ -67,7 +70,7 @@ In addition, fields from the following extensions must be imported in the item:
 | selected_band       | list of integers   | Specifies the bands selected from the data described in dlm:data. |
 | pre_processing_function | string | Defines a python pre-processing function (path and inputs should be specified). |
 
-#### Tensor Object
+### Tensor Object
 
 | Field Name     | Type                           | Description |
 | -------------- | ------------------------------ | ----------- |
