@@ -2,7 +2,6 @@
 
 [![hackmd-github-sync-badge](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q/badge)](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q)
 
-
 - **Title:** Deep Learning Model Extension
 - **Identifier:** <https://stac-extensions.github.io/template/v1.0.0/schema.json>
 - **Field Name Prefix:** dlm
@@ -19,7 +18,6 @@ This document explains the fields of the STAC Deep Learning Model (dlm) Extensio
 1. Scientific references
 
 ![](https://i.imgur.com/cVAg5sA.png)
-
 
 - Examples:
   - [Example with a UNet trained with thelper](examples/example-thelper-item.json)
@@ -52,7 +50,6 @@ In addition, fields from the following extensions must be imported in the item:
 | number_of_bands       | integer | Number of bands used by the model |
 | useful_bands       | \[[Outputs Object](#outputs-object)] | Describes only the relevant bands for the model, based on the [eo:bands](https://github.com/radiantearth/stac-spec/blob/v1.0.0-beta.2/extensions/eo/README.md#band-object) object but indicates only the relevant bands. |
 
-
 ### Inputs Object
 
 | Field Name     | Type                           | Description |
@@ -74,7 +71,6 @@ In addition, fields from the following extensions must be imported in the item:
 | height | number | Height of the tensor (must be > 0). |
 | width  | number | Width of the tensor (must be > 0). |
 
-
 ### Architecture Object
 
 | Field Name     | Type                           | Description |
@@ -84,7 +80,6 @@ In addition, fields from the following extensions must be imported in the item:
 | type  | string | Type of network (ex: ResNet-18). |
 | summary  | string | Summary of the layers, can be the ouput of `print(model)`. |
 | pretrained  | string | Indicates the source of the pretraining (ex: ImageNet). |
-
 
 ### Runtime Object
 
