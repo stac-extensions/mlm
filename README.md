@@ -11,7 +11,8 @@
 
 This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
 This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. 
-The main objective is to be able to build model collections that can be searched and that are containing enough information to be able to deploy an inference service. When Deep Learning models are trained using satellite imagery, it is important to track essential information if you want to make them searchable and reusable:
+The main objective is to be able to build model collections that can be searched and that are containing enough information to be able to deploy an inference service.
+When Deep Learning models are trained using satellite imagery, it is important to track essential information if you want to make them searchable and reusable:
 1. Input data origin and specifications
 2. Model base transforms
 3. Model output and its semantic interpretation
