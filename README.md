@@ -13,7 +13,8 @@ This document explains the Template Extension to the [SpatioTemporal Asset Catal
 This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. 
 The main objective is to be able to build model collections that can be searched 
 and that are containing enough information to be able to deploy an inference service.
-When Deep Learning models are trained using satellite imagery, it is important to track essential information if you want to make them searchable and reusable:
+When Deep Learning models are trained using satellite imagery, it is important
+to track essential information if you want to make them searchable and reusable:
 1. Input data origin and specifications
 2. Model base transforms
 3. Model output and its semantic interpretation
@@ -39,13 +40,14 @@ When Deep Learning models are trained using satellite imagery, it is important t
 | dlm:outputs       | \[[Outputs Object](#outputs-object)] | Describes the model output and how to interpret it. |
 
 In addition, fields from the following extensions must be imported in the item:
-- the [Scientific Extension Specification]
-(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md)
+- the 
+[Scientific Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md)
  to describe relevant publications.
-- the [EO Extension Specification]
-(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) to describe eo data.
-- the [Version Extension Specification]
-(https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md)
+- the 
+[EO Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/eo/README.md) 
+to describe eo data.
+- the 
+[Version Extension Specification](https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md)
  to define version tags.
 
 ### Data Object
