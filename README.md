@@ -65,7 +65,7 @@ to describe eo data.
 | Field Name     | Type                           | Description |
 | -------------- | ------------------------------ | ----------- |
 | name      | string | Python name of the input variable. |
-| input_tensors       |  \[[Tensor Object](#tensor-object)] | Shape of the input tensor ($N\times C\times H \times W$). |
+| input_tensors       | \[[Tensor Object](#tensor-object)] | Shape of the input tensor ($N\times C\times H \times W$). |
 | scaling_factor      | number | Scaling factor to apply to get data within `[0,1]`. For instance `scaling_factor=0.004` for 8-bit data. |
 | normalization:mean  | list of numbers   | Mean vector value to be removed from the data. The vector size must be consistent with `input_tensors:dim` and `selected_bands`. |
 | normalization:std   | list of numbers   | Standard-deviation values used to normalize the data. The vector size must be consistent with `input_tensors:dim` and `selected_bands`. |
