@@ -7,7 +7,7 @@
 - **Field Name Prefix:** dlm
 - **Scope:** Item, Collection
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-spec/tree/master/extensions/README.md#extension-maturity):** Proposal
-- **Owner**: @sfoucher  @person2
+- **Owner**: @sfoucher @fmigneault @ymoisan
 
 This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
 This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. 
