@@ -21,6 +21,8 @@ to track essential information if you want to make them searchable and reusable:
 4. Runtime environment to be able to run the model
 5. Scientific references
 
+Check the original technical report [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details.
+
 ![](https://i.imgur.com/cVAg5sA.png)
 
 - Examples:
