@@ -3,16 +3,17 @@
 [![hackmd-github-sync-badge](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q/badge)](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q)
 
 - **Title:** Deep Learning Model Extension
-- **Identifier:** <https://stac-extensions.github.io/template/v1.0.0/schema.json>
+- **Identifier:** <https://schemas.stacspec.org/v1.0.0-beta.2/extensions/dl-model/json-schema/schema.json>
 - **Field Name Prefix:** dlm
 - **Scope:** Item, Collection
 - **Extension [Maturity Classification](https://github.com/radiantearth/stac-spec/tree/master/extensions/README.md#extension-maturity):** Proposal
-- **Owner**: @sfoucher @fmigneault @ymoisan
+- **Owner**: [@sfoucher](https://github.com/sfoucher) [@fmigneault](https://github.com/fmigneault) [@ymoisan](https://github.com/ymoisan)
 
-This document explains the Template Extension to the [SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
+This document explains the Template Extension to the
+[SpatioTemporal Asset Catalog](https://github.com/radiantearth/stac-spec) (STAC) specification.
 This document explains the fields of the STAC Deep Learning Model (dlm) Extension to a STAC Item. 
 The main objective is to be able to build model collections that can be searched 
-and that are containing enough information to be able to deploy an inference service.
+and that contain enough information to be able to deploy an inference service.
 When Deep Learning models are trained using satellite imagery, it is important
 to track essential information if you want to make them searchable and reusable:
 1. Input data origin and specifications
