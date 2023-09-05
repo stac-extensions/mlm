@@ -1,13 +1,12 @@
 {
   "stac_version": "1.0.0-rc.1",
   "stac_extensions": [
-    "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json",
-    "https://stac-extensions.github.io/template/v1.0.0/schema.json"
+    "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
   ],
   "type": "Collection",
-  "id": "collection",
+  "id": "EO-DL-model-catalog",
   "title": "A title",
-  "description": "A description",
+  "description": "Collection that refers to a STAC Item with DLM Extension",
   "license": "Apache-2.0",
   "extent": {
     "spatial": {
@@ -29,21 +28,9 @@
       ]
     }
   },
-  "template:new_field": "test",
-  "template:xyz": {
-    "x": 1,
-    "y": 2,
-    "z": 3
-  },
-  "template:another_one": [
-    1,
-    2,
-    3
-  ],
   "assets": {
     "example": {
-      "href": "https://example.com/examples/file.xyz",
-      "template:new_field": "test"
+      "href": "item.json"
     }
   },
   "item_assets": {
@@ -51,7 +38,6 @@
       "roles": [
         "data"
       ],
-      "template:new_field": "test"
     }
   },
   "summaries": {
@@ -62,11 +48,11 @@
   },
   "links": [
     {
-      "href": "https://example.com/examples/collection.json",
+      "href": "collection.json",
       "rel": "self"
     },
     {
-      "href": "https://example.com/examples/item.json",
+      "href": "item.json",
       "rel": "item"
     }
   ]
