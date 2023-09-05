@@ -9,6 +9,9 @@
     },
     {
       "$ref": "#/definitions/dl-model"
+    },
+    {
+      "$ref": "#/definitions/dlm:properties"
     }
   ],
   "definitions": {
@@ -47,428 +50,508 @@
             "dlm:data"
           ],
           "properties": {
-            "dlm:runtime": {
-              "title": "Execution environment",
-              "description": "Describe the execution environment",
-              "type": "object",
-              "required": [
-                "framework",
-                "version",
-                "model_handler",
-                "model_src_url",
-                "requirement_file"
-              ],
-              "properties": {
-                "framework": {
-                  "title": "Name of the deep learning framework used",
-                  "type": "string"
-                },
-                "framework_version": {
-                  "title": "Framework version",
-                  "type": "string"
-                },
-                "model_handler": {
-                  "title": "Model handling function",
-                  "type": "string"
-                },
-                "model_src_url": {
-                  "title": "Model source repository",
-                  "type": "string"
-                },
-                "model_commit_hash": {
-                  "title": "Hash value for the Model source",
-                  "type": "string"
-                },
-                "requirement_file": {
-                  "title": "Requirement file",
-                  "type": "string"
-                },
-                "docker": {
-                  "title": "Docker runtime specifications",
-                  "type": "object",
-                  "anyOf": [
-                    {
-                      "required": [
-                        "docker_file",
-                        "gpu",
-                        "working_dir",
-                        "run"
-                      ]
-                    },
-                    {
-                      "required": [
-                        "image_name",
-                        "gpu",
-                        "working_dir",
-                        "run"
-                      ]
-                    }
-                  ],
-                  "properties": {
-                    "docker_runtime": {
-                      "anyOf": [
-                        {
-                          "docker_file": {
-                            "title": "Docker file url",
-                            "type": "string"
-                          },
-                          "docker_image": {
-                            "title": "Docker image url",
-                            "type": "string"
-                          }
-                        }
-                      ]
-                    },
-                    "gpu": {
-                      "title": "Docker runtime requires a gpu",
-                      "type": "boolean"
-                    },
-                    "image_name": {
-                      "title": "Docker image name",
-                      "type": "string"
-                    },
-                    "tag": {
-                      "title": "Docker image tag",
-                      "type": "string"
-                    },
-                    "working_dir": {
-                      "title": "Docker container working dir",
-                      "type": "string"
-                    },
-                    "run": {
-                      "title": "Docker run parameters",
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            },
-            "dlm:architecture": {
-              "title": "Model architecture description",
-              "description": "Describe the model architecture",
-              "type": "object",
-              "required": [
-                "total_nb_parameters",
-                "estimated_total_size_mb",
-                "type",
-                "pretrained"
-              ],
-              "properties": {
-                "total_nb_parameters": {
-                  "title": "Total number of parameters",
-                  "type": "integer"
-                },
-                "estimated_total_size_mb": {
-                  "title": "Estimated memory size in MB",
-                  "type": "number"
-                },
-                "type": {
-                  "title": "Type of architecture",
-                  "type": "string"
-                },
-                "summary": {
-                  "title": "Summary of the architecture",
-                  "type": "string"
-                },
-                "pretrained": {
-                  "title": "Pre-training",
-                  "type": "string"
-                }
-              }
-            },
             "dlm:inputs": {
-              "title": "Description of the input tensor",
-              "type": "object",
-              "description": "Describe the inputs required by the model",
-              "required": [
-                "name",
-                "scaling_factor",
-                "normalization:mean",
-                "normalization:std",
-                "selected_bands",
-                "input_tensors"
-              ],
-              "properties": {
-                "name": {
-                  "title": "Python name of the tensor",
-                  "type": "string"
-                },
-                "scaling_factor": {
-                  "title": "Scaling factor",
-                  "description": "Scaling factor to be applied on the data in order to bring the range of values between 0 and 1",
-                  "type": "number",
-                  "exclusiveMinimum": 0
-                },
-                "normalization:mean": {
-                  "title": "Statistical mean",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "number"
-                  }
-                },
-                "normalization:std": {
-                  "title": "Statistical standard-deviation",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "number",
-                    "exclusiveMinimum": 0
-                  }
-                },
-                "selected_bands": {
-                  "title": "Selected bands",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "integer"
-                  }
-                },
-                "pre_processing_function": {
-                  "title": "Pre-processing function",
-                  "description": "Pre-processing Python function transforming the EO data to a ML-ready tensor",
-                  "type": "string"
-                },
-                "input_tensors": {
-                  "title": "Shape of the input tensor",
-                  "description": "Describe the dimensions of the input tensors",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "properties": {
-                      "batch": {
-                        "title": "Batch size",
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "dim": {
-                        "title": "Number of channels",
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "height": {
-                        "title": "Height",
-                        "type": "integer",
-                        "minimum": 1
-                      },
-                      "width": {
-                        "title": "Width",
-                        "type": "integer",
-                        "minimum": 1
-                      }
-                    }
-                  }
-                }
-              }
+              "$ref": "#/definitions/dlm:inputs"
             },
             "dlm:outputs": {
-              "title": "Description of the outputs of the model",
-              "type": "object",
-              "description": "Describe the outputs of the model",
-              "required": [
-                "task",
-                "number_of_classes",
-                "final_layer_size",
-                "class_name_mapping"
-              ],
-              "properties": {
-                "task": {
-                  "title": "Task name",
-                  "type": "string",
-                  "enum": [
-                    "semantic segmentation",
-                    "classification",
-                    "object detection",
-                    "object segmentation"
-                  ]
-                },
-                "number_of_classes": {
-                  "title": "number of classes",
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "final_layer_size": {
-                  "title": "Output size",
-                  "description": "Size of the tensor from the top layer",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "integer",
-                    "exclusiveMinimum": 0
-                  }
-                },
-                "dont_care_index": {
-                  "title": "Index of 'dont-care' class",
-                  "description": "In case a 'dont-care' class is used",
-                  "type": "integer"
-                },
-                "post_processing_function": {
-                  "title": "Name of the post-processing file",
-                  "description": "Name of the python file containing a post-processing function",
-                  "type": "string"
-                },
-                "class_name_mapping": {
-                  "title": "Output size",
-                  "description": "This is a lookup table mapping the model output (index) to a class name",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "properties": {
-                      "index": {
-                        "title": "Class index",
-                        "type": "integer",
-                        "minimum": 0
-                      },
-                      "class_name": {
-                        "title": "Class name",
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
+              "$ref": "#/definitions/dlm:outputs"
             },
-            "dlm:data": {
-              "title": "Description of the data requirements",
-              "type": "object",
-              "description": "Describe the eo data compatible with the model",
-              "required": [
-                "process_level",
-                "dtype",
-                "number_of_bands",
-                "class_name_mapping"
-              ],
-              "properties": {
-                "process_ level": {
-                  "title": "Data processing level",
-                  "description": "Describe the processing level expected",
-                  "type": "string",
-                  "enum": [
-                    "raw",
-                    "ortho",
-                    "L0",
-                    "L1",
-                    "L2",
-                    "L3"
-                  ]
-                },
-                "nodata": {
-                  "title": "no data value",
-                  "description": "Sometimes datasets have no data value, this value should be ignored",
-                  "type": "number"
-                },
-                "item_examples": {
-                  "title": "item examples",
-                  "description": "Link to additional data records or stac items",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "properties": {
-                      "url": {
-                        "title": "Link toward an item",
-                        "type": "string"
-                      },
-                      "title": {
-                        "title": "item description",
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "number_of_bands": {
-                  "title": "number of bands",
-                  "description": "Number of spectral bands expected in the eo data",
-                  "type": "number",
-                  "minimum": 1
-                },
-                "useful_bands": {
-                  "title": "Useful bands",
-                  "description": "Describe the spectral bands required by the model",
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "properties": {
-                      "index": {
-                        "title": "Index of the spectral band",
-                        "description": "Index of the band in the original dataset",
-                        "type": "integer",
-                        "minimum": 0
-                      },
-                      "name": {
-                        "title": "Short name of the band",
-                        "type": "string"
-                      }
-                    }
-                  }
-                },
-                "data_type": {
-                  "title": "Data type",
-                  "description": "Data type according to numpy",
-                  "type": "string",
-                  "enum": [
-                    "byte",
-                    "short",
-                    "intc",
-                    "int_",
-                    "longlong",
-                    "int8",
-                    "int16",
-                    "int32",
-                    "int64",
-                    "ubyte",
-                    "ushort",
-                    "uintc",
-                    "uint",
-                    "ulonglong",
-                    "uint8",
-                    "uint16",
-                    "uint32",
-                    "uint64",
-                    "half",
-                    "double",
-                    "float_",
-                    "longfloat",
-                    "float16",
-                    "float32",
-                    "float64",
-                    "float96",
-                    "float128"
-                  ]
-                },
-                "test_file": {
-                  "title": "Test file",
-                  "type": "string",
-                  "description": "this test file is a data sample",
-                }
-              }
+            "dlm:runtime": {
+              "$ref": "#/definitions/dlm:runtime"
+            },
+            "dlm:architecture": {
+              "$ref": "#/definitions/dlm:architecture"
             },
             "dlm:archive": {
-              "title": "Description of the archive content",
-              "description": "Describe the model archive content",
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "properties": {
-                  "name": {
-                    "title": "File name",
+              "$ref": "#/definitions/dlm:archive"
+            },
+            "dlm:data": {
+              "$ref": "#/definitions/dlm:data"
+            }
+          }
+        }
+      },
+      "patternProperties": {
+        "^(?!dlm:)": {}
+      },
+      "additionalProperties": false
+    },
+    "dlm:runtime": {
+      "title": "Execution environment",
+      "description": "Describe the execution environment",
+      "type": "object",
+      "required": [
+        "framework",
+        "version",
+        "model_handler",
+        "model_src_url",
+        "requirement_file"
+      ],
+      "properties": {
+        "framework": {
+          "title": "Name of the deep learning framework used",
+          "type": "string"
+        },
+        "framework_version": {
+          "title": "Framework version",
+          "type": "string"
+        },
+        "model_handler": {
+          "title": "Model handling function",
+          "type": "string"
+        },
+        "model_src_url": {
+          "title": "Model source repository",
+          "type": "string"
+        },
+        "model_commit_hash": {
+          "title": "Hash value for the Model source",
+          "type": "string"
+        },
+        "requirement_file": {
+          "title": "Requirement file",
+          "type": "string"
+        },
+        "docker": {
+          "title": "Docker runtime specifications",
+          "type": "object",
+          "anyOf": [
+            {
+              "required": [
+                "docker_file",
+                "gpu",
+                "working_dir",
+                "run"
+              ]
+            },
+            {
+              "required": [
+                "image_name",
+                "gpu",
+                "working_dir",
+                "run"
+              ]
+            }
+          ],
+          "properties": {
+            "docker_runtime": {
+              "anyOf": [
+                {
+                  "docker_file": {
+                    "title": "Docker file url",
                     "type": "string"
                   },
-                  "role": {
-                    "title": "Role of the file",
-                    "type": "string",
-                    "enum": [
-                      "dependency",
-                      "handling function",
-                      "model weight",
-                      "config file",
-                      "test set",
-                      "other"
-                    ]
+                  "docker_image": {
+                    "title": "Docker image url",
+                    "type": "string"
                   }
                 }
+              ]
+            },
+            "gpu": {
+              "title": "Docker runtime requires a gpu",
+              "type": "boolean"
+            },
+            "image_name": {
+              "title": "Docker image name",
+              "type": "string"
+            },
+            "tag": {
+              "title": "Docker image tag",
+              "type": "string"
+            },
+            "working_dir": {
+              "title": "Docker container working dir",
+              "type": "string"
+            },
+            "run": {
+              "title": "Docker run parameters",
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "dlm:architecture": {
+      "title": "Model architecture description",
+      "description": "Describe the model architecture",
+      "type": "object",
+      "required": [
+        "total_nb_parameters",
+        "estimated_total_size_mb",
+        "type",
+        "pretrained"
+      ],
+      "properties": {
+        "total_nb_parameters": {
+          "title": "Total number of parameters",
+          "type": "integer"
+        },
+        "estimated_total_size_mb": {
+          "title": "Estimated memory size in MB",
+          "type": "number"
+        },
+        "type": {
+          "title": "Type of architecture",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary of the architecture",
+          "type": "string",
+          "examples": [
+            {
+              "$ref": "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/examples/model-arch-summary.txt"
+            }
+          ]
+        },
+        "pretrained": {
+          "title": "Pre-training",
+          "type": "string"
+        }
+      }
+    },
+    "dlm:inputs": {
+      "title": "Description of the input tensor",
+      "type": "object",
+      "description": "Describe the inputs required by the model",
+      "required": [
+        "name",
+        "scaling_factor",
+        "normalization:mean",
+        "normalization:std",
+        "selected_bands",
+        "input_tensors"
+      ],
+      "properties": {
+        "name": {
+          "title": "Python name of the tensor",
+          "type": "string"
+        },
+        "scaling_factor": {
+          "title": "Scaling factor",
+          "description": "Scaling factor to be applied on the data in order to bring the range of values between 0 and 1",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "normalization:mean": {
+          "title": "Statistical mean",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number"
+          }
+        },
+        "normalization:std": {
+          "title": "Statistical standard-deviation",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "selected_bands": {
+          "title": "Selected bands",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "pre_processing_function": {
+          "title": "Pre-processing function",
+          "description": "Pre-processing Python function transforming the EO data to a ML-ready tensor",
+          "type": "string"
+        },
+        "input_tensors": {
+          "title": "Shape of the input tensor",
+          "description": "Describe the dimensions of the input tensors",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "properties": {
+              "batch": {
+                "title": "Batch size",
+                "type": "integer",
+                "minimum": 1
+              },
+              "dim": {
+                "title": "Number of channels",
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "title": "Height",
+                "type": "integer",
+                "minimum": 1
+              },
+              "width": {
+                "title": "Width",
+                "type": "integer",
+                "minimum": 1
               }
             }
           }
+        }
+      }
+    },
+    "dlm:outputs": {
+      "title": "Description of the outputs of the model",
+      "type": "object",
+      "description": "Describe the outputs of the model",
+      "required": [
+        "task",
+        "number_of_classes",
+        "final_layer_size",
+        "class_name_mapping"
+      ],
+      "properties": {
+        "task": {
+          "title": "Task name",
+          "type": "string",
+          "enum": [
+            "semantic segmentation",
+            "classification",
+            "object detection",
+            "object segmentation"
+          ]
+        },
+        "number_of_classes": {
+          "title": "number of classes",
+          "type": "integer",
+          "minimum": 1
+        },
+        "final_layer_size": {
+          "title": "Output size",
+          "description": "Size of the tensor from the top layer",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "exclusiveMinimum": 0
+          }
+        },
+        "dont_care_index": {
+          "title": "Index of 'dont-care' class",
+          "description": "In case a 'dont-care' class is used",
+          "type": "integer"
+        },
+        "post_processing_function": {
+          "title": "Name of the post-processing file",
+          "description": "Name of the python file containing a post-processing function",
+          "type": "string"
+        },
+        "class_name_mapping": {
+          "description": "This is a lookup table mapping the model output (index) to a class name",
+          "oneOf": [
+            {
+              "$ref": "#/definitions/dlm:class_name_listing"
+            },
+            {
+              "$ref": "#/definitions/dlm:class_name_mapping"
+            }
+          ]
+        }
+      }
+    },
+    "dlm:class_name_listing": {
+      "deprecated": true,
+      "type": "array",
+      "minItems": 1,
+      "items": {
+         "oneOf": [
+           {
+             "type": "object",
+             "properties": {
+               "index": {
+                 "title": "Class index",
+                 "type": "integer",
+                 "minimum": 0
+               },
+               "class_name": {
+                 "title": "Class name",
+                 "type": "string"
+               }
+             }
+           },
+           {
+             "$ref": "#/definitions/dlm:class_name_mapping"
+           }
+         ]
+       }
+    },
+    "dlm:class_name_mapping": {
+      "type": "object",
+      "patternProperties": {
+        "^I_": {
+          "description": "Class name to map the index.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "dlm:data": {
+      "title": "Description of the data requirements",
+      "type": "object",
+      "description": "Describe the eo data compatible with the model",
+      "required": [
+        "process_level",
+        "data_type",
+        "number_of_bands",
+        "class_name_mapping"
+      ],
+      "properties": {
+        "process_ level": {
+          "title": "Data processing level",
+          "description": "Describe the processing level expected",
+          "type": "string",
+          "enum": [
+            "raw",
+            "ortho",
+            "L0",
+            "L1",
+            "L2",
+            "L3"
+          ]
+        },
+        "nodata": {
+          "title": "no data value",
+          "description": "Sometimes datasets have no data value, this value should be ignored",
+          "type": "number"
+        },
+        "item_examples": {
+          "title": "item examples",
+          "description": "Link to additional data records or stac items",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "properties": {
+              "url": {
+                "title": "Link toward an item",
+                "type": "string"
+              },
+              "title": {
+                "title": "item description",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "number_of_bands": {
+          "title": "number of bands",
+          "description": "Number of spectral bands expected in the eo data",
+          "type": "number",
+          "minimum": 1
+        },
+        "useful_bands": {
+          "title": "Useful bands",
+          "description": "Describe the spectral bands required by the model",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "properties": {
+              "index": {
+                "title": "Index of the spectral band",
+                "description": "Index of the band in the original dataset",
+                "type": "integer",
+                "minimum": 0
+              },
+              "name": {
+                "title": "Short name of the band",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "data_type": {
+          "title": "Data type",
+          "description": "Data type according to numpy",
+          "type": "string",
+          "enum": [
+            "byte",
+            "short",
+            "intc",
+            "int_",
+            "longlong",
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "ubyte",
+            "ushort",
+            "uintc",
+            "uint",
+            "ulonglong",
+            "uint8",
+            "uint16",
+            "uint32",
+            "uint64",
+            "half",
+            "double",
+            "float_",
+            "longfloat",
+            "float16",
+            "float32",
+            "float64",
+            "float96",
+            "float128"
+          ]
+        },
+        "test_file": {
+          "title": "Test file",
+          "type": "string",
+          "description": "this test file is a data sample"
+        }
+      }
+    },
+    "dlm:archive": {
+      "title": "Description of the archive content",
+      "description": "Describe the model archive content",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "properties": {
+          "name": {
+            "title": "File name",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role of the file",
+            "type": "string",
+            "enum": [
+              "dependency",
+              "handling function",
+              "model weight",
+              "config file",
+              "test set",
+              "other"
+            ]
+          }
+        }
+      }
+    },
+    "dlm:properties": {
+      "type": "object",
+      "required": [
+        "properties"
+      ],
+      "properties": {
+        "properties": {
+          "$comment": "Optional metadata that provides more details about provenance.",
+          "anyOf": [
+            {
+              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/instrument.json"
+            },
+            {
+              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/licensing.json"
+            },
+            {
+              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/provider.json"
+            },
+            {
+              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/datetime.json"
+            }
+          ]
         }
       }
     }
