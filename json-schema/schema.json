@@ -1,26 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.stacspec.org/v1.0.0-beta.2/extensions/dl-model/json-schema/schema.json#",
+  "$id": "https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json",
   "title": "DL Model Item",
   "description": "This object represents the metadata for a Deep Learning (DL) model item in a DL Catalog.",
   "allOf": [
     {
-      "$ref": "../../../item-spec/json-schema/item.json"
+      "$ref": "https://schemas.stacspec.org/v1.0.0/item-spec/json-schema/item.json"
     },
     {
       "$ref": "#/definitions/dl-model"
-    },
-    {
-      "$ref": "../../../item-spec/json-schema/instrument.json"
-    },
-    {
-      "$ref": "../../../item-spec/json-schema/licensing.json"
-    },
-    {
-      "$ref": "../../../item-spec/json-schema/provider.json"
-    },
-    {
-      "$ref": "../../../item-spec/json-schema/datetime.json"
     }
   ],
   "definitions": {
@@ -43,7 +31,7 @@
               "contains": {
                 "enum": [
                   "dl-model",
-                  "https://schemas.stacspec.org/v1.0.0-beta.2/extensions/dl-model/json-schema/schema.json"
+                  "https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json"
                 ]
               }
             }
@@ -60,8 +48,8 @@
           ],
           "properties": {
             "dlm:runtime": {
-              "title": "Execution environement",
-              "description": "Describe the execution environement",
+              "title": "Execution environment",
+              "description": "Describe the execution environment",
               "type": "object",
               "required": [
                 "framework",
@@ -310,12 +298,12 @@
                   }
                 },
                 "dont_care_index": {
-                  "title": "dont care index",
-                  "description": "In case a dont care class is used",
+                  "title": "Index of 'dont-care' class",
+                  "description": "In case a 'dont-care' class is used",
                   "type": "integer"
                 },
                 "post_processing_function": {
-                  "title": "Name of the post processing file",
+                  "title": "Name of the post-processing file",
                   "description": "Name of the python file containing a post-processing function",
                   "type": "string"
                 },
@@ -364,7 +352,7 @@
                     "L3"
                   ]
                 },
-                "nodata_value": {
+                "nodata": {
                   "title": "no data value",
                   "description": "Sometimes datasets have no data value, this value should be ignored",
                   "type": "number"
@@ -413,7 +401,7 @@
                     }
                   }
                 },
-                "dtype": {
+                "data_type": {
                   "title": "Data type",
                   "description": "Data type according to numpy",
                   "type": "string",

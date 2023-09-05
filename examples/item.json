@@ -1,15 +1,12 @@
-// 20210610154737
-// https://raw.githubusercontent.com/crim-ca/CCCOT03/main/extension/dl-model/examples/example-thelper-item.json
-
 {
-  "stac_version": "1.0.0-beta.2",
+  "stac_version": "1.0.0",
   "stac_extensions": [
-    "dl-model",
-    "eo",
-    "scientific",
-    "provider"
+    "https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/processing/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/scientific/v1.0.0/schema.json"
   ],
-  "id": 11234,
+  "id": "dlm-resnet18-unet-scse",
   "type": "Feature",
   "geometry": {
     "type": "Polygon",
@@ -44,7 +41,7 @@
     180,
     90
   ],
-  "collection": "a eo model catalog",
+  "collection": "EO-DL-model-catalog",
   "links": [
     {
       "rel": "self",
@@ -71,7 +68,7 @@
   "properties": {
     "datetime": "2016-05-03T13:22:30Z",
     "title": "resnet18+unet_scse",
-    "description": "UNet architecture with a resnet18 backbone and a SCSE layer fine-tuned on Pleiade imagery        ",
+    "description": "UNet architecture with a resnet18 backbone and a SCSE layer fine-tuned on Pleiade imagery",
     "license": "MIT",
     "created": "2020-12-12T00:00:01.000Z",
     "updated": "2021-01-04T00:30:55.000Z",
@@ -122,9 +119,11 @@
     ],
     "sci:publications": [
       {
-        "citation": "Abhijit Guha Roy and Nassir Navab and Christian Wachinger (2018).  Concurrent Spatial and Channel Squeeze & Excitation in Fully Convolutional Networks,  arXiv 1803.02579"
+        "citation": "Abhijit Guha Roy and Nassir Navab and Christian Wachinger (2018). Concurrent Spatial and Channel Squeeze & Excitation in Fully Convolutional Networks, arXiv 1803.02579",
+        "doi": "10.1007/978-3-030-00928-1_48"
       }
     ],
+    "processing:level": "L4",
     "dlm:runtime": {
       "framework": "PyTorch",
       "version": 1.5,

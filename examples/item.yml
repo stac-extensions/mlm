@@ -1,7 +1,7 @@
 stac_version: 1.0.0-beta.2      # schema version
-stac_extensions:  # stac exension required
+stac_extensions:  # stac extension required
   - dl-model      # deep-learning model extension
-  - eo            # eo extesnion
+  - eo            # eo extension
   - scientific    # scientific extension required for citations
   - provider      # metadata about providers
 id: 11234         # Some ID for this item
