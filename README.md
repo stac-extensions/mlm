@@ -1,6 +1,6 @@
 # Deep Learning Model Extension Specification
 
-[![hackmd-github-sync-badge](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q/badge)](https://hackmd.io/3fB1lrHSTcSHQS57UhVk-Q)
+[![hackmd-github-sync-badge](https://hackmd.io/lekSD_RVRiquNHRloXRzeg/badge)](https://hackmd.io/lekSD_RVRiquNHRloXRzeg?both)
 
 - **Title:** Deep Learning Model Extension
 - **Identifier:** <https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json>
