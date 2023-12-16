@@ -49,19 +49,24 @@ In addition, fields from the following extensions must be imported in the item:
 
 ### Bands
 
-We use the STAC 1.1 Bands Object for representing bands information, including nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this list.
+We use the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) for representing bands information, including nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this list.
 
-### Input Object
+A deviation is that we do not include the [Statistics](https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294) object at the band object level, but at the Model Input level. This is because in machine learning, we typically only need statistics for the dataset used to train the model in order to normalize any given bands input.
+
+### Model Input
 
 | Field Name              | Type                            | Description                                                                                                                     |
 |-------------------------|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | name                    | string                          | Python name of the input variable.                                                                                              |
-| input_tensors           | [Tensor Object](#tensor-object) | Shape of the input tensor ($N \times C \times H \times W$).                                                                     |
-| scaling_factor          | number                          | Scaling factor to apply to get data within `[0,1]`. For instance `scaling_factor=0.004` for 8-bit data.                         |
-| mean                    | list of numbers                 | Mean vector value to be removed from the data if norm_type uses mean. The vector size must be consistent with `input_tensors:dim`. |
-| std                     | list of numbers                 | Standard deviation values used to normalize the data if norm type uses standard deviation. The vector size must be consistent with `input_tensors:dim`. |
 | band_names              | list of common metadata band names | Specifies the ordering of the bands selected from the bands list described in [bands](#Bands).                                 |
-
+| input_tensors           | [Tensor Object](#tensor-object) | Shape of the input tensor ($N \times C \times H \times W$).                                                                     |
+| params           | dict | dictionary with names for the parameters and their values. some models may take scalars or other non-tensor inputs.                                                                     |
+| scaling_factor          | number                          | Scaling factor to apply to get data within `[0,1]`. For instance `scaling_factor=0.004` for 8-bit data.                         |
+| norm_by_channel          | string                          | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. "True" or "False" |
+| norm_type          | string                          | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none" |
+| rescale_type          | string                          | High level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead|
+| statistics          | [Statistics Object](https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294)                          | Dataset statistics for the training dataset used to normalize the inputs. |
+| pre_processing_function          | string                          | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function|
 
 #### Tensor Object
 
@@ -72,6 +77,7 @@ We use the STAC 1.1 Bands Object for representing bands information, including n
 | channels   | number | Number of channels  (must be > 0).  |
 | height     | number | Height of the tensor (must be > 0). |
 | width      | number | Width of the tensor (must be > 0).  |
+|dim_order   | string | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw", "bcthw" |
 
 
 ### Architecture Object
@@ -79,9 +85,9 @@ We use the STAC 1.1 Bands Object for representing bands information, including n
 | Field Name              | Type    | Description                                                 |
 |-------------------------|---------|-------------------------------------------------------------|
 | total_parameters        | integer | Total number of parameters.                                 |
-| on_disk_size_mb         | number  | The equivalent memory size on disk in MB.                   |
-| ram_size_mb | number    | number  | The equivalent memory size in memory in MB.                 |
-| type                    | string  | Type of network (ex: ResNet-18).                            |
+| on_disk_size_mb         | number  | The memory size on disk of the model artifact (MB).         |
+| ram_size_mb | number    | number  | The memory size in accelerator memory during inference (MB).|
+| model_type                    | string  | Type of network (ex: ResNet-18).                            |
 | summary                 | string  | Summary of the layers, can be the output of `print(model)`. |
 | pretrained              | string  | Indicates the source of the pretraining (ex: ImageNet).     |
 
@@ -97,7 +103,7 @@ We use the STAC 1.1 Bands Object for representing bands information, including n
 | model_commit_hash     | string                             | Hash value pointing to a specific version of the code.                                   |
 | docker                | \[[Docker Object](#docker-object)] | Information for the deployment of the model in a docker instance.                        |
 | batch_size_suggestion | number                             | A suggested batch size for a given compute instance type                                 |
-| instance_suggestion   | str
+| hardware_suggestion   | str                                | A suggested cloud instance type or accelerator model |
 
 #### Docker Object
 
@@ -117,7 +123,8 @@ We use the STAC 1.1 Bands Object for representing bands information, including n
 | task                     | [Task Enum](#task-enum) | Specifies the Machine Learning task for which the output can be used for.                                                                                                          |
 | number_of_classes        | integer                 | Number of classes.                                                                                                                                                                 |
 | final_layer_size         | \[integer]              | Sizes of the output tensor as ($N \times C \times H \times W$).                                                                                                                    |
-| class_name_mapping       | list                    | Mapping of the output index to a short class name, for each record we specify the index and the class name.                                                                        |
+| class_name_mapping       | dict                    | Mapping of the output index to a short class name, for each record we specify the index and the class name.                                                                        |
+| post_processing_function          | string                          | A url to the postprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function|
 
 
 #### Task Enum
