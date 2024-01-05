@@ -112,15 +112,13 @@ Currently this looks like
 
 You can see the list of available releases on the [GitHub Releases][r1] page.
 
-
+## :page_facing_up:  License
 [![License][blic1]][blic2]
 
-This project is licenced under the terms of the `Apache Software License 2.0` licence. See [LICENCE][blic2] for more details.
+This project is licenced under the terms of the `Apache Software License 2.0` licence. See [LICENSE][blic2] for more details.
 
-
-## Credits [![Python project templated from galactipy.][bp6]][bp7]
-
-This project was generated with [`galactipy`][bp7].
+## :heartpulse: Credits
+[![Python project templated from galactipy.][bp6]][bp7]
 
 <!-- Anchors -->
 
