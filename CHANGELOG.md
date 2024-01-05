@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Data Object, replaced with common metadata band object which also records data_type and nodata type
 
-# TODO link release
+# TODO link release here
 
 ## [Unreleased]
 

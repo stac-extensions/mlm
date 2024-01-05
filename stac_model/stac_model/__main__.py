@@ -33,12 +33,17 @@ def main(
 ) -> None:
     """Generate example spec."""
 
-    input_sig = TensorSignature(
-        name="input_tensor", dtype="float32", shape=(-1, 13, 64, 64)
+    input_array = Array(
+        dtype="float32", shape=[-1, 13, 64, 64], dim_ordering="bchw"
     )
-    output_sig = TensorSignature(name="output_tensor", dtype="float32", shape=(-1, 10))
-    model_sig = ModelSignature(inputs=[input_sig], outputs=[output_sig])
-    model_artifact = ModelArtifact(path="s3://example/s3/uri/model.pt")
+
+    band_list = []
+    bands = [Band(name=b, description = f"Band {b}", nodata=-9999, data_type="float32", unit="reflectance") for b in band_list]
+
+    model_input = ModelInput(name= "13 Band Sentinel-2 Batch", bands=bands, input_array=input_array, norm_by_channel=False, )
+
+
+    model_artifact = ModelAsset(path="s3://example/s3/uri/model.pt")
     class_map = ClassMap(
         class_to_label_id={
             "Annual Crop": 0,
@@ -53,6 +58,7 @@ def main(
             "SeaLake": 9,
         }
     )
+    output_sig = Array(name="output_tensor", dtype="float32", shape=(-1, 10))
     meta = ModelMetadata(
         name="eurosat",
         class_map=class_map,
