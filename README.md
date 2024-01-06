@@ -20,6 +20,8 @@ This document explains the Template Extension to the [SpatioTemporal Asset Catal
 4. An optional, flexible description of the runtime environment to be able to run the model
 5. Scientific references
 
+Note: The spec is biased towards supervised ML models the produce classifications. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
+
 Check the original technical report for an earlier version of the Model Extension [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details.
 
 ![Image Description](https://i.imgur.com/cVAg5sA.png)
@@ -53,8 +55,8 @@ In addition, fields from the following extensions must be imported in the item:
 |-------------------------|---------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
 | name                    | string                          | Informative name of the input variable. Example "RGB Time Series"                             |
 | bands            | [Band](#bands)                       | Describes the EO data used to train or fine-tune the model.            |
-| input_arrays           | [Array](#array) | Shape of the input arrays/tensors ($N \times C \times H \times W$).                                                                     |
-| params           | dict | dictionary with names for the parameters and their values. some models may take scalars or other non-tensor inputs.                                                                     |
+| input_array           | [Array](#array) | Shape of the input array/tensor ($N \times C \times H \times W$).                                                                     |
+| params           | dict | dictionary with names for the parameters and their values. some models may take multiple input arrays, scalars, other non-tensor inputs.                                                                     |
 | scaling_factor          | number                          | Scaling factor to apply to get data within a `[0,1]` range. For instance `scaling_factor=0.004` for 8-bit data.                         |
 | norm_by_channel          | string                          | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. "True" or "False" |
 | norm_type          | string                          | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none" |
@@ -71,24 +73,22 @@ A deviation is that we do not include the [Statistics](https://github.com/radian
 #### Array
 | Field Name | Type   | Description                         |
 |------------|--------|-------------------------------------|
-| batch      | number | Batch size dimension (must be > 0). |
-| time       | number | Number of timesteps  (must be > 0). |
-| channels   | number | Number of channels  (must be > 0).  |
-| height     | number | Height of the tensor (must be > 0). |
-| width      | number | Width of the tensor (must be > 0).  |
-|dim_order   | string | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" |
+| shape      | [integer] | Shape of the input array, including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
+|dim_order   | string | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time,  h=height, w=width|
+|dtype   | string | The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32" |
 
 
 ### Architecture
 
 | Field Name              | Type    | Description                                                 |
 |-------------------------|---------|-------------------------------------------------------------|
-| total_parameters        | integer | Total number of parameters.                                 |
-| on_disk_size_mb         | number  | The memory size on disk of the model artifact (MB).         |
-| ram_size_mb | number    | number  | The memory size in accelerator memory during inference (MB).|
+| name        | string | The name of the model architecture. For example, "ResNet-18" or "Random Forest"                                |
 | model_type                    | string  | Type of network (ex: ResNet-18).                            |
 | summary                 | string  | Summary of the layers, can be the output of `print(model)`. |
 | pretrained              | string  | Indicates the source of the pretraining (ex: ImageNet).     |
+| total_parameters        | integer | Total number of parameters.                                 |
+| on_disk_size_mb         | number  | The memory size on disk of the model artifact (MB).         |
+| ram_size_mb | number    | number  | The memory size in accelerator memory during inference (MB).|
 
 ### Runtime
 
@@ -121,7 +121,7 @@ A deviation is that we do not include the [Statistics](https://github.com/radian
 |--------------------------|-------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | task                     | [Task Enum](#task-enum) | Specifies the Machine Learning task for which the output can be used for.                                                                                                          |
 | number_of_classes        | integer                 | Number of classes.                                                                                                                                                                 |
-| final_layer_size         | \[integer]              | Sizes of the output tensor as ($N \times C \times H \times W$).                                                                                                                    |
+| output_shape        | \[integer]              | Shape of the output array/tensor from the model For example ($N \times H \times W$). Use -1 to indicate variable dimensions, like the batch dimension.                                                                                                                   |
 | class_name_mapping       | dict                    | Mapping of the output index to a short class name, for each record we specify the index and the class name.                                                                        |
 | post_processing_function          | string                          | A url to the postprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function|
 
