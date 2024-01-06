@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Union, Optional
 from enum import Enum
 class TaskEnum(str, Enum):
     regression = "regression"
@@ -25,6 +25,6 @@ class ClassMap(BaseModel):
 class ModelOutput(BaseModel):
     task: TaskEnum
     number_of_classes: int
-    final_layer_size: List[int]
-    class_name_mapping: ClassMap.class_to_label_id
-    post_processing_function: str
+    output_shape: List[Union[int,float]]
+    class_name_mapping: Optional[ClassMap.class_to_label_id]
+    post_processing_function: Optional[str]

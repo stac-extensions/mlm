@@ -1,15 +1,17 @@
 from pydantic import BaseModel
-from .input import ModelInput, Array, Band
+from typing import Optional
+from .input import ModelInput, InputArray, Band, Statistics
 from .output import ModelOutput, ClassMap
 from .runtime import Runtime, ModelAsset
 
 class Architecture(BaseModel):
-    total_parameters: int
-    on_disk_size_mb: float
-    ram_size_mb: float
+    name: str
     model_type: str
     summary: str
-    pretrained: str
+    pretrained: bool
+    total_parameters: Optional[int]
+    on_disk_size_mb: Optional[float]
+    ram_size_mb: Optional[float]
 
 class MLModel(BaseModel):
     mlm_input: ModelInput
@@ -17,4 +19,4 @@ class MLModel(BaseModel):
     mlm_runtime: Runtime
     mlm_output: ModelOutput
 
-__all__ = ["MLModel", "ModelInput", "Array", "Band", "ModelOutput", "ModelAsset", "ClassMap", "Runtime", "Architecture"]
+__all__ = ["MLModel", "ModelInput", "InputArray", "Band", "Statistics", "ModelOutput", "ModelAsset", "ClassMap", "Runtime", "ContainerInfo", "Model Asset", "Architecture"]
