@@ -15,16 +15,15 @@ class TaskEnum(str, Enum):
 
 class ClassMap(BaseModel):
     class_to_label_id: Dict[str, int]
-
     # Property to reverse the mapping
     @property
     def label_id_to_class(self) -> Dict[int, str]:
         # Reverse the mapping
         return {v: k for k, v in self.class_to_label_id.items()}
 
-class ModelOutput(BaseModel):
+class Output(BaseModel):
     task: TaskEnum
     number_of_classes: int
     output_shape: List[Union[int,float]]
-    class_name_mapping: Optional[ClassMap.class_to_label_id]
-    post_processing_function: Optional[str]
+    class_name_mapping: Optional[Dict[str, int]] = None
+    post_processing_function: Optional[str] = None

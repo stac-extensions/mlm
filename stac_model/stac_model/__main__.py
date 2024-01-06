@@ -34,7 +34,7 @@ def main(
     """Generate example spec."""
 
     input_array = InputArray(
-        dtype="float32", shape=[-1, 13, 64, 64], dim_ordering="bchw"
+        dtype="float32", shape=[-1, 13, 64, 64], dim_order="bchw"
     )
     band_list = []
     bands = [Band(name=b, description = f"Band {b}", nodata=-9999, data_type="float32", unit="reflectance") for b in band_list]
@@ -44,12 +44,11 @@ def main(
                         stddev= [245.71762908, 333.00778264, 395.09249139, 593.75055589, 566.4170017,
                             861.18399006, 1086.63139075, 1117.98170791, 404.91978886, 4.77584468,
                             1002.58768311, 761.30323499, 1231.58581042])
-    mlm_input = ModelInput(name= "13 Band Sentinel-2 Batch", bands=bands, input_array=input_array, norm_by_channel=True, norm_type="z_score", rescale_type="None", statistics=stats, pre_processing_function = "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py")
-    mlm_architecture = Architecture(name = "ResNet-18", total_parameters= 11_700_000,  model_type= "torch", summary= "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO", pretrained= True)
-    mlm_runtime = Runtime(framework= "torch", version= "2.1.2+cu121", model_asset= ModelAsset(href= "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth"),
-                          model_handler= "torchgeo.models.resnet.ResNet18", model_src_url= "https://github.com/huggingface/pytorch-image-models/blob/b5a4fa9c3be6ac732807db7e87d176f5e4fc06f1/timm/models/resnet.py#L362")
-    class_map = ClassMap(
-        class_to_label_id={
+    mlm_input = Input(name= "13 Band Sentinel-2 Batch", bands=bands, input_array=input_array, norm_by_channel=True, norm_type="z_score", rescale_type="none", statistics=stats, pre_processing_function = "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py")
+    mlm_architecture = Architecture(name = "ResNet-18", total_parameters= 11_700_000, summary= "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO", pretrained= True)
+    mlm_runtime = Runtime(framework= "torch", version= "2.1.2+cu121", asset= Asset(href= "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth"),
+                          handler= "torchgeo.models.resnet.ResNet18", source_code_url= "https://github.com/huggingface/pytorch-image-models/blob/b5a4fa9c3be6ac732807db7e87d176f5e4fc06f1/timm/models/resnet.py#L362")
+    mlm_output = Output(task= "classification", number_of_classes= 10, output_shape=[-1, 10], class_name_mapping= {
             "Annual Crop": 0,
             "Forest": 1,
             "Herbaceous Vegetation": 2,
@@ -60,13 +59,11 @@ def main(
             "Residential Buildings": 7,
             "River": 8,
             "SeaLake": 9,
-        }
-    )
-    mlm_output = ModelOutput(task= "classification", number_of_classes= 10, output_shape=[-1, 10], class_name_mapping= class_map.class_to_label_id)
-    ml_model_meta = MLModel(mlm_input, mlm_architecture, mlm_runtime, mlm_output)
-    json_str = ml_model_meta.model_dump_json(indent=2)
+        })
+    ml_model_meta = MLModel(mlm_input=mlm_input, mlm_architecture=mlm_architecture, mlm_runtime=mlm_runtime, mlm_output=mlm_output)
+    json_str = ml_model_meta.model_dump_json(indent=2, exclude_none=True)
     with open("example.json", "w") as file:
         file.write(json_str)
-    print(ml_model_meta.model_dump_yaml(indent=2)
+    print(ml_model_meta.model_dump_json(indent=2, exclude_none=True))
 if __name__ == "__main__":
     app()

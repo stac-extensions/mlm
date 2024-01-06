@@ -44,9 +44,9 @@ classifiers = [  # UPDATEME with additional classifiers; remove last classifier 
 [tool.poetry.dependencies]
 python = "^3.10"
 
-typer = {extras = ["all"], version = "^0.7.0"}
-rich = "^12.6.0"
-pydantic = "~2.3.0" # bug in post 2.3 https://github.com/pydantic/pydantic/issues/7720
+typer = {extras = ["all"], version = "^0.9.0"}
+rich = "^13.7.0"
+pydantic = "^2.5.0" # bug in post 2.3 https://github.com/pydantic/pydantic/issues/7720
 pydantic-core = "~2"
 numpy = "^1.26.2"
 

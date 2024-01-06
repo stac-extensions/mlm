@@ -7,24 +7,24 @@ from pydantic import (
 class InputArray(BaseModel):
     shape: List[Union[int,float]]
     dim_order: Literal["bhw", "bchw", "bthw", "btchw"]
-    dtype: str = Field(..., regex="^(uint8|uint16|int16|int32|float16|float32|float64)$")
+    dtype: str = Field(..., pattern="^(uint8|uint16|int16|int32|float16|float32|float64)$")
 
 class Statistics(BaseModel):
-    minimum: Optional[List[Union[float, int]]]
-    maximum: Optional[List[Union[float, int]]]
-    mean: Optional[List[float]]
-    stddev: Optional[List[float]]
-    count: Optional[List[int]]
-    valid_percent: Optional[List[float]]
+    minimum: Optional[List[Union[float, int]]] = None
+    maximum: Optional[List[Union[float, int]]] = None
+    mean: Optional[List[float]] = None
+    stddev: Optional[List[float]] = None
+    count: Optional[List[int]] = None
+    valid_percent: Optional[List[float]] = None
 
 class Band(BaseModel):
     name: str
     description: str
     nodata: float | int | str
     data_type: str
-    unit: Optional[str]
+    unit: Optional[str] = None
 
-class ModelInput(BaseModel):
+class Input(BaseModel):
     name: str
     bands: List[Band]
     input_array: InputArray
@@ -34,6 +34,6 @@ class ModelInput(BaseModel):
     params: Optional[
         Dict[str, int | float | str]
     ] = None
-    scaling_factor: Optional[float]
-    statistics: Optional[Statistics]
-    pre_processing_function: Optional[str | AnyUrl]
+    scaling_factor: Optional[float] = None
+    statistics: Optional[Statistics] = None
+    pre_processing_function: Optional[str | AnyUrl] = None

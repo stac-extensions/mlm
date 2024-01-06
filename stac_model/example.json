@@ -1,36 +1,77 @@
 {
-  "signatures": {
-    "inputs": [
-      {
-        "name": "input_tensor",
-        "dtype": "float32",
-        "shape": [
-          -1,
-          13,
-          64,
-          64
-        ]
-      }
-    ],
-    "outputs": [
-      {
-        "name": "output_tensor",
-        "dtype": "float32",
-        "shape": [
-          -1,
-          10
-        ]
-      }
-    ],
-    "params": null
+  "mlm_input": {
+    "name": "13 Band Sentinel-2 Batch",
+    "bands": [],
+    "input_array": {
+      "shape": [
+        -1,
+        13,
+        64,
+        64
+      ],
+      "dim_order": "bchw",
+      "dtype": "float32"
+    },
+    "norm_type": "z_score",
+    "rescale_type": "none",
+    "norm_by_channel": true,
+    "statistics": {
+      "mean": [
+        1354.40546513,
+        1118.24399958,
+        1042.92983953,
+        947.62620298,
+        1199.47283961,
+        1999.79090914,
+        2369.22292565,
+        2296.82608323,
+        732.08340178,
+        12.11327804,
+        1819.01027855,
+        1118.92391149,
+        2594.14080798
+      ],
+      "stddev": [
+        245.71762908,
+        333.00778264,
+        395.09249139,
+        593.75055589,
+        566.4170017,
+        861.18399006,
+        1086.63139075,
+        1117.98170791,
+        404.91978886,
+        4.77584468,
+        1002.58768311,
+        761.30323499,
+        1231.58581042
+      ]
+    },
+    "pre_processing_function": "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"
   },
-  "artifact": {
-    "path": "s3://example/s3/uri/model.pt",
-    "additional_files": null
+  "mlm_architecture": {
+    "name": "ResNet-18",
+    "summary": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
+    "pretrained": true,
+    "total_parameters": 11700000
   },
-  "id": "3fa03dceb4004b6e8a9e8591e4b3a99d",
-  "class_map": {
-    "class_to_label_id": {
+  "mlm_runtime": {
+    "framework": "torch",
+    "version": "2.1.2+cu121",
+    "asset": {
+      "href": "."
+    },
+    "source_code_url": "https://github.com/huggingface/pytorch-image-models/blob/b5a4fa9c3be6ac732807db7e87d176f5e4fc06f1/timm/models/resnet.py#L362",
+    "handler": "torchgeo.models.resnet.ResNet18"
+  },
+  "mlm_output": {
+    "task": "classification",
+    "number_of_classes": 10,
+    "output_shape": [
+      -1,
+      10
+    ],
+    "class_name_mapping": {
       "Annual Crop": 0,
       "Forest": 1,
       "Herbaceous Vegetation": 2,
@@ -42,12 +83,5 @@
       "River": 8,
       "SeaLake": 9
     }
-  },
-  "runtime_config": null,
-  "name": "eurosat",
-  "ml_model_type": null,
-  "ml_model_processor_type": "cpu",
-  "ml_model_learning_approach": null,
-  "ml_model_prediction_type": null,
-  "ml_model_architecture": null
+  }
 }

@@ -1,16 +1,16 @@
 from .paths import S3Path
-from pydantic import BaseModel, Field, FilePath, AnyUrl, field_validator
+from pydantic import BaseModel, FilePath, AnyUrl, field_validator
 from typing import Optional, List
-class ModelAsset(BaseModel):
+class Asset(BaseModel):
     """Information about the model location and other additional file locations. Follows
     the Asset Object spec: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
     """
 
-    href: S3Path | FilePath | str = Field(...)
-    title: Optional[str] = Field(None)
-    description: Optional[str] = Field(None)
-    type: Optional[str] = Field(None)
-    roles: Optional[List[str]] = Field(None)
+    href: S3Path | FilePath | str
+    title: Optional[str] = None
+    description: Optional[str] = None
+    type: Optional[str] = None
+    roles: Optional[List[str]] = None
 
 
     class Config:
@@ -41,10 +41,10 @@ class ContainerInfo(BaseModel):
 class Runtime(BaseModel):
     framework: str
     version: str
-    model_asset: ModelAsset
-    model_handler: str
-    model_src_url: str
-    model_commit_hash: str
-    container: List[ContainerInfo]
-    batch_size_suggestion: int
-    hardware_suggestion: str | AnyUrl
+    asset: Asset
+    source_code_url: str
+    handler: Optional[str] = None
+    commit_hash: Optional[str] = None
+    container: Optional[ContainerInfo] = None
+    batch_size_suggestion: Optional[int] = None
+    hardware_suggestion: Optional[str | AnyUrl] = None
