@@ -12,19 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - batch_size and hardware suggestion
 - ram_size_mb to specify model ram requirements during inference
 - added time to the Tensor object as an optional dim
+- Use common metadata Asset Object to refer to Model Artifact and artifact metadata as a Collection level object
 
 ### Changed
 - selected_bands > band_names, the same human readable names used in the common metadata band objects.
 - replaced normalization:mean, etc. with statistics from STAC 1.1 common metadata
-- added pydantic models for internal schema objects
+- added pydantic models for internal schema objects in stac_model package and published to PYPI
 
 [raster-band-object]: https://github.com/stac-extensions/raster/#raster-band-object
 
 ### Deprecated
-- Specifying `class_name_mapping` by array is deprecated.
-  Direct mapping as an object of index to class name should be used.
-  For backward compatibility, mapping as array and using nested objects with `index` and `class_name` properties
-  is still permitted, although overly verbose compared to the direct mapping.
+-
 
 ### Removed
 - Data Object, replaced with common metadata band object which also records data_type and nodata type
