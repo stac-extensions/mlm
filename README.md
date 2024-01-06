@@ -83,7 +83,6 @@ A deviation is that we do not include the [Statistics](https://github.com/radian
 | Field Name              | Type    | Description                                                 |
 |-------------------------|---------|-------------------------------------------------------------|
 | name        | string | The name of the model architecture. For example, "ResNet-18" or "Random Forest"                                |
-| model_type                    | string  | Type of network (ex: ResNet-18).                            |
 | summary                 | string  | Summary of the layers, can be the output of `print(model)`. |
 | pretrained              | string  | Indicates the source of the pretraining (ex: ImageNet).     |
 | total_parameters        | integer | Total number of parameters.                                 |
@@ -98,7 +97,7 @@ A deviation is that we do not include the [Statistics](https://github.com/radian
 | version               | string                             | Framework version (some models require a specific version of the framework).             |
 | model_asset        | [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object)                        | Common Metadata Collection level asset object containing URI to the model file.   |
 | model_handler         | string                             | Inference execution function.                                                            |
-| model_src_url         | string                             | Url of the source code (ex: GitHub repo).                                                |
+| source_code_url         | string                             | Url of the source code (ex: GitHub repo).                                                |
 | model_commit_hash     | string                             | Hash value pointing to a specific version of the code.                                   |
 | docker                | [Container](#container) | Information for the deployment of the model in a docker instance.                        |
 | batch_size_suggestion | number                             | A suggested batch size for a given compute instance type                                 |
