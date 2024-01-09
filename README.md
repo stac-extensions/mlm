@@ -17,7 +17,7 @@ The STAC Machine Learning Model (MLM) Extension provides a standard set of field
 
 The main objective of the extension is two-fold: 1) to enable building model collections that can be searched alongside associated STAC datasets and 2) to record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy an inference service. Specifically, this extension records the following information to make ML models searchable and reusable:
 1. Sensor band specifications
-2. The two fundamental transforms on model inputs: rescale and normalization
+2. Model input transforms including rescale and normalization
 3. Model output shape, data type, and its semantic interpretation
 4. An optional, flexible description of the runtime environment to be able to run the model
 5. Scientific references
@@ -56,11 +56,10 @@ In addition, fields from the following extensions must be imported in the item:
 | Field Name              | Type                          | Description                                                                                                                                                                                                                                        |
 |-------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | name                    | string                        | Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                                  |
-| bands                   | [Band](#bands-and-statistics) | Describes the EO data used to train or fine-tune the model.                                                                                                                                                                                        |
-| input_array             | [Array](#array)               | Shape of the input array/tensor ($N \times C \times H \times W$).                                                                                                                                                                                  |
+| bands                   | [string]                      | Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAc Item's [Band Object](#bands-and-statistics).                                                                                |
+| input_array             | [NDArray](#ndarray)           | The N-dimensional array object that describes the shape, dimension ordering, and data type.                                                                                                                                                        |
 | params                  | dict                          | Dictionary with names for the parameters and their values. Some models may take multiple input arrays, scalars, other non-tensor inputs.                                                                                                           |
-| scaling_factor          | number                        | Scaling factor to apply to get data within a `[0,1]` range. For instance `scaling_factor=0.004` for 8-bit data.                                                                                                                                    |
-| norm_by_channel         | string                        | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. "True" or "False"                                                                                                                              |
+| norm_by_channel         | boolean                       | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics.                                                                                                                                                |
 | norm_type               | string                        | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |
 | rescale_type            | string                        | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |
 | statistics              | [Statistics](stac-statistics) | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |
@@ -68,30 +67,36 @@ In addition, fields from the following extensions must be imported in the item:
 
 #### Bands and Statistics
 
-We use the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) for representing bands information, including nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this list.
+We use the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) for representing bands information, including nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this `bands` field.
 
-A deviation is that we do not include the [Statistics](stac-statistics) object at the band object level, but at the Model Input level. This is because in machine learning, we typically only need statistics for the dataset used to train the model in order to normalize any given bands input.
+A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) is that we do not include the [Statistics](stac-statistics) object at the band object level, but at the Model Input level. This is because in machine learning, we typically only need statistics for the dataset used to train the model in order to normalize any given bands input.
 
 [stac-statistics]: https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294
 
-#### Array
+#### NDArray
 
-| Field Name | Type      | Description                                                                                                                                                                 |
-|------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer] | Shape of the input array, including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_order  | string    | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                |
-| dtype      | string    | The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32" |
+| Field Name | Type      | Description                                                                                                                                                                                                                |
+|------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | [integer] | Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
+| dim_order  | string    | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                                                               |
+| dtype      | string    | The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                                |
 
 ### Architecture
 
-| Field Name       | Type    | Description                                                                     |
-|------------------|---------|---------------------------------------------------------------------------------|
-| name             | string  | The name of the model architecture. For example, "ResNet-18" or "Random Forest" |
-| summary          | string  | Summary of the layers, can be the output of `print(model)`.                     |
-| pretrained       | string  | Indicates the source of the pretraining (ex: ImageNet).                         |
-| total_parameters | integer | Total number of parameters.                                                     |
-| on_disk_size_mb  | number  | The memory size on disk of the model artifact (MB).                             |
-| ram_size_mb      | number  | The memory size in accelerator memory during inference (MB).                    |
+| Field Name       | Type                                  | Description                                                                     |
+|------------------|---------------------------------------|---------------------------------------------------------------------------------|
+| name             | string                                | The name of the model architecture. For example, "ResNet-18" or "Random Forest" |
+| summary          | string                                | Summary of the layers, can be the output of `print(model)`.                     |
+| pretrained       | string                                | Indicates the source of the pretraining (ex: ImageNet).                         |
+| total_parameters | integer                               | Total number of parameters.                                                     |
+| file_size        | number                                | The size on disk of the model artifact (MB).                                    |
+| memory_size      | number                                | The in-memory size on the accelerator during inference (MB).                    |
+| accelerator      | [Accelerator Enum](#accelerator-enum) | The intended accelerator that runs inference.                                   |
+
+#### Accelerator Enum
+
+It is recommended to define `accelerator` with one of the following values:
+
 
 ### Runtime
 
@@ -118,7 +123,6 @@ A deviation is that we do not include the [Statistics](stac-statistics) object a
 | tag            | string  | Tag of the image.                                                        |
 | working_dir    | string  | Working directory in the instance that can be mapped.                    |
 | run            | string  | Running command.                                                         |
-| accelerator    | boolean | True if the container image requires a custom accelerator (CPU,TPU,MPS). |
 
 ### Output
 
