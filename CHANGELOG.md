@@ -19,13 +19,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - replaced normalization:mean, etc. with statistics from STAC 1.1 common metadata
 - added pydantic models for internal schema objects in stac_model package and published to PYPI
 
-[raster-band-object]: https://github.com/stac-extensions/raster/#raster-band-object
-
 ### Deprecated
 -
 
 ### Removed
-- Data Object, replaced with common metadata band object which also records data_type and nodata type
+- Data Object, replaced with [common metadata band object](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#bands) which also records data_type and nodata type
 
 # TODO link release here
 

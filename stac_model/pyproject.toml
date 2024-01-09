@@ -49,6 +49,7 @@ rich = "^13.7.0"
 pydantic = "^2.5.0" # bug in post 2.3 https://github.com/pydantic/pydantic/issues/7720
 pydantic-core = "~2"
 numpy = "^1.26.2"
+fastapi="^0.108.0"
 
 
 [tool.poetry.group.dev.dependencies]
