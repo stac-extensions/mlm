@@ -69,7 +69,7 @@ In addition, fields from the following extensions must be imported in the item:
 
 | Field Name                        | Type    | Description                                                              |
 |-----------------------------------|---------|--------------------------------------------------------------------------|
-| *parameter names depend on the model* | number | string | boolean | array  | The field number and names depend on the model as do the values. Values should be not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another model input object. |
+| *parameter names depend on the model* | number `\|` string `\|` boolean `\|` array  | The field number and names depend on the model as do the values. Values should be not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another model input object. |
 
 The parameters field can either be specified in the model input object if they are associated with a specific input or as an Item or Collection field if the parameters are supplied without relation to a specific model input.
 
