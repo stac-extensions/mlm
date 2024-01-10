@@ -39,9 +39,9 @@ Check the original technical report for an earlier version of the Model Extensio
 | Field Name       | Type                                        | Description                                                                         |
 |------------------|---------------------------------------------|-------------------------------------------------------------------------------------|
 | mlm:input        | [[Model Input Object](#model-input-object)] | **REQUIRED.** Describes the transformation between the EO data and the model input. |
-| mlm:architecture | [Architecture](#architecture)               | **REQUIRED.** Describes the model architecture.                                     |
-| mlm:runtime      | [Runtime](#runtime)                         | **REQUIRED.** Describes the runtime environments to run the model (inference).      |
-| mlm:output       | [ModelOutput](#model-output)                | **REQUIRED.** Describes each model output and how to interpret it.                  |
+| mlm:architecture | [Architecture Object](#architecture-object)               | **REQUIRED.** Describes the model architecture.                                     |
+| mlm:runtime      | [Runtime Object](#runtime-object)                         | **REQUIRED.** Describes the runtime environments to run the model (inference).      |
+| mlm:output       | [Model Output Object](#model-output-object)                | **REQUIRED.** Describes each model output and how to interpret it.                  |
 
 
 In addition, fields from the following extensions must be imported in the item:
@@ -94,17 +94,18 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 
 ### Runtime Object
 
-| Field Name            | Type                                  | Description                                                                                                                                                                             |
-|-----------------------|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| framework             | string                                | **REQUIRED.** Used framework (ex: PyTorch, TensorFlow).                                                                                                                                 |
-| version               | string                                | **REQUIRED.** Framework version (some models require a specific version of the framework).                                                                                              |
-| model_asset           | [Asset Object](stac-asset)            | **REQUIRED.** Asset object containing URI to the model file.                                                                                           |
-| source_code           | [Asset Object](stac-asset)            | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc. This description should reference the inference function, for example my_package.my_module.predict |
-| accelerator           | [Accelerator Enum](#accelerator-enum) | **REQUIRED.** The intended accelerator that runs inference.                                                                                                                             |
-| hardware_summary      | string                                | **REQUIRED.** A high level description of the number of accelerators, specific generation of accelerator, or other relevant inference details.                                          |
-| docker                | [Container](#container)               | **RECOMMENDED.** Information for the deployment of the model in a docker instance.                                                                                                      |
-| model_commit_hash     | string                                | Hash value pointing to a specific version of the code.                                                                                                                                  |
-| batch_size_suggestion | number                                | A suggested batch size for the accelerator and summarized hardware.                                                                                                                     |
+| Field Name              | Type                                  | Description                                                                                                                                                                             |
+|-------------------------|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| framework               | string                                | **REQUIRED.** Used framework (ex: PyTorch, TensorFlow).                                                                                                                                 |
+| version                 | string                                | **REQUIRED.** Framework version (some models require a specific version of the framework).                                                                                              |
+| model_asset             | [Asset Object](stac-asset)            | **REQUIRED.** Asset object containing URI to the model file.                                                                                                                            |
+| source_code             | [Asset Object](stac-asset)            | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc. This description should reference the inference function, for example my_package.my_module.predict |
+| accelerator             | [Accelerator Enum](#accelerator-enum) | **REQUIRED.** The intended accelerator that runs inference.                                                                                                                             |
+| accelerator_constrained | boolean                               | **REQUIRED.** If the intended accelerator is the only accelerator that can run inference. If False, other accelerators, such as the amd64 (CPU), can run inference                      |
+| hardware_summary        | string                                | **REQUIRED.** A high level description of the number of accelerators, specific generation of accelerator, or other relevant inference details.                                          |
+| docker                  | [Container](#container)               | **RECOMMENDED.** Information for the deployment of the model in a docker instance.                                                                                                      |
+| model_commit_hash       | string                                | Hash value pointing to a specific version of the code.                                                                                                                                  |
+| batch_size_suggestion   | number                                | A suggested batch size for the accelerator and summarized hardware.                                                                                                                     |
 
 #### Accelerator Enum
 
@@ -154,7 +155,7 @@ You can also use other base images. Pytorch and Tensorflow offer docker images f
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
 
-### Output Object
+### Model Output Object
 
 | Field Name               | Type                                  | Description                                                                                                                                                                                                             |
 |--------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
