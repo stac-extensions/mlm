@@ -36,13 +36,13 @@ Check the original technical report for an earlier version of the Model Extensio
 
 ## Item Properties and Collection Fields
 
-| Field Name       | Type                                        | Description                                                                         |
-|------------------|---------------------------------------------|-------------------------------------------------------------------------------------|
-| mlm:input        | [[Model Input Object](#model-input-object)] | **REQUIRED.** Describes the transformation between the EO data and the model input. |
-| mlm:architecture | [Architecture Object](#architecture-object)               | **REQUIRED.** Describes the model architecture.                                     |
-| mlm:runtime      | [Runtime Object](#runtime-object)                         | **REQUIRED.** Describes the runtime environments to run the model (inference).      |
-| mlm:output       | [Model Output Object](#model-output-object)                | **REQUIRED.** Describes each model output and how to interpret it.                  |
-
+| Field Name       | Type                                        | Description                                                                                                                                     |
+|------------------|---------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| mlm:input        | [[Model Input Object](#model-input-object)] | **REQUIRED.** Describes the transformation between the EO data and the model input.                                                             |
+| mlm:architecture | [Architecture Object](#architecture-object) | **REQUIRED.** Describes the model architecture.                                                                                                 |
+| mlm:runtime      | [Runtime Object](#runtime-object)           | **REQUIRED.** Describes the runtime environments to run the model (inference).                                                                  |
+| mlm:output       | [Model Output Object](#model-output-object) | **REQUIRED.** Describes each model output and how to interpret it.                                                                              |
+| parameters       | [Parameters Object](#params-object)         | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text. |
 
 In addition, fields from the following extensions must be imported in the item:
 - [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
@@ -56,14 +56,22 @@ In addition, fields from the following extensions must be imported in the item:
 | Field Name              | Type                                          | Description                                                                                                                                                                                                                                        |
 |-------------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | name                    | string                                        | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |
-| bands                   | [string]                                      | **REQUIRED.** Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAc Item's [Band Object](#bands-and-statistics).                                                                  |
+| bands                   | [string]                                      | **REQUIRED.** Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                                  |
 | input_feature           | [Feature Array Object](#feature-array-object) | **REQUIRED.** The N-dimensional feature array object that describes the shape, dimension ordering, and data type.                                                                                                                                  |
-| params                  | dict                                          | Dictionary with names for the parameters and their values. Some models may take multiple input arrays, scalars, other non-tensor inputs.                                                                                                           |
+| parameters              | [Parameters Object](#params-object)           | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |
 | norm_by_channel         | boolean                                       | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics.                                                                                                                                                |
 | norm_type               | string                                        | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |
 | rescale_type            | string                                        | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |
 | statistics              | [Statistics Object](stac-statistics)          | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |
 | pre_processing_function | string                                        | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function                            |
+
+#### Parameters Object
+
+| Field Name                        | Type    | Description                                                              |
+|-----------------------------------|---------|--------------------------------------------------------------------------|
+| *parameter names depend on the model* | number | string | boolean | array  | The field number and names depend on the model as do the values. Values should be not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another model input object. |
+
+The parameters field can either be specified in the model input object if they are associated with a specific input or as an Item or Collection field if the parameters are supplied without relation to a specific model input.
 
 #### Bands and Statistics
 
@@ -75,10 +83,10 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 
 #### Feature Array Object
 
-| Field Name | Type      | Description                                                                                                                                                                                                                |
-|------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Field Name | Type      | Description                                                                                                                                                                                                                                      |
+|------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional feature array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                                                               |
+| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                                                                       |
 | dtype      | string    | **REQUIRED.** The data type of values in the feature array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                                |
 
 ### Architecture Object
@@ -90,7 +98,7 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 | memory_size       | integer | **REQUIRED.** The in-memory size of the model on the accelerator during inference (bytes).    |
 | summary           | string  | Summary of the layers, can be the output of `print(model)`.                                   |
 | pretrained_source | string  | Indicates the source of the pretraining (ex: ImageNet).                                       |
-| total_parameters  | integer | Total number of parameters.                                                                   |
+| total_parameters  | integer | Total number of parameters.
 
 ### Runtime Object
 
