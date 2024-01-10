@@ -98,10 +98,10 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 |-----------------------|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | framework             | string                                | **REQUIRED.** Used framework (ex: PyTorch, TensorFlow).                                                                                                                                 |
 | version               | string                                | **REQUIRED.** Framework version (some models require a specific version of the framework).                                                                                              |
-| model_asset           | [Asset Object](stac-asset)            | **REQUIRED.** Common Metadata Collection level asset object containing URI to the model file.                                                                                           |
+| model_asset           | [Asset Object](stac-asset)            | **REQUIRED.** Asset object containing URI to the model file.                                                                                           |
+| source_code           | [Asset Object](stac-asset)            | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc. This description should reference the inference function, for example my_package.my_module.predict |
 | accelerator           | [Accelerator Enum](#accelerator-enum) | **REQUIRED.** The intended accelerator that runs inference.                                                                                                                             |
 | hardware_summary      | string                                | **REQUIRED.** A high level description of the number of accelerators, specific generation of accelerator, or other relevant inference details.                                          |
-| source_code           | [Asset Object](stac-asset)            | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc. This description should reference the inference function, for example my_package.my_module.predict |
 | docker                | [Container](#container)               | **RECOMMENDED.** Information for the deployment of the model in a docker instance.                                                                                                      |
 | model_commit_hash     | string                                | Hash value pointing to a specific version of the code.                                                                                                                                  |
 | batch_size_suggestion | number                                | A suggested batch size for the accelerator and summarized hardware.                                                                                                                     |
@@ -129,6 +129,30 @@ It is recommended to define `accelerator` with one of the following values:
 | tag            | string | Tag of the image.                                     |
 | working_dir    | string | Working directory in the instance that can be mapped. |
 | run            | string | Running command.                                      |
+
+If you're unsure how to containerize your model, we suggest starting from the latest official container image for your framework that works with your model and pinning the container version.
+
+Examples:
+[Pytorch Dockerhub](https://hub.docker.com/r/pytorch/pytorch/tags)
+[Pytorch Docker Run Example](https://github.com/pytorch/pytorch?tab=readme-ov-file#docker-image)
+
+[Tensorflow Dockerhub](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=8&ordering=last_updated)
+[Tensorflow Docker Run Example](https://www.tensorflow.org/install/docker#gpu_support)
+
+Using a base image for a framework looks like
+
+
+```dockerfile
+# In your Dockerfile, pull the latest base image with all framework dependencies including accelerator drivers
+FROM pytorch/pytorch:2.1.2-cuda11.8-cudnn8-runtime
+
+### Your specific environment setup to run your model
+RUN pip install my_package
+```
+
+You can also use other base images. Pytorch and Tensorflow offer docker images for serving models for inference.
+- [Torchserve](https://pytorch.org/serve/)
+- [TFServing](https://github.com/tensorflow/serving)
 
 ### Output Object
 
