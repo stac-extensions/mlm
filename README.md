@@ -15,14 +15,19 @@
 
 The STAC Machine Learning Model (MLM) Extension provides a standard set of fields to describe machine learning models trained on overhead imagery and enable running model inference.
 
-The main objective of the extension is two-fold: 1) to enable building model collections that can be searched alongside associated STAC datasets and 2) to record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy an inference service. Specifically, this extension records the following information to make ML models searchable and reusable:
-1. Sensor band specifications
-2. Model input transforms including rescale and normalization
-3. Model output shape, data type, and its semantic interpretation
-4. An optional, flexible description of the runtime environment to be able to run the model
-5. Scientific references
+The main objectives of the extension are:
 
-Note: The MLM specification is biased towards supervised ML models the produce classifications. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
+1) to enable building model collections that can be searched alongside associated STAC datasets
+2) record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy an inference service.
+
+Specifically, this extension records the following information to make ML models searchable and reusable:
+1. Sensor band specifications
+1. Model input transforms including rescale and normalization
+1. Model output shape, data type, and its semantic interpretation
+1. An optional, flexible description of the runtime environment to be able to run the model
+1. Scientific references
+
+The MLM specification is biased towards supervised ML models the produce classifications. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
 
 Check the original technical report for an earlier version of the Model Extension [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details.
 
@@ -31,7 +36,7 @@ Check the original technical report for an earlier version of the Model Extensio
 - Examples:
   - [Example with a ??? trained with torchgeo](examples/item.json) TODO update example
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
-- [JSON Schema](json-schema/schema.json)
+- [JSON Schema](json-schema/schema.json) TODO update
 - [Changelog](./CHANGELOG.md)
 
 ## Item Properties and Collection Fields
@@ -53,17 +58,17 @@ In addition, fields from the following extensions must be imported in the item:
 
 ### Model Input Object
 
-| Field Name              | Type                                          | Description                                                                                                                                                                                                                                        |
-|-------------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                                        | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |
-| bands                   | [string]                                      | **REQUIRED.** Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                                  |
-| input_feature           | [Feature Array Object](#feature-array-object) | **REQUIRED.** The N-dimensional feature array object that describes the shape, dimension ordering, and data type.                                                                                                                                  |
-| parameters              | [Parameters Object](#params-object)           | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |
-| norm_by_channel         | boolean                                       | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics.                                                                                                                                                |
-| norm_type               | string                                        | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |
-| rescale_type            | string                                        | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |
-| statistics              | [Statistics Object](stac-statistics)          | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |
-| pre_processing_function | string                                        | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function                            |
+| Field Name              | Type                                      | Description                                                                                                                                                                                                                                        |                                                                           |
+|-------------------------|-------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------|
+| name                    | string                                    | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |                                                                           |
+| bands                   | [string]                                  | **REQUIRED.** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                           |                                                                           |
+| input_array             | [Array Object](#feature-array-object)     | **REQUIRED.** The N-dimensional array object that describes the shape, dimension ordering, and data type.                                                                                                                                          |                                                                           |
+| parameters              | [Parameters Object](#params-object)       | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |                                                                           |
+| norm_by_channel         | boolean                                   | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of Statistics Objects that is ordered like the bands field.                                                              |                                                                           |
+| norm_type               | string                                    | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |                                                                           |
+| rescale_type            | string                                    | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |                                                                           |
+| statistics              | [Statistics Object](stac-statistics)   `\ | ` [[Statistics Object](stac-statistics)]                                                                                                                                                                                                           | Dataset statistics for the training dataset used to normalize the inputs. |
+| pre_processing_function | string                                    | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function                            |                                                                           |
 
 #### Parameters Object
 
