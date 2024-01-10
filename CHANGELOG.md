@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- more Task Enum tasks
-- accelerator options
+- more [Task Enum](./README.md#task-enum) tasks
+- [accelerator](./README#accelerators) options in [Runtime Object](./README#runtime-object)
 - batch_size and hardware suggestion
 - ram_size_mb to specify model ram requirements during inference
 - added time to the Tensor object as an optional dim

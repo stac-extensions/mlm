@@ -36,12 +36,12 @@ Check the original technical report for an earlier version of the Model Extensio
 
 ## Item Properties and Collection Fields
 
-| Field Name       | Type                                        | Description                                                           |
-|------------------|---------------------------------------------|-----------------------------------------------------------------------|
-| mlm:input        | [[Model Input Object](#model-input-object)] | Describes the transformation between the EO data and the model input. |
-| mlm:architecture | [Architecture](#architecture)               | Describes the model architecture.                                     |
-| mlm:runtime      | [Runtime](#runtime)                         | Describes the runtime environments to run the model (inference).      |
-| mlm:output       | [ModelOutput](#model-output)                | Describes each model output and how to interpret it.                  |
+| Field Name       | Type                                        | Description                                                                         |
+|------------------|---------------------------------------------|-------------------------------------------------------------------------------------|
+| mlm:input        | [[Model Input Object](#model-input-object)] | **REQUIRED.** Describes the transformation between the EO data and the model input. |
+| mlm:architecture | [Architecture](#architecture)               | **REQUIRED.** Describes the model architecture.                                     |
+| mlm:runtime      | [Runtime](#runtime)                         | **REQUIRED.** Describes the runtime environments to run the model (inference).      |
+| mlm:output       | [ModelOutput](#model-output)                | **REQUIRED.** Describes each model output and how to interpret it.                  |
 
 
 In addition, fields from the following extensions must be imported in the item:
@@ -51,19 +51,19 @@ In addition, fields from the following extensions must be imported in the item:
 [stac-ext-sci]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md
 [stac-ext-ver]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md
 
-### Model Input
+### Model Input Object
 
-| Field Name              | Type                          | Description                                                                                                                                                                                                                                        |
-|-------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                        | Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                                  |
-| bands                   | [string]                      | Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAc Item's [Band Object](#bands-and-statistics).                                                                                |
-| input_array             | [NDArray](#ndarray)           | The N-dimensional array object that describes the shape, dimension ordering, and data type.                                                                                                                                                        |
-| params                  | dict                          | Dictionary with names for the parameters and their values. Some models may take multiple input arrays, scalars, other non-tensor inputs.                                                                                                           |
-| norm_by_channel         | boolean                       | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics.                                                                                                                                                |
-| norm_type               | string                        | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |
-| rescale_type            | string                        | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |
-| statistics              | [Statistics](stac-statistics) | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |
-| pre_processing_function | string                        | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function                            |
+| Field Name              | Type                                          | Description                                                                                                                                                                                                                                        |
+|-------------------------|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string                                        | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |
+| bands                   | [string]                                      | **REQUIRED.** Describes the EO bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAc Item's [Band Object](#bands-and-statistics).                                                                  |
+| input_feature           | [Feature Array Object](#feature-array-object) | **REQUIRED.** The N-dimensional feature array object that describes the shape, dimension ordering, and data type.                                                                                                                                  |
+| params                  | dict                                          | Dictionary with names for the parameters and their values. Some models may take multiple input arrays, scalars, other non-tensor inputs.                                                                                                           |
+| norm_by_channel         | boolean                                       | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics.                                                                                                                                                |
+| norm_type               | string                                        | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"                                                                                                                                |
+| rescale_type            | string                                        | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |
+| statistics              | [Statistics Object](stac-statistics)          | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |
+| pre_processing_function | string                                        | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function                            |
 
 #### Bands and Statistics
 
@@ -73,66 +73,75 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 
 [stac-statistics]: https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294
 
-#### NDArray
+#### Feature Array Object
 
 | Field Name | Type      | Description                                                                                                                                                                                                                |
 |------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer] | Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_order  | string    | How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                                                               |
-| dtype      | string    | The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                                |
+| shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional feature array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
+| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered with the tensor. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width                                                               |
+| dtype      | string    | **REQUIRED.** The data type of values in the feature array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                                |
 
-### Architecture
+### Architecture Object
 
-| Field Name       | Type                                  | Description                                                                     |
-|------------------|---------------------------------------|---------------------------------------------------------------------------------|
-| name             | string                                | The name of the model architecture. For example, "ResNet-18" or "Random Forest" |
-| summary          | string                                | Summary of the layers, can be the output of `print(model)`.                     |
-| pretrained       | string                                | Indicates the source of the pretraining (ex: ImageNet).                         |
-| total_parameters | integer                               | Total number of parameters.                                                     |
-| file_size        | number                                | The size on disk of the model artifact (MB).                                    |
-| memory_size      | number                                | The in-memory size on the accelerator during inference (MB).                    |
-| accelerator      | [Accelerator Enum](#accelerator-enum) | The intended accelerator that runs inference.                                   |
+| Field Name        | Type    | Description                                                                                   |
+|-------------------|---------|-----------------------------------------------------------------------------------------------|
+| name              | string  | **REQUIRED.** The name of the model architecture. For example, "ResNet-18" or "Random Forest" |
+| file_size         | integer | **REQUIRED.** The size on disk of the model artifact (bytes).                                 |
+| memory_size       | integer | **REQUIRED.** The in-memory size of the model on the accelerator during inference (bytes).    |
+| summary           | string  | Summary of the layers, can be the output of `print(model)`.                                   |
+| pretrained_source | string  | Indicates the source of the pretraining (ex: ImageNet).                                       |
+| total_parameters  | integer | Total number of parameters.                                                                   |
+
+### Runtime Object
+
+| Field Name            | Type                                  | Description                                                                                                                                                                             |
+|-----------------------|---------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| framework             | string                                | **REQUIRED.** Used framework (ex: PyTorch, TensorFlow).                                                                                                                                 |
+| version               | string                                | **REQUIRED.** Framework version (some models require a specific version of the framework).                                                                                              |
+| model_asset           | [Asset Object](stac-asset)            | **REQUIRED.** Common Metadata Collection level asset object containing URI to the model file.                                                                                           |
+| accelerator           | [Accelerator Enum](#accelerator-enum) | **REQUIRED.** The intended accelerator that runs inference.                                                                                                                             |
+| hardware_summary      | string                                | **REQUIRED.** A high level description of the number of accelerators, specific generation of accelerator, or other relevant inference details.                                          |
+| source_code           | [Asset Object](stac-asset)            | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc. This description should reference the inference function, for example my_package.my_module.predict |
+| docker                | [Container](#container)               | **RECOMMENDED.** Information for the deployment of the model in a docker instance.                                                                                                      |
+| model_commit_hash     | string                                | Hash value pointing to a specific version of the code.                                                                                                                                  |
+| batch_size_suggestion | number                                | A suggested batch size for the accelerator and summarized hardware.                                                                                                                     |
 
 #### Accelerator Enum
 
 It is recommended to define `accelerator` with one of the following values:
 
-
-### Runtime
-
-| Field Name            | Type                       | Description                                                                     |
-|-----------------------|----------------------------|---------------------------------------------------------------------------------|
-| framework             | string                     | Used framework (ex: PyTorch, TensorFlow).                                       |
-| version               | string                     | Framework version (some models require a specific version of the framework).    |
-| model_asset           | [Asset Object](stac-asset) | Common Metadata Collection level asset object containing URI to the model file. |
-| model_handler         | string                     | Inference execution function.                                                   |
-| source_code_url       | string                     | Url of the source code (ex: GitHub repo).                                       |
-| model_commit_hash     | string                     | Hash value pointing to a specific version of the code.                          |
-| docker                | [Container](#container)    | Information for the deployment of the model in a docker instance.               |
-| batch_size_suggestion | number                     | A suggested batch size for a given compute instance type                        |
-| hardware_suggestion   | string                     | A suggested cloud instance type or accelerator model                            |
+- `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
+- `cuda` models compatible with NVIDIA GPUs
+- `xla` models compiled with XLA. models trained on TPUs are typically compiled with XLA.
+- `amd-rocm` models trained on AMD GPUs
+- `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
+- `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
+- `macos-arm` for models trained on Apple Silicon
 
 [stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
-#### Container
+#### Container Object
 
-| Field Name     | Type    | Description                                                              |
-|----------------|---------|--------------------------------------------------------------------------|
-| container_file | string  | Url of the container file (Dockerfile).                                  |
-| image_name     | string  | Name of the container image.                                             |
-| tag            | string  | Tag of the image.                                                        |
-| working_dir    | string  | Working directory in the instance that can be mapped.                    |
-| run            | string  | Running command.                                                         |
+| Field Name     | Type   | Description                                           |
+|----------------|--------|-------------------------------------------------------|
+| container_file | string | Url of the container file (Dockerfile).               |
+| image_name     | string | Name of the container image.                          |
+| tag            | string | Tag of the image.                                     |
+| working_dir    | string | Working directory in the instance that can be mapped. |
+| run            | string | Running command.                                      |
 
-### Output
+### Output Object
 
-| Field Name               | Type                    | Description                                                                                                                                                                                                              |
-|--------------------------|-------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| task                     | [Task Enum](#task-enum) | Specifies the Machine Learning task for which the output can be used for.                                                                                                                                                |
-| class_count              | integer                 | Number of classes.                                                                                                                                                                                                       |
-| output_shape             | \[integer]              | Shape of the output array/tensor from the model For example ($N \times H \times W$). Use -1 to indicate variable dimensions, like the batch dimension.                                                                   |
-| class_name_mapping       | dict                    | Mapping of the output index to a short class name, for each record we specify the index and the class name.                                                                                                              |
-| post_processing_function | string                  | A url to the postprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_python_module_name:my_processing_function |
+| Field Name               | Type                                  | Description                                                                                                                                                                                                             |
+|--------------------------|---------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| task                     | [Task Enum](#task-enum)               | **REQUIRED.** Specifies the Machine Learning task for which the output can be used for.                                                                                                                                 |
+| number_of_classes        | integer                               | Number of classes.                                                                                                                                                                                                      |
+| result                   | [[Result Object](#result-object)]     | The list of output array/tensor from the model. For example ($N \times H \times W$). Use -1 to indicate variable dimensions, like the batch dimension.                                                                  |
+| class_name_mapping       | [Class Map Object](#class-map-object) | Mapping of the class name to an index representing the label in the model output.                                                                                                                                       |
+| post_processing_function | string                                | A url to the postprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: my_package.my_module.my_processing_function |
+
+While only `task` is a required field, all fields are recommended for supervised tasks that produce a fixed shape tensor and have output classes.
+`image-captioning`, `multi-modal`, and `generative` tasks may not return fixed shape tensors or classes.
 
 #### Task Enum
 
@@ -152,6 +161,23 @@ If the task falls within supervised machine learning and uses labels during trai
 STAC Collections and Items employed with the model described by this extension.
 
 [stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
+
+#### Result Object
+
+| Field Name | Type      | Description                                                                                                                                                                                                                             |
+|------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | [integer] | **REQUIRED.** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
+| dim_names  | [string]  | **REQUIRED.** The names of the above dimensions of the result array.                                                                                                                                                                    |
+| dtype      | string    | **REQUIRED.** The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                               |
+
+
+#### Class Map Object
+
+| Field Name                        | Type    | Description                                                              |
+|-----------------------------------|---------|--------------------------------------------------------------------------|
+| *class names depend on the model* | integer | There are N corresponding integer values corresponding to N class fieds. |
+
+The user can supply any number of fields for the classes of their model if the model produces a supervised classification result.                                                                                                                                                                   |
 
 ## Relation types
 
