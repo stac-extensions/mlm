@@ -1,4 +1,4 @@
-from typing import List, Optional, Literal, Dict, Literal, Union
+from typing import List, Optional, Dict, Literal, Union
 from pydantic import (
     BaseModel,
     Field,
@@ -19,21 +19,18 @@ class Statistics(BaseModel):
 
 class Band(BaseModel):
     name: str
-    description: str
+    description: Optional[str] = None
     nodata: float | int | str
     data_type: str
     unit: Optional[str] = None
 
-class Input(BaseModel):
+class ModelInput(BaseModel):
     name: str
-    bands: List[Band]
+    bands: List[str]
     input_array: InputArray
-    norm_type: Literal["min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"]
-    rescale_type: Literal["crop", "pad", "interpolation", "none"]
-    norm_by_channel: bool
-    params: Optional[
-        Dict[str, int | float | str]
-    ] = None
-    scaling_factor: Optional[float] = None
-    statistics: Optional[Statistics] = None
+    parameters: Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]] = None
+    norm_by_channel: bool = None
+    norm_type: Literal["min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "none"] = None
+    rescale_type: Literal["crop", "pad", "interpolation", "none"] = None
+    statistics: Optional[Union[Statistics, List[Statistics]]] = None
     pre_processing_function: Optional[str | AnyUrl] = None

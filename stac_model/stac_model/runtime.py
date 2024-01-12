@@ -1,6 +1,7 @@
 from .paths import S3Path
-from pydantic import BaseModel, FilePath, AnyUrl, field_validator
+from pydantic import BaseModel, FilePath, field_validator
 from typing import Optional, List
+from enum import Enum
 class Asset(BaseModel):
     """Information about the model location and other additional file locations. Follows
     the Asset Object spec: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
@@ -30,7 +31,7 @@ class Asset(BaseModel):
             )
         return v
 
-class ContainerInfo(BaseModel):
+class Container(BaseModel):
     container_file: str
     image_name: str
     tag: str
@@ -38,13 +39,26 @@ class ContainerInfo(BaseModel):
     run: str
     accelerator: bool
 
+class AcceleratorEnum(str, Enum):
+    amd64 = "amd64"
+    cuda = "cuda"
+    xla = "xla"
+    amd_rocm = "amd-rocm"
+    intel_ipex_cpu = "intel-ipex-cpu"
+    intel_ipex_gpu = "intel-ipex-gpu"
+    macos_arm = "macos-arm"
+
+    def __str__(self):
+        return self.value
+
 class Runtime(BaseModel):
     framework: str
     version: str
     asset: Asset
-    source_code_url: str
-    handler: Optional[str] = None
+    source_code: Asset
+    accelerator: AcceleratorEnum
+    accelerator_constrained: bool
+    hardware_summary: str
+    container: Optional[Container] = None
     commit_hash: Optional[str] = None
-    container: Optional[ContainerInfo] = None
     batch_size_suggestion: Optional[int] = None
-    hardware_suggestion: Optional[str | AnyUrl] = None

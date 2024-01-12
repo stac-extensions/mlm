@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Dict, Union, Optional
 from enum import Enum
 class TaskEnum(str, Enum):
@@ -21,9 +21,14 @@ class ClassMap(BaseModel):
         # Reverse the mapping
         return {v: k for k, v in self.class_to_label_id.items()}
 
-class Output(BaseModel):
+class ResultArray(BaseModel):
+    shape: List[Union[int,float]]
+    dim_names: List[str]
+    dtype: str = Field(..., pattern="^(uint8|uint16|int16|int32|float16|float32|float64)$")
+
+class ModelOutput(BaseModel):
     task: TaskEnum
-    number_of_classes: int
-    output_shape: List[Union[int,float]]
+    number_of_classes: int = None
+    result_array: ResultArray = None
     class_name_mapping: Optional[Dict[str, int]] = None
     post_processing_function: Optional[str] = None

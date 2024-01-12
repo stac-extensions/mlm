@@ -9,5 +9,7 @@ repos:
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
-        exclude: LICENCE
-# UPDATEME with additional hooks
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: ''  # Use the latest version of ruff-pre-commit
+    hooks:
+      - id: ruff

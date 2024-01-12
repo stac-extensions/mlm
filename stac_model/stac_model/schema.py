@@ -1,21 +1,23 @@
 from pydantic import BaseModel
-from typing import Optional
-from .input import Input, InputArray, Band, Statistics
-from .output import Output, ClassMap
-from .runtime import Runtime, Asset, ContainerInfo
+from .input import ModelInput, InputArray, Band, Statistics
+from .output import ModelOutput, ClassMap, ResultArray
+from .runtime import Runtime, Asset, Container
+from typing import List, Optional, Dict, Union
 
 class Architecture(BaseModel):
     name: str
-    summary: str
-    pretrained: bool
+    file_size: int
+    memory_size: int
+    summary: str = None
+    pretrained_source: str = None
     total_parameters: Optional[int] = None
-    on_disk_size_mb: Optional[float] = None
-    ram_size_mb: Optional[float] = None
 
 class MLModel(BaseModel):
-    mlm_input: Input
+    mlm_name: str
+    mlm_input: List[ModelInput]
     mlm_architecture: Architecture
     mlm_runtime: Runtime
-    mlm_output: Output
+    mlm_output: ModelOutput
+    mlm_parameters: Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]] = None
 
-__all__ = ["MLModel", "Input", "InputArray", "Band", "Statistics", "Output", "Asset", "ClassMap", "Runtime", "ContainerInfo", "Asset", "Architecture"]
+__all__ = ["MLModel", "ModelInput", "InputArray", "Band", "Statistics", "ModelOutput", "Asset", "ClassMap", "ResultArray", "Runtime", "Container", "Asset", "Architecture"]
