@@ -178,7 +178,7 @@ You can also use other base images. Pytorch and Tensorflow offer docker images f
 | task                     | [Task Enum](#task-enum)                       | **REQUIRED.** Specifies the Machine Learning task for which the output can be used for.                                                                                                                |
 | number_of_classes        | integer                                       | Number of classes.                                                                                                                                                                                     |
 | result                   | [[Result Array Object](#result-array-object)] | The list of output array/tensor from the model. For example ($N \times H \times W$). Use -1 to indicate variable dimensions, like the batch dimension.                                                 |
-| class_name_mapping       | [Class Map Object](#class-map-object)         | Mapping of the class name to an index representing the label in the model output.                                                                                                                      |
+| classification:classes       | [Class Object](#class-object)         | A list of class objects adhering to the Classification extension.                                                                                                                      |
 | post_processing_function | string                                        | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module.my_processing_function` |
 
 While only `task` is a required field, all fields are recommended for supervised tasks that produce a fixed shape tensor and have output classes.
@@ -212,13 +212,9 @@ STAC Collections and Items employed with the model described by this extension.
 | dtype      | string    | **REQUIRED.** The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                               |
 
 
-#### Class Map Object
+#### Class Object
 
-| Field Name                        | Type    | Description                                                              |
-|-----------------------------------|---------|--------------------------------------------------------------------------|
-| *class names depend on the model* | integer | There are N corresponding integer values corresponding to N class fields. |
-
-The user can supply any number of fields for the classes of their model if the model produces a supervised classification result.                                                                                                                                                                   |
+See the documentation for the [Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object). We don't use the Bit Field Object since inputs and outputs to machine learning models don't typically use bit fields.
 
 ## Relation types
 
