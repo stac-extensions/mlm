@@ -52,8 +52,6 @@ class AcceleratorEnum(str, Enum):
         return self.value
 
 class Runtime(BaseModel):
-    framework: str
-    version: str
     asset: Asset
     source_code: Asset
     accelerator: AcceleratorEnum

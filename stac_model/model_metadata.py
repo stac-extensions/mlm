@@ -1,8 +1,6 @@
 from pydantic import BaseModel, Field, FilePath, AnyUrl
 from typing import Optional, List, Tuple, Dict, Literal, Any
 from uuid import uuid4
-import numpy as np
-import re
 
 # Pydantic Models
 class TensorSignature(BaseModel):

@@ -2,6 +2,7 @@ from pydantic import (
     field_validator,
     AnyUrl
 )
+import re
 class S3Path(AnyUrl):
     allowed_schemes = {"s3"}
     user_required = False

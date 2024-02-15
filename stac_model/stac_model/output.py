@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import List, Dict, Union, Optional
+from typing import List, Union, Optional
 from enum import Enum
 class TaskEnum(str, Enum):
     regression = "regression"
@@ -12,23 +12,22 @@ class TaskEnum(str, Enum):
     similarity_search = "similarity search"
     image_captioning = "image captioning"
     generative =  "generative"
-
-class ClassMap(BaseModel):
-    class_to_label_id: Dict[str, int]
-    # Property to reverse the mapping
-    @property
-    def label_id_to_class(self) -> Dict[int, str]:
-        # Reverse the mapping
-        return {v: k for k, v in self.class_to_label_id.items()}
+    super_resolution = "super resolution"
 
 class ResultArray(BaseModel):
     shape: List[Union[int,float]]
     dim_names: List[str]
-    dtype: str = Field(..., pattern="^(uint8|uint16|int16|int32|float16|float32|float64)$")
+    data_type: str = Field(..., pattern="^(uint8|uint16|uint32|uint64|int8|int16|int32|int64|float16|float32|float64)$")
 
+class ClassObject(BaseModel):
+    value: int
+    name: str
+    description: str = None
+    title: str = None
+    color_hint: str = None
+    nodata: bool = False
 class ModelOutput(BaseModel):
     task: TaskEnum
-    number_of_classes: int = None
-    result_array: ResultArray = None
-    class_name_mapping: Optional[Dict[str, int]] = None
+    result_array: List[ResultArray] = None
+    classification_classes: List[ClassObject] = None
     post_processing_function: Optional[str] = None
