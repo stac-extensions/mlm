@@ -6,10 +6,17 @@ This document makes a number of recommendations for creating real world ML Model
 
 ### Processing Extension
 
-We recommend using the `processing:lineage` and `processing:level` fields from the [Processing Extension](https://github.com/stac-extensions/processing) to make it clear how [Model Input Objects](./README.md#model-input-object) are processed.
+We recommend using at least the `processing:lineage` and `processing:level` fields from the [Processing Extension](https://github.com/stac-extensions/processing) to make it clear how [Model Input Objects](./README.md#model-input-object) are processed by the data provider prior to an inference preprocessing pipeline. This can help users locate the correct version of the dataset used during model inference or help them reproduce the data processing pipeline.
 
 For example:
 
-TODO supply example
+```
+"processing:lineage": "GRD Post Processing",
+"processing:level": "L1C",
+"processing:facility": "Copernicus S1 Core Ground Segment - DPA",
+"processing:software": {
+    "Sentinel-1 IPF": "002.71"
+}
+```
 
 TODO provide other suggestions on extensions to compose with this one. STAC ML AOI, STAC Label, ...
