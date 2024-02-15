@@ -74,7 +74,6 @@ In addition, fields from the following extensions must be imported in the item:
 | name                    | string                                                                           | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |   |
 | bands                   | [string]                                                                         | **REQUIRED.** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                           |   |
 | input_array             | [Array Object](#feature-array-object)                                            | **REQUIRED.** The N-dimensional array object that describes the shape, dimension ordering, and data type.                                                                                                                                          |   |
-| inference_data_type              | string | **REQUIRED.** The required or suggested data type of the model input after all preprocessing has been applied and model inference is run.  See the list of [common metadata data types](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#data-types).                                                                                                                                                                     | |
 | parameters              | [Parameters Object](#params-object)                                              | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |   |
 | norm_by_channel         | boolean                                                                          | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of [Statistics Objects](#bands-and-statistics) that is ordered like the `bands` field in this object.                    |   |
 | norm_type               | string                                                                           | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "norm_with_clip", "none"                                                                                                                                |   |
@@ -89,7 +88,7 @@ In addition, fields from the following extensions must be imported in the item:
 |---------------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *parameter names depend on the model* | number `\|` string `\|` boolean `\|` array | The number of fields and their names depend on the model. Values should not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another [model input object](#model-input-object). |
 
-The parameters field can either be specified in the [model input object](#model-input-object) if they are associated with a specific input or as an [Item or Collection](#item-properties-and-collection-fields) field if the parameters are supplied without relation to a specific model input.
+The parameters field can either be specified in the [Model Input Object](#model-input-object) if they are associated with a specific input or as an [Item or Collection](#item-properties-and-collection-fields) field if the parameters are supplied without relation to a specific model input.
 
 #### Bands and Statistics
 
@@ -101,11 +100,11 @@ A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/sta
 
 #### Array Object
 
-| Field Name | Type      | Description                                                                                                                                                                                                                              |
-|------------|-----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered within the `shape`. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width.                                                           |
-| dtype      | string    | **REQUIRED.** The data type of values in the n-dimensional array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                  |
+| Field Name | Type      | Description                                                                                                                                                                                                                                                                                                                                                                                            |  |
+|------------|-----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--|
+| shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size.                                                                                                                                                               |  |
+| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered within the `shape`. "bhw", "bchw", "bthw", "btchw" are valid orderings where b=batch, c=channel, t=time, h=height, w=width.                                                                                                                                                                                                                         |  |
+| data_type  | enum      | **REQUIRED.** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. Use one of the [common metadata data types](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#data-types). |  |
 
 Note: It is common in the machine learning, computer vision, and remote sensing communities to refer to rasters that are inputs to a model as arrays or tensors. Array Objects are distinct from the JSON array type used to represent lists of values.
 
@@ -176,9 +175,8 @@ You can also use other base images. Pytorch and Tensorflow offer docker images f
 | Field Name               | Type                                          | Description                                                                                                                                                                                            |
 |--------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | task                     | [Task Enum](#task-enum)                       | **REQUIRED.** Specifies the Machine Learning task for which the output can be used for.                                                                                                                |
-| number_of_classes        | integer                                       | Number of classes.                                                                                                                                                                                     |
 | result                   | [[Result Array Object](#result-array-object)] | The list of output array/tensor from the model. For example ($N \times H \times W$). Use -1 to indicate variable dimensions, like the batch dimension.                                                 |
-| classification:classes       | [Class Object](#class-object)         | A list of class objects adhering to the Classification extension.                                                                                                                      |
+| classification:classes       | [[Class Object](#class-object)]       | A list of class objects adhering to the [Classification extension](https://github.com/stac-extensions/classification).                                                                                                                      |
 | post_processing_function | string                                        | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module.my_processing_function` |
 
 While only `task` is a required field, all fields are recommended for supervised tasks that produce a fixed shape tensor and have output classes.
@@ -186,7 +184,7 @@ While only `task` is a required field, all fields are recommended for supervised
 
 #### Task Enum
 
-It is recommended to define `task` with one of the following values:
+It is recommended to define `task` with one of the following values for each Model Output Object:
 - `regression`
 - `classification`
 - `object detection`
@@ -198,18 +196,19 @@ It is recommended to define `task` with one of the following values:
 - `image captioning`
 - `generative`
 
-If the task falls within supervised machine learning and uses labels during training, this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
-STAC Collections and Items employed with the model described by this extension.
+If the task falls within the category of supervised machine learning and uses labels during training, this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
+STAC Collections and Items published with the model described by this extension.
 
 [stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
 
 #### Result Array Object
 
-| Field Name | Type      | Description                                                                                                                                                                                                                             |
-|------------|-----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer] | **REQUIRED.** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_names  | [string]  | **REQUIRED.** The names of the above dimensions of the result array, ordered the same as this object's `shape` field.                                                                                                                   |
-| dtype      | string    | **REQUIRED.** The data type of values in the array. Suggested to use [Numpy numerical types](https://numpy.org/devdocs/user/basics.types.html), omitting the numpy module, e.g. "float32"                                               |
+| Field Name | Type      | Description                                                                                                                                                                                                                                                                                                                                                          |  |
+|------------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--|
+| shape      | [integer] | **REQUIRED.** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size.                                                                                                                              |  |
+| dim_names  | [string]  | **REQUIRED.** The names of the above dimensions of the result array, ordered the same as this object's `shape` field.                                                                                                                                                                                                                                                |  |
+| data_type  | enum      | **REQUIRED.** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing. Use one of the [common metadata data types](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#data-types). |  |
+
 
 
 #### Class Object
