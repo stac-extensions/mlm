@@ -36,109 +36,174 @@ Then you can run
 stac-model --help
 ```
 
-or with `Poetry`:
-
-```bash
-poetry run stac-model --help
-```
-
 ## Creating an example metadata json
 
 ```
-poetry run stac-model
+stac-model
 ```
 
 This will make an example example.json metadata file for an example model.
 
 Currently this looks like
 
-```
-{
-  "mlm_input": {
-    "name": "13 Band Sentinel-2 Batch",
-    "bands": [],
-    "input_array": {
-      "shape": [
-        -1,
-        13,
-        64,
-        64
+```json
+  "mlm_name": "Resnet-18 Sentinel-2 ALL MOCO",
+  "mlm_task": "classification",
+  "mlm_framework": "pytorch",
+  "mlm_framework_version": "2.1.2+cu121",
+  "mlm_file_size": 1,
+  "mlm_memory_size": 1,
+  "mlm_input": [
+    {
+      "name": "13 Band Sentinel-2 Batch",
+      "bands": [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B8A",
+        "B09",
+        "B10",
+        "B11",
+        "B12"
       ],
-      "dim_order": "bchw",
-      "dtype": "float32"
-    },
-    "norm_type": "z_score",
-    "rescale_type": "none",
-    "norm_by_channel": true,
-    "statistics": {
-      "mean": [
-        1354.40546513,
-        1118.24399958,
-        1042.92983953,
-        947.62620298,
-        1199.47283961,
-        1999.79090914,
-        2369.22292565,
-        2296.82608323,
-        732.08340178,
-        12.11327804,
-        1819.01027855,
-        1118.92391149,
-        2594.14080798
-      ],
-      "stddev": [
-        245.71762908,
-        333.00778264,
-        395.09249139,
-        593.75055589,
-        566.4170017,
-        861.18399006,
-        1086.63139075,
-        1117.98170791,
-        404.91978886,
-        4.77584468,
-        1002.58768311,
-        761.30323499,
-        1231.58581042
-      ]
-    },
-    "pre_processing_function": "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"
-  },
-  "mlm_architecture": {
-    "name": "ResNet-18",
-    "summary": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
-    "pretrained": true,
-    "total_parameters": 11700000
-  },
-  "mlm_runtime": {
-    "framework": "torch",
-    "version": "2.1.2+cu121",
-    "asset": {
-      "href": "."
-    },
-    "source_code_url": "https://github.com/huggingface/pytorch-image-models/blob/b5a4fa9c3be6ac732807db7e87d176f5e4fc06f1/timm/models/resnet.py#L362",
-    "handler": "torchgeo.models.resnet.ResNet18"
-  },
-  "mlm_output": {
-    "task": "classification",
-    "number_of_classes": 10,
-    "output_shape": [
-      -1,
-      10
-    ],
-    "class_name_mapping": {
-      "Annual Crop": 0,
-      "Forest": 1,
-      "Herbaceous Vegetation": 2,
-      "Highway": 3,
-      "Industrial Buildings": 4,
-      "Pasture": 5,
-      "Permanent Crop": 6,
-      "Residential Buildings": 7,
-      "River": 8,
-      "SeaLake": 9
+      "input_array": {
+        "shape": [
+          -1,
+          13,
+          64,
+          64
+        ],
+        "dim_order": "bchw",
+        "data_type": "float32"
+      },
+      "norm_by_channel": true,
+      "norm_type": "z_score",
+      "statistics": {
+        "mean": [
+          1354.40546513,
+          1118.24399958,
+          1042.92983953,
+          947.62620298,
+          1199.47283961,
+          1999.79090914,
+          2369.22292565,
+          2296.82608323,
+          732.08340178,
+          12.11327804,
+          1819.01027855,
+          1118.92391149,
+          2594.14080798
+        ],
+        "stddev": [
+          245.71762908,
+          333.00778264,
+          395.09249139,
+          593.75055589,
+          566.4170017,
+          861.18399006,
+          1086.63139075,
+          1117.98170791,
+          404.91978886,
+          4.77584468,
+          1002.58768311,
+          761.30323499,
+          1231.58581042
+        ]
+      },
+      "pre_processing_function": "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"
     }
-  }
+  ],
+  "mlm_output": [
+    {
+      "task": "classification",
+      "result_array": [
+        {
+          "shape": [
+            -1,
+            10
+          ],
+          "dim_names": [
+            "batch",
+            "class"
+          ],
+          "data_type": "float32"
+        }
+      ],
+      "classification_classes": [
+        {
+          "value": 0,
+          "name": "Annual Crop",
+          "nodata": false
+        },
+        {
+          "value": 1,
+          "name": "Forest",
+          "nodata": false
+        },
+        {
+          "value": 2,
+          "name": "Herbaceous Vegetation",
+          "nodata": false
+        },
+        {
+          "value": 3,
+          "name": "Highway",
+          "nodata": false
+        },
+        {
+          "value": 4,
+          "name": "Industrial Buildings",
+          "nodata": false
+        },
+        {
+          "value": 5,
+          "name": "Pasture",
+          "nodata": false
+        },
+        {
+          "value": 6,
+          "name": "Permanent Crop",
+          "nodata": false
+        },
+        {
+          "value": 7,
+          "name": "Residential Buildings",
+          "nodata": false
+        },
+        {
+          "value": 8,
+          "name": "River",
+          "nodata": false
+        },
+        {
+          "value": 9,
+          "name": "SeaLake",
+          "nodata": false
+        }
+      ]
+    }
+  ],
+  "mlm_runtime": [
+    {
+      "asset": {
+        "href": "."
+      },
+      "source_code": {
+        "href": "."
+      },
+      "accelerator": "cuda",
+      "accelerator_constrained": false,
+      "hardware_summary": "Unknown"
+    }
+  ],
+  "mlm_total_parameters": 11700000,
+  "mlm_pretrained_source": "EuroSat Sentinel-2",
+  "mlm_summary": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
 }
 ```
 
