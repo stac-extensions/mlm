@@ -27,7 +27,9 @@ Specifically, this extension records the following information to make ML models
 1. An optional, flexible description of the runtime environment to be able to run the model
 1. Scientific references
 
-The MLM specification is biased towards supervised ML models the produce classifications. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
+The MLM specification is biased towards providing metadata fields for supervised machine learning models. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
+
+See [Best Practices](./best-practices.md) for guidance on what other extensions to use for documenting models with this extension.
 
 Check the original technical report for an earlier version of the Model Extension [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details.
 
