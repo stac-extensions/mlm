@@ -24,15 +24,24 @@ keywords = []  # UPDATEME with relevant keywords
 
 
 # Pypi classifiers: https://pypi.org/classifiers/
-classifiers = [  # UPDATEME with additional classifiers; remove last classifier to allow publishing on PyPI
+classifiers = [
   "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Libraries :: Python Modules",
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Framework :: Pydantic",
+  "Framework :: Pydantic :: 2",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "Topic :: File Formats :: JSON :: JSON Schema",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 
 
