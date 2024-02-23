@@ -19,4 +19,8 @@ For example:
 }
 ```
 
+STAC Items or STAC Assets with asset properties resulting from the model inference should be annotated with [`processing:level = L4`](https://github.com/stac-extensions/processing?tab=readme-ov-file#suggested-processing-levels).
+
+> Model output or results from analyses of lower level data (i.e.,variables that are not directly measured by the instruments, but are derived from these measurements)
+
 TODO provide other suggestions on extensions to compose with this one. STAC ML AOI, STAC Label, ...

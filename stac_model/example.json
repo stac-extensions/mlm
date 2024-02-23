@@ -1,11 +1,11 @@
 {
-  "mlm_name": "Resnet-18 Sentinel-2 ALL MOCO",
-  "mlm_task": "classification",
-  "mlm_framework": "pytorch",
-  "mlm_framework_version": "2.1.2+cu121",
-  "mlm_file_size": 1,
-  "mlm_memory_size": 1,
-  "mlm_input": [
+  "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
+  "mlm:task": "classification",
+  "mlm:framework": "pytorch",
+  "mlm:framework_version": "2.1.2+cu121",
+  "mlm:file_size": 1,
+  "mlm:memory_size": 1,
+  "mlm:input": [
     {
       "name": "13 Band Sentinel-2 Batch",
       "bands": [
@@ -70,7 +70,7 @@
       "pre_processing_function": "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"
     }
   ],
-  "mlm_output": [
+  "mlm:output": [
     {
       "task": "classification",
       "result_array": [
@@ -140,7 +140,7 @@
       ]
     }
   ],
-  "mlm_runtime": [
+  "mlm:runtime": [
     {
       "asset": {
         "href": "."
@@ -153,7 +153,7 @@
       "hardware_summary": "Unknown"
     }
   ],
-  "mlm_total_parameters": 11700000,
-  "mlm_pretrained_source": "EuroSat Sentinel-2",
-  "mlm_summary": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
+  "mlm:total_parameters": 11700000,
+  "mlm:pretrained_source": "EuroSat Sentinel-2",
+  "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
 }

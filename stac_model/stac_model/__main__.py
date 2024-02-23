@@ -161,10 +161,10 @@ def main(
         mlm_runtime=[mlm_runtime],
         mlm_output=[mlm_output],
     )
-    json_str = ml_model_meta.model_dump_json(indent=2, exclude_none=True)
+    json_str = ml_model_meta.model_dump_json(indent=2, exclude_none=True, by_alias=True)
     with open("example.json", "w") as file:
         file.write(json_str)
-    print(ml_model_meta.model_dump_json(indent=2, exclude_none=True))
+    print(ml_model_meta.model_dump_json(indent=2, exclude_none=True, by_alias=True))
 
 
 if __name__ == "__main__":

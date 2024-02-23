@@ -29,9 +29,9 @@ Specifically, this extension records the following information to make ML models
 
 The MLM specification is biased towards providing metadata fields for supervised machine learning models. However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
 
-See [Best Practices](./best-practices.md) for guidance on what other extensions to use for documenting models with this extension.
+See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction with this extension. The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost never have the Machine Learning Model Extension exclusively in `stac_extensions`.
 
-Check the original technical report for an earlier version of the Model Extension [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details.
+Check the original technical report for an earlier version of the Model Extension, formerly known as the Deep Learning Model Extension (DLM), [here](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf) for more details. The DLM was renamed to the current MLM Extension and refactored to form a cohesive definition across all machine learning approaches, regardless of whether the approach constitutes a deep neural network or other statistical approach.
 
 ![Image Description](https://i.imgur.com/cVAg5sA.png)
 
