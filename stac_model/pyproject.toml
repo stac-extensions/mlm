@@ -73,7 +73,7 @@ pytest-sugar = "^0.9.7"
 pytest-click = "^1.1.0"
 pytest-pikachu = "^1.0.0"
 coverage = "^7.3.0"
-ruff = "^0.1.7"
+ruff = "^0.2.2"
 
 [tool.ruff]
 exclude = [
@@ -90,6 +90,21 @@ exclude = [
     "venv"
 ]
 
+[tool.ruff.lint]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    "I",
+]
 
 [tool.mypy]
 # https://github.com/python/mypy

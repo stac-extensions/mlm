@@ -1,8 +1,11 @@
+from typing import Dict, List, Union
+
 from pydantic import BaseModel
-from .input import ModelInput, InputArray, Band, Statistics
-from .output import ModelOutput, ClassObject, ResultArray, TaskEnum
-from .runtime import Runtime, Asset, Container
-from typing import List, Dict, Union
+
+from .input import Band, InputArray, ModelInput, Statistics
+from .output import ClassObject, ModelOutput, ResultArray, TaskEnum
+from .runtime import Asset, Container, Runtime
+
 
 class MLModel(BaseModel):
     mlm_name: str
@@ -19,4 +22,18 @@ class MLModel(BaseModel):
     mlm_summary: str
     mlm_parameters: Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]] = None
 
-__all__ = ["MLModel", "ModelInput", "InputArray", "Band", "Statistics", "ModelOutput", "ClassObject", "Asset", "ResultArray", "Runtime", "Container", "Asset"]
+
+__all__ = [
+    "MLModel",
+    "ModelInput",
+    "InputArray",
+    "Band",
+    "Statistics",
+    "ModelOutput",
+    "ClassObject",
+    "Asset",
+    "ResultArray",
+    "Runtime",
+    "Container",
+    "Asset",
+]

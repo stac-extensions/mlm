@@ -22,7 +22,7 @@ The main objectives of the extension are:
 
 Specifically, this extension records the following information to make ML models searchable and reusable:
 1. Sensor band specifications
-1. Model input transforms including rescale and normalization
+1. Model input transforms including resize and normalization
 1. Model output shape, data type, and its semantic interpretation
 1. An optional, flexible description of the runtime environment to be able to run the model
 1. Scientific references
@@ -77,7 +77,7 @@ In addition, fields from the following extensions must be imported in the item:
 | parameters              | [Parameters Object](#params-object)                                              | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |   |
 | norm_by_channel         | boolean                                                                          | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of [Statistics Objects](#bands-and-statistics) that is ordered like the `bands` field in this object.                    |   |
 | norm_type               | string                                                                           | Normalization method. Select one option from "min_max", "z_score", "max_norm", "mean_norm", "unit_variance", "norm_with_clip", "none"                                                                                                                                |   |
-| rescale_type            | string                                                                           | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |   |
+| resize_type            | string                                                                           | High-level descriptor of the rescaling method to change image shape. Select one option from "crop", "pad", "interpolation", "none". If your rescaling method combines more than one of these operations, provide the name of the operation instead |   |
 | statistics              | [Statistics Object](stac-statistics) `\|` [[Statistics Object](stac-statistics)] | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                          |   |
 | norm_with_clip_values              | [integer] |  If norm_type = "norm_with_clip" this array supplies a value that is less than the band maximum. The array must be the same length as "bands", each value is used to divide each band before clipping values between 0 and 1.                                                                                                                                                                        |
 | pre_processing_function | string                                                                           | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: `my_python_module_name:my_processing_function`                          |   |
@@ -195,6 +195,7 @@ It is recommended to define `task` with one of the following values for each Mod
 - `similarity search`
 - `image captioning`
 - `generative`
+- `super resolution`
 
 If the task falls within the category of supervised machine learning and uses labels during training, this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
 STAC Collections and Items published with the model described by this extension.

@@ -1,10 +1,14 @@
-from .paths import S3Path
-from pydantic import BaseModel, FilePath, field_validator
-from typing import Optional, List
 from enum import Enum
+from typing import List, Optional
+
+from pydantic import BaseModel, FilePath, field_validator
+
+from .paths import S3Path
+
+
 class Asset(BaseModel):
-    """Information about the model location and other additional file locations. Follows
-    the Asset Object spec: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
+    """Information about the model location and other additional file locations.
+    Follows the STAC Asset Object spec.
     """
 
     href: S3Path | FilePath | str
@@ -13,7 +17,6 @@ class Asset(BaseModel):
     type: Optional[str] = None
     roles: Optional[List[str]] = None
 
-
     class Config:
         arbitrary_types_allowed = True
 
@@ -21,15 +24,13 @@ class Asset(BaseModel):
     @classmethod
     def check_path_type(cls, v):
         if isinstance(v, str):
-            if v.startswith("s3://"):
-                v = S3Path(url=v)
-            else:
-                v = FilePath(f=v)
+            v = S3Path(url=v) if v.startswith("s3://") else FilePath(f=v)
         else:
             raise ValueError(
                 f"Expected str, S3Path, or FilePath input, received {type(v).__name__}"
             )
         return v
+
 
 class Container(BaseModel):
     container_file: str
@@ -38,6 +39,7 @@ class Container(BaseModel):
     working_dir: str
     run: str
     accelerator: bool
+
 
 class AcceleratorEnum(str, Enum):
     amd64 = "amd64"
@@ -50,6 +52,7 @@ class AcceleratorEnum(str, Enum):
 
     def __str__(self):
         return self.value
+
 
 class Runtime(BaseModel):
     asset: Asset

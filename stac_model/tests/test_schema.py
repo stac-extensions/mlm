@@ -1,13 +1,15 @@
-import pytest
-from stac_model.schema import (
-    TensorSignature,
-    ModelSignature,
-    ModelArtifact,
-    ClassMap,
-    ModelMetadata,
-)
 import os
 import tempfile
+
+import pytest
+
+from stac_model.schema import (
+    ClassMap,
+    ModelArtifact,
+    ModelMetadata,
+    ModelSignature,
+    TensorSignature,
+)
 
 
 def create_metadata():
@@ -56,7 +58,7 @@ def test_model_metadata_json_operations(metadata_json):
             file.write(metadata_json)
 
         # Read and validate the model metadata from the JSON file
-        with open(temp_filepath, "r") as json_file:
+        with open(temp_filepath) as json_file:
             json_str = json_file.read()
             model_metadata = ModelMetadata.model_validate_json(json_str)
 

@@ -1,8 +1,8 @@
-from pydantic import (
-    field_validator,
-    AnyUrl
-)
 import re
+
+from pydantic import AnyUrl, field_validator
+
+
 class S3Path(AnyUrl):
     allowed_schemes = {"s3"}
     user_required = False
@@ -29,7 +29,7 @@ class S3Path(AnyUrl):
             raise ValueError("Bucket name must be between 3 and 63 characters")
         if not re.match(r"^[a-z0-9.\-]+$", v):
             raise ValueError(
-                "Bucket name can only contain lowercase letters, numbers, dots, and hyphens"
+                "Bucket name can only contain lowercase, numbers, dots, and hyphens"
             )
         if v.startswith("-") or v.endswith("-"):
             raise ValueError("Bucket name cannot start or end with a hyphen")
