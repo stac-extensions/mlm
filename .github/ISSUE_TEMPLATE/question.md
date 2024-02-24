@@ -25,4 +25,4 @@ Is it possible to [...]?
 
 <!-- Add any other context or screenshots about the feature request here. -->
 
-[1]: https://github.com/rbavery/stac-model/issues
+[1]: https://github.com/crim-ca/stac-model/issues

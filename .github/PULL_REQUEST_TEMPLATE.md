@@ -21,7 +21,6 @@
 
 <!-- Mark with an `x` all the checkboxes that apply (like `[x]`) -->
 
-- [ ] I've read the [`CODE_OF_CONDUCT.md`][1] document;
 - [ ] I've read the [`CONTRIBUTING.md`][2] guide;
 - [ ] I've updated the code style using `make codestyle`;
 - [ ] I've written tests for all new methods and classes that I created;

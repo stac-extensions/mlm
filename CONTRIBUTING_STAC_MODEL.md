@@ -1,4 +1,4 @@
-# How to contribute
+# How to contribute to stac-model
 
 ### Project setup
 

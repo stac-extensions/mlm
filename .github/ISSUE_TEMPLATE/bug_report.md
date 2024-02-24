@@ -12,7 +12,7 @@ assignees:
 
 ## :microscope: How To Reproduce
 
-Steps to reproduce the behaviour:
+Steps to reproduce the behavior:
 
 1. ...
 
@@ -23,15 +23,9 @@ Steps to reproduce the behaviour:
 ### Environment
 
 * OS: [e.g. Linux / Windows / macOS]
-* Python version, get it with:
+* Python version
+* stac-model version
 
-```bash
-python --version
-```
-
-### Screenshots
-
-<!-- If applicable, add screenshots to help explain your problem. -->
 
 ## :chart_with_upwards_trend: Expected behavior
 
