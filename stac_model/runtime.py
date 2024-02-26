@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, FilePath, field_validator
+from pydantic import BaseModel, ConfigDict, FilePath, field_validator
 
 from .paths import S3Path
 
@@ -17,8 +17,7 @@ class Asset(BaseModel):
     type: Optional[str] = None
     roles: Optional[List[str]] = None
 
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed = True)
 
     @field_validator("href")
     @classmethod
