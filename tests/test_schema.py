@@ -11,4 +11,4 @@ def metadata_json():
 def test_model_metadata_json_operations(metadata_json):
     from stac_model.schema import MLModel
     model_metadata = MLModel.model_validate_json(metadata_json)
-    assert model_metadata.name == "Resnet-18 Sentinel-2 ALL MOCO"
+    assert model_metadata.mlm_name == "Resnet-18 Sentinel-2 ALL MOCO"

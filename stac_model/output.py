@@ -30,14 +30,14 @@ class ResultArray(BaseModel):
 class ClassObject(BaseModel):
     value: int
     name: str
-    description: str = None
-    title: str = None
-    color_hint: str = None
-    nodata: bool = False
+    description: Optional[str] = None
+    title: Optional[str] = None
+    color_hint: Optional[str] = None
+    nodata: Optional[bool] = False
 
 
 class ModelOutput(BaseModel):
     task: TaskEnum
-    result_array: List[ResultArray] = None
-    classification_classes: List[ClassObject] = None
+    result_array: Optional[List[ResultArray]] = None
+    classification_classes: Optional[List[ClassObject]] = None
     post_processing_function: Optional[str] = None

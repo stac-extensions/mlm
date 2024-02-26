@@ -69,7 +69,7 @@ def eurosat_resnet():
         input_array=input_array,
         norm_by_channel=True,
         norm_type="z_score",
-        rescale_type="none",
+        resize_type="none",
         statistics=stats,
         pre_processing_function = "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"  # noqa: E501
 ,

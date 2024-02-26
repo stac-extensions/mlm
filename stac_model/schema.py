@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel, ConfigDict
 
@@ -23,7 +23,7 @@ class MLModel(BaseModel):
     mlm_total_parameters: int
     mlm_pretrained_source: str
     mlm_summary: str
-    mlm_parameters: Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]] = None # noqa: E501
+    mlm_parameters: Optional[Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]] = None # noqa: E501
 
     model_config = ConfigDict(alias_generator=mlm_prefix_replacer,
                               populate_by_name=True, extra="ignore")

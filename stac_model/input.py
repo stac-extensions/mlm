@@ -33,7 +33,6 @@ class ModelInput(BaseModel):
     name: str
     bands: List[str]
     input_array: InputArray
-    parameters: Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]] = None
     norm_by_channel: bool = None
     norm_type: Literal[
         "min_max",
@@ -44,7 +43,9 @@ class ModelInput(BaseModel):
         "norm_with_clip",
         "none",
     ] = None
-    resize_type: Literal["crop", "pad", "interpolation", "none"] = None
+    resize_type: Literal["crop", "pad", "interpolate", "none"] = None
+    parameters: Optional[Dict[str, Union[int, str, bool,
+                                         List[Union[int, str, bool]]]]] = None
     statistics: Optional[Union[Statistics, List[Statistics]]] = None
     norm_with_clip_values: Optional[List[Union[float, int]]] = None
     pre_processing_function: Optional[str | AnyUrl] = None
