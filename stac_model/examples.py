@@ -2,7 +2,7 @@ from stac_model.schema import (
     Asset,
     ClassObject,
     InputArray,
-    MLModel,
+    MLModelExtension,
     ModelInput,
     ModelOutput,
     ResultArray,
@@ -112,7 +112,7 @@ def eurosat_resnet():
         output_shape=[-1, 10],
         result_array=[result_array],
     )
-    ml_model_meta = MLModel(
+    ml_model_meta = MLModelExtension(
         mlm_name="Resnet-18 Sentinel-2 ALL MOCO",
         mlm_task="classification",
         mlm_framework="pytorch",
