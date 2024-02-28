@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel, ConfigDict, FilePath, field_validator
+from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath
 
 from .paths import S3Path
 
@@ -11,25 +11,13 @@ class Asset(BaseModel):
     Follows the STAC Asset Object spec.
     """
 
-    href: S3Path | FilePath | str
+    href: S3Path | FilePath | AnyUrl| str
     title: Optional[str] = None
     description: Optional[str] = None
     type: Optional[str] = None
     roles: Optional[List[str]] = None
 
     model_config = ConfigDict(arbitrary_types_allowed = True)
-
-    @field_validator("href")
-    @classmethod
-    def check_path_type(cls, v):
-        if isinstance(v, str):
-            v = S3Path(url=v) if v.startswith("s3://") else FilePath(f=v)
-        else:
-            raise ValueError(
-                f"Expected str, S3Path, or FilePath input, received {type(v).__name__}"
-            )
-        return v
-
 
 class Container(BaseModel):
     container_file: str

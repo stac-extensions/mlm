@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from stac_model.schema import (
     Asset,
     ClassObject,
     InputArray,
-    MLModelExtension,
+    MLModelHelper,
+    MLModelProperties,
     ModelInput,
     ModelOutput,
     ResultArray,
@@ -112,7 +115,7 @@ def eurosat_resnet():
         output_shape=[-1, 10],
         result_array=[result_array],
     )
-    ml_model_meta = MLModelExtension(
+    ml_model_meta = MLModelProperties(
         mlm_name="Resnet-18 Sentinel-2 ALL MOCO",
         mlm_task="classification",
         mlm_framework="pytorch",
@@ -129,4 +132,13 @@ def eurosat_resnet():
         mlm_runtime=[mlm_runtime],
         mlm_output=[mlm_output],
     )
-    return ml_model_meta
+
+    mlmodel_helper = MLModelHelper(attrs = ml_model_meta.model_dump())
+    geometry=None
+    bbox = [-90, -180, 90, 180]
+    start_time = datetime.strptime("1900-01-01", '%Y-%m-%d')
+    end_time = None
+    item = mlmodel_helper.stac_item(geometry, bbox, start_datetime=start_time,
+                                    end_datetime=end_time)
+
+    return item

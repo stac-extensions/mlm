@@ -63,7 +63,6 @@ class MLModelProperties(BaseModel):
 class MLModelHelper:
     def __init__(self, attrs: MutableMapping[str, Any]):
         self.attrs = attrs
-        self.mlmodel_attrs = attrs["attributes"]
 
     @property
     def uid(self) -> str:
@@ -73,12 +72,12 @@ class MLModelHelper:
             "mlm_task",
         ]
         name = "_".join("_".join(
-            self.mlmodel_attrs[k].split(" ")) for k in keys).lower()
+            self.attrs[k].split(" ")) for k in keys).lower()
         return name
 
     @property
     def properties(self) -> MLModelProperties:
-        props = MLModelProperties(**self.mlmodel_attrs)
+        props = MLModelProperties(**self.attrs)
         return props
 
     def stac_item(self, geometry: AnyGeometry, bbox: List[float],
