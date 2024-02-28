@@ -1,6 +1,6 @@
 import typer
 from rich.console import Console
-
+import json
 from stac_model import __version__
 from stac_model.examples import eurosat_resnet
 
@@ -35,10 +35,8 @@ def main(
 ) -> None:
     """Generate example spec."""
     ml_model_meta = eurosat_resnet()
-    json_str = ml_model_meta.model_dump_json(indent=2, exclude_none=True, by_alias=True)
-    with open("example.json", "w") as file:
-        file.write(json_str)
-    print(ml_model_meta.model_dump_json(indent=2, exclude_none=True, by_alias=True))
+    with open("example.json", "w") as json_file:
+        json.dump(ml_model_meta.item.to_dict(), json_file, indent=4)
     print("Example model metadata written to ./example.json.")
     return ml_model_meta
 
