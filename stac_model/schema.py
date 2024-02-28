@@ -1,5 +1,4 @@
 import json
-from datetime import datetime
 from typing import (
     Any,
     Dict,
@@ -7,7 +6,6 @@ from typing import (
     Iterable,
     List,
     Literal,
-    MutableMapping,
     Optional,
     TypeVar,
     Union,
@@ -26,21 +24,23 @@ from pystac.extensions.base import (
     SummariesExtension,
 )
 
-from .geometry_models import AnyGeometry
 from .input import Band, InputArray, ModelInput, Statistics
 from .output import ClassObject, ModelOutput, ResultArray, TaskEnum
 from .runtime import Asset, Container, Runtime
 
-T = TypeVar("T", pystac.Collection, pystac.Item, pystac.Asset,
-            item_assets.AssetDefinition)
+T = TypeVar(
+    "T", pystac.Collection, pystac.Item, pystac.Asset, item_assets.AssetDefinition
+)
 
 SchemaName = Literal["mlm"]
 # TODO update
-SCHEMA_URI: str = "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json" #noqa: E501
+SCHEMA_URI: str = "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json"  # noqa: E501
 PREFIX = f"{get_args(SchemaName)[0]}:"
+
 
 def mlm_prefix_replacer(field_name: str) -> str:
     return field_name.replace("mlm_", "mlm:")
+
 
 class MLModelProperties(BaseModel):
     mlm_name: str
@@ -55,46 +55,13 @@ class MLModelProperties(BaseModel):
     mlm_total_parameters: int
     mlm_pretrained_source: str
     mlm_summary: str
-    mlm_parameters: Optional[Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]] = None # noqa: E501
+    mlm_parameters: Optional[
+        Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]
+    ] = None  # noqa: E501
 
-    model_config = ConfigDict(alias_generator=mlm_prefix_replacer,
-                              populate_by_name=True, extra="ignore")
-
-class MLModelHelper:
-    def __init__(self, attrs: MutableMapping[str, Any]):
-        self.attrs = attrs
-
-    @property
-    def uid(self) -> str:
-        """Return a unique ID for MLModel data item."""
-        keys = [
-            "mlm_name",
-            "mlm_task",
-        ]
-        name = "_".join("_".join(
-            self.attrs[k].split(" ")) for k in keys).lower()
-        return name
-
-    @property
-    def properties(self) -> MLModelProperties:
-        props = MLModelProperties(**self.attrs)
-        return props
-
-    def stac_item(self, geometry: AnyGeometry, bbox: List[float],
-                  start_datetime: datetime, end_datetime: datetime) -> pystac.Item:
-        item = pystac.Item(
-            id=self.uid,
-            geometry=geometry,
-            bbox=bbox,
-            properties={
-                "start_datetime": start_datetime,
-                "end_datetime": end_datetime,
-            },
-            datetime=None,
-        )
-        item_mlmodel = MLModelExtension.ext(item, add_if_missing=True)
-        item_mlmodel.apply(self.properties)
-        return item
+    model_config = ConfigDict(
+        alias_generator=mlm_prefix_replacer, populate_by_name=True, extra="ignore"
+    )
 
 
 class MLModelExtension(
@@ -131,7 +98,8 @@ class MLModelExtension(
         # is not fulfilled (ie: using 'main' branch, no tag available...)
         ext_uri = cls.get_schema_uri()
         return obj.stac_extensions is not None and any(
-            uri == ext_uri for uri in obj.stac_extensions)
+            uri == ext_uri for uri in obj.stac_extensions
+        )
 
     @classmethod
     def ext(cls, obj: T, add_if_missing: bool = False) -> "MLModelExtension[T]":
@@ -168,17 +136,18 @@ class MLModelExtension(
         cls.ensure_has_extension(obj, add_if_missing)
         return SummariesMLModelExtension(obj)
 
+
 class SummariesMLModelExtension(SummariesExtension):
     """A concrete implementation of :class:`~SummariesExtension` that extends
     the ``summaries`` field of a :class:`~pystac.Collection` to include properties
     defined in the :stac-ext:`Machine Learning Model <mlm>`.
     """
+
     def _check_mlm_property(self, prop: str) -> FieldInfo:
         try:
             return MLModelProperties.model_fields[prop]
         except KeyError as err:
-            raise AttributeError(
-                f"Name '{prop}' is not a valid MLM property.") from err
+            raise AttributeError(f"Name '{prop}' is not a valid MLM property.") from err
 
     def _validate_mlm_property(self, prop: str, summaries: list[Any]) -> None:
         model = MLModelProperties.model_construct()
@@ -201,6 +170,7 @@ class SummariesMLModelExtension(SummariesExtension):
     def __setattr__(self, prop, value):
         self.set_mlm_property(prop, value)
 
+
 class ItemMLModelExtension(MLModelExtension[pystac.Item]):
     """A concrete implementation of :class:`MLModelExtension` on an
     :class:`~pystac.Item` that extends the properties of the Item to
@@ -218,6 +188,7 @@ class ItemMLModelExtension(MLModelExtension[pystac.Item]):
     def __repr__(self) -> str:
         return f"<ItemMLModelExtension Item id={self.item.id}>"
 
+
 class ItemAssetsMLModelExtension(MLModelExtension[item_assets.AssetDefinition]):
     properties: dict[str, Any]
     asset_defn: item_assets.AssetDefinition
@@ -225,6 +196,7 @@ class ItemAssetsMLModelExtension(MLModelExtension[item_assets.AssetDefinition]):
     def __init__(self, item_asset: item_assets.AssetDefinition):
         self.asset_defn = item_asset
         self.properties = item_asset.properties
+
 
 class AssetMLModelExtension(MLModelExtension[pystac.Asset]):
     """A concrete implementation of :class:`MLModelExtension` on an
@@ -255,10 +227,11 @@ class AssetMLModelExtension(MLModelExtension[pystac.Asset]):
     def __repr__(self) -> str:
         return f"<AssetMLModelExtension Asset href={self.asset_href}>"
 
-class CollectionMLModelExtension(MLModelExtension[pystac.Collection]):
 
+class CollectionMLModelExtension(MLModelExtension[pystac.Collection]):
     def __init__(self, collection: pystac.Collection):
         self.collection = collection
+
 
 __all__ = [
     "MLModelExtension",

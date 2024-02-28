@@ -14,11 +14,13 @@ app = typer.Typer(
 )
 console = Console()
 
+
 def version_callback(print_version: bool) -> None:
     """Print the version of the package."""
     if print_version:
         console.print(f"[yellow]stac-model[/] version: [bold blue]{__version__}[/]")
         raise typer.Exit()
+
 
 @app.command(name="")
 def main(
@@ -39,6 +41,7 @@ def main(
     print(ml_model_meta.model_dump_json(indent=2, exclude_none=True, by_alias=True))
     print("Example model metadata written to ./example.json.")
     return ml_model_meta
+
 
 if __name__ == "__main__":
     app()

@@ -1,10 +1,12 @@
 from datetime import datetime
 
+import pystac
+
 from stac_model.schema import (
     Asset,
     ClassObject,
     InputArray,
-    MLModelHelper,
+    MLModelExtension,
     MLModelProperties,
     ModelInput,
     ModelOutput,
@@ -15,7 +17,6 @@ from stac_model.schema import (
 
 
 def eurosat_resnet():
-
     input_array = InputArray(
         shape=[-1, 13, 64, 64], dim_order="bchw", data_type="float32"
     )
@@ -74,8 +75,7 @@ def eurosat_resnet():
         norm_type="z_score",
         resize_type="none",
         statistics=stats,
-        pre_processing_function = "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"  # noqa: E501
-,
+        pre_processing_function="https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py",  # noqa: E501
     )
     mlm_runtime = Runtime(
         framework="torch",
@@ -132,13 +132,24 @@ def eurosat_resnet():
         mlm_runtime=[mlm_runtime],
         mlm_output=[mlm_output],
     )
-
-    mlmodel_helper = MLModelHelper(attrs = ml_model_meta.model_dump())
-    geometry=None
+    start_datetime = datetime.strptime("1900-01-01", "%Y-%m-%d")
+    end_datetime = None
+    geometry = None
     bbox = [-90, -180, 90, 180]
-    start_time = datetime.strptime("1900-01-01", '%Y-%m-%d')
-    end_time = None
-    item = mlmodel_helper.stac_item(geometry, bbox, start_datetime=start_time,
-                                    end_datetime=end_time)
-
-    return item
+    name = (
+        "_".join(ml_model_meta.mlm_name.split(" ")).lower()
+        + f"_{ml_model_meta.mlm_task}".lower()
+    )
+    item = pystac.Item(
+        id=name,
+        geometry=geometry,
+        bbox=bbox,
+        datetime=None,
+        properties={"start_datetime": start_datetime, "end_datetime": end_datetime},
+    )
+    item.add_derived_from(
+        "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a"
+    )
+    item_mlmodel = MLModelExtension.ext(item, add_if_missing=True)
+    item_mlmodel.apply(ml_model_meta.model_dump())
+    return item_mlmodel

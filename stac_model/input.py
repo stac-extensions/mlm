@@ -44,8 +44,9 @@ class ModelInput(BaseModel):
         "none",
     ] = None
     resize_type: Literal["crop", "pad", "interpolate", "none"] = None
-    parameters: Optional[Dict[str, Union[int, str, bool,
-                                         List[Union[int, str, bool]]]]] = None
+    parameters: Optional[
+        Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]
+    ] = None
     statistics: Optional[Union[Statistics, List[Statistics]]] = None
     norm_with_clip_values: Optional[List[Union[float, int]]] = None
     pre_processing_function: Optional[str | AnyUrl] = None

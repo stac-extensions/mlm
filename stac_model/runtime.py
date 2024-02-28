@@ -11,13 +11,14 @@ class Asset(BaseModel):
     Follows the STAC Asset Object spec.
     """
 
-    href: S3Path | FilePath | AnyUrl| str
+    href: S3Path | FilePath | AnyUrl | str
     title: Optional[str] = None
     description: Optional[str] = None
     type: Optional[str] = None
     roles: Optional[List[str]] = None
 
-    model_config = ConfigDict(arbitrary_types_allowed = True)
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
 
 class Container(BaseModel):
     container_file: str
