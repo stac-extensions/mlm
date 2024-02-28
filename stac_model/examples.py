@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import pystac
 
 from stac_model.schema import (
@@ -120,7 +118,7 @@ def eurosat_resnet():
         mlm_task="classification",
         mlm_framework="pytorch",
         mlm_framework_version="2.1.2+cu121",
-        mlm_file_size=1,
+        mlm_file_size=43000000,
         mlm_memory_size=1,
         mlm_summary=(
             "Sourced from torchgeo python library,"
@@ -132,7 +130,10 @@ def eurosat_resnet():
         mlm_runtime=[mlm_runtime],
         mlm_output=[mlm_output],
     )
-    start_datetime = datetime.strptime("1900-01-01", "%Y-%m-%d")
+    # TODO, this can't be serialized but pystac.item calls for a datetime
+    # in docs. start_datetime=datetime.strptime("1900-01-01", "%Y-%m-%d")
+    # Is this a problem that we don't do date validation if we supply as str?
+    start_datetime = "1900-01-01"
     end_datetime = None
     geometry = None
     bbox = [-90, -180, 90, 180]
