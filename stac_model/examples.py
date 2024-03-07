@@ -1,5 +1,6 @@
 import pystac
-
+import json
+import shapely
 from stac_model.schema import (
     Asset,
     ClassObject,
@@ -73,7 +74,7 @@ def eurosat_resnet():
         norm_type="z_score",
         resize_type="none",
         statistics=stats,
-        pre_processing_function="https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py",  # noqa: E501
+        pre_processing_function="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn",  # noqa: E501
     )
     runtime = Runtime(
         framework="torch",
@@ -135,8 +136,13 @@ def eurosat_resnet():
     # Is this a problem that we don't do date validation if we supply as str?
     start_datetime = "1900-01-01"
     end_datetime = None
-    geometry = None
-    bbox = [-90, -180, 90, 180]
+    bbox = [
+          -7.882190080512502,
+          37.13739173208318,
+          27.911651652899923,
+          58.21798141355221
+        ]
+    geometry = json.dumps(shapely.geometry.Polygon.from_bounds(*bbox).__geo_interface__, indent=2)
     name = (
         "_".join(ml_model_meta.name.split(" ")).lower()
         + f"_{ml_model_meta.task}".lower()
