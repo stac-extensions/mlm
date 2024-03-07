@@ -65,7 +65,7 @@ def eurosat_resnet():
             1231.58581042,
         ],
     )
-    mlm_input = ModelInput(
+    input = ModelInput(
         name="13 Band Sentinel-2 Batch",
         bands=band_names,
         input_array=input_array,
@@ -75,7 +75,7 @@ def eurosat_resnet():
         statistics=stats,
         pre_processing_function="https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py",  # noqa: E501
     )
-    mlm_runtime = Runtime(
+    runtime = Runtime(
         framework="torch",
         version="2.1.2+cu121",
         asset=Asset(
@@ -107,28 +107,28 @@ def eurosat_resnet():
         ClassObject(value=class_map[class_name], name=class_name)
         for class_name in class_map
     ]
-    mlm_output = ModelOutput(
+    output = ModelOutput(
         task="classification",
         classification_classes=class_objects,
         output_shape=[-1, 10],
         result_array=[result_array],
     )
     ml_model_meta = MLModelProperties(
-        mlm_name="Resnet-18 Sentinel-2 ALL MOCO",
-        mlm_task="classification",
-        mlm_framework="pytorch",
-        mlm_framework_version="2.1.2+cu121",
-        mlm_file_size=43000000,
-        mlm_memory_size=1,
-        mlm_summary=(
+        name="Resnet-18 Sentinel-2 ALL MOCO",
+        task="classification",
+        framework="pytorch",
+        framework_version="2.1.2+cu121",
+        file_size=43000000,
+        memory_size=1,
+        summary=(
             "Sourced from torchgeo python library,"
             "identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
         ),
-        mlm_pretrained_source="EuroSat Sentinel-2",
-        mlm_total_parameters=11_700_000,
-        mlm_input=[mlm_input],
-        mlm_runtime=[mlm_runtime],
-        mlm_output=[mlm_output],
+        pretrained_source="EuroSat Sentinel-2",
+        total_parameters=11_700_000,
+        input=[input],
+        runtime=[runtime],
+        output=[output],
     )
     # TODO, this can't be serialized but pystac.item calls for a datetime
     # in docs. start_datetime=datetime.strptime("1900-01-01", "%Y-%m-%d")
@@ -138,8 +138,8 @@ def eurosat_resnet():
     geometry = None
     bbox = [-90, -180, 90, 180]
     name = (
-        "_".join(ml_model_meta.mlm_name.split(" ")).lower()
-        + f"_{ml_model_meta.mlm_task}".lower()
+        "_".join(ml_model_meta.name.split(" ")).lower()
+        + f"_{ml_model_meta.task}".lower()
     )
     item = pystac.Item(
         id=name,

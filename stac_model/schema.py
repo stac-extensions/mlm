@@ -38,29 +38,29 @@ SCHEMA_URI: str = "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/
 PREFIX = f"{get_args(SchemaName)[0]}:"
 
 
-def mlm_prefix_replacer(field_name: str) -> str:
-    return field_name.replace("mlm_", "mlm:")
+def mlm_prefix_adder(field_name: str) -> str:
+    return "mlm:" + field_name
 
 
 class MLModelProperties(BaseModel):
-    mlm_name: str
-    mlm_task: TaskEnum
-    mlm_framework: str
-    mlm_framework_version: str
-    mlm_file_size: int
-    mlm_memory_size: int
-    mlm_input: List[ModelInput]
-    mlm_output: List[ModelOutput]
-    mlm_runtime: List[Runtime]
-    mlm_total_parameters: int
-    mlm_pretrained_source: str
-    mlm_summary: str
-    mlm_parameters: Optional[
+    name: str
+    task: TaskEnum
+    framework: str
+    framework_version: str
+    file_size: int
+    memory_size: int
+    input: List[ModelInput]
+    output: List[ModelOutput]
+    runtime: List[Runtime]
+    total_parameters: int
+    pretrained_source: str
+    summary: str
+    parameters: Optional[
         Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]
     ] = None  # noqa: E501
 
     model_config = ConfigDict(
-        alias_generator=mlm_prefix_replacer, populate_by_name=True, extra="ignore"
+        alias_generator=mlm_prefix_adder, populate_by_name=True, extra="ignore"
     )
 
 
