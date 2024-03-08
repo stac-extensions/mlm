@@ -8,7 +8,7 @@ class InputArray(BaseModel):
     dim_order: Literal["bhw", "bchw", "bthw", "btchw"]
     data_type: str = Field(
         ...,
-        pattern="^(uint8|uint16|uint32|uint64|int8|int16|int32|int64|float16|float32|float64)$",
+        pattern="^(uint8|uint16|uint32|uint64|int8|int16|int32|int64|float16|float32|float64|cint16|cint32|cfloat32|cfloat64|other)$",
     )
 
 

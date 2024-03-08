@@ -5,11 +5,12 @@
     "properties": {
         "start_datetime": "1900-01-01",
         "end_datetime": null,
+        "datetime": null,
         "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
         "mlm:task": "classification",
         "mlm:framework": "pytorch",
         "mlm:framework_version": "2.1.2+cu121",
-        "mlm:file_size": 1,
+        "mlm:file_size": 43000000,
         "mlm:memory_size": 1,
         "mlm:input": [
             {
@@ -80,7 +81,7 @@
                     "valid_percent": null
                 },
                 "norm_with_clip_values": null,
-                "pre_processing_function": "https://github.com/microsoft/torchgeo/blob/545abe8326efc2848feae69d0212a15faba3eb00/torchgeo/datamodules/eurosat.py"
+                "pre_processing_function": "torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn"
             }
         ],
         "mlm:output": [
@@ -204,16 +205,15 @@
                 "accelerator_constrained": false,
                 "hardware_summary": "Unknown",
                 "container": null,
-                "commit_hash": null,
+                "commit_hash": "61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a",
                 "batch_size_suggestion": null
             }
         ],
         "mlm:total_parameters": 11700000,
         "mlm:pretrained_source": "EuroSat Sentinel-2",
-        "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
-        "datetime": null
+        "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
     },
-    "geometry": null,
+    "geometry": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": [\n    [\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ]\n    ]\n  ]\n}",
     "links": [
         {
             "rel": "derived_from",
@@ -223,10 +223,10 @@
     ],
     "assets": {},
     "bbox": [
-        -90,
-        -180,
-        90,
-        180
+        -7.882190080512502,
+        37.13739173208318,
+        27.911651652899923,
+        58.21798141355221
     ],
     "stac_extensions": [
         "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json"

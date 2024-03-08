@@ -14,7 +14,7 @@ We recommend using at least the `processing:lineage` and `processing:level` fiel
 
 For example:
 
-```
+```json
 "processing:lineage": "GRD Post Processing",
 "processing:level": "L1C",
 "processing:facility": "Copernicus S1 Core Ground Segment - DPA",
