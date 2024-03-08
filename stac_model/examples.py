@@ -88,6 +88,7 @@ def eurosat_resnet():
         accelerator="cuda",
         accelerator_constrained=False,
         hardware_summary="Unknown",
+        commit_hash="61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a",
     )
     result_array = ResultArray(
         shape=[-1, 10], dim_names=["batch", "class"], data_type="float32"
