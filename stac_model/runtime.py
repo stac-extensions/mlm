@@ -3,15 +3,13 @@ from typing import List, Optional
 
 from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath
 
-from .paths import S3Path
-
 
 class Asset(BaseModel):
     """Information about the model location and other additional file locations.
     Follows the STAC Asset Object spec.
     """
 
-    href: S3Path | FilePath | AnyUrl | str
+    href: FilePath | AnyUrl | str
     title: Optional[str] = None
     description: Optional[str] = None
     type: Optional[str] = None
