@@ -5,7 +5,6 @@
     "properties": {
         "start_datetime": "1900-01-01",
         "end_datetime": null,
-        "datetime": null,
         "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
         "mlm:task": "classification",
         "mlm:framework": "pytorch",
@@ -189,10 +188,12 @@
             {
                 "asset": {
                     "href": "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth",
-                    "title": null,
-                    "description": null,
-                    "type": null,
-                    "roles": null
+                    "title": "Pytorch weights checkpoint",
+                    "description": "A Resnet-18 classification model trained on normalized Sentinel-2 imagery with Eurosat landcover labels with torchgeo",
+                    "type": ".pth",
+                    "roles": [
+                        "weights"
+                    ]
                 },
                 "source_code": {
                     "href": "https://github.com/microsoft/torchgeo/blob/61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a/torchgeo/models/resnet.py#L207",
@@ -211,7 +212,8 @@
         ],
         "mlm:total_parameters": 11700000,
         "mlm:pretrained_source": "EuroSat Sentinel-2",
-        "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
+        "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
+        "datetime": null
     },
     "geometry": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": [\n    [\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ]\n    ]\n  ]\n}",
     "links": [
