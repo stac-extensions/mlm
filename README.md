@@ -73,19 +73,6 @@ In addition, fields from the following extensions must be imported in the item:
 [stac-ext-sci]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md
 [stac-ext-ver]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md
 
-#### Accelerator Enum
-
-It is recommended to define `accelerator` with one of the following values:
-
-- `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
-- `cuda` models compatible with NVIDIA GPUs
-- `xla` models compiled with XLA. models trained on TPUs are typically compiled with XLA.
-- `amd-rocm` models trained on AMD GPUs
-- `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
-- `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
-- `macos-arm` for models trained on Apple Silicon
-
-[stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
 ### Model Input Object
 
@@ -103,33 +90,41 @@ It is recommended to define `accelerator` with one of the following values:
 | norm_with_clip_values   | [integer]                                                                        | If `norm_type = "norm_with_clip"` this array supplies a value that is less than the band maximum. The array must be the same length as "bands", each value is used to divide each band before clipping values between 0 and 1.                     |
 | pre_processing_function | string                                                                           | A url to the preprocessing function where normalization and rescaling takes place, and any other significant operations. Or, instead, the function code path, for example: `my_python_module_name:my_processing_function`                          |     |
 
+### Accelerator Enum
 
-#### Parameters Object
+It is recommended to define `accelerator` with one of the following values:
 
-| Field Name                            | Type                         | Description                                                                                                                                                                                                                                                                      |
-|---------------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *parameter names depend on the model* | number `\|` string `\|` boolean `\|` array | The number of fields and their names depend on the model. Values should not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another [model input object](#model-input-object). |
+- `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
+- `cuda` models compatible with NVIDIA GPUs
+- `xla` models compiled with XLA. models trained on TPUs are typically compiled with XLA.
+- `amd-rocm` models trained on AMD GPUs
+- `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
+- `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
+- `macos-arm` for models trained on Apple Silicon
 
-The `Parameters Object` is a user defined mapping of parameters to parameter values. This is meant to capture model inputs that can't be represented as n-dimensional arrays/tensors. This includes inputs like scalars, text, and booleans. The `parameters` field can either be specified in the [Model Input Object](#model-input-object) if they are associated with a specific input or as an [Item or Collection](#item-properties-and-collection-fields) field if the parameters are supplied without relation to a specific model input. For example: the [Segment Anything](https://ai.meta.com/blog/segment-anything-foundation-model-image-segmentation/) foundational model accepts a label integer for each image input.
+[stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
-#### Bands and Statistics
+### mlm:model Asset
 
-We use the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) for representing bands information, including the nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this `bands` field.
+| Field Name | Type   | Description                                                               |
+| ---------- | ------ | ------------------------------------------------------------------------- |
+| title      | string | Description of the model asset.                                           |
+| href       | string | Url to the checkoint or model artifact.                                   |
+| type       | string | "application/x-pytorch" or specify another appropriate custom media type. |
+| roles      | string | Specify one or more of ["model", "weights", "compiled"]                   |
 
-A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) is that we do not include the [Statistics](stac-statistics) object at the band object level, but at the Model Input level. This is because in machine learning, it is common to only need overall statistics for the dataset used to train the model to normalize all bands.
 
-[stac-statistics]: https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294
+### mlm:source_code Asset
 
-#### Array Object
+| Field Name | Type   | Description                                          |
+| ---------- | ------ | ---------------------------------------------------- |
+| title      | string | Description of the source code.                      |
+| href       | string | Url to the repository.                               |
+| type       | string | Use media type "text/html" for code files            |
+| roles      | string | Specify one or more of ["model", "code", "metadata"] |
 
-| Field Name | Type      | Description                                                                                                                                                                                                                                                                                                                                    |     |
-| ---------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
-| shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size.                                                                                                       |     |
-| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, w=width.                                                                                                                                                         |     |
-| data_type  | enum      | **REQUIRED.** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. Use one of the [common metadata data types](https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types). |     |
-Note: It is common in the machine learning, computer vision, and remote sensing communities to refer to rasters that are inputs to a model as arrays or tensors. Array Objects are distinct from the JSON array type used to represent lists of values.
 
-#### Container Asset
+### Container Asset
 
 | Field Name  | Type   | Description                                           |
 | ----------- | ------ | ----------------------------------------------------- |
@@ -163,6 +158,32 @@ RUN pip install my_package
 You can also use other base images. Pytorch and Tensorflow offer docker images for serving models for inference.
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
+
+### Parameters Object
+
+| Field Name                            | Type                         | Description                                                                                                                                                                                                                                                                      |
+|---------------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| *parameter names depend on the model* | number `\|` string `\|` boolean `\|` array | The number of fields and their names depend on the model. Values should not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another [model input object](#model-input-object). |
+
+The `Parameters Object` is a user defined mapping of parameters to parameter values. This is meant to capture model inputs that can't be represented as n-dimensional arrays/tensors. This includes inputs like scalars, text, and booleans. The `parameters` field can either be specified in the [Model Input Object](#model-input-object) if they are associated with a specific input or as an [Item or Collection](#item-properties-and-collection-fields) field if the parameters are supplied without relation to a specific model input. For example: the [Segment Anything](https://ai.meta.com/blog/segment-anything-foundation-model-image-segmentation/) foundational model accepts a label integer for each image input.
+
+#### Bands and Statistics
+
+We use the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) for representing bands information, including the nodata value, data type, and common band names. Only bands used to train or fine tune the model should be included in this `bands` field.
+
+A deviation from the [STAC 1.1 Bands Object](https://github.com/radiantearth/stac-spec/pull/1254) is that we do not include the [Statistics](stac-statistics) object at the band object level, but at the Model Input level. This is because in machine learning, it is common to only need overall statistics for the dataset used to train the model to normalize all bands.
+
+[stac-statistics]: https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294
+
+#### Array Object
+
+| Field Name | Type      | Description                                                                                                                                                                                                                                                                                                                                    |     |
+| ---------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- |
+| shape      | [integer] | **REQUIRED.** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size.                                                                                                       |     |
+| dim_order  | string    | **REQUIRED.** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, w=width.                                                                                                                                                         |     |
+| data_type  | enum      | **REQUIRED.** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. Use one of the [common metadata data types](https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types). |     |
+
+Note: It is common in the machine learning, computer vision, and remote sensing communities to refer to rasters that are inputs to a model as arrays or tensors. Array Objects are distinct from the JSON array type used to represent lists of values.
 
 ### Model Output Object
 
