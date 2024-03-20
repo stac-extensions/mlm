@@ -17,7 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - flexible [class map object](./README.md#class-map-object) and [parameters object](./README.md#parameters-object) to handle aspects of models that vary substantially in number
 
 ### Changed
-- replaced normalization:mean, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
+- reorganized `dlm:architecture` nested fields to exist at the top level of properties as `mlm:name`, `mlm:summary` and so on to provide STAC API search capabilities.
+- replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
 - added `pydantic` models for internal schema objects in `stac_model` package and published to PYPI
 - specified [rel_type](./README.md#relation-types) to be `derived_from` and specify how model item or collection json should be named
 
@@ -25,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -
 
 ### Removed
-- Data Object, replaced with [Model Input Object](./README.md#model-input-object) that uses the `name` field from the[common metadata band object](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#bands) which also records `data_type` and `nodata` type
+- Data Object, replaced with [Model Input Object](./README.md#model-input-object) that uses the `name` field from the [common metadata band object](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#bands) which also records `data_type` and `nodata` type
 
 # TODO link release here
 
