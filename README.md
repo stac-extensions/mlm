@@ -56,15 +56,10 @@ Check the original technical report for an earlier version of the Model Extensio
 | mlm:accelerator             | [Accelerator Enum](#accelerator-enum)         | **REQUIRED.** The intended computational hardware that runs inference.                                                                                                                                                                                                 |
 | mlm:accelerator_constrained | boolean                                       | **REQUIRED.** True if the intended `accelerator` is the only `accelerator` that can run inference. False if other accelerators, such as amd64 (CPU), can run inference.                                                                                                |
 | mlm:hardware_summary        | string                                        | **REQUIRED.** A high level description of the number of accelerators, specific generation of the `accelerator`, or other relevant inference details.                                                                                                                   |
-| mlm:model                   | [Asset Object](stac-asset)                    | **REQUIRED.** Asset object containing URI to the model file.                                                                                                                                                                                                           |
-| mlm:source_code             | [Asset Object](stac-asset)                    | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc.                                                                                                                                                                                   |
-| mlm:container               | [Asset Object](stac-asset)                    | **RECOMMENDED.** Information to run the model in a container with URI to the container.                                                                                                                                                                                |
 | mlm:total_parameters        | integer                                       | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                    |
 | mlm:pretrained_source       | string                                        | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description.                                                                                                                        |
 | mlm:summary                 | string                                        | Text summary of the model and it's purpose.                                                                                                                                                                                                                            |
 | batch_size_suggestion       | number                                        | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                    |
-| mlm:parameters              | [Parameters Object](#parameters-object)       | Mapping with names for the parameters and their values. The field should be specified here if parameters apply to all [Model Input Objects](#model-input-object). If each [Model Input Object](#model-input-object) has parameters, specify parameters in that object. |
-
 
 In addition, fields from the following extensions must be imported in the item:
 - [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
@@ -82,7 +77,6 @@ In addition, fields from the following extensions must be imported in the item:
 | name                    | string                                                                           | **REQUIRED.** Informative name of the input variable. Example "RGB Time Series"                                                                                                                                                                    |     |
 | bands                   | [string]                                                                         | **REQUIRED.** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                           |     |
 | input_array             | [Array Object](#feature-array-object)                                            | **REQUIRED.** The N-dimensional array object that describes the shape, dimension ordering, and data type.                                                                                                                                          |     |
-| parameters              | [Parameters Object](#parameters-object)                                          | Mapping with names for the parameters and their values. Some models may take additional scalars, tuples, and other non-tensor inputs like text.                                                                                                    |     |
 | norm_by_channel         | boolean                                                                          | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of [Statistics Objects](#bands-and-statistics) that is ordered like the `bands` field in this object.                    |     |
 | norm_type               | string                                                                           | Normalization method. Select one option from `min_max`, `z_score`, `max_norm`, `mean_norm`, `unit_variance`, `norm_with_clip`, `none`                                                                                                              |     |
 | resize_type             | string                                                                           | High-level descriptor of the rescaling method to change image shape. Select one option from `crop`, `pad`, `interpolation`, `none`. If your rescaling method combines more than one of these operations, provide the name of the operation instead |     |
@@ -104,14 +98,23 @@ It is recommended to define `accelerator` with one of the following values:
 
 [stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
+
+### MLM Asset Fields
+
+| mlm:model                   | [Asset Object](stac-asset)                    | **REQUIRED.** Asset object containing URI to the model file.                                                                                                                                                                                                           |
+| mlm:source_code             | [Asset Object](stac-asset)                    | **REQUIRED.** Source code description. Can describe a github repo, zip archive, etc.                                                                                                                                                                                   |
+| mlm:container               | [Asset Object](stac-asset)                    | **RECOMMENDED.** Information to run the model in a container with URI to the container.                                                                                                                                                                                |
+
+
 ### mlm:model Asset
 
 | Field Name | Type     | Description                                                               |
 |------------|----------|---------------------------------------------------------------------------|
 | title      | string   | Description of the model asset.                                           |
-| href       | string   | Url to the checkpoint or model artifact.                                  |
+| href       | string   | Url to the model artifact.                                  |
 | type       | string   | "application/x-pytorch" or specify another appropriate custom media type. |
 | roles      | [string] | Specify one or more of ["model", "weights", "compiled"]                   |
+| mlm:artifact_type      | ArtifactTypeEnum | Specifies the kind of model artifact. Typically related to a particular ml framework.                  |
 
 
 Recommended asset `roles` include `weights` for model weights that need to be loaded by a model definition and `compiled` for models that can be loaded directly without an intermediate model definition.
@@ -165,13 +168,6 @@ You can also use other base images. Pytorch and Tensorflow offer docker images f
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
 
-### Parameters Object
-
-| Field Name                            | Type                         | Description                                                                                                                                                                                                                                                                      |
-|---------------------------------------|------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| *parameter names depend on the model* | number `\|` string `\|` boolean `\|` array | The number of fields and their names depend on the model. Values should not be n-dimensional array inputs. If the model input can be represented as an n-dimensional array, it should instead be supplied as another [model input object](#model-input-object). |
-
-The `Parameters Object` is a user defined mapping of parameters to parameter values. This is meant to capture model inputs that can't be represented as n-dimensional arrays/tensors. This includes inputs like scalars, text, and booleans. The `parameters` field can either be specified in the [Model Input Object](#model-input-object) if they are associated with a specific input or as an [Item or Collection](#item-properties-and-collection-fields) field if the parameters are supplied without relation to a specific model input. For example: the [Segment Anything](https://ai.meta.com/blog/segment-anything-foundation-model-image-segmentation/) foundational model accepts a label integer for each image input.
 
 #### Bands and Statistics
 
