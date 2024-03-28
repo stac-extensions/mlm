@@ -15,12 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [`hardware_summary`, `accelerator`, `accelerator_constrained`](./README#runtime-object) to specify hardware requirements for inference
 - Use common metadata [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object) to refer to model asset and source code.
 - flexible [class map object](./README.md#class-map-object) and [parameters object](./README.md#parameters-object) to handle aspects of models that vary substantially in number
+- add `scene-classification` to the Enum Tasks to allow disambiguation between pixel-wise and patch-based classification
 
 ### Changed
 - reorganized `dlm:architecture` nested fields to exist at the top level of properties as `mlm:name`, `mlm:summary` and so on to provide STAC API search capabilities.
 - replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
 - added `pydantic` models for internal schema objects in `stac_model` package and published to PYPI
 - specified [rel_type](./README.md#relation-types) to be `derived_from` and specify how model item or collection json should be named
+- replaced all Enum Tasks names to use hyphens instead of spaces
+- replaced `dlm:task` by `mlm:tasks` using an array of value instead of a single one, allowing models to represent
+  multiple tasks they support simultaneously or interchangeably depending on context
 
 ### Deprecated
 -

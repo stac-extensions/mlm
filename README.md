@@ -43,23 +43,23 @@ Check the original technical report for an earlier version of the Model Extensio
 
 ## Item Properties and Collection Fields
 
-| Field Name                  | Type                                          | Description                                                                                                                                                                                                                                                            |
-|-----------------------------|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| mlm:name                    | string                                        | **REQUIRED.** A unique name for the model. This should include but be distinct from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                  |
-| mlm:task                    | [Task Enum](#task-enum)                       | **REQUIRED.** Specifies the primary Machine Learning task for which the output can be used for. If there are multi-modal outputs, specify the primary task and specify each task in the [Model Output Object](#model-output-object).                                   |
-| mlm:framework               | string                                        | **REQUIRED.** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                             |
-| mlm:framework_version       | string                                        | **REQUIRED.** The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                      |
-| mlm:file_size               | integer                                       | **REQUIRED.** The size on disk of the model artifact (bytes).                                                                                                                                                                                                          |
-| mlm:memory_size             | integer                                       | **REQUIRED.** The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                             |
-| mlm:input                   | [[Model Input Object](#model-input-object)]   | **REQUIRED.** Describes the transformation between the EO data and the model input.                                                                                                                                                                                    |
-| mlm:output                  | [[Model Output Object](#model-output-object)] | **REQUIRED.** Describes each model output and how to interpret it.                                                                                                                                                                                                     |
-| mlm:accelerator             | [Accelerator Enum](#accelerator-enum)         | **REQUIRED.** The intended computational hardware that runs inference.                                                                                                                                                                                                 |
-| mlm:accelerator_constrained | boolean                                       | **REQUIRED.** True if the intended `accelerator` is the only `accelerator` that can run inference. False if other accelerators, such as amd64 (CPU), can run inference.                                                                                                |
-| mlm:hardware_summary        | string                                        | **REQUIRED.** A high level description of the number of accelerators, specific generation of the `accelerator`, or other relevant inference details.                                                                                                                   |
-| mlm:total_parameters        | integer                                       | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                    |
-| mlm:pretrained_source       | string                                        | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description.                                                                                                                        |
-| mlm:summary                 | string                                        | Text summary of the model and it's purpose.                                                                                                                                                                                                                            |
-| batch_size_suggestion       | number                                        | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                    |
+| Field Name                  | Type                                          | Description                                                                                                                                                                                                                                                                                            |
+|-----------------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mlm:name                    | string                                        | **REQUIRED.** A unique name for the model. This should include but be distinct from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                                  |
+| mlm:tasks                   | [[Task Enum](#task-enum)]                     | **REQUIRED.** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
+| mlm:framework               | string                                        | **REQUIRED.** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                             |
+| mlm:framework_version       | string                                        | **REQUIRED.** The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                      |
+| mlm:file_size               | integer                                       | **REQUIRED.** The size on disk of the model artifact (bytes).                                                                                                                                                                                                                                          |
+| mlm:memory_size             | integer                                       | **REQUIRED.** The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                             |
+| mlm:input                   | [[Model Input Object](#model-input-object)]   | **REQUIRED.** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                                    |
+| mlm:output                  | [[Model Output Object](#model-output-object)] | **REQUIRED.** Describes each model output and how to interpret it.                                                                                                                                                                                                                                     |
+| mlm:accelerator             | [Accelerator Enum](#accelerator-enum)         | **REQUIRED.** The intended computational hardware that runs inference.                                                                                                                                                                                                                                 |
+| mlm:accelerator_constrained | boolean                                       | **REQUIRED.** True if the intended `accelerator` is the only `accelerator` that can run inference. False if other accelerators, such as amd64 (CPU), can run inference.                                                                                                                                |
+| mlm:hardware_summary        | string                                        | **REQUIRED.** A high level description of the number of accelerators, specific generation of the `accelerator`, or other relevant inference details.                                                                                                                                                   |
+| mlm:total_parameters        | integer                                       | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                                    |
+| mlm:pretrained_source       | string                                        | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description.                                                                                                                                                        |
+| mlm:summary                 | string                                        | Text summary of the model and it's purpose.                                                                                                                                                                                                                                                            |
+| batch_size_suggestion       | number                                        | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                                    |
 
 In addition, fields from the following extensions must be imported in the item:
 - [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
@@ -190,8 +190,8 @@ Note: It is common in the machine learning, computer vision, and remote sensing 
 ### Model Output Object
 
 | Field Name               | Type                                          | Description                                                                                                                                                                                            |
-| ------------------------ | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| task                     | [Task Enum](#task-enum)                       | **REQUIRED.** Specifies the Machine Learning task for which the output can be used for.                                                                                                                |
+|--------------------------| --------------------------------------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| tasks                    | [[Task Enum](#task-enum)]                     | **REQUIRED.** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                        |
 | result_array             | [[Result Array Object](#result-array-object)] | The list of output arrays/tensors from the model.                                                                                                                                                      |
 | classification:classes   | [[Class Object](#class-object)]               | A list of class objects adhering to the [Classification extension](https://github.com/stac-extensions/classification).                                                                                 |
 | post_processing_function | string                                        | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module.my_processing_function` |
@@ -202,21 +202,37 @@ While only `task` is a required field, all fields are recommended for supervised
 
 #### Task Enum
 
-It is recommended to define `task` with one of the following values for each Model Output Object:
-- `regression`
-- `classification`
-- `object detection`
-- `semantic segmentation`
-- `instance segmentation`
-- `panoptic segmentation`
-- `multi-modal`
-- `similarity search`
-- `image captioning`
-- `generative`
-- `super resolution`
+It is recommended to define `mlm:tasks` of the entire model and `tasks` of [Model Output Object](#model-output-object)
+with the following values. Although other values are permitted, they should be used sparingly to allow better
+interoperability of models and their representation.
 
-If the task falls within the category of supervised machine learning and uses labels during training, this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
+| Task Name               | Corresponding `label:tasks`  | Description                                                                            |
+|-------------------------|------------------------------|----------------------------------------------------------------------------------------|
+| `regression`            | `regression`                 | Generic regression that estimates a numeric value.                                     |
+| `classification`        | `classification`             | Generic classification task that assigns class labels to an output.                    |
+| `scene-classification`  | *n/a* |
+| `detection`             | `detection`                  | Generic detection of the "presence" of objects or entities, with or without positions. |
+| `object-detection`      | *n/a* |
+| `segmentation`          | *n/a* |                                                                                        | 
+| `semantic-segmentation` | *n/a* | 
+| `instance-segmentation` | *n/a* | 
+| `panoptic-segmentation` | *n/a* | 
+| `similarity-search`     | *n/a* | 
+| `image-captioning`      | *n/a* | 
+| `generative`            | *n/a* | 
+| `super-resolution`      | *n/a* | 
+
+If the task falls within the category of supervised machine learning and uses labels during training,
+this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
 STAC Collections and Items published with the model described by this extension.
+
+It is to be noted that multiple "generic" tasks names (`classification`, `detection`, etc.) are defined to allow
+correspondance with `label:tasks`, but these can lead to some ambiguity depending on context. For example, a model
+that supports `classification` could mean that the model can predict patch-based classes over an entire scene
+(i.e.: `scene-classification` for a single prediction over an entire area of interest as a whole),
+or that it can predict pixel-wise classification (i.e.: `pixel-classification`), such as land-cover labels for
+every single pixel coordinate over the area of interest. To avoid this kind of ambiguity, `tasks` should always aim
+to provide the most specific definitions possible to explicitly describe the model.
 
 [stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
 
@@ -230,7 +246,8 @@ STAC Collections and Items published with the model described by this extension.
 
 #### Class Object
 
-See the documentation for the [Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object). We don't use the Bit Field Object since inputs and outputs to machine learning models don't typically use bit fields.
+See the documentation for the
+[Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object).
 
 ## Relation types
 
