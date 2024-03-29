@@ -6,6 +6,15 @@ of your model and make life easier for client tooling and users. They come about
 implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their 
 models or creating tools to work with STAC.
 
+- [Using STAC Common Metadata Fields for the ML Model Extension](#using-stac-common-metadata-fields-for-the-ml-model-extension)
+- [Recommended Extensions to Compose with the ML Model Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
+  - [Processing Extension](#processing-extension)
+  - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
+  - [Classification Extension](#classification-extension)
+  - [Scientific Extension](#scientific-extension)
+  - [File Extension](#file-extension)
+  - [Version Extension](#version-extension)
+
 ## Using STAC Common Metadata Fields for the ML Model Extension
 
 It is recommended to use the `start_datetime` and `end_datetime`, `geometry`, and `bbox` to represent the 
@@ -74,7 +83,7 @@ to provide direct references to the training dataset that was employed for creat
 Providing dataset references would, in combination with the training pipeline contained under an
 [MLM Asset Object](README.md#assets-objects) annotated by the `mlm:training-runtime` role,
 allow users to retrain the model for validation, or with adaptations to improve it, eventually
-leading to a new MLM STAC Item definition.
+leading to a new MLM STAC Item definition (see also [STAC Version Extension](#version-extension)).
 
 ```json
 {
@@ -111,5 +120,70 @@ leading to a new MLM STAC Item definition.
       "ml-aoi:split": "test"
     }
   ]
+}
+```
+
+### Classification Extension
+
+Since it is expected that a model will provide some kind of classification values as output, the 
+[Classification Extension](https://github.com/stac-extensions/classification) can be leveraged inside
+MLM definition to indicate which class values can be contained in the resulting output from the model prediction.
+
+For more details, see the [Model Output Object](README.md#model-output-object) definition.
+
+### Scientific Extension
+
+Provided that most models derive from previous scientific work, it is strongly recommended to employ the 
+[Scientific Extension](https://github.com/stac-extensions/scientific) to provide references corresponding to the
+original source of the model (`sci:doi`, `sci:citation`). This can help users find more information about the model,
+its underlying architecture, or ways to improve it by piecing together the related work (`sci:publications`) that
+lead to its creation.
+
+This extension can also be used for the purpose of publishing new models, by providing to users the necessary details
+regarding how they should cite its use (i.e.: `sci:citation` field and `cite-as` relation type).
+
+### Version Extension
+
+In the even that a model is retrained with gradually added annotations or improved training strategies leading to
+better performances, the existing model and newer models represented by STAC Items with MLM should also make use of
+the [Version Extension](https://github.com/stac-extensions/version). Using the fields and link relation types defined
+by this extension, the retraining cycle of the model can better be described, with a full history of the newer versions
+developed.
+
+Additionally, the `version:experimental` field should be considered for models being trained and still under evaluation
+before widespread deployment. This can be particularly useful for annotating models experiments during cross-validation
+training process to find the "best model". This field could also be used to indicate if a model is provided for
+educational purposes only.
+
+### File Extension
+
+In order to provide a reliable and reproducible machine learning pipeline, external references to data required by the
+model should employ the [file](https://github.com/stac-extensions/file?tab=readme-ov-file#asset--link-object-fields) to
+validate that they are properly retrieved for inference.
+
+One of the most typical case is the definition of an external file reference to model weights, often stored on a
+Git LFS or S3 bucket due to their size. Providing the `file:checksum` and `file:size` for this file can help ensure
+that the model is properly instantiated from the expected weights, or that sufficient storage is allocated to run it.
+
+```json
+{
+  "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/file/v2.1.0/schema.json"
+  ],
+  "assets": {
+    "model": {
+      "type": "application/x-pytorch",
+      "href": "<URI-to-model-weights>",
+      "roles": [
+        "mlm:model",
+        "mlm:weights",
+        "data"
+      ],
+      "file:size": 123456789,
+      "file:checksum": "12209f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
+      "mlm:artifact_type": "torch.save"
+    }
+  }
 }
 ```
