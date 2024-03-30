@@ -70,7 +70,7 @@ extension to synthesize common use cases into a single reference for Machine Lea
 | mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
 | mlm:pretrained_source       | string                                           | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description.                                                                                                                                             |
 | mlm:summary                 | string                                           | Text summary of the model and it's purpose.                                                                                                                                                                                                                                                 |
-| batch_size_suggestion       | number                                           | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
+| mlm:batch_size_suggestion   | number                                           | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
 
 In addition, fields from the following extensions must be imported in the item:
 - [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
@@ -232,6 +232,10 @@ The `text/html` media-type should be reserved for cases where the URI generally 
 Note that the URI including the specific commit hash, release number or target branch should be preferred over
 other means of referring to checkout procedures, although this specification does not prohibit the use of additional
 properties to better describe the Asset.
+
+Since the source code of a model provides useful example on how to use it, it is also recommended to define relevant
+references to documentation using the `example` extension.
+See the [Best Practices - Example Extension](best-practices.md#example-extension) section for more details.
 
 Recommended asset `roles` include `code` and `metadata`,
 since the source code asset might also refer to more detailed metadata than this specification captures.

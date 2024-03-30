@@ -13,6 +13,7 @@ models or creating tools to work with STAC.
   - [Classification Extension](#classification-extension)
   - [Scientific Extension](#scientific-extension)
   - [File Extension](#file-extension)
+  - [Example Extension](#example-extension)
   - [Version Extension](#version-extension)
 
 ## Using STAC Common Metadata Fields for the ML Model Extension
@@ -131,6 +132,9 @@ MLM definition to indicate which class values can be contained in the resulting 
 
 For more details, see the [Model Output Object](README.md#model-output-object) definition.
 
+> [!NOTE]
+> Update according to https://github.com/stac-extensions/classification/issues/48
+
 ### Scientific Extension
 
 Provided that most models derive from previous scientific work, it is strongly recommended to employ the 
@@ -141,19 +145,6 @@ lead to its creation.
 
 This extension can also be used for the purpose of publishing new models, by providing to users the necessary details
 regarding how they should cite its use (i.e.: `sci:citation` field and `cite-as` relation type).
-
-### Version Extension
-
-In the even that a model is retrained with gradually added annotations or improved training strategies leading to
-better performances, the existing model and newer models represented by STAC Items with MLM should also make use of
-the [Version Extension](https://github.com/stac-extensions/version). Using the fields and link relation types defined
-by this extension, the retraining cycle of the model can better be described, with a full history of the newer versions
-developed.
-
-Additionally, the `version:experimental` field should be considered for models being trained and still under evaluation
-before widespread deployment. This can be particularly useful for annotating models experiments during cross-validation
-training process to find the "best model". This field could also be used to indicate if a model is provided for
-educational purposes only.
 
 ### File Extension
 
@@ -187,3 +178,35 @@ that the model is properly instantiated from the expected weights, or that suffi
   }
 }
 ```
+
+### Example Extension
+
+In order to help users understand how to apply and run the described machine learning model,
+the [Example Extension](https://github.com/stac-extensions/example-links#fields) can be used to provide code examples
+demonstrating how it can be applied.
+
+For example, a [Model Card on Hugging Face](https://huggingface.co/docs/hub/en/model-cards)
+is often provided (see [Hugging Face Model examples](https://huggingface.co/models)) to describe the model, which
+can embed sample code and references to more details about the model. This kind of reference should be added under
+the `links` of the STAC Item using MLM.
+
+Typically, a STAC Item using the MLM extension to describe the training or
+inference strategies to apply a model should define the [Source Code Asset](README.md#source-code-asset).
+This code is in itself ideal to guide users how to run it, and should therefore be replicated as an `example` link
+reference to offer more code samples to execute the model.
+
+> [!NOTE]
+> Update according to https://github.com/stac-extensions/example-links/issues/4
+
+### Version Extension
+
+In the even that a model is retrained with gradually added annotations or improved training strategies leading to
+better performances, the existing model and newer models represented by STAC Items with MLM should also make use of
+the [Version Extension](https://github.com/stac-extensions/version). Using the fields and link relation types defined
+by this extension, the retraining cycle of the model can better be described, with a full history of the newer versions
+developed.
+
+Additionally, the `version:experimental` field should be considered for models being trained and still under evaluation
+before widespread deployment. This can be particularly useful for annotating models experiments during cross-validation
+training process to find the "best model". This field could also be used to indicate if a model is provided for
+educational purposes only.
