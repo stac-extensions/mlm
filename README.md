@@ -60,16 +60,15 @@ extension to synthesize common use cases into a single reference for Machine Lea
 | mlm:tasks                   | [[Task Enum](#task-enum)]                        | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                           | **REQUIRED** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
 | mlm:framework_version       | string                                           | **REQUIRED** The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                            |
-| mlm:file_size               | integer                                          | **REQUIRED** The size on disk of the model artifact (bytes).                                                                                                                                                                                                                                |
 | mlm:memory_size             | integer                                          | **REQUIRED** The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                   |
 | mlm:input                   | [[Model Input Object](#model-input-object)]      | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
 | mlm:output                  | [[Model Output Object](#model-output-object)]    | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
-| mlm:accelerator             | [Accelerator Enum](#accelerator-enum)            | **REQUIRED** The intended computational hardware that runs inference.                                                                                                                                                                                                                       |
-| mlm:accelerator_constrained | boolean                                          | **REQUIRED** True if the intended `accelerator` is the only `accelerator` that can run inference. False if other accelerators, such as amd64 (CPU), can run inference.                                                                                                                      |
-| mlm:hardware_summary        | string                                           | **REQUIRED** A high level description of the number of accelerators, specific generation of the `accelerator`, or other relevant inference details.                                                                                                                                         |
+| mlm:accelerator             | [Accelerator Enum](#accelerator-enum)            | The intended computational hardware that runs inference. If undefined, it should be assumed `amd64` (i.e.: CPU).                                                                                                                                                                            |
+| mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
+| mlm:accelerator_summary     | string                                           | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
+| mlm:accelerator_count       | integer                                          | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
 | mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
-| mlm:pretrained_source       | string                                           | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description.                                                                                                                                             |
-| mlm:summary                 | string                                           | Text summary of the model and it's purpose.                                                                                                                                                                                                                                                 |
+| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch, the `null` value should be set explicitly.                                                                         |
 | mlm:batch_size_suggestion   | number                                           | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
 
 In addition, fields from the following extensions must be imported in the item:
@@ -106,20 +105,17 @@ Fields that accept the `null` value can be considered `null` when omitted entire
 However, setting `null` explicitly when this information is known by the model provider can help users understand
 what is the expected behavior of the model. It is therefore recommended to provide `null` explicitly when applicable.
 
-### Accelerator Enum
+### Accelerator Type Enum
 
 It is recommended to define `accelerator` with one of the following values:
 
 - `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
 - `cuda` models compatible with NVIDIA GPUs
-- `xla` models compiled with XLA. models trained on TPUs are typically compiled with XLA.
+- `xla` models compiled with XLA. Models trained on TPUs are typically compiled with XLA.
 - `amd-rocm` models trained on AMD GPUs
 - `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
 - `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
 - `macos-arm` for models trained on Apple Silicon
-
-[stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
-
 
 ## Assets Objects
 
@@ -135,6 +131,8 @@ It is recommended that the [Assets][stac-asset] defined in a STAC Item using MLM
 names for nesting the Assets in order to improve their quick identification, although the specific names employed are
 left up to user preference. However, the MLM Asset definitions **MUST** include the
 appropriate [MLM Asset Roles](#mlm-asset-roles) to ensure their discovery.
+
+[stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
 ### MLM Asset Roles
 
