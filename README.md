@@ -401,11 +401,16 @@ See the documentation for the
 ## Relation types
 
 The following types should be used as applicable `rel` types in the
-[Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object) of STAC Items describing Band Assets used with a model.
+[Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object)
+of STAC Items describing Band Assets that result from the inference of a model described by the MLM extension.
 
-| Type         | Description                                                                                                                                                            |
-|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| derived_from | This link points to <model>_item.json or <model>_collection.json.  Replace <model> with the unique [`mlm:name`](#item-properties-and-collection-fields) field's value. |
+| Type         | Description                                                                                                                                  |
+|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
+| derived_from | This link points to a STAC Collection or Item using MLM, using the corresponding [`mlm:name`](#item-properties-and-collection-fields) value. |
+
+Note that a derived product from model inference described by STAC should also consider using
+additional indications that it came of a model, such as described by
+the [Best Practices - Processing Extension](best-practices.md#processing-extension).
 
 ## Contributing
 

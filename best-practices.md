@@ -63,12 +63,32 @@ A potential representation of a STAC Asset could be as follows:
 ```json
 {
   "model-output": {
+    "mlm:name": "<name-in-MLM-STAC-Item",
     "processing:level": "L4",
     "processing:expression": {
       "format": "stac-mlm",
       "expression": "<URI-to-MLM-STAC-Item>"
     }
   }
+}
+```
+
+Furthermore, the STAC Item representing the derived product could also include
+a [Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object)
+referring back to the MLM definition using `rel: derived_from`, as described in
+[MLM Relation Types](README.md#relation-types). Such a link would like something like the following:
+
+```json
+{
+  "links": [
+    {
+      "rel": "derived_from",
+      "type": "application/geo+json",
+      "href": "<URI-to-MLM-STAC-Item>",
+      "mlm:name": "<name-in-MLM-STAC-Item",
+      "processing:level": "L4"
+    }
+  ]
 }
 ```
 
