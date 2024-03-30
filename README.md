@@ -366,24 +366,31 @@ the [Data Types from the STAC Raster extension][raster-data-types] should be use
 
 #### Input Structure Object
 
-| Field Name | Type                              | Description                                                                                                                                                                                                                             |
-|------------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer]                         | **REQUIRED** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_order  | string                            | **REQUIRED** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, `w`=width.                                                 |
-| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.                 |
+| Field Name | Type                              | Description                                                                                                                                                                                                             |
+|------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | [integer]                         | **REQUIRED** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size.     |
+| dim_order  | string                            | **REQUIRED** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, `w`=width.                                 |
+| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. |
+
+A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
+However, this value is not strictly reserved for the `b` dimension.
+For example, if the model is capable of automatically adjusting its input layer to adapt to the provided input data,
+then the corresponding dimensions that can be adapted can employ `-1` as well. 
 
 ### Model Output Object
 
-| Field Name               | Type                                                | Description                                                                                                                                                                                            |
-|--------------------------|-----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| tasks                    | [[Task Enum](#task-enum)]                           | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                         |
-| result                   | [Result Structure Object](#result-structure-object) | The structure that describes the resulting output arrays/tensors from one model head.                                                                                                                  |
-| classification:classes   | [[Class Object](#class-object)]                     | A list of class objects adhering to the [Classification extension](https://github.com/stac-extensions/classification).                                                                                 |
-| post_processing_function | string                                              | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module.my_processing_function` |
+| Field Name               | Type                                                | Description                                                                                                                                                                                             |
+|--------------------------|-----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| tasks                    | [[Task Enum](#task-enum)]                           | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                          |
+| result                   | [Result Structure Object](#result-structure-object) | The structure that describes the resulting output arrays/tensors from one model head.                                                                                                                   |
+| classification:classes   | [[Class Object](#class-object)]                     | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                                                  |
+| post_processing_function | string                                              | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module:my_processing_function`. |
 
-
-While only `task` is a required field, all fields are recommended for supervised tasks that produce a fixed shape tensor and have output classes.
-`image-captioning`, `multi-modal`, and `generative` tasks may not return fixed shape tensors or classes.
+While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
+shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
+appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such 
+as for `regression`, `image-captioning`, `super-resolution` and some `generative` tasks, to name a few, the
+`classification:classes` can be omitted.
 
 #### Result Structure Object
 
