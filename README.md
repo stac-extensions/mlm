@@ -59,17 +59,17 @@ extension to synthesize common use cases into a single reference for Machine Lea
 | mlm:architecture            | [Model Architecture](#model-architecture) string | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
 | mlm:tasks                   | [[Task Enum](#task-enum)]                        | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                           | **REQUIRED** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
-| mlm:framework_version       | string                                           | **REQUIRED** The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                            |
+| mlm:framework_version       | string                                           | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
 | mlm:memory_size             | integer                                          | **REQUIRED** The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                   |
-| mlm:input                   | [[Model Input Object](#model-input-object)]      | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
-| mlm:output                  | [[Model Output Object](#model-output-object)]    | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
-| mlm:accelerator             | [Accelerator Enum](#accelerator-enum)            | The intended computational hardware that runs inference. If undefined, it should be assumed `amd64` (i.e.: CPU).                                                                                                                                                                            |
+| mlm:accelerator             | [Accelerator Enum](#accelerator-enum) \| null    | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
 | mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
 | mlm:accelerator_summary     | string                                           | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
 | mlm:accelerator_count       | integer                                          | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
 | mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
 | mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch, the `null` value should be set explicitly.                                                                         |
 | mlm:batch_size_suggestion   | number                                           | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
+| mlm:input                   | [[Model Input Object](#model-input-object)]      | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
+| mlm:output                  | [[Model Output Object](#model-output-object)]    | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 
 In addition, fields from the following extensions must be imported in the item:
 - [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
@@ -86,6 +86,74 @@ the [Papers With Code - Computer Vision Methods](https://paperswithcode.com/meth
 Note that this field is not an explicit "Enum", and is used only as an indicator of common architecture occurrences.
 If no specific or predefined architecture can be associated with the described model, simply employ `unknown` or
 another custom name as deemed appropriate.
+
+### Task Enum
+
+It is recommended to define `mlm:tasks` of the entire model at the STAC Item level,
+and `tasks` of respective [Model Output Object](#model-output-object) with the following values.
+Although other values are permitted to support more use cases, they should be used sparingly to allow better
+interoperability of models and their representation.
+
+As a general rule of thumb, if a task is not represented below, an appropriate name can be formulated by taking
+definitions listed in [Papers With Code](https://paperswithcode.com/sota). The names
+should be normalized to lowercase and use hyphens instead of spaces.
+
+| Task Name               | Corresponding `label:tasks` | Description                                                                                                     |
+|-------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------------------|
+| `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                               |
+| `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                             |
+| `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.              |
+| `detection`             | `detection`                 | Generic detection of the "presence" of objects or entities, with or without positions.                          |
+| `object-detection`      | *n/a*                       | Task corresponding to the identification of positions as bounding boxes of object detected in the scene.        |
+| `segmentation`          | `segmentation`              | Generic tasks that regroups all types of segmentations tasks consisting of applying labels to pixels.           |
+| `semantic-segmentation` | *n/a*                       | Specific segmentation task where all pixels are attributed labels, without consideration of similar instances.  |
+| `instance-segmentation` | *n/a*                       | Specific segmentation task that assigns distinct labels for groups of pixels corresponding to object instances. |
+| `panoptic-segmentation` | *n/a*                       | Specific segmentation task that combines instance segmentation of objects and semantic labels for non-objects.  |
+| `similarity-search`     | *n/a*                       | Generic task to identify whether a query input corresponds to another reference within a corpus.                |
+| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                   |
+| `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                         |
+| `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.   |
+
+If the task falls within the category of supervised machine learning and uses labels during training,
+this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
+STAC Collections and Items published with the model described by this extension.
+
+It is to be noted that multiple "*generic*" tasks names (`classification`, `detection`, etc.) are defined to allow
+correspondance with `label:tasks`, but these can lead to some ambiguity depending on context. For example, a model
+that supports `classification` could mean that the model can predict patch-based classes over an entire scene
+(i.e.: `scene-classification` for a single prediction over an entire area of interest as a whole),
+or that it can predict pixel-wise "classifications", such as land-cover labels for
+every single pixel coordinate over the area of interest. Maybe counter-intuitively to some users,
+such a model that produces pixel-wise "classifications" should be attributed the `segmentation` task
+(and more specifically `semantic-segmentation`) rather than `classification`. To avoid this kind of ambiguity,
+it is strongly recommended that `tasks` always aim to provide the most specific definitions possible to explicitly
+describe what the model accomplishes.
+
+[stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
+
+### Accelerator Type Enum
+
+It is recommended to define `accelerator` with one of the following values:
+
+- `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
+- `cuda` models compatible with NVIDIA GPUs
+- `xla` models compiled with XLA. Models trained on TPUs are typically compiled with XLA.
+- `amd-rocm` models trained on AMD GPUs
+- `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
+- `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
+- `macos-arm` for models trained on Apple Silicon
+
+> [!WARNING]
+> If `mlm:accelerator = amd64`, this explicitly indicates that the model does not (and will not try to) use any
+> accelerator, even if some are available from the runtime environment. This is to be distinguished from 
+> the value `mlm:accelerator = null`, which means that the model *could* make use of some accelerators if provided,
+> but is not constrained by any specific one. To improve comprehension by users, it is recommended that any model
+> using `mlm:accelerator = amd64` also set explicitly `mlm:accelerator_constrained = true` to illustrate that the
+> model **WILL NOT** use accelerators, although the hardware resolution should be identical nonetheless.
+
+When `mlm:accelerator = null` is employed, the value of `mlm:accelerator_constrained` can be ignored, since even if
+set to `true`, there would be no `accelerator` to contain against. To avoid confusion, it is suggested to set the
+`mlm:accelerator_constrained = false` or omit the field entirely in this case.
 
 ### Model Input Object
 
@@ -104,18 +172,6 @@ another custom name as deemed appropriate.
 Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
 However, setting `null` explicitly when this information is known by the model provider can help users understand
 what is the expected behavior of the model. It is therefore recommended to provide `null` explicitly when applicable.
-
-### Accelerator Type Enum
-
-It is recommended to define `accelerator` with one of the following values:
-
-- `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
-- `cuda` models compatible with NVIDIA GPUs
-- `xla` models compiled with XLA. Models trained on TPUs are typically compiled with XLA.
-- `amd-rocm` models trained on AMD GPUs
-- `intel-ipex-cpu` for models optimized with IPEX for Intel CPUs
-- `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
-- `macos-arm` for models trained on Apple Silicon
 
 ## Assets Objects
 
@@ -328,50 +384,6 @@ the [Data Types from the STAC Raster extension][raster-data-types] should be use
 
 While only `task` is a required field, all fields are recommended for supervised tasks that produce a fixed shape tensor and have output classes.
 `image-captioning`, `multi-modal`, and `generative` tasks may not return fixed shape tensors or classes.
-
-#### Task Enum
-
-It is recommended to define `mlm:tasks` of the entire model at the STAC Item level,
-and `tasks` of respective [Model Output Object](#model-output-object) with the following values.
-Although other values are permitted to support more use cases, they should be used sparingly to allow better
-interoperability of models and their representation.
-
-As a general rule of thumb, if a task is not represented below, an appropriate name can be formulated by taking
-definitions listed in [Papers With Code](https://paperswithcode.com/sota). The names
-should be normalized to lowercase and use hyphens instead of spaces.
-
-| Task Name               | Corresponding `label:tasks` | Description                                                                                                     |
-|-------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                               |
-| `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                             |
-| `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.              |
-| `detection`             | `detection`                 | Generic detection of the "presence" of objects or entities, with or without positions.                          |
-| `object-detection`      | *n/a*                       | Task corresponding to the identification of positions as bounding boxes of object detected in the scene.        |
-| `segmentation`          | `segmentation`              | Generic tasks that regroups all types of segmentations tasks consisting of applying labels to pixels.           |
-| `semantic-segmentation` | *n/a*                       | Specific segmentation task where all pixels are attributed labels, without consideration of similar instances.  |
-| `instance-segmentation` | *n/a*                       | Specific segmentation task that assigns distinct labels for groups of pixels corresponding to object instances. |
-| `panoptic-segmentation` | *n/a*                       | Specific segmentation task that combines instance segmentation of objects and semantic labels for non-objects.  |
-| `similarity-search`     | *n/a*                       | Generic task to identify whether a query input corresponds to another reference within a corpus.                |
-| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                   |
-| `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                         |
-| `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.   |
-
-If the task falls within the category of supervised machine learning and uses labels during training,
-this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
-STAC Collections and Items published with the model described by this extension.
-
-It is to be noted that multiple "*generic*" tasks names (`classification`, `detection`, etc.) are defined to allow
-correspondance with `label:tasks`, but these can lead to some ambiguity depending on context. For example, a model
-that supports `classification` could mean that the model can predict patch-based classes over an entire scene
-(i.e.: `scene-classification` for a single prediction over an entire area of interest as a whole),
-or that it can predict pixel-wise "classifications", such as land-cover labels for
-every single pixel coordinate over the area of interest. Maybe counter-intuitively to some users,
-such a model that produces pixel-wise "classifications" should be attributed the `segmentation` task
-(and more specifically `semantic-segmentation`) rather than `classification`. To avoid this kind of ambiguity,
-it is strongly recommended that `tasks` always aim to provide the most specific definitions possible to explicitly
-describe what the model accomplishes.
-
-[stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
 
 #### Result Structure Object
 
