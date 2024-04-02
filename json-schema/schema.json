@@ -1,50 +1,104 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json",
+  "$id": "https://schemas.stacspec.org/v1.0.0/extensions/mlm/json-schema/schema.json",
   "title": "DL Model Item",
-  "description": "This object represents the metadata for a Deep Learning (DL) model item in a DL Catalog.",
-  "allOf": [
+  "description": "This object represents the metadata for a Machine Learning Model (MLM).",
+  "oneOf": [
     {
-      "$ref": "https://schemas.stacspec.org/v1.0.0/item-spec/json-schema/item.json"
-    },
-    {
-      "$ref": "#/definitions/dl-model"
-    },
-    {
-      "$ref": "#/definitions/dlm:properties"
-    }
-  ],
-  "definitions": {
-    "dl-model": {
-      "type": "object",
-      "required": [
-        "stac_extensions",
-        "properties",
-        "assets"
-      ],
-      "properties": {
-        "stac_extensions": {
+      "$comment": "This is the schema for STAC extension MLM in Items.",
+      "allOf": [
+        {
           "type": "object",
           "required": [
-            "stac_extensions"
+            "type",
+            "properties",
+            "assets"
           ],
           "properties": {
-            "stac_extensions": {
-              "type": "array",
-              "contains": {
-                "enum": [
-                  "dl-model",
-                  "https://schemas.stacspec.org/v1.0.0-beta.3/extensions/dl-model/json-schema/schema.json"
-                ]
+            "type": {
+              "const": "Feature"
+            },
+            "properties": {
+              "allOf": [
+                {
+                  "required": [
+                    "mlm:name",
+                    "mlm:architecture",
+                    "mlm:framework",
+                    "mlm:tasks",
+                    "mlm:input",
+                    "mlm:output"
+                  ]
+                },
+                {
+                  "$ref": "#/definitions/fields"
+                }
+              ]
+            },
+            "assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fields"
               }
             }
           }
         },
+        {
+          "$ref": "#/definitions/stac_extensions_mlm"
+        }
+      ]
+    },
+    {
+      "$comment": "This is the schema for STAC extension MLM in Collections.",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "summaries"
+          ],
+          "properties": {
+            "type": {
+              "const": "Collection"
+            },
+            "assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/fields"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "stac_extensions_mlm": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "const": "https://schemas.stacspec.org/v1.0.0/extensions/mlm/json-schema/schema.json"
+          }
+        }
+      }
+    },
+    "fields": {
+
+
+
+    },
+      "properties": {
         "properties": {
           "type": "object",
           "required": [
-            "dlm:inputs",
-            "dlm:outputs",
+            "mlm:name",
+            "mlm:input",
+            "mlm:output",
             "dlm:runtime",
             "dlm:archive",
             "dlm:data"
@@ -529,31 +583,5 @@
           }
         }
       }
-    },
-    "dlm:properties": {
-      "type": "object",
-      "required": [
-        "properties"
-      ],
-      "properties": {
-        "properties": {
-          "$comment": "Optional metadata that provides more details about provenance.",
-          "anyOf": [
-            {
-              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/instrument.json"
-            },
-            {
-              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/licensing.json"
-            },
-            {
-              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/provider.json"
-            },
-            {
-              "$ref": "https://schemas.stacspec.org/v1.0.0-beta.2/item-spec/json-schema/datetime.json"
-            }
-          ]
-        }
-      }
     }
-  }
 }
