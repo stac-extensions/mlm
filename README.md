@@ -5,7 +5,7 @@
 - **Title:** Machine Learning Model Extension
 - **Identifier:** [https://schemas.stacspec.org/2.0.0.alpha.0/extensions/ml-model/json-schema/schema.json](https://schemas.stacspec.org/2.0.0.alpha.0/extensions/ml-model/json-schema/schema.json)
 - **Field Name Prefix:** mlm
-- **Scope:** Item, Collection
+- **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Proposal
 - **Owner:**
   - [@fmigneault](https://github.com/fmigneault)
@@ -19,7 +19,8 @@ trained on overhead imagery and enable running model inference.
 The main objectives of the extension are:
 
 1) to enable building model collections that can be searched alongside associated STAC datasets
-2) record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy an inference service.
+2) record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy
+   an inference service.
 
 Specifically, this extension records the following information to make ML models searchable and reusable:
 1. Sensor band specifications
@@ -31,7 +32,8 @@ Specifically, this extension records the following information to make ML models
 The MLM specification is biased towards providing metadata fields for supervised machine learning models.
 However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
 
-See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction with this extension.
+See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
+with this extension.
 The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
 never have the Machine Learning Model Extension exclusively in `stac_extensions`.
@@ -53,6 +55,14 @@ extension to synthesize common use cases into a single reference for Machine Lea
 
 ## Item Properties and Collection Fields
 
+The fields in the table below can be used in these parts of STAC documents:
+
+- [ ] Catalogs
+- [x] Collections
+- [x] Item Properties (incl. Summaries in Collections)
+- [x] Assets (for both Collections and Items, incl. Item Asset Definitions in Collections, except `mlm:name`)
+- [ ] Links
+
 | Field Name                  | Type                                             | Description                                                                                                                                                                                                                                                                                 |
 |-----------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | mlm:name                    | string                                           | **REQUIRED** A unique name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
@@ -60,7 +70,7 @@ extension to synthesize common use cases into a single reference for Machine Lea
 | mlm:tasks                   | [[Task Enum](#task-enum)]                        | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                           | **REQUIRED** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
 | mlm:framework_version       | string                                           | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
-| mlm:memory_size             | integer                                          | **REQUIRED** The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                   |
+| mlm:memory_size             | integer                                          | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
 | mlm:accelerator             | [Accelerator Enum](#accelerator-enum) \| null    | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
 | mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
 | mlm:accelerator_summary     | string                                           | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
@@ -71,9 +81,22 @@ extension to synthesize common use cases into a single reference for Machine Lea
 | mlm:input                   | [[Model Input Object](#model-input-object)]      | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
 | mlm:output                  | [[Model Output Object](#model-output-object)]    | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 
-In addition, fields from the following extensions must be imported in the item:
-- [Scientific Extension Specification][stac-ext-sci] to describe relevant publications.
-- [Version Extension Specification][stac-ext-ver] to define version tags.
+To decide whether above fields should be applied under Item `properties` or under respective Assets, the context of
+each field must be considered. For example, the `mlm:name` should always be provided in the Item `properties`, since
+it relates to the model as a whole. In contrast, some models could support multiple `mlm:accelerator`, which could be
+handled by distinct source code represented by different Assets. In such case, `mlm:accelerator` definitions should be
+nested under their relevant Asset. If a field is defined both at the Item and Asset level, the value at the Asset level
+would be considered for that specific Asset, and the value at the Item level would be used for other Assets that did
+not override it for their respective reference. For some of the fields, further details are provided in following
+sections to provide more precisions regarding some potentially ambiguous use cases.
+
+In addition, fields from the multiple relevant extensions should be defined as applicable. See
+[Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-ml-model-extension)
+for more details.
+
+For the [Extent Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object)
+in STAC Collections and the corresponding spatial and temporal fields in Items, please refer to section
+[Best Practices - Using STAC Common Metadata Fields for the ML Model Extension](best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension).
 
 [stac-ext-sci]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md
 [stac-ext-ver]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md
@@ -411,9 +434,12 @@ The following types should be used as applicable `rel` types in the
 [Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object)
 of STAC Items describing Band Assets that result from the inference of a model described by the MLM extension.
 
-| Type         | Description                                                                                                                                  |
-|--------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| derived_from | This link points to a STAC Collection or Item using MLM, using the corresponding [`mlm:name`](#item-properties-and-collection-fields) value. |
+| Type         | Description                                              |
+|--------------|----------------------------------------------------------|
+| derived_from | This link points to a STAC Collection or Item using MLM. |
+
+It is recommended that the link using `derived_from` referring to another STAC definition using the MLM extension
+specifies the [`mlm:name`](#item-properties-and-collection-fields) value to make the derived reference more explicit.
 
 Note that a derived product from model inference described by STAC should also consider using
 additional indications that it came of a model, such as described by

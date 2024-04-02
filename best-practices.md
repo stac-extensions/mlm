@@ -18,12 +18,35 @@ models or creating tools to work with STAC.
 
 ## Using STAC Common Metadata Fields for the ML Model Extension
 
-It is recommended to use the `start_datetime` and `end_datetime`, `geometry`, and `bbox` to represent the 
-recommended context of data the model was trained with and for which the model should have appropriate domain
-knowledge for inference. For example, we can consider a model which is trained on imagery from all over the world
+It is recommended to use the `start_datetime` and `end_datetime`, `geometry`, and `bbox` in a STAC Item,
+and the corresponding
+[Extent Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object)
+in a Collection, to represent the *recommended context* of the data the model was trained with and for which the model
+should have appropriate domain knowledge for inference.
+
+For example, if a model was trained using the [EuroSAT][EuroSAT-github] dataset, and represented using MLM, it would
+be reasonable to describe it with a time range of 2015-2018 and an area corresponding to the European Urban Atlas, as
+described by the [EuroSAT paper][EuroSAT-paper]. However, it could also be considered adequate to define a wider extent,
+considering that it would not be unexpected to have reasonably similar classes and domain distribution in following
+years and in other locations. Provided that the exact extent applicable for a model is difficult to define reliably,
+it is left to the good judgement of users to provide adequate values. Note that users employing the model can also
+choose to apply it for contexts outside the *recommended* extent for the same reason.
+
+[EuroSAT-github]: https://github.com/phelber/EuroSAT
+[EuroSAT-paper]: https://www.researchgate.net/publication/319463676
+
+As another example, let us consider a model which is trained on imagery from all over the world
 and is robust enough to be applied to any time period. In this case, the common metadata to use with the model
-would include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_datetime` and `end_datetime` range could
-be generic values like `["1900-01-01", null]`.
+could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_datetime` and `end_datetime` range could
+be generic values like `["1900-01-01", null]`. However, it is to be noted that generic and very broad spatiotemporal
+extents like these rarely reflect the reality regarding the capabilities and precision of the model to predict reliable
+results. If a more restrained area and time of interest can be identified, such as the ranges for which the training
+dataset applies, or a test split dataset that validates the applicability of the model on other domains, those should
+be provided instead. 
+
+If specific datasets with training/validation/test splits are known to support the claims of the suggested extent for
+the model, it is recommended that they are included as reference to the STAC Item/Collection using MLM. For more
+information regarding these references, see the [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) details.
 
 ## Recommended Extensions to Compose with the ML Model Extension
 
