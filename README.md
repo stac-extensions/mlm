@@ -81,6 +81,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:accelerator_count       | integer                                          | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
 | mlm:input                   | \[[Model Input Object](#model-input-object)]     | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
 | mlm:output                  | \[[Model Output Object](#model-output-object)]   | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
+| mlm:hyperparameters         | [Model Hyperparameters Object](#model-hyperparameters-object) | Additional hyperparameters relevant for the model.                                                                                                                                                                                                                                          |
 
 To decide whether above fields should be applied under Item `properties` or under respective Assets, the context of
 each field must be considered. For example, the `mlm:name` should always be provided in the Item `properties`, since
@@ -391,6 +392,27 @@ as for `regression`, `image-captioning`, `super-resolution` and some `generative
 See the documentation for the
 [Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object).
 
+### Model Hyperparameters Object
+
+The hyperparameters are an open JSON object definition that can be used to provide relevant configurations for the
+model. Those can combine training details, inference runtime parameters, or both. For example, training hyperparameters
+could indicate the number of epochs that were used, the optimizer employed, the number of estimators contained in an
+ensemble of models, or the random state value. For inference, parameters such as the model temperature, a confidence
+cut-off threshold, or a non-maximum suppression threshold to limit proposal could be specified. The specific parameter
+names, and how they should be employed by the model, are specific to each implementation.
+
+Following is an example of what the hyperparameters definition could look like:
+
+```json
+{
+  "mlm:hyperparameters": {
+    "nms_max_detections": 500,
+    "nms_threshold": 0.25,
+    "iou_threshold": 0.5,
+    "random_state": 12345
+  }
+}
+```
 
 ## Assets Objects
 
