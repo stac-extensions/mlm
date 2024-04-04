@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.stacspec.org/v1.0.0/extensions/mlm/json-schema/schema.json",
+  "$id": "https://stac-extensions.github.io/mlm/v1.0.0/schema.json",
   "title": "DL Model Item",
   "description": "This object represents the metadata for a Machine Learning Model (MLM).",
   "oneOf": [
@@ -31,20 +31,20 @@
                   ]
                 },
                 {
-                  "$ref": "#/definitions/fields"
+                  "$ref": "#/$defs/fields"
                 }
               ]
             },
             "assets": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/fields"
+                "$ref": "#/$defs/fields"
               }
             }
           }
         },
         {
-          "$ref": "#/definitions/stac_extensions_mlm"
+          "$ref": "#/$defs/stac_extensions_mlm"
         }
       ]
     },
@@ -54,25 +54,33 @@
         {
           "type": "object",
           "required": [
-            "type",
-            "summaries"
+            "type"
           ],
           "properties": {
             "type": {
               "const": "Collection"
             },
+            "summaries": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/fields"
+              }
+            },
             "assets": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/definitions/fields"
+                "$ref": "#/$defs/fields"
               }
             }
           }
+        },
+        {
+          "$ref": "#/$defs/stac_extensions_mlm"
         }
       ]
     }
   ],
-  "definitions": {
+  "$defs": {
     "stac_extensions_mlm": {
       "type": "object",
       "required": [
@@ -82,54 +90,497 @@
         "stac_extensions": {
           "type": "array",
           "contains": {
-            "const": "https://schemas.stacspec.org/v1.0.0/extensions/mlm/json-schema/schema.json"
+            "const": "https://stac-extensions.github.io/mlm/v1.0.0/schema.json"
           }
         }
       }
     },
-    "fields": {
-
-
-
-    },
+    "stac_extensions_eo": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
       "properties": {
-        "properties": {
-          "type": "object",
-          "required": [
-            "mlm:name",
-            "mlm:input",
-            "mlm:output",
-            "dlm:runtime",
-            "dlm:archive",
-            "dlm:data"
-          ],
-          "properties": {
-            "dlm:inputs": {
-              "$ref": "#/definitions/dlm:inputs"
-            },
-            "dlm:outputs": {
-              "$ref": "#/definitions/dlm:outputs"
-            },
-            "dlm:runtime": {
-              "$ref": "#/definitions/dlm:runtime"
-            },
-            "dlm:architecture": {
-              "$ref": "#/definitions/dlm:architecture"
-            },
-            "dlm:archive": {
-              "$ref": "#/definitions/dlm:archive"
-            },
-            "dlm:data": {
-              "$ref": "#/definitions/dlm:data"
-            }
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "type": "string",
+            "pattern": "https://stac-extensions\\.github\\.io/eo/v1(\\.[0-9]+){2}/schema\\.json"
           }
         }
+      }
+    },
+    "stac_extensions_raster": {
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "type": "string",
+            "pattern": "https://stac-extensions\\.github\\.io/raster/v1(\\.[0-9]+){2}/schema\\.json"
+          }
+        }
+      }
+    },
+    "stac_version_1.1": {
+      "$comment": "Requirement for STAC 1.1 or above.",
+      "type": "object",
+      "required": [
+        "stac_version"
+      ],
+      "properties": {
+        "stac_version": {
+          "pattern": "1\\.[1-9][0-9]*\\.[0-9]+(-.*)?"
+        }
+      }
+    },
+    "fields": {
+      "type": "object",
+      "properties": {
+        "mlm:name": {
+          "$ref": "#/$defs/mlm:name"
+        },
+        "mlm:architecture": {
+          "$ref": "#/$defs/mlm:architecture"
+        },
+        "mlm:tasks": {
+          "$ref": "#/$defs/mlm:tasks"
+        },
+        "mlm:framework": {
+          "$ref": "#/$defs/mlm:framework"
+        },
+        "mlm:framework_version": {
+          "$ref": "#/$defs/mlm:framework_version"
+        },
+        "mlm:memory_size": {
+          "$ref": "#/$defs/mlm:memory_size"
+        },
+        "mlm:total_parameters": {
+          "$ref": "#/$defs/mlm:total_parameters"
+        },
+        "mlm:pretrained_source": {
+          "$ref": "#/$defs/mlm:pretrained_source"
+        },
+        "mlm:batch_size_suggestion": {
+          "$ref": "#/$defs/mlm:batch_size_suggestion"
+        },
+        "mlm:accelerator": {
+          "$ref": "#/$defs/mlm:accelerator"
+        },
+        "mlm:accelerator_constrained": {
+          "$ref": "#/$defs/mlm:accelerator_constrained"
+        },
+        "mlm:accelerator_summary": {
+          "$ref": "#/$defs/mlm:accelerator_summary"
+        },
+        "mlm:accelerator_count": {
+          "$ref": "#/$defs/mlm:accelerator_count"
+        },
+        "mlm:input": {
+          "$ref": "#/$defs/mlm:input"
+        },
+        "mlm:output": {
+          "$ref": "#/$defs/mlm:output"
+        }
       },
+      "$comment": "Allow properties not defined by MLM prefix to allow combination with other extensions.",
       "patternProperties": {
         "^(?!dlm:)": {}
       },
       "additionalProperties": false
     },
+    "mlm:name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]+[a-zA-Z0-9]$"
+    },
+    "mlm:architecture": {
+      "type": "string",
+      "title": "Model Architecture",
+      "description": "A descriptive name of the model architecture, typically a common name from the literature.",
+      "examples": [
+        "ResNet",
+        "VGG",
+        "GAN",
+        "Vision Transformer"
+      ]
+    },
+    "mlm:framework": {
+      "title": "Name of the machine learning framework used.",
+      "anyOf": [
+        {
+          "$comment": "Add more entries here as needed, and repeat them in the README.",
+          "description": "Notable predefined framework names.",
+          "type": "string",
+          "enum": [
+            "PyTorch",
+            "TensorFlow",
+            "Scikit-learn",
+            "Huggingface",
+            "PyMC",
+            "JAX",
+            "ONNX",
+            "MXNet",
+            "Keras",
+            "Caffe",
+            "Weka"
+          ]
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "description": "Any other framework name to allow extension. Enum names should be preferred when possible to allow better portability."
+        }
+      ]
+    },
+    "mlm:framework_version": {
+      "title": "Framework version",
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "mlm:tasks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "regression",
+          "classification",
+          "scene-classification",
+          "detection",
+          "object-detection",
+          "segmentation",
+          "semantic-segmentation",
+          "instance-segmentation",
+          "panoptic-segmentation",
+          "similarity-search",
+          "generative",
+          "image-captioning",
+          "super-resolution"
+        ]
+      }
+    },
+    "mlm:memory_size": {
+      "description": "Memory size (in bytes) required to load the model with the specified accelerator.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "mlm:total_parameters": {
+      "description": "Total number of model parameters (weights).",
+      "type": "integer",
+      "minimum": 0
+    },
+    "mlm:pretrained_source": {
+      "description": "Pre-training dataset reference or training from scratch definition.",
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "The name or URI of the dataset used for pretraining the model.",
+          "examples": [
+            "ImageNet",
+            "EuroSAT"
+          ]
+        },
+        {
+          "type": "null",
+          "description": "Explicit mention that the model is trained from scratch."
+        }
+      ]
+    },
+    "mlm:batch_size_suggestion": {
+      "description": "Recommended batch size to employ the model with the accelerator.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "mlm:accelerator": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "amd64",
+            "cuda",
+            "xla",
+            "amd-rocm",
+            "intel-ipex-cpu",
+            "intel-ipex-gpu",
+            "macos-arm"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "mlm:accelerator_constrained": {
+      "type": "boolean",
+      "default": false
+    },
+    "mlm:accelerator_summary": {
+      "type": "string"
+    },
+    "mlm:accelerator_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "mlm:input": {
+      "type": "array",
+      "items": {
+        "title": "Model Input Object",
+        "type": "object",
+        "required": [
+          "name",
+          "bands",
+          "input"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bands": {
+            "$ref": "#/$defs/ModelBands"
+          },
+          "input": {
+            "$ref": "#/$defs/InputStructure"
+          },
+          "norm_by_channel": {
+            "type": "boolean"
+          },
+          "norm_type": {
+            "$ref": "#/$defs/NormalizeType"
+          },
+          "norm_clip": {
+            "$ref": "#/$defs/NormalizeClip"
+          },
+          "resize_type": {
+            "$ref": "#/$defs/ResizeType"
+          },
+          "statistics": {
+            "$ref": "#/$defs/statistics"
+          },
+          "pre_processing_function": {
+            "$ref": "https://stac-extensions.github.io/processing/v1.1.0/schema.json#/definitions/fields/properties/processing:expression"
+          }
+        }
+      }
+    },
+    "InputStructure": {
+      "title": "Input Structure Object",
+      "type": "object",
+      "required": [
+        "shape",
+        "dim_order",
+        "data_type"
+      ],
+      "properties": {
+        "shape": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": -1
+          }
+        },
+        "dim_order": {
+          "type": "string",
+          "minLength": 1
+        },
+        "data_type": {
+          "$ref": "#/$defs/DataType"
+        }
+      }
+    },
+    "NormalizeType": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "min-max",
+            "z-score",
+            "l1",
+            "l2",
+            "l2sqr",
+            "hamming",
+            "hamming2",
+            "type-mask",
+            "relative",
+            "inf"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "NormalizeClip": {
+
+    },
+    "ResizeType": {
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "crop",
+            "pad",
+            "interpolation-nearest",
+            "interpolation-linear",
+            "interpolation-cubic",
+            "interpolation-area",
+            "interpolation-lanczos4",
+            "interpolation-max",
+            "wrap-fill-outliers",
+            "wrap-inverse-map"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "DataType": {
+      "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/data_type"
+    },
+    "ModelBands": {
+      "allOf": [
+        {
+          "$comment": "No 'minItems' here since to support model inputs not using any band (other data source).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "$comment": "However, if any band is indicated, a 'bands'-compliant section should describe them.",
+          "$ref": "#/$defs/AnyBandsRef"
+        }
+      ]
+    },
+    "AnyBandsRef": {
+      "$comment": "This definition ensures that, if at least 1 named MLM 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well.",
+      "if": {
+        "$comment": "This is the JSON-object 'properties' definition.",
+        "properties": {
+          "$comment": "This is the STAC-Item 'properties' field.",
+          "properties": {
+            "required": [
+              "mlm:input"
+            ],
+            "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
+            "properties": {
+              "$comment": "Required MLM bands listing referring to at least one band name.",
+              "mlm:input": {
+                "type": "array",
+                "items": {
+                  "required": [
+                    "bands"
+                  ],
+                  "$comment": "This is the 'Model Input Object' properties.",
+                  "properties": {
+                    "bands": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "$comment": "This 'minItems' is the purpose of this whole 'if/then' block.",
+                        "minItems": 1
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "$comment": "Need at least one 'bands', but multiple is allowed.",
+        "anyOf": [
+          {
+            "allOf": [
+              {
+                "$ref": "#/$defs/stac_extensions_raster"
+              },
+              {
+                "$comment": "This is the JSON-object 'properties' definition.",
+                "properties": {
+                  "$comment": "This is the STAC-Item 'properties' field.",
+                  "properties": {
+                    "required": ["raster:bands"],
+                    "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
+                    "properties": {
+                      "$comment": "https://github.com/stac-extensions/raster#item-asset-fields",
+                      "raster:bands": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "$ref": "#/$defs/stac_extensions_eo"
+              },
+              {
+                "$comment": "This is the JSON-object 'properties' definition.",
+                "properties": {
+                  "$comment": "This is the STAC-Item 'properties' field.",
+                  "properties": {
+                    "required": ["eo:bands"],
+                    "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
+                    "properties": {
+                      "$comment": "https://github.com/stac-extensions/eo#item-properties-or-asset-fields",
+                      "eo:bands": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "allOf": [
+              {
+                "$ref": "#/$defs/stac_version_1.1"
+              },
+              {
+                "$comment": "This is the JSON-object 'properties' definition.",
+                "properties": {
+                  "$comment": "This is the STAC-Item 'properties' field.",
+                  "properties": {
+                    "required": ["bands"],
+                    "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
+                    "properties": {
+                      "$comment": "https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#bands",
+                      "bands": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+
     "dlm:runtime": {
       "title": "Execution environment",
       "description": "Describe the execution environment",
@@ -142,30 +593,7 @@
         "requirement_file"
       ],
       "properties": {
-        "framework": {
-          "title": "Name of the deep learning framework used",
-          "type": "string"
-        },
-        "framework_version": {
-          "title": "Framework version",
-          "type": "string"
-        },
-        "model_handler": {
-          "title": "Model handling function",
-          "type": "string"
-        },
-        "model_src_url": {
-          "title": "Model source repository",
-          "type": "string"
-        },
-        "model_commit_hash": {
-          "title": "Hash value for the Model source",
-          "type": "string"
-        },
-        "requirement_file": {
-          "title": "Requirement file",
-          "type": "string"
-        },
+
         "docker": {
           "title": "Docker runtime specifications",
           "type": "object",
@@ -399,10 +827,10 @@
           "description": "This is a lookup table mapping the model output (index) to a class name",
           "oneOf": [
             {
-              "$ref": "#/definitions/dlm:class_name_listing"
+              "$ref": "#/$defs/dlm:class_name_listing"
             },
             {
-              "$ref": "#/definitions/dlm:class_name_mapping"
+              "$ref": "#/$defs/dlm:class_name_mapping"
             }
           ]
         }
@@ -413,26 +841,26 @@
       "type": "array",
       "minItems": 1,
       "items": {
-         "oneOf": [
-           {
-             "type": "object",
-             "properties": {
-               "index": {
-                 "title": "Class index",
-                 "type": "integer",
-                 "minimum": 0
-               },
-               "class_name": {
-                 "title": "Class name",
-                 "type": "string"
-               }
-             }
-           },
-           {
-             "$ref": "#/definitions/dlm:class_name_mapping"
-           }
-         ]
-       }
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "index": {
+                "title": "Class index",
+                "type": "integer",
+                "minimum": 0
+              },
+              "class_name": {
+                "title": "Class name",
+                "type": "string"
+              }
+            }
+          },
+          {
+            "$ref": "#/$defs/dlm:class_name_mapping"
+          }
+        ]
+      }
     },
     "dlm:class_name_mapping": {
       "type": "object",
@@ -584,4 +1012,5 @@
         }
       }
     }
+  }
 }

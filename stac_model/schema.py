@@ -33,8 +33,7 @@ T = TypeVar(
 )
 
 SchemaName = Literal["mlm"]
-# TODO update
-SCHEMA_URI: str = "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json"  # noqa: E501
+SCHEMA_URI: str = "https://stac-extensions.github.io/mlm/v1.0.0/schema.json"
 PREFIX = f"{get_args(SchemaName)[0]}:"
 
 
@@ -89,17 +88,6 @@ class MLModelExtension(
     @classmethod
     def get_schema_uri(cls) -> str:
         return SCHEMA_URI
-
-    @classmethod
-    def has_extension(cls, obj: S):
-        # FIXME: this override should be removed once an official and
-        # versioned schema is released ignore the original implementation
-        # logic for a version regex since in our case, the VERSION_REGEX
-        # is not fulfilled (ie: using 'main' branch, no tag available...)
-        ext_uri = cls.get_schema_uri()
-        return obj.stac_extensions is not None and any(
-            uri == ext_uri for uri in obj.stac_extensions
-        )
 
     @classmethod
     def ext(cls, obj: T, add_if_missing: bool = False) -> "MLModelExtension[T]":

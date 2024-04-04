@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/lekSD_RVRiquNHRloXRzeg/badge)](https://hackmd.io/lekSD_RVRiquNHRloXRzeg?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://schemas.stacspec.org/2.0.0.alpha.0/extensions/ml-model/json-schema/schema.json](https://schemas.stacspec.org/2.0.0.alpha.0/extensions/ml-model/json-schema/schema.json)
+- **Identifier:** [https://stac-extensions.github.io/mlm/v1.0.0/schema.json](https://stac-extensions.github.io/mlm/v1.0.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Proposal
@@ -67,19 +67,19 @@ The fields in the table below can be used in these parts of STAC documents:
 |-----------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | mlm:name                    | string                                           | **REQUIRED** A unique name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
 | mlm:architecture            | [Model Architecture](#model-architecture) string | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
-| mlm:tasks                   | [[Task Enum](#task-enum)]                        | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
+| mlm:tasks                   | \[[Task Enum](#task-enum)]                       | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                           | **REQUIRED** Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
 | mlm:framework_version       | string                                           | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
 | mlm:memory_size             | integer                                          | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
+| mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
+| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch, the `null` value should be set explicitly.                                                                         |
+| mlm:batch_size_suggestion   | integer                                          | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
 | mlm:accelerator             | [Accelerator Enum](#accelerator-enum) \| null    | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
 | mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
 | mlm:accelerator_summary     | string                                           | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
 | mlm:accelerator_count       | integer                                          | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
-| mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
-| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch, the `null` value should be set explicitly.                                                                         |
-| mlm:batch_size_suggestion   | number                                           | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
-| mlm:input                   | [[Model Input Object](#model-input-object)]      | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
-| mlm:output                  | [[Model Output Object](#model-output-object)]    | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
+| mlm:input                   | \[[Model Input Object](#model-input-object)]     | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
+| mlm:output                  | \[[Model Output Object](#model-output-object)]   | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 
 To decide whether above fields should be applied under Item `properties` or under respective Assets, the context of
 each field must be considered. For example, the `mlm:name` should always be provided in the Item `properties`, since
@@ -133,8 +133,8 @@ should be normalized to lowercase and use hyphens instead of spaces.
 | `instance-segmentation` | *n/a*                       | Specific segmentation task that assigns distinct labels for groups of pixels corresponding to object instances. |
 | `panoptic-segmentation` | *n/a*                       | Specific segmentation task that combines instance segmentation of objects and semantic labels for non-objects.  |
 | `similarity-search`     | *n/a*                       | Generic task to identify whether a query input corresponds to another reference within a corpus.                |
-| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                   |
 | `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                         |
+| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                   |
 | `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.   |
 
 If the task falls within the category of supervised machine learning and uses labels during training,
@@ -153,6 +153,24 @@ it is strongly recommended that `tasks` always aim to provide the most specific 
 describe what the model accomplishes.
 
 [stac-ext-label-props]: https://github.com/stac-extensions/label#item-properties
+
+### Framework
+
+In most cases, this should correspond to common library names of well-established ML frameworks.
+No explicit "Enum" is defined to allow easy addition of newer frameworks, but it is recommended
+to use common names when applicable. Below are a few notable entries.
+
+- `PyTorch`
+- `TensorFlow`
+- `Scikit-learn`
+- `Huggingface`
+- `PyMC`
+- `JAX`
+- `ONNX`
+- `MXNet`
+- `Keras`
+- `Caffe`
+- `Weka`
 
 ### Accelerator Type Enum
 
@@ -180,21 +198,176 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 
 ### Model Input Object
 
-| Field Name              | Type                                              | Description                                                                                                                                                                                                                                                                   |
-|-------------------------|---------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                                            | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: "RGB Time Series") can be used instead.                                                                                                 | 
-| bands                   | [string]                                          | **REQUIRED** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics).                                                                                       |
-| input                   | [Input Structure Object](#input-structure-object) | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                  |
-| norm_by_channel         | boolean                                           | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                                                               |
-| norm_type               | string \| null                                    | Normalization method. Select one option from `"min_max"`, `"z_score"`, `"max_norm"`, `"mean_norm"`, `"unit_variance"`, `"norm_with_clip"` or `null` when none applies.                                                                                                        |
-| resize_type             | string \| null                                    | High-level descriptor of the rescaling method to change image shape. Select one option from `"crop"`, `"pad"`, `"interpolation"` or `null` when none applies. If your rescaling method combines more than one of these operations, provide the name of the operation instead. |
-| statistics              | [[Statistics Object](#bands-and-statistics)]      | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                                                     |
-| norm_with_clip_values   | [integer]                                         | If `norm_type = "norm_with_clip"` this array supplies a value that is less than the band maximum. The array must be the same length as `bands`, each value is used to divide each band before clipping values between 0 and 1.                                                |
-| pre_processing_function | string \| null                                    | URI to the preprocessing function where normalization and rescaling takes place, and any other significant operations or, instead, the function code path, for example: `my_python_module_name:my_processing_function`.                                                       |
+| Field Name              | Type                                                    | Description                                                                                                                                                                                                                                   |
+|-------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: "RGB Time Series") can be used instead.                                                                 | 
+| bands                   | \[string]                                               | **REQUIRED** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array. |
+| input                   | [Input Structure Object](#input-structure-object)       | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                  |
+| norm_by_channel         | boolean                                                 | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                               |
+| norm_type               | [Normalize Enum](#normalize-enum) \| null               | Normalization method. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                             |
+| norm_clip               | \[number]                                               | When `norm_type = "clip"`, this array supplies the value for each `bands` item, which is used to divide each band before clipping values between 0 and 1.                                                                                     |
+| resize_type             | [Resize Enum](#resize-enum) \| null                     | High-level descriptor of the rescaling method to change image shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.              |
+| statistics              | \[[Statistics Object](#bands-and-statistics)]           | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                     |
+| pre_processing_function | [Processing Expression](#processing-expression) \| null | Custom preprocessing function where normalization and rescaling, and any other significant operations takes place.                                                                                                                            |
 
 Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
 However, setting `null` explicitly when this information is known by the model provider can help users understand
 what is the expected behavior of the model. It is therefore recommended to provide `null` explicitly when applicable.
+
+#### Bands and Statistics
+
+Depending on the supported `stac_version` and other `stac_extensions` employed by the STAC Item using MLM,
+the [STAC 1.1 - Band Object][stac-1.1-band], 
+the [STAC Raster - Band Object][stac-raster-band] or
+the [STAC EO - Band Object][stac-eo-band] can be used for
+representing bands information, including notably the `nodata` value,
+the `data_type` (see also [Data Type Enum](#data-type-enum)),
+and [Common Band Names][stac-band-names].
+
+Only bands used as input to the model should be included in the MLM `bands` field.
+To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
+
+One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Statistics][stac-1.1-stats] object
+(or the corresponding [STAC Raster - Statistics][stac-raster-stats] for STAC 1.0) are not
+defined at the "Band Object" level, but at the [Model Input](#model-input-object) level.
+This is because, in machine learning, it is common to need overall statistics for the dataset used to train the model
+to normalize all bands, rather than normalizing the values over a single product. Furthermore, statistics could be
+applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
+properties of the model.
+
+[stac-1.1-band]: https://github.com/radiantearth/stac-spec/pull/1254
+[stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#statistics-object
+[stac-eo-band]: https://github.com/stac-extensions/eo?tab=readme-ov-file#band-object
+[stac-raster-band]: https://github.com/stac-extensions/raster?tab=readme-ov-file#raster-band-object
+[stac-raster-stats]: https://github.com/stac-extensions/raster?tab=readme-ov-file#statistics-object
+[stac-band-names]: https://github.com/stac-extensions/eo?tab=readme-ov-file#common-band-names
+
+#### Data Type Enum
+
+When describing the `data_type` provided by a [Band](#bands-and-statistics), whether for defining
+the [Input Structure](#input-structure-object) or the [Result Structure](#result-structure-object),
+the [Data Types from the STAC Raster extension][raster-data-types] should be used if using STAC 1.0 or earlier,
+and can use [Data Types from STAC 1.1 Core][stac-1.1-data-types] for later versions.
+Both definitions should define equivalent values.
+
+[raster-data-types]: https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types
+[stac-1.1-data-types]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#data-types
+
+#### Input Structure Object
+
+| Field Name | Type                              | Description                                                                                                                                                                                                             |
+|------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | [integer]                         | **REQUIRED** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size.     |
+| dim_order  | string                            | **REQUIRED** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, `w`=width.                                 |
+| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. |
+
+A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
+However, this value is not strictly reserved for the `b` dimension.
+For example, if the model is capable of automatically adjusting its input layer to adapt to the provided input data,
+then the corresponding dimensions that can be adapted can employ `-1` as well. 
+
+#### Normalize Enum
+
+Select one option from:
+- `min-max`
+- `z-score`
+- `l1`
+- `l2`
+- `l2sqr`
+- `hamming`
+- `hamming2`
+- `type-mask`
+- `relative`
+- `inf`
+- `clip`
+
+See [OpenCV - Interpolation Flags](https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121)
+for details about the relevant methods. Equivalent methods from other packages are applicable as well.
+
+If none of the above values applies, `null` (literal, not string) can be used instead.
+If a custom normalization operation, or a combination of operations (with or without [Resize](#resize-enum)),
+must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
+
+#### Resize Enum
+
+Select one option from:
+- `crop`
+- `pad`
+- `interpolation-nearest`
+- `interpolation-linear`
+- `interpolation-cubic`
+- `interpolation-area`
+- `interpolation-lanczos4`
+- `interpolation-max`
+- `wrap-fill-outliers`
+- `wrap-inverse-map`
+
+See [OpenCV - Normalization Flags](https://docs.opencv.org/4.x/d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd)
+for details about the relevant methods. Equivalent methods from other packages are applicable as well.
+
+If none of the above values applies, `null` (literal, not string) can be used instead.
+If a custom rescaling operation, or a combination of operations (with or without [Normalization](#normalize-enum)),
+must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
+
+#### Processing Expression
+
+Taking inspiration from [Processing Extension - Expression Object][stac-proc-expr], the processing expression defines
+at the very least a `format` and the applicable `expression` for it to perform pre/post-processing operations on MLM
+inputs/outputs.
+
+| Field Name | Type   | Description |
+| ---------- | ------ | ----------- |
+| format     | string | **REQUIRED** The type of the expression that is specified in the `expression` property. |
+| expression | \*     | **REQUIRED** An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given, e.g. string or object. |
+
+On top of the examples already provided by [Processing Extension - Expression Object][stac-proc-expr],
+the following formats are recommended as alternative scripts and function references.
+
+| Format   | Type   | Description                            | Expression Example                                                                                   |
+|----------| ------ |----------------------------------------|------------------------------------------------------------------------------------------------------|
+| `python` | string | A Python entry point reference.        | `my_package.my_module:my_processing_function` or `my_package.my_module:MyClass.my_method`            |
+| `docker` | string | An URI with image and tag to a Docker. | `ghcr.io/NAMESPACE/IMAGE_NAME:latest`                                                                |
+| `uri`    | string | An URI to some binary or script.       | `{"href": "https://raw.githubusercontent.com/ORG/REPO/TAG/package/cli.py", "type": "text/x-python"}` |
+
+> [!NOTE]
+> Above definitions are only indicative, and more can be added as desired with even more custom definitions.
+> It is left as an implementation detail for users to resolve how these expressions should be handled at runtime.
+
+> [!WARNING]
+> See also discussion regarding additional processing expressions:
+> [stac-extensions/processing#31](https://github.com/stac-extensions/processing/issues/31)
+
+
+[stac-proc-expr]: https://github.com/stac-extensions/processing#expression-object
+
+### Model Output Object
+
+| Field Name               | Type                                                | Description                                                                                                                                                                                             |
+|--------------------------|-----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| tasks                    | \[[Task Enum](#task-enum)]                          | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                          |
+| result                   | [Result Structure Object](#result-structure-object) | The structure that describes the resulting output arrays/tensors from one model head.                                                                                                                   |
+| classification:classes   | \[[Class Object](#class-object)]                    | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                                                  |
+| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization and rescaling, and any other significant operations takes place.                                                                                     |
+
+While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
+shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
+appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such 
+as for `regression`, `image-captioning`, `super-resolution` and some `generative` tasks, to name a few, the
+`classification:classes` can be omitted.
+
+#### Result Structure Object
+
+| Field Name | Type                              | Description                                                                                                                                                                                                                            |
+|------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | \[integer]                        | **REQUIRED** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
+| dim_names  | \[string]                         | **REQUIRED** The names of the above dimensions of the result array, ordered the same as this object's `shape` field.                                                                                                                   |
+| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                                  |
+
+#### Class Object
+
+See the documentation for the
+[Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object).
+
 
 ## Assets Objects
 
@@ -242,7 +415,6 @@ In order to provide more context, the following roles are also recommended were 
 
 [ml-model-asset-roles]: https://github.com/stac-extensions/ml-model?tab=readme-ov-file#asset-objects
 
-
 ### Model Asset
 
 | Field Name        | Type                                      | Description                                                                                      |
@@ -250,7 +422,7 @@ In order to provide more context, the following roles are also recommended were 
 | title             | string                                    | Description of the model asset.                                                                  |
 | href              | string                                    | URI to the model artifact.                                                                       |
 | type              | string                                    | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
-| roles             | [string]                                  | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
+| roles             | \[string]                                 | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
 | mlm:artifact_type | [Artifact Type Enum](#artifact-type-enum) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
@@ -288,14 +460,14 @@ the users understand the source explicitly, although this is not strictly requir
 
 ### Source Code Asset
 
-| Field Name     | Type     | Description                                                                   |
-|----------------|----------|-------------------------------------------------------------------------------|
-| title          | string   | Title of the source code.                                                     |
-| href           | string   | URI to the code repository, a ZIP archive, or an individual code/script file. |
-| type           | string   | Media-type of the URI.                                                        |
-| roles          | [string] | **RECOMMENDED** Specify one or more of `["model", "code", "metadata"]`        |
-| description    | string   | Description of the source code.                                               |
-| mlm:entrypoint | string   | Specific entrypoint reference in the code to use for running model inference. |
+| Field Name     | Type      | Description                                                                   |
+|----------------|-----------|-------------------------------------------------------------------------------|
+| title          | string    | Title of the source code.                                                     |
+| href           | string    | URI to the code repository, a ZIP archive, or an individual code/script file. |
+| type           | string    | Media-type of the URI.                                                        |
+| roles          | \[string] | **RECOMMENDED** Specify one or more of `["model", "code", "metadata"]`        |
+| description    | string    | Description of the source code.                                               |
+| mlm:entrypoint | string    | Specific entrypoint reference in the code to use for running model inference. |
 
 If the referenced code does not directly offer a callable script to run the model, the `mlm:entrypoint` field should be
 added to the [Asset Object][stac-asset] in order to provide a pointer to the inference function to execute the model.
@@ -319,24 +491,23 @@ since the source code asset might also refer to more detailed metadata than this
 
 ### Container Asset
 
-| Field Name  | Type     | Description                                                                       |
-|-------------|----------|-----------------------------------------------------------------------------------|
-| title       | string   | Description of the container.                                                     |
-| href        | string   | URI of the published container, including the container registry, image and tag.  |
-| type        | string   | Media-type of the container, typically `application/vnd.oci.image.index.v1+json`. |
-| roles       | [string] | Specify `["runtime"]` and any other custom roles.                                 |
+| Field Name  | Type      | Description                                                                       |
+|-------------|-----------|-----------------------------------------------------------------------------------|
+| title       | string    | Description of the container.                                                     |
+| href        | string    | URI of the published container, including the container registry, image and tag.  |
+| type        | string    | Media-type of the container, typically `application/vnd.oci.image.index.v1+json`. |
+| roles       | \[string] | Specify `["runtime"]` and any other custom roles.                                 |
 
 If you're unsure how to containerize your model, we suggest starting from the latest official container image for
 your framework that works with your model and pinning the container version.
 
 Examples:
-[Pytorch Dockerhub](https://hub.docker.com/r/pytorch/pytorch/tags)
-[Pytorch Docker Run Example](https://github.com/pytorch/pytorch?tab=readme-ov-file#docker-image)
+- [Pytorch Dockerhub](https://hub.docker.com/r/pytorch/pytorch/tags)
+- [Pytorch Docker Run Example](https://github.com/pytorch/pytorch?tab=readme-ov-file#docker-image)
+- [Tensorflow Dockerhub](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=8&ordering=last_updated)
+- [Tensorflow Docker Run Example](https://www.tensorflow.org/install/docker#gpu_support)
 
-[Tensorflow Dockerhub](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=8&ordering=last_updated)
-[Tensorflow Docker Run Example](https://www.tensorflow.org/install/docker#gpu_support)
-
-Using a base image for a framework looks like
+Using a base image for a framework looks like:
 
 ```dockerfile
 # In your Dockerfile, pull the latest base image with all framework dependencies including accelerator drivers
@@ -349,84 +520,6 @@ RUN pip install my_package
 You can also use other base images. Pytorch and Tensorflow offer docker images for serving models for inference.
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
-
-
-#### Bands and Statistics
-
-Depending on the supported `stac_version` and other `stac_extensions` employed by the STAC Item using MLM,
-the [STAC 1.1 - Band Object][stac-1.1-band], 
-the [STAC Raster - Band Object][stac-raster-band] or
-the [STAC EO - Band Object][stac-eo-band] can be used for
-representing bands information, including notably the `nodata` value,
-the `data_type` (see also [Data Type Enum](#data-type-enum)),
-and [Common Band Names][stac-band-names].
-
-Only bands used as input to the model should be included in the MLM `bands` field.
-To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
-
-One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Statistics][stac-1.1-stats] object
-(or the corresponding [STAC Raster - Statistics][stac-raster-stats] for STAC 1.0) are not
-defined at the "Band Object" level, but at the [Model Input](#model-input-object) level.
-This is because, in machine learning, it is common to need overall statistics for the dataset used to train the model
-to normalize all bands, rather than normalizing the values over a single product. Furthermore, statistics could be
-applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
-properties of the model.
-
-[stac-1.1-band]: https://github.com/radiantearth/stac-spec/pull/1254
-[stac-1.1-stats]: https://github.com/radiantearth/stac-spec/pull/1254/files#diff-2477b726f8c5d5d1c8b391be056db325e6918e78a24b414ccd757c7fbd574079R294
-[stac-eo-band]: https://github.com/stac-extensions/eo?tab=readme-ov-file#band-object
-[stac-raster-band]: https://github.com/stac-extensions/raster?tab=readme-ov-file#raster-band-object
-[stac-raster-stats]: https://github.com/stac-extensions/raster?tab=readme-ov-file#statistics-object
-[stac-band-names]: https://github.com/stac-extensions/eo?tab=readme-ov-file#common-band-names
-
-#### Data Type Enum
-
-When describing the `data_type` provided by a [Band](#bands-and-statistics), whether for defining
-the [Input Structure](#input-structure-object) or the [Result Structure](#result-structure-object),
-the [Data Types from the STAC Raster extension][raster-data-types] should be used.
-
-[raster-data-types]: https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types
-
-#### Input Structure Object
-
-| Field Name | Type                              | Description                                                                                                                                                                                                             |
-|------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer]                         | **REQUIRED** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size.     |
-| dim_order  | string                            | **REQUIRED** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, `w`=width.                                 |
-| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. |
-
-A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
-However, this value is not strictly reserved for the `b` dimension.
-For example, if the model is capable of automatically adjusting its input layer to adapt to the provided input data,
-then the corresponding dimensions that can be adapted can employ `-1` as well. 
-
-### Model Output Object
-
-| Field Name               | Type                                                | Description                                                                                                                                                                                             |
-|--------------------------|-----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| tasks                    | [[Task Enum](#task-enum)]                           | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                          |
-| result                   | [Result Structure Object](#result-structure-object) | The structure that describes the resulting output arrays/tensors from one model head.                                                                                                                   |
-| classification:classes   | [[Class Object](#class-object)]                     | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                                                  |
-| post_processing_function | string                                              | A url to the postprocessing function where normalization, rescaling, and other operations take place.. Or, instead, the function code path, for example: `my_package.my_module:my_processing_function`. |
-
-While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
-shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
-appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such 
-as for `regression`, `image-captioning`, `super-resolution` and some `generative` tasks, to name a few, the
-`classification:classes` can be omitted.
-
-#### Result Structure Object
-
-| Field Name | Type                              | Description                                                                                                                                                                                                                            |
-|------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer]                         | **REQUIRED** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_names  | [string]                          | **REQUIRED** The names of the above dimensions of the result array, ordered the same as this object's `shape` field.                                                                                                                   |
-| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                                  |
-
-#### Class Object
-
-See the documentation for the
-[Class Object](https://github.com/stac-extensions/classification?tab=readme-ov-file#class-object).
 
 ## Relation types
 
