@@ -226,6 +226,21 @@ representing bands information, including notably the `nodata` value,
 the `data_type` (see also [Data Type Enum](#data-type-enum)),
 and [Common Band Names][stac-band-names].
 
+> [!NOTE]
+> Due to how the schema for [`eo:bands`][stac-eo-band] is defined, it is not sufficient to *only* provide
+> the `eo:bands` property at the STAC Item level. The schema validation of the EO extension explicitly looks
+> for a corresponding set of bands under an Asset, and if none is found, it disallows `eo:bands` in the Item properties.
+> Therefore, `eo:bands` should either be specified *only* under the Asset containing the `mlm:model` role
+> (see [Model Asset](#model-asset)), or define them *both* under the Asset and Item properties. If the second
+> approach is selected, it is recommended that the `eo:bands` under the Asset contains only the `name` or the
+> `common_name` property, such that all other details about the bands are defined at the Item level.
+> <br><br>
+> For more details, refer to [stac-extensions/eo#12](https://github.com/stac-extensions/eo/issues/12).
+> <br>
+> For an example, please refer to [examples/example_eo_bands.json](examples/example_eo_bands.json).
+> Notably in this example, the `assets.weights.eo:bands` property provides the `name` to fulfill the Asset requirement,
+> while all additional band details are provided in `properties.eo:bands`.
+
 Only bands used as input to the model should be included in the MLM `bands` field.
 To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
 

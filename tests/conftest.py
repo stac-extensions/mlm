@@ -19,7 +19,7 @@ def mlm_schema() -> Dict[str, Any]:
         return json.load(schema_file)
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def mlm_validator(
     request: pytest.FixtureRequest,
     mlm_schema: Dict[str, Any],
@@ -39,9 +39,9 @@ def mlm_validator(
     return validator
 
 
-@pytest.fixture(scope="session", autouse=True)
-def mlm_example() -> Dict[str, Any]:
-    with open(os.path.join(EXAMPLES_DIR, "example.json")) as example_file:
+@pytest.fixture
+def mlm_example(request) -> Dict[str, Any]:
+    with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
         return json.load(example_file)
 
 

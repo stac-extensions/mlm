@@ -38,7 +38,15 @@
             "assets": {
               "type": "object",
               "additionalProperties": {
-                "$ref": "#/$defs/fields"
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/fields"
+                  },
+                  {
+                    "$comment": "At least one Asset must provide the model definition.",
+                    "$ref": "#/$defs/AssetModelRole"
+                  }
+                ]
               }
             }
           }
@@ -595,6 +603,21 @@
     },
     "DataType": {
       "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/data_type"
+    },
+    "AssetModelRole": {
+      "required": ["assets"],
+      "properties": {
+        "assets": {
+          "additionalProperties": {
+            "required": ["roles"],
+            "properties": {
+              "roles": {
+                "contains": "mlm:model"
+              }
+            }
+          }
+        }
+      }
     },
     "ModelBands": {
       "allOf": [

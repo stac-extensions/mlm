@@ -2,6 +2,7 @@
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
     "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
     "https://stac-extensions.github.io/file/v1.0.0/schema.json",
     "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json"
@@ -244,6 +245,99 @@
         "post_processing_function": null
       }
     ],
+    "eo:bands": [
+      {
+        "name": "coastal",
+        "common_name": "coastal",
+        "description": "Coastal aerosol (band 1)",
+        "center_wavelength": 0.443,
+        "full_width_half_max": 0.027
+      },
+      {
+        "name": "blue",
+        "common_name": "blue",
+        "description": "Blue (band 2)",
+        "center_wavelength": 0.49,
+        "full_width_half_max": 0.098
+      },
+      {
+        "name": "green",
+        "common_name": "green",
+        "description": "Green (band 3)",
+        "center_wavelength": 0.56,
+        "full_width_half_max": 0.045
+      },
+      {
+        "name": "red",
+        "common_name": "red",
+        "description": "Red (band 4)",
+        "center_wavelength": 0.665,
+        "full_width_half_max": 0.038
+      },
+      {
+        "name": "rededge1",
+        "common_name": "rededge",
+        "description": "Red edge 1 (band 5)",
+        "center_wavelength": 0.704,
+        "full_width_half_max": 0.019
+      },
+      {
+        "name": "rededge2",
+        "common_name": "rededge",
+        "description": "Red edge 2 (band 6)",
+        "center_wavelength": 0.74,
+        "full_width_half_max": 0.018
+      },
+      {
+        "name": "rededge3",
+        "common_name": "rededge",
+        "description": "Red edge 3 (band 7)",
+        "center_wavelength": 0.783,
+        "full_width_half_max": 0.028
+      },
+      {
+        "name": "nir",
+        "common_name": "nir",
+        "description": "NIR 1 (band 8)",
+        "center_wavelength": 0.842,
+        "full_width_half_max": 0.145
+      },
+      {
+        "name": "nir08",
+        "common_name": "nir08",
+        "description": "NIR 2 (band 8A)",
+        "center_wavelength": 0.865,
+        "full_width_half_max": 0.033
+      },
+      {
+        "name": "nir09",
+        "common_name": "nir09",
+        "description": "NIR 3 (band 9)",
+        "center_wavelength": 0.945,
+        "full_width_half_max": 0.026
+      },
+      {
+        "name": "cirrus",
+        "common_name": "cirrus",
+        "description": "SWIR - Cirrus (band 10)",
+        "center_wavelength": 1.375,
+        "full_width_half_max": 0.026
+      },
+      {
+        "name": "swir16",
+        "common_name": "swir16",
+        "description": "SWIR 1 (band 11)",
+        "center_wavelength": 1.61,
+        "full_width_half_max": 0.143
+      },
+      {
+        "name": "swir22",
+        "common_name": "swir22",
+        "description": "SWIR 2 (band 12)",
+        "center_wavelength": 2.19,
+        "full_width_half_max": 0.242
+      }
+    ],
     "raster:bands": [
       {
         "name": "coastal",
@@ -379,6 +473,22 @@
       "roles": [
         "mlm:model",
         "mlm:weights"
+      ],
+      "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
+      "eo:bands": [
+        {"name": "coastal"},
+        {"name": "blue"},
+        {"name": "green"},
+        {"name": "red"},
+        {"name": "rededge1"},
+        {"name": "rededge2"},
+        {"name": "rededge3"},
+        {"name": "nir"},
+        {"name": "nir08"},
+        {"name": "nir09"},
+        {"name": "cirrus"},
+        {"name": "swir16"},
+        {"name": "swir22"}
       ]
     },
     "source_code": {
