@@ -575,6 +575,10 @@
         }
       ]
     },
+    "InputStatistics": {
+      "$comment": "MLM statistics for the specific input relevant for normalization for ML features.",
+      "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/statistics"
+    },
     "ProcessingExpression": {
       "oneOf": [
         {

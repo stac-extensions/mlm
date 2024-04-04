@@ -307,6 +307,11 @@ Select one option from:
 See [OpenCV - Interpolation Flags](https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121)
 for details about the relevant methods. Equivalent methods from other packages are applicable as well.
 
+When a normalization technique is specified, it is expected that the corresponding [Statistics](#bands-and-statistics)
+parameters necessary to perform it would be provided for the corresponding input.
+For example, the `min-max` normalization would require that at least the `minimum` and `maximum` statistic properties
+are provided, while the `z-score` would require `mean` and `stddev`.
+
 If none of the above values applies, `null` (literal, not string) can be used instead.
 If a custom normalization operation, or a combination of operations (with or without [Resize](#resize-enum)),
 must be defined instead, consider using a [Processing Expression](#processing-expression) reference.

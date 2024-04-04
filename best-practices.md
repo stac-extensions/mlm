@@ -38,7 +38,7 @@ choose to apply it for contexts outside the *recommended* extent for the same re
 As another example, let us consider a model which is trained on imagery from all over the world
 and is robust enough to be applied to any time period. In this case, the common metadata to use with the model
 could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_datetime` and `end_datetime` range
-would ideally be generic values like `["1900-01-01", null]` (see warning below).
+would ideally be generic values like `["1900-01-01T00:00:00Z", null]` (see warning below).
 However, due to limitations with the STAC 1.0 specification, this time extent is not applicable.
 
 > [!WARNING]
