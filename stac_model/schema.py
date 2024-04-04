@@ -7,6 +7,7 @@ from typing import (
     List,
     Literal,
     Optional,
+    Set,
     TypeVar,
     Union,
     cast,
@@ -14,7 +15,7 @@ from typing import (
 )
 
 import pystac
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from pydantic.fields import FieldInfo
 from pystac.extensions import item_assets
 from pystac.extensions.base import (
@@ -24,9 +25,10 @@ from pystac.extensions.base import (
     SummariesExtension,
 )
 
-from .input import Band, InputArray, ModelInput, Statistics
-from .output import ClassObject, ModelOutput, ResultArray, TaskEnum
-from .runtime import Asset, Container, Runtime
+from stac_model.base import DataType, ModelTask
+from stac_model.input import Band, InputArray, ModelInput, Statistics
+from stac_model.output import MLMClassification, ModelOutput
+from stac_model.runtime import Asset, Container, Runtime
 
 T = TypeVar(
     "T", pystac.Collection, pystac.Item, pystac.Asset, item_assets.AssetDefinition
@@ -41,25 +43,20 @@ def mlm_prefix_adder(field_name: str) -> str:
     return "mlm:" + field_name
 
 
-class MLModelProperties(BaseModel):
+class MLModelProperties(Runtime):
     name: str
-    task: TaskEnum
-    framework: str
-    framework_version: str
-    file_size: int
-    memory_size: int
+    tasks: Set[ModelTask]
     input: List[ModelInput]
     output: List[ModelOutput]
-    runtime: List[Runtime]
+
     total_parameters: int
-    pretrained_source: str
-    summary: str
-    parameters: Optional[
-        Dict[str, Union[int, str, bool, List[Union[int, str, bool]]]]
-    ] = None  # noqa: E501
+    pretrained: bool = Field(exclude_unset=True, default=True)
+    pretrained_source: Optional[str] = Field(exclude_unset=True)
 
     model_config = ConfigDict(
-        alias_generator=mlm_prefix_adder, populate_by_name=True, extra="ignore"
+        alias_generator=mlm_prefix_adder,
+        populate_by_name=True,
+        extra="ignore"
     )
 
 
@@ -221,17 +218,15 @@ class CollectionMLModelExtension(MLModelExtension[pystac.Collection]):
         self.collection = collection
 
 
-__all__ = [
-    "MLModelExtension",
-    "ModelInput",
-    "InputArray",
-    "Band",
-    "Statistics",
-    "ModelOutput",
-    "ClassObject",
-    "Asset",
-    "ResultArray",
-    "Runtime",
-    "Container",
-    "Asset",
-]
+# __all__ = [
+#     "MLModelExtension",
+#     "ModelInput",
+#     "InputArray",
+#     "Band",
+#     "Statistics",
+#     "ModelOutput",
+#     "Asset",
+#     "Runtime",
+#     "Container",
+#     "Asset",
+# ]

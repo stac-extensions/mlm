@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath
+from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath, Field
 
 
 class Asset(BaseModel):
@@ -41,11 +41,13 @@ class AcceleratorEnum(str, Enum):
 
 
 class Runtime(BaseModel):
-    asset: Asset
-    source_code: Asset
-    accelerator: AcceleratorEnum
-    accelerator_constrained: bool
-    hardware_summary: str
-    container: Optional[Container] = None
-    commit_hash: Optional[str] = None
+    framework: str
+    framework_version: str
+    file_size: int = Field(alias="file:size")
+    memory_size: int
     batch_size_suggestion: Optional[int] = None
+
+    accelerator: Optional[AcceleratorEnum] = Field(exclude_unset=True, default=None)
+    accelerator_constrained: bool = Field(exclude_unset=True, default=False)
+    accelerator_summary: str = Field(exclude_unset=True, exclude_defaults=True, default="")
+    accelerator_count: int = Field(minimum=1, exclude_unset=True, exclude_defaults=True, default=-1)
