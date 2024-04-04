@@ -15,7 +15,7 @@ from stac_model.schema import (
 )
 
 
-def eurosat_resnet():
+def eurosat_resnet() -> MLModelExtension[pystac.Item]:
     input_array = InputArray(
         shape=[-1, 13, 64, 64], dim_order="bchw", data_type="float32"
     )
@@ -91,7 +91,7 @@ def eurosat_resnet():
         commit_hash="61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a",
     )
     result_array = ResultArray(
-        shape=[-1, 10], dim_names=["batch", "class"], data_type="float32"
+        shape=[-1, 10], dim_order=["batch", "class"], data_type="float32"
     )
     class_map = {
         "Annual Crop": 0,
@@ -158,6 +158,6 @@ def eurosat_resnet():
     item.add_derived_from(
         "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a"
     )
-    item_mlmodel = MLModelExtension.ext(item, add_if_missing=True)
-    item_mlmodel.apply(ml_model_meta.model_dump())
-    return item_mlmodel
+    item_mlm = MLModelExtension.ext(item, add_if_missing=True)
+    item_mlm.apply(ml_model_meta.model_dump())
+    return item_mlm

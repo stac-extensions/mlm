@@ -5,7 +5,7 @@ from pydantic import AnyUrl, BaseModel, Field
 
 class InputArray(BaseModel):
     shape: List[Union[int, float]]
-    dim_order: Literal["bhw", "bchw", "bthw", "btchw"]
+    dim_order: List[str]
     data_type: str = Field(
         ...,
         pattern="^(uint8|uint16|uint32|uint64|int8|int16|int32|int64|float16|float32|float64|cint16|cint32|cfloat32|cfloat64|other)$",

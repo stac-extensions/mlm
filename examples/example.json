@@ -1,236 +1,275 @@
 {
-    "type": "Feature",
-    "stac_version": "1.0.0",
-    "id": "resnet-18_sentinel-2_all_moco_classification",
-    "properties": {
-        "start_datetime": "1900-01-01",
-        "end_datetime": null,
-        "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
-        "mlm:task": "classification",
-        "mlm:framework": "pytorch",
-        "mlm:framework_version": "2.1.2+cu121",
-        "mlm:file_size": 43000000,
-        "mlm:memory_size": 1,
-        "mlm:input": [
-            {
-                "name": "13 Band Sentinel-2 Batch",
-                "bands": [
-                    "B01",
-                    "B02",
-                    "B03",
-                    "B04",
-                    "B05",
-                    "B06",
-                    "B07",
-                    "B08",
-                    "B8A",
-                    "B09",
-                    "B10",
-                    "B11",
-                    "B12"
-                ],
-                "input_array": {
-                    "shape": [
-                        -1,
-                        13,
-                        64,
-                        64
-                    ],
-                    "dim_order": "bchw",
-                    "data_type": "float32"
-                },
-                "norm_by_channel": true,
-                "norm_type": "z_score",
-                "resize_type": "none",
-                "parameters": null,
-                "statistics": {
-                    "minimum": null,
-                    "maximum": null,
-                    "mean": [
-                        1354.40546513,
-                        1118.24399958,
-                        1042.92983953,
-                        947.62620298,
-                        1199.47283961,
-                        1999.79090914,
-                        2369.22292565,
-                        2296.82608323,
-                        732.08340178,
-                        12.11327804,
-                        1819.01027855,
-                        1118.92391149,
-                        2594.14080798
-                    ],
-                    "stddev": [
-                        245.71762908,
-                        333.00778264,
-                        395.09249139,
-                        593.75055589,
-                        566.4170017,
-                        861.18399006,
-                        1086.63139075,
-                        1117.98170791,
-                        404.91978886,
-                        4.77584468,
-                        1002.58768311,
-                        761.30323499,
-                        1231.58581042
-                    ],
-                    "count": null,
-                    "valid_percent": null
-                },
-                "norm_with_clip_values": null,
-                "pre_processing_function": "torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn"
-            }
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "resnet-18_sentinel-2_all_moco_classification",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.882190080512502,
+          37.13739173208318
         ],
-        "mlm:output": [
-            {
-                "task": "classification",
-                "result_array": [
-                    {
-                        "shape": [
-                            -1,
-                            10
-                        ],
-                        "dim_names": [
-                            "batch",
-                            "class"
-                        ],
-                        "data_type": "float32"
-                    }
-                ],
-                "classification_classes": [
-                    {
-                        "value": 0,
-                        "name": "Annual Crop",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 1,
-                        "name": "Forest",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 2,
-                        "name": "Herbaceous Vegetation",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 3,
-                        "name": "Highway",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 4,
-                        "name": "Industrial Buildings",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 5,
-                        "name": "Pasture",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 6,
-                        "name": "Permanent Crop",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 7,
-                        "name": "Residential Buildings",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 8,
-                        "name": "River",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    },
-                    {
-                        "value": 9,
-                        "name": "SeaLake",
-                        "description": null,
-                        "title": null,
-                        "color_hint": null,
-                        "nodata": false
-                    }
-                ],
-                "post_processing_function": null
-            }
+        [
+          -7.882190080512502,
+          58.21798141355221
         ],
-        "mlm:runtime": [
-            {
-                "asset": {
-                    "href": "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth",
-                    "title": "Pytorch weights checkpoint",
-                    "description": "A Resnet-18 classification model trained on normalized Sentinel-2 imagery with Eurosat landcover labels with torchgeo",
-                    "type": ".pth",
-                    "roles": [
-                        "weights"
-                    ]
-                },
-                "source_code": {
-                    "href": "https://github.com/microsoft/torchgeo/blob/61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a/torchgeo/models/resnet.py#L207",
-                    "title": null,
-                    "description": null,
-                    "type": null,
-                    "roles": null
-                },
-                "accelerator": "cuda",
-                "accelerator_constrained": false,
-                "hardware_summary": "Unknown",
-                "container": null,
-                "commit_hash": "61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a",
-                "batch_size_suggestion": null
-            }
+        [
+          27.911651652899925,
+          58.21798141355221
         ],
-        "mlm:total_parameters": 11700000,
-        "mlm:pretrained_source": "EuroSat Sentinel-2",
-        "mlm:summary": "Sourced from torchgeo python library,identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
-        "datetime": null
-    },
-    "geometry": "{\n  \"type\": \"Polygon\",\n  \"coordinates\": [\n    [\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        58.21798141355221\n      ],\n      [\n        27.911651652899923,\n        37.13739173208318\n      ],\n      [\n        -7.882190080512502,\n        37.13739173208318\n      ]\n    ]\n  ]\n}",
-    "links": [
-        {
-            "rel": "derived_from",
-            "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
-            "type": "application/json"
-        }
-    ],
-    "assets": {},
-    "bbox": [
-        -7.882190080512502,
-        37.13739173208318,
-        27.911651652899923,
-        58.21798141355221
-    ],
-    "stac_extensions": [
-        "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json"
+        [
+          27.911651652899925,
+          37.13739173208318
+        ],
+        [
+          -7.882190080512502,
+          37.13739173208318
+        ]
+      ]
     ]
+  },
+  "properties": {
+    "start_datetime": "1900-01-01",
+    "end_datetime": "9999-12-31T23:59:59Z",
+    "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
+    "mlm:tasks": [
+      "classification"
+    ],
+    "mlm:framework": "pytorch",
+    "mlm:framework_version": "2.1.2+cu121",
+    "mlm:file_size": 43000000,
+    "mlm:memory_size": 1,
+    "mlm:total_parameters": 11700000,
+    "mlm:pretrained_source": "EuroSat Sentinel-2",
+    "mlm:summary": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
+    "mlm:accelerator": "cuda",
+    "mlm:accelerator_constrained": false,
+    "mlm:accelerator_summary": "Unknown",
+    "mlm:batch_size_suggestion": null,
+    "mlm:input": [
+      {
+        "name": "13 Band Sentinel-2 Batch",
+        "bands": [
+          "B01",
+          "B02",
+          "B03",
+          "B04",
+          "B05",
+          "B06",
+          "B07",
+          "B08",
+          "B8A",
+          "B09",
+          "B10",
+          "B11",
+          "B12"
+        ],
+        "input": {
+          "shape": [
+            -1,
+            13,
+            64,
+            64
+          ],
+          "dim_order": [
+            "batch",
+            "channel",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        },
+        "norm_by_channel": true,
+        "norm_type": "z-score",
+        "resize_type": null,
+        "parameters": null,
+        "statistics": {
+          "minimum": null,
+          "maximum": null,
+          "mean": [
+            1354.40546513,
+            1118.24399958,
+            1042.92983953,
+            947.62620298,
+            1199.47283961,
+            1999.79090914,
+            2369.22292565,
+            2296.82608323,
+            732.08340178,
+            12.11327804,
+            1819.01027855,
+            1118.92391149,
+            2594.14080798
+          ],
+          "stddev": [
+            245.71762908,
+            333.00778264,
+            395.09249139,
+            593.75055589,
+            566.4170017,
+            861.18399006,
+            1086.63139075,
+            1117.98170791,
+            404.91978886,
+            4.77584468,
+            1002.58768311,
+            761.30323499,
+            1231.58581042
+          ],
+          "count": null,
+          "valid_percent": null
+        },
+        "norm_with_clip_values": null,
+        "pre_processing_function": {
+          "format": "python",
+          "expression": "torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn"
+        }
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "classification",
+        "tasks": [
+          "classification"
+        ],
+        "result": [
+          {
+            "shape": [
+              -1,
+              10
+            ],
+            "dim_order": [
+              "batch",
+              "class"
+            ],
+            "data_type": "float32"
+          }
+        ],
+        "classification_classes": [
+          {
+            "value": 0,
+            "name": "Annual Crop",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 1,
+            "name": "Forest",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 2,
+            "name": "Herbaceous Vegetation",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 3,
+            "name": "Highway",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 4,
+            "name": "Industrial Buildings",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 5,
+            "name": "Pasture",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 6,
+            "name": "Permanent Crop",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 7,
+            "name": "Residential Buildings",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 8,
+            "name": "River",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          },
+          {
+            "value": 9,
+            "name": "SeaLake",
+            "description": null,
+            "title": null,
+            "color_hint": null,
+            "nodata": false
+          }
+        ],
+        "post_processing_function": null
+      }
+    ]
+  },
+  "links": [
+    {
+      "rel": "derived_from",
+      "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "weights": {
+      "href": "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth",
+      "title": "Pytorch weights checkpoint",
+      "description": "A Resnet-18 classification model trained on normalized Sentinel-2 imagery with Eurosat landcover labels with torchgeo",
+      "type": ".pth",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ]
+    },
+    "source_code": {
+      "href": "https://github.com/microsoft/torchgeo/blob/61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a/torchgeo/models/resnet.py#L207",
+      "title": null,
+      "description": null,
+      "type": null,
+      "roles": [
+        "mlm:model",
+        "code",
+        "metadata"
+      ]
+    }
+  },
+  "datetime": null,
+  "bbox": [
+    -7.882190080512502,
+    37.13739173208318,
+    27.911651652899923,
+    58.21798141355221
+  ],
+  "stac_extensions": [
+    "https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/schema.json"
+  ]
 }

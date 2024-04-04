@@ -20,11 +20,12 @@ class TaskEnum(str, Enum):
 
 class ResultArray(BaseModel):
     shape: List[Union[int, float]]
-    dim_names: List[str]
+    dim_order: List[str]
     data_type: str = Field(
         ...,
         pattern="^(uint8|uint16|uint32|uint64|int8|int16|int32|int64|float16|float32|float64)$",
     )
+
 
 class ClassObject(BaseModel):
     value: int
@@ -33,6 +34,7 @@ class ClassObject(BaseModel):
     title: Optional[str] = None
     color_hint: Optional[str] = None
     nodata: Optional[bool] = False
+
 
 class ModelOutput(BaseModel):
     task: TaskEnum
