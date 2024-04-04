@@ -72,7 +72,8 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:framework_version       | string                                           | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
 | mlm:memory_size             | integer                                          | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
 | mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
-| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch, the `null` value should be set explicitly.                                                                         |
+| mlm:pretrained              | boolean                                          | Indicates if the model was pretrained. If the model was pretrained, consider providing `pretrained_source` if it is known.                                                                                                                                                                  |
+| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch (i.e.: `pretrained = false`), the `null` value should be set explicitly.                                            |
 | mlm:batch_size_suggestion   | integer                                          | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
 | mlm:accelerator             | [Accelerator Enum](#accelerator-enum) \| null    | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
 | mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
@@ -200,7 +201,7 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 
 | Field Name              | Type                                                    | Description                                                                                                                                                                                                                                   |
 |-------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: "RGB Time Series") can be used instead.                                                                 | 
+| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                 | 
 | bands                   | \[string]                                               | **REQUIRED** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array. |
 | input                   | [Input Structure Object](#input-structure-object)       | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                  |
 | norm_by_channel         | boolean                                                 | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                               |
@@ -255,16 +256,37 @@ Both definitions should define equivalent values.
 
 #### Input Structure Object
 
-| Field Name | Type                              | Description                                                                                                                                                                                                             |
-|------------|-----------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | [integer]                         | **REQUIRED** Shape of the input n-dimensional array ($N \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size.     |
-| dim_order  | string                            | **REQUIRED** How the above dimensions are ordered within the `shape`. `bhw`, `bchw`, `bthw`, `btchw` are valid orderings where `b`=batch, `c`=channel, `t`=time, `h`=height, `w`=width.                                 |
-| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands. |
+| Field Name | Type                                   | Description                                                                                                                                                                                                               |
+|------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | \[integer]                             | **REQUIRED** Shape of the input n-dimensional array (e.g.: $B \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                     |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.   |
 
 A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
 However, this value is not strictly reserved for the `b` dimension.
 For example, if the model is capable of automatically adjusting its input layer to adapt to the provided input data,
-then the corresponding dimensions that can be adapted can employ `-1` as well. 
+then the corresponding dimensions that can be adapted can employ `-1` as well.
+
+#### Dimension Order
+
+Recommended values should use common names as much as possible to allow better interpretation by users and scripts
+that could need to resolve the dimension ordering for reshaping requirements according to the ML framework employed.
+
+Below are some notable common names recommended for use, but others can be employed as needed.
+
+- `batch`
+- `channel`
+- `time`
+- `height`
+- `width`
+- `depth`
+- `token`
+- `class`
+- `score`
+- `confidence`
+
+For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should 
+indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 #### Normalize Enum
 
@@ -342,12 +364,13 @@ the following formats are recommended as alternative scripts and function refere
 
 ### Model Output Object
 
-| Field Name               | Type                                                | Description                                                                                                                                                                                             |
-|--------------------------|-----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| tasks                    | \[[Task Enum](#task-enum)]                          | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                          |
-| result                   | [Result Structure Object](#result-structure-object) | The structure that describes the resulting output arrays/tensors from one model head.                                                                                                                   |
-| classification:classes   | \[[Class Object](#class-object)]                    | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                                                  |
-| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization and rescaling, and any other significant operations takes place.                                                                                     |
+| Field Name               | Type                                                    | Description                                                                                                                                                                     |
+|--------------------------|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                     | string                                                  | **REQUIRED** Name of the output variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"CLASSIFICATION"`) can be used instead. |
+| tasks                    | \[[Task Enum](#task-enum)]                              | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.  |
+| result                   | [Result Structure Object](#result-structure-object)     | **REQUIRED** The structure that describes the resulting output arrays/tensors from one model head.                                                                              |
+| classification:classes   | \[[Class Object](#class-object)]                        | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                          |
+| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization and rescaling, and any other significant operations takes place.                                                             |
 
 While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
 shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
@@ -357,11 +380,11 @@ as for `regression`, `image-captioning`, `super-resolution` and some `generative
 
 #### Result Structure Object
 
-| Field Name | Type                              | Description                                                                                                                                                                                                                            |
-|------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | \[integer]                        | **REQUIRED** Shape of the n-dimensional result array ($N \times H \times W$), possibly including a batch size dimension. The batch size dimension must either be greater than 0 or -1 to indicate an unspecified batch dimension size. |
-| dim_names  | \[string]                         | **REQUIRED** The names of the above dimensions of the result array, ordered the same as this object's `shape` field.                                                                                                                   |
-| data_type  | [Data Type Enum](#data-type-enum) | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                                  |
+| Field Name | Type                                   | Description                                                                                                                                                                                                                    |
+|------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| shape      | \[integer]                             | **REQUIRED** Shape of the n-dimensional result array (e.g.: $B \times H \times W$ or $B \times C$), possibly including a batch size dimension. The dimensions must either be greater than 0 or -1 to indicate a variable size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name for the result array.                                                                                                                                                     |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                          |
 
 #### Class Object
 
