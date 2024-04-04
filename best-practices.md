@@ -37,12 +37,23 @@ choose to apply it for contexts outside the *recommended* extent for the same re
 
 As another example, let us consider a model which is trained on imagery from all over the world
 and is robust enough to be applied to any time period. In this case, the common metadata to use with the model
-could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_datetime` and `end_datetime` range could
-be generic values like `["1900-01-01", null]`. However, it is to be noted that generic and very broad spatiotemporal
-extents like these rarely reflect the reality regarding the capabilities and precision of the model to predict reliable
+could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_datetime` and `end_datetime` range
+would ideally be generic values like `["1900-01-01", null]` (see warning below).
+However, due to limitations with the STAC 1.0 specification, this time extent is not applicable.
+
+> [!WARNING]
+> The `null` value is not allowed for datetime specification.
+> As a workaround, the `end_datetime` can be set with a "very large value"
+> (similarly to `start_datetime` set with a small value), such as `"9999-12-31T23:59:59Z"`.
+> Alternatively, the model can instead be described with only `datetime` corresponding to its publication date.
+> <br><br>
+> For more details, see the following [discussion](https://github.com/radiantearth/stac-spec/issues/1268).
+
+It is to be noted that generic and very broad spatiotemporal
+extents like above rarely reflect the reality regarding the capabilities and precision of the model to predict reliable
 results. If a more restrained area and time of interest can be identified, such as the ranges for which the training
 dataset applies, or a test split dataset that validates the applicability of the model on other domains, those should
-be provided instead. 
+be provided instead. Nevertheless, users of the model are still free to apply it outside the specified extents.
 
 If specific datasets with training/validation/test splits are known to support the claims of the suggested extent for
 the model, it is recommended that they are included as reference to the STAC Item/Collection using MLM. For more
