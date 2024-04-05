@@ -1,7 +1,7 @@
 import json
 from typing import (
     Any,
-    Dict,
+    Annotated,
     Generic,
     Iterable,
     List,
@@ -15,7 +15,7 @@ from typing import (
 )
 
 import pystac
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import ConfigDict, Field
 from pydantic.fields import FieldInfo
 from pystac.extensions import item_assets
 from pystac.extensions.base import (
@@ -25,10 +25,10 @@ from pystac.extensions.base import (
     SummariesExtension,
 )
 
-from stac_model.base import DataType, ModelTask
-from stac_model.input import Band, InputArray, ModelInput, Statistics
-from stac_model.output import MLMClassification, ModelOutput
-from stac_model.runtime import Asset, Container, Runtime
+from stac_model.base import ModelTask, OmitIfNone
+from stac_model.input import ModelInput
+from stac_model.output import ModelOutput
+from stac_model.runtime import Runtime
 
 T = TypeVar(
     "T", pystac.Collection, pystac.Item, pystac.Asset, item_assets.AssetDefinition
@@ -44,14 +44,15 @@ def mlm_prefix_adder(field_name: str) -> str:
 
 
 class MLModelProperties(Runtime):
-    name: str
+    name: str = Field(min_length=1)
+    architecture: str = Field(min_length=1)
     tasks: Set[ModelTask]
     input: List[ModelInput]
     output: List[ModelOutput]
 
     total_parameters: int
-    pretrained: bool = Field(exclude_unset=True, default=True)
-    pretrained_source: Optional[str] = Field(exclude_unset=True)
+    pretrained: Annotated[Optional[bool], OmitIfNone] = Field(default=True)
+    pretrained_source: Annotated[Optional[str], OmitIfNone] = None
 
     model_config = ConfigDict(
         alias_generator=mlm_prefix_adder,

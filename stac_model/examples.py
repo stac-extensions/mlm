@@ -2,24 +2,18 @@ import pystac
 import json
 import shapely
 from dateutil.parser import parse as parse_dt
-from pystac import media_type
+from typing import cast
+
+from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
-from stac_model.input import ModelInput
-from stac_model.output import ModelOutput, ModelResult
-from stac_model.schema import (
-    Asset,
-    InputArray,
-    MLMClassification,
-    MLModelExtension,
-    MLModelProperties,
-    Runtime,
-    Statistics,
-)
+from stac_model.input import ModelInput, InputStructure, MLMStatistic
+from stac_model.output import ModelOutput, ModelResult, MLMClassification
+from stac_model.schema import MLModelExtension, MLModelProperties
 
 
 def eurosat_resnet() -> MLModelExtension[pystac.Item]:
-    input_array = InputArray(
+    input_array = InputStructure(
         shape=[-1, 13, 64, 64],
         dim_order=[
             "batch",
@@ -29,53 +23,56 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
         ],
         data_type="float32",
     )
-    band_names = [
-        "B01",
-        "B02",
-        "B03",
-        "B04",
-        "B05",
-        "B06",
-        "B07",
-        "B08",
-        "B8A",
-        "B09",
-        "B10",
-        "B11",
-        "B12",
+    band_names = []
+    # band_names = [
+    #     "B01",
+    #     "B02",
+    #     "B03",
+    #     "B04",
+    #     "B05",
+    #     "B06",
+    #     "B07",
+    #     "B08",
+    #     "B8A",
+    #     "B09",
+    #     "B10",
+    #     "B11",
+    #     "B12",
+    # ]
+    stats_mean = [
+        1354.40546513,
+        1118.24399958,
+        1042.92983953,
+        947.62620298,
+        1199.47283961,
+        1999.79090914,
+        2369.22292565,
+        2296.82608323,
+        732.08340178,
+        12.11327804,
+        1819.01027855,
+        1118.92391149,
+        2594.14080798,
     ]
-    stats = Statistics(
-        mean=[
-            1354.40546513,
-            1118.24399958,
-            1042.92983953,
-            947.62620298,
-            1199.47283961,
-            1999.79090914,
-            2369.22292565,
-            2296.82608323,
-            732.08340178,
-            12.11327804,
-            1819.01027855,
-            1118.92391149,
-            2594.14080798,
-        ],
-        stddev=[
-            245.71762908,
-            333.00778264,
-            395.09249139,
-            593.75055589,
-            566.4170017,
-            861.18399006,
-            1086.63139075,
-            1117.98170791,
-            404.91978886,
-            4.77584468,
-            1002.58768311,
-            761.30323499,
-            1231.58581042,
-        ],
-    )
+    stats_stddev = [
+        245.71762908,
+        333.00778264,
+        395.09249139,
+        593.75055589,
+        566.4170017,
+        861.18399006,
+        1086.63139075,
+        1117.98170791,
+        404.91978886,
+        4.77584468,
+        1002.58768311,
+        761.30323499,
+        1231.58581042,
+    ]
+    stats = [
+        MLMStatistic(mean=mean, stddev=stddev)
+        for mean, stddev in zip(stats_mean, stats_stddev)
+    ]
     input = ModelInput(
         name="13 Band Sentinel-2 Batch",
         bands=band_names,
@@ -141,16 +138,20 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
             ]
         )
     }
+
+    ml_model_size = 43000000
     ml_model_meta = MLModelProperties(
         name="Resnet-18 Sentinel-2 ALL MOCO",
+        architecture="ResNet-18",
         tasks={"classification"},
         framework="pytorch",
         framework_version="2.1.2+cu121",
         accelerator="cuda",
         accelerator_constrained=False,
         accelerator_summary="Unknown",
-        file_size=43000000,
+        file_size=ml_model_size,
         memory_size=1,
+        pretrained=True,
         pretrained_source="EuroSat Sentinel-2",
         total_parameters=11_700_000,
         input=[input],
@@ -187,6 +188,13 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
     item.add_derived_from(
         "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a"
     )
+
+    model_asset = cast(
+        FileExtension[pystac.Asset],
+        pystac.extensions.file.FileExtension.ext(assets["model"], add_if_missing=True)
+    )
+    model_asset.apply(size=ml_model_size)
+
     item_mlm = MLModelExtension.ext(item, add_if_missing=True)
-    item_mlm.apply(ml_model_meta.model_dump(by_alias=True))
+    item_mlm.apply(ml_model_meta.model_dump(by_alias=True, exclude_unset=True, exclude_defaults=True))
     return item_mlm

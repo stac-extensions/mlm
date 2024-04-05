@@ -1,30 +1,9 @@
 from enum import Enum
-from typing import List, Literal, Optional, Union
+from typing import Annotated, Literal, Optional, Union
 
-from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath, Field
+from pydantic import Field
 
-
-class Asset(BaseModel):
-    """Information about the model location and other additional file locations.
-    Follows the STAC Asset Object spec.
-    """
-
-    href: FilePath | AnyUrl | str
-    title: Optional[str] = None
-    description: Optional[str] = None
-    type: Optional[str] = None
-    roles: Optional[List[str]] = None
-
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
-
-class Container(BaseModel):
-    container_file: str
-    image_name: str
-    tag: str
-    working_dir: str
-    run: str
-    accelerator: bool
+from stac_model.base import MLMBaseModel, OmitIfNone
 
 
 class AcceleratorEnum(str, Enum):
@@ -53,14 +32,14 @@ AcceleratorName = Literal[
 AcceleratorType = Union[AcceleratorName, AcceleratorEnum]
 
 
-class Runtime(BaseModel):
-    framework: str = Field(default="", exclude_defaults=True, exclude_unset=True)
-    framework_version: str = Field(default="", exclude_defaults=True, exclude_unset=True)
-    file_size: int = Field(alias="file:size", default=0, exclude_defaults=True, exclude_unset=True)
-    memory_size: int = Field(default=0, exclude_defaults=True, exclude_unset=True)
-    batch_size_suggestion: Optional[int] = Field(default=None, exclude_defaults=True, exclude_unset=True)
+class Runtime(MLMBaseModel):
+    framework: Annotated[str, OmitIfNone] = Field(default=None)
+    framework_version: Annotated[str, OmitIfNone] = Field(default=None)
+    file_size: Annotated[int, OmitIfNone] = Field(alias="file:size", default=None)
+    memory_size: Annotated[int, OmitIfNone] = Field(default=None)
+    batch_size_suggestion: Annotated[int, OmitIfNone] = Field(default=None)
 
-    accelerator: Optional[AcceleratorType] = Field(exclude_unset=True, default=None)
-    accelerator_constrained: bool = Field(exclude_unset=True, default=False)
-    accelerator_summary: str = Field(exclude_unset=True, exclude_defaults=True, default="")
-    accelerator_count: int = Field(minimum=1, exclude_unset=True, exclude_defaults=True, default=-1)
+    accelerator: Optional[AcceleratorType] = Field(default=None)
+    accelerator_constrained: bool = Field(default=False)
+    accelerator_summary: Annotated[str, OmitIfNone] = Field(default=None)
+    accelerator_count: Annotated[int, OmitIfNone] = Field(default=None, minimum=1)

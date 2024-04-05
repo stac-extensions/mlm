@@ -2,12 +2,12 @@ from typing import Annotated, Any, Dict, List, Optional, Set, TypeAlias, Union
 from typing_extensions import NotRequired, TypedDict
 
 from pystac.extensions.classification import Classification
-from pydantic import AliasChoices, BaseModel, ConfigDict, Field, PlainSerializer, model_serializer
+from pydantic import AliasChoices, ConfigDict, Field, PlainSerializer, model_serializer
 
-from stac_model.base import DataType, ModelTask, ProcessingExpression
+from stac_model.base import DataType, MLMBaseModel, ModelTask, ProcessingExpression, OmitIfNone
 
 
-class ModelResult(BaseModel):
+class ModelResult(MLMBaseModel):
     shape: List[Union[int, float]] = Field(..., min_items=1)
     dim_order: List[str] = Field(..., min_items=1)
     data_type: DataType
@@ -31,7 +31,7 @@ class ModelResult(BaseModel):
 # ]
 
 
-class MLMClassification(BaseModel, Classification):
+class MLMClassification(MLMBaseModel, Classification):
     @model_serializer()
     def model_dump(self, *_, **__) -> Dict[str, Any]:
         return self.to_dict()
@@ -60,7 +60,7 @@ class MLMClassification(BaseModel, Classification):
         if key == "properties":
             Classification.__setattr__(self, key, value)
         else:
-            BaseModel.__setattr__(self, key, value)
+            MLMBaseModel.__setattr__(self, key, value)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -73,7 +73,7 @@ class MLMClassification(BaseModel, Classification):
 #     nodata: Optional[bool] = False
 
 
-class ModelOutput(BaseModel):
+class ModelOutput(MLMBaseModel):
     name: str
     tasks: Set[ModelTask]
     result: ModelResult
@@ -83,11 +83,9 @@ class ModelOutput(BaseModel):
     #   it is more important to keep the order in this case,
     #   which we would lose with 'Set'.
     #   We also get some unhashable errors with 'Set', although 'MLMClassification' implements '__hash__'.
-    classes: List[MLMClassification] = Field(
+    classes: Annotated[List[MLMClassification], OmitIfNone] = Field(
         alias="classification:classes",
         validation_alias=AliasChoices("classification:classes", "classification_classes"),
-        exclude_unset=True,
-        exclude_defaults=True
     )
     post_processing_function: Optional[ProcessingExpression] = None
 

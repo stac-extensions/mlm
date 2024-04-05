@@ -1,31 +1,26 @@
-from typing import Any, List, Literal, Optional, Set, TypeAlias, Union
+from typing import Any, Annotated, List, Literal, Optional, Set, TypeAlias, Union
 
-from pydantic import BaseModel, Field
+from pystac.extensions.raster import Statistics
+from pydantic import ConfigDict, Field, model_serializer
 
-from stac_model.base import DataType, ProcessingExpression
+from stac_model.base import DataType, MLMBaseModel, ProcessingExpression, OmitIfNone
+
+Number: TypeAlias = Union[int, float]
 
 
-class InputArray(BaseModel):
-    shape: List[Union[int, float]] = Field(..., min_items=1)
-    dim_order: List[str] = Field(..., min_items=1)
+class InputStructure(MLMBaseModel):
+    shape: List[Union[int, float]] = Field(min_items=1)
+    dim_order: List[str] = Field(min_items=1)
     data_type: DataType
 
 
-class Statistics(BaseModel):
-    minimum: Optional[List[Union[float, int]]] = None
-    maximum: Optional[List[Union[float, int]]] = None
-    mean: Optional[List[float]] = None
-    stddev: Optional[List[float]] = None
-    count: Optional[List[int]] = None
-    valid_percent: Optional[List[float]] = None
-
-
-class Band(BaseModel):
-    name: str
-    description: Optional[str] = None
-    nodata: Union[float, int, str]
-    data_type: str
-    unit: Optional[str] = None
+class MLMStatistic(MLMBaseModel):  # FIXME: add 'Statistics' dep from raster extension (cases required to be triggered)
+    minimum: Annotated[Optional[Number], OmitIfNone] = None
+    maximum: Annotated[Optional[Number], OmitIfNone] = None
+    mean: Annotated[Optional[Number], OmitIfNone] = None
+    stddev: Annotated[Optional[Number], OmitIfNone] = None
+    count: Annotated[Optional[int], OmitIfNone] = None
+    valid_percent: Annotated[Optional[Number], OmitIfNone] = None
 
 
 NormalizeType: TypeAlias = Optional[Literal[
@@ -55,13 +50,13 @@ ResizeType: TypeAlias = Optional[Literal[
 ]]
 
 
-class ModelInput(BaseModel):
+class ModelInput(MLMBaseModel):
     name: str
     bands: List[str]  # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
-    input: InputArray
-    norm_by_channel: bool = None
-    norm_type: NormalizeType = None
-    norm_clip: Optional[List[Union[float, int]]] = None
-    resize_type: ResizeType = None
-    statistics: Optional[Union[Statistics, List[Statistics]]] = None
+    input: InputStructure
+    norm_by_channel: Annotated[bool, OmitIfNone] = None
+    norm_type: Annotated[NormalizeType, OmitIfNone] = None
+    norm_clip: Annotated[List[Union[float, int]], OmitIfNone] = None
+    resize_type: Annotated[ResizeType, OmitIfNone] = None
+    statistics: Annotated[List[MLMStatistic], OmitIfNone] = None
     pre_processing_function: Optional[ProcessingExpression] = None

@@ -1,7 +1,44 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Literal, Union, TypeAlias
 
-from pydantic import BaseModel
+from pydantic import BaseModel, model_serializer
+
+
+@dataclass
+class _OmitIfNone:
+    pass
+
+
+OmitIfNone = _OmitIfNone()
+
+
+class MLMBaseModel(BaseModel):
+    """
+    Allows wrapping any field with an annotation to drop it entirely if unset.
+
+    ```
+    field: Annotated[Optional[<desiredType>], OmitIfNone] = None
+    # or
+    field: Annotated[<desiredType>, OmitIfNone] = None
+    # or
+    field: Annotated[<desiredType>, OmitIfNone] = Field(default=None)
+    ```
+
+    It is important to use `MLMBaseModel`, otherwise the serializer will not be called and applied.
+    """
+    @model_serializer
+    def model_serialize(self):
+        omit_if_none_fields = {
+            key: field
+            for key, field in self.model_fields.items()
+            if any(isinstance(m, _OmitIfNone) for m in field.metadata)
+        }
+        values = {
+            self.__fields__[key].alias or key: val  # use the alias if specified
+            for key, val in self if key not in omit_if_none_fields or val is not None
+        }
+        return values
 
 
 DataType: TypeAlias = Literal[
