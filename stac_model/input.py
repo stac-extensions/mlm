@@ -57,7 +57,7 @@ ResizeType: TypeAlias = Optional[Literal[
 
 class ModelInput(BaseModel):
     name: str
-    bands: List[str]
+    bands: List[str]  # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
     input: InputArray
     norm_by_channel: bool = None
     norm_type: NormalizeType = None

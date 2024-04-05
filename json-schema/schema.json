@@ -24,7 +24,6 @@
                   "required": [
                     "mlm:name",
                     "mlm:architecture",
-                    "mlm:framework",
                     "mlm:tasks",
                     "mlm:input",
                     "mlm:output"
@@ -208,7 +207,7 @@
     },
     "mlm:name": {
       "type": "string",
-      "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]+[a-zA-Z0-9]$"
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_.\\-\\s]+[a-zA-Z0-9]$"
     },
     "mlm:architecture": {
       "type": "string",
@@ -605,16 +604,12 @@
       "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/data_type"
     },
     "AssetModelRole": {
-      "required": ["assets"],
+      "required": ["roles"],
       "properties": {
-        "assets": {
-          "additionalProperties": {
-            "required": ["roles"],
-            "properties": {
-              "roles": {
-                "contains": "mlm:model"
-              }
-            }
+        "roles": {
+          "contains": {
+            "type": "string",
+            "const": "mlm:model"
           }
         }
       }
@@ -631,7 +626,7 @@
         },
         {
           "$comment": "However, if any band is indicated, a 'bands'-compliant section should describe them.",
-          "$ref": "#/$defs/AnyBandsRef"
+          "FIXME_$ref": "#/$defs/AnyBandsRef"
         }
       ]
     },
@@ -658,10 +653,10 @@
                   "properties": {
                     "bands": {
                       "type": "array",
+                      "minItems": 1,
                       "items": {
                         "type": "string",
-                        "$comment": "This 'minItems' is the purpose of this whole 'if/then' block.",
-                        "minItems": 1
+                        "$comment": "This 'minItems' is the purpose of this whole 'if/then' block."
                       }
                     }
                   }
@@ -756,6 +751,40 @@
             ]
           }
         ]
+      },
+      "else": {
+        "$comment": "This is the JSON-object 'properties' definition.",
+        "properties": {
+          "$comment": "This is the STAC-Item 'properties' field.",
+          "properties": {
+            "required": [
+              "mlm:input"
+            ],
+            "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
+            "properties": {
+              "$comment": "Required MLM bands listing referring to at least one band name.",
+              "mlm:input": {
+                "type": "array",
+                "items": {
+                  "$comment": "This is the 'Model Input Object' properties.",
+                  "properties": {
+                    "bands": {
+                      "oneOf": [
+                        {
+                          "type": "null"
+                        },
+                        {
+                          "type": "array",
+                          "maxItems": 0
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

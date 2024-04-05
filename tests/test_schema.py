@@ -8,8 +8,10 @@ from stac_model.schema import SCHEMA_URI
 @pytest.mark.parametrize(
     "mlm_example",  # value passed to 'mlm_example' fixture
     [
-        "example.json",
-        "example_eo_bands.json",
+        "item_basic.json",
+        "item_raster_bands.json",
+        "item_eo_bands.json",
+        "item_multi_io.json",
     ],
     indirect=True,
 )

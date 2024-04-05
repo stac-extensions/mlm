@@ -41,11 +41,11 @@ class AcceleratorEnum(str, Enum):
 
 
 class Runtime(BaseModel):
-    framework: str
-    framework_version: str
-    file_size: int = Field(alias="file:size")
-    memory_size: int
-    batch_size_suggestion: Optional[int] = None
+    framework: str = Field(default="", exclude_defaults=True, exclude_unset=True)
+    framework_version: str = Field(default="", exclude_defaults=True, exclude_unset=True)
+    file_size: int = Field(alias="file:size", default=0, exclude_defaults=True, exclude_unset=True)
+    memory_size: int = Field(default=0, exclude_defaults=True, exclude_unset=True)
+    batch_size_suggestion: Optional[int] = Field(default=None, exclude_defaults=True, exclude_unset=True)
 
     accelerator: Optional[AcceleratorEnum] = Field(exclude_unset=True, default=None)
     accelerator_constrained: bool = Field(exclude_unset=True, default=False)
