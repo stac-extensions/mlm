@@ -23,22 +23,21 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
         ],
         data_type="float32",
     )
-    band_names = []
-    # band_names = [
-    #     "B01",
-    #     "B02",
-    #     "B03",
-    #     "B04",
-    #     "B05",
-    #     "B06",
-    #     "B07",
-    #     "B08",
-    #     "B8A",
-    #     "B09",
-    #     "B10",
-    #     "B11",
-    #     "B12",
-    # ]
+    band_names = [
+        "B01",
+        "B02",
+        "B03",
+        "B04",
+        "B05",
+        "B06",
+        "B07",
+        "B08",
+        "B8A",
+        "B09",
+        "B10",
+        "B11",
+        "B12",
+    ]
     stats_mean = [
         1354.40546513,
         1118.24399958,
