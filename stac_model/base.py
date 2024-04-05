@@ -17,7 +17,7 @@ class MLMBaseModel(BaseModel):
     """
     Allows wrapping any field with an annotation to drop it entirely if unset.
 
-    ```
+    ```python
     field: Annotated[Optional[<desiredType>], OmitIfNone] = None
     # or
     field: Annotated[<desiredType>, OmitIfNone] = None
@@ -26,6 +26,8 @@ class MLMBaseModel(BaseModel):
     ```
 
     It is important to use `MLMBaseModel`, otherwise the serializer will not be called and applied.
+
+    Reference: https://github.com/pydantic/pydantic/discussions/5461#discussioncomment-7503283
     """
     @model_serializer
     def model_serialize(self):
