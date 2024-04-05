@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import List, Optional
+from typing import List, Literal, Optional, Union
 
 from pydantic import AnyUrl, BaseModel, ConfigDict, FilePath, Field
 
@@ -40,6 +40,19 @@ class AcceleratorEnum(str, Enum):
         return self.value
 
 
+AcceleratorName = Literal[
+    "amd64",
+    "cuda",
+    "xla",
+    "amd-rocm",
+    "intel-ipex-cpu",
+    "intel-ipex-gpu",
+    "macos-arm",
+]
+
+AcceleratorType = Union[AcceleratorName, AcceleratorEnum]
+
+
 class Runtime(BaseModel):
     framework: str = Field(default="", exclude_defaults=True, exclude_unset=True)
     framework_version: str = Field(default="", exclude_defaults=True, exclude_unset=True)
@@ -47,7 +60,7 @@ class Runtime(BaseModel):
     memory_size: int = Field(default=0, exclude_defaults=True, exclude_unset=True)
     batch_size_suggestion: Optional[int] = Field(default=None, exclude_defaults=True, exclude_unset=True)
 
-    accelerator: Optional[AcceleratorEnum] = Field(exclude_unset=True, default=None)
+    accelerator: Optional[AcceleratorType] = Field(exclude_unset=True, default=None)
     accelerator_constrained: bool = Field(exclude_unset=True, default=False)
     accelerator_summary: str = Field(exclude_unset=True, exclude_defaults=True, default="")
     accelerator_count: int = Field(minimum=1, exclude_unset=True, exclude_defaults=True, default=-1)
