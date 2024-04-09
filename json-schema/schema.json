@@ -1,8 +1,8 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://stac-extensions.github.io/mlm/v1.0.0/schema.json",
-  "title": "DL Model Item",
-  "description": "This object represents the metadata for a Machine Learning Model (MLM).",
+  "title": "Machine Learning Model STAC Extension Schema",
+  "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
   "oneOf": [
     {
       "$comment": "This is the schema for STAC extension MLM in Items.",
