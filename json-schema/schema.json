@@ -232,12 +232,14 @@
             "TensorFlow",
             "Scikit-learn",
             "Huggingface",
-            "PyMC",
-            "JAX",
-            "ONNX",
-            "MXNet",
             "Keras",
+            "ONNX",
+            "rgee",
+            "spatialRF",
+            "JAX",
+            "MXNet",
             "Caffe",
+            "PyMC",
             "Weka"
           ]
         },

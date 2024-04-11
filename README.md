@@ -123,21 +123,21 @@ As a general rule of thumb, if a task is not represented below, an appropriate n
 definitions listed in [Papers With Code](https://paperswithcode.com/sota). The names
 should be normalized to lowercase and use hyphens instead of spaces.
 
-| Task Name               | Corresponding `label:tasks` | Description                                                                                                     |
-|-------------------------|-----------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                               |
-| `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                             |
-| `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.              |
-| `detection`             | `detection`                 | Generic detection of the "presence" of objects or entities, with or without positions.                          |
-| `object-detection`      | *n/a*                       | Task corresponding to the identification of positions as bounding boxes of object detected in the scene.        |
-| `segmentation`          | `segmentation`              | Generic tasks that regroups all types of segmentations tasks consisting of applying labels to pixels.           |
-| `semantic-segmentation` | *n/a*                       | Specific segmentation task where all pixels are attributed labels, without consideration of similar instances.  |
-| `instance-segmentation` | *n/a*                       | Specific segmentation task that assigns distinct labels for groups of pixels corresponding to object instances. |
-| `panoptic-segmentation` | *n/a*                       | Specific segmentation task that combines instance segmentation of objects and semantic labels for non-objects.  |
-| `similarity-search`     | *n/a*                       | Generic task to identify whether a query input corresponds to another reference within a corpus.                |
-| `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                         |
-| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                   |
-| `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.   |
+| Task Name               | Corresponding `label:tasks` | Description                                                                                                              |
+|-------------------------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                                        |
+| `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                                      |
+| `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.                       |
+| `detection`             | `detection`                 | Generic detection of the "presence" of objects or entities, with or without positions.                                   |
+| `object-detection`      | *n/a*                       | Task corresponding to the identification of positions as bounding boxes of object detected in the scene.                 |
+| `segmentation`          | `segmentation`              | Generic tasks that regroups all types of segmentations tasks consisting of applying labels to pixels.                    |
+| `semantic-segmentation` | *n/a*                       | Specific segmentation task where all pixels are attributed labels, without consideration for segments as unique objects. |
+| `instance-segmentation` | *n/a*                       | Specific segmentation task that assigns distinct labels for groups of pixels corresponding to object instances.          |
+| `panoptic-segmentation` | *n/a*                       | Specific segmentation task that combines instance segmentation of objects and semantic labels for non-objects.           |
+| `similarity-search`     | *n/a*                       | Generic task to identify whether a query input corresponds to another reference within a corpus.                         |
+| `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                                  |
+| `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                            |
+| `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.            |
 
 If the task falls within the category of supervised machine learning and uses labels during training,
 this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
@@ -158,20 +158,22 @@ describe what the model accomplishes.
 
 ### Framework
 
-In most cases, this should correspond to common library names of well-established ML frameworks.
-No explicit "Enum" is defined to allow easy addition of newer frameworks, but it is recommended
+This should correspond to the common library name of a well-established ML framework.
+No "Enum" are *enforced* to allow easy addition of newer frameworks, but it is **STRONGLY** recommended
 to use common names when applicable. Below are a few notable entries.
 
 - `PyTorch`
 - `TensorFlow`
 - `Scikit-learn`
 - `Huggingface`
-- `PyMC`
-- `JAX`
-- `ONNX`
-- `MXNet`
 - `Keras`
+- `ONNX`
+- `rgee`
+- `spatialRF`
+- `JAX`
+- `MXNet`
 - `Caffe`
+- `PyMC`
 - `Weka`
 
 ### Accelerator Type Enum
@@ -319,7 +321,7 @@ Select one option from:
 - `inf`
 - `clip`
 
-See [OpenCV - Interpolation Flags](https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121)
+See [OpenCV - Normalization Flags][opencv-normalization-flags]
 for details about the relevant methods. Equivalent methods from other packages are applicable as well.
 
 When a normalization technique is specified, it is expected that the corresponding [Statistics](#bands-and-statistics)
@@ -330,6 +332,8 @@ are provided, while the `z-score` would require `mean` and `stddev`.
 If none of the above values applies, `null` (literal, not string) can be used instead.
 If a custom normalization operation, or a combination of operations (with or without [Resize](#resize-enum)),
 must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
+
+[opencv-normalization-flags]: https://docs.opencv.org/4.x/d2/de8/group__core__array.html#gad12cefbcb5291cf958a85b4b67b6149f
 
 #### Resize Enum
 
@@ -345,12 +349,14 @@ Select one option from:
 - `wrap-fill-outliers`
 - `wrap-inverse-map`
 
-See [OpenCV - Normalization Flags](https://docs.opencv.org/4.x/d2/de8/group__core__array.html#ga87eef7ee3970f86906d69a92cbf064bd)
+See [OpenCV - Interpolation Flags][opencv-interpolation-flags]
 for details about the relevant methods. Equivalent methods from other packages are applicable as well.
 
 If none of the above values applies, `null` (literal, not string) can be used instead.
 If a custom rescaling operation, or a combination of operations (with or without [Normalization](#normalize-enum)),
 must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
+
+[opencv-interpolation-flags]: https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121
 
 #### Processing Expression
 
@@ -501,27 +507,55 @@ by comparison with fields `file:checksum` and `file:size` for example.
 
 #### Model Artifact Media-Type
 
-Not all ML framework, libraries or model artifacts provide explicit media-type. When those are not provided, custom
-media-types can be considered. For example `application/x-pytorch` or `application/octet-stream; application=pytorch`
-could be appropriate to represent a PyTorch `.pt` file, since the underlying format is a serialized pickle structure.
+Very few ML framework, libraries or model artifacts provide explicit [IANA registered][iana-media-type] media-type
+to represent the contents they handle. When those are not provided, custom media-types can be considered.
+However, "*unofficial but well-established*" parameters should be reused over custom media-types when possible.
+
+For example, the unofficial `application/octet-stream; framework=pytorch` definition is appropriate to represent a
+PyTorch `.pt` file, since its underlying format is a serialized pickle structure, and its `framework` parameter
+provides a clearer indication about the targeted ML framework and its contents. Since artifacts will typically be
+downloaded using a request stream into a runtime environment in order to employ the model,
+the `application/octet-stream` media-type is relevant for representing this type of arbitrary binary data.
+Being an official media-type, it also has the benefit to increase chances that
+HTTP clients will handle download of the contents appropriately when performing requests. In contrast, custom
+media-types such as `application/x-pytorch` have higher chances to be considered unacceptable (HTTP 406 Not Acceptable)
+by servers, which is why they should preferably be avoided.
+
+Users can consider adding more parameters to provide additional context, such as `profile=compiled` to provide an
+additional hint that the specific [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] profile
+is used for the artifact described by the media-type. However, users need to remember that those parameters are not
+official. In order to validate the specific framework and artifact type employed by the model, the MLM properties
+`mlm:framework` (see [MLM Fields](#item-properties-and-collection-fields)) and
+`mlm:artifact_type` (see [Model Asset](#model-asset)) should be employed instead to perform this validation if needed.
+
+[iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
 
 #### Artifact Type Enum
 
 This value can be used to provide additional details about the specific model artifact being described.
-For example, PyTorch offers various strategies for providing model definitions, such as Pickle (`.pt`), TorchScript,
-or the compiled approach. Since they all refer to the same ML framework,
-the [Model Artifact Media-Type](#model-artifact-media-type) would be insufficient in this case to detect with strategy
-should be used. 
+For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions,
+such as Pickle (`.pt`), [TorchScript][pytorch-jit-script],
+or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach.
+Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type)
+can be insufficient in this case to detect which strategy should be used with.
 
 Following are some proposed *Artifact Type* values for corresponding approaches, but other names are
 permitted as well. Note that the names are selected using the framework-specific definitions to help
 the users understand the source explicitly, although this is not strictly required either.
 
-| Artifact Type      | Description                                                                                                              |
-|--------------------|--------------------------------------------------------------------------------------------------------------------------|
-| `torch.compile`    | A model artifact obtained by [`torch.compile`](https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html).  |
-| `torch.jit.script` | A model artifact obtained by [`TorchScript`](https://pytorch.org/docs/stable/jit.html).                                  |
-| `torch.save`       | A model artifact saved by [Serialized Pickle Object](https://pytorch.org/tutorials/beginner/saving_loading_models.html). |
+| Artifact Type      | Description                                                                          |
+|--------------------|--------------------------------------------------------------------------------------|
+| `torch.save`       | A model artifact obtained by [Serialized Pickle Object][pytorch.save] (i.e.: `.pt`). |
+| `torch.jit.script` | A model artifact obtained by [`TorchScript`][pytorch-jit-script].                    |
+| `torch.export`     | A model artifact obtained by [`torch.export`][pytorch-export] (i.e.: `.pt2`).        |
+| `torch.compile`    | A model artifact obtained by [`torch.compile`][pytorch-compile].                     |
+
+[pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
+[pytorch-export]: https://pytorch.org/docs/main/export.html
+[pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
+[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
+[pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
+[pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
 
 ### Source Code Asset
 
