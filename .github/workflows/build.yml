@@ -19,7 +19,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install poetry
-      run: make poetry-download
+      run: make poetry-install
 
     - name: Set up cache
       uses: actions/cache@v2.1.6
