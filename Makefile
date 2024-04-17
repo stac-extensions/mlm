@@ -16,13 +16,20 @@ poetry-remove:
 poetry-plugins:
 	poetry self add poetry-plugin-up
 
+.PHONY: poetry-env
+poetry-env:
+	poetry config virtualenvs.in-project true
 
 #* Installation
 .PHONY: install
-install:
+install: poetry-env
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
 	-poetry run mypy --install-types --non-interactive ./
+
+.PHONY: install-dev
+install-dev: poetry-env install
+	poetry install -n --with dev
 
 .PHONY: pre-commit-install
 pre-commit-install:
@@ -57,6 +64,9 @@ lint:
 	poetry run ruff --config=pyproject.toml ./
 	poetry run pydocstyle --count --config=pyproject.toml ./
 	poetry run pydoclint --config=pyproject.toml ./
+
+.PHONY: check-lint
+check-lint: lint
 
 .PHONY: lint-all
 lint: test lint mypy check-safety
