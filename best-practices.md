@@ -41,7 +41,7 @@ could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_date
 would ideally be generic values like `["1900-01-01T00:00:00Z", null]` (see warning below).
 However, due to limitations with the STAC 1.0 specification, this time extent is not applicable.
 
-> [!WARNING]
+> :warning: <br>
 > The `null` value is not allowed for datetime specification.
 > As a workaround, the `end_datetime` can be set with a "very large value"
 > (similarly to `start_datetime` set with a small value), such as `"9999-12-31T23:59:59Z"`.
@@ -87,7 +87,8 @@ annotated with [`processing:level = L4`](https://github.com/stac-extensions/proc
 (as described below) to indicate that they correspond from the output of an ML model.
 
 > <b>processing:level = L4</b><br>
-> Model output or results from analyses of lower level data (i.e.: variables that are not directly measured by the instruments, but are derived from these measurements)
+> Model output or results from analyses of lower level data
+> (i.e.: variables that are not directly measured by the instruments, but are derived from these measurements).
 
 Furthermore, the [`processing:expression`](https://github.com/stac-extensions/processing?tab=readme-ov-file#expression-object)
 should be specified with a reference to the STAC Item employing the MLM extension to provide full context of the source
@@ -186,19 +187,21 @@ MLM definition to indicate which class values can be contained in the resulting 
 
 For more details, see the [Model Output Object](README.md#model-output-object) definition.
 
-> [!NOTE]
-> Update according to https://github.com/stac-extensions/classification/issues/48
+> :information_source: <br>
+> Update according to [stac-extensions/classification#48](https://github.com/stac-extensions/classification/issues/48).
 
 ### Scientific Extension
 
 Provided that most models derive from previous scientific work, it is strongly recommended to employ the 
-[Scientific Extension](https://github.com/stac-extensions/scientific) to provide references corresponding to the
+[Scientific Extension][stac-ext-sci] to provide references corresponding to the
 original source of the model (`sci:doi`, `sci:citation`). This can help users find more information about the model,
 its underlying architecture, or ways to improve it by piecing together the related work (`sci:publications`) that
 lead to its creation.
 
 This extension can also be used for the purpose of publishing new models, by providing to users the necessary details
 regarding how they should cite its use (i.e.: `sci:citation` field and `cite-as` relation type).
+
+[stac-ext-sci]: https://github.com/stac-extensions/scientific
 
 ### File Extension
 
@@ -249,14 +252,14 @@ inference strategies to apply a model should define the [Source Code Asset](READ
 This code is in itself ideal to guide users how to run it, and should therefore be replicated as an `example` link
 reference to offer more code samples to execute the model.
 
-> [!NOTE]
-> Update according to https://github.com/stac-extensions/example-links/issues/4
+> :information_source: <br>
+> Update according to [stac-extensions/example-links#4](https://github.com/stac-extensions/example-links/issues/4).
 
 ### Version Extension
 
 In the even that a model is retrained with gradually added annotations or improved training strategies leading to
 better performances, the existing model and newer models represented by STAC Items with MLM should also make use of
-the [Version Extension](https://github.com/stac-extensions/version). Using the fields and link relation types defined
+the [Version Extension][stac-ext-version]. Using the fields and link relation types defined
 by this extension, the retraining cycle of the model can better be described, with a full history of the newer versions
 developed.
 
@@ -264,3 +267,5 @@ Additionally, the `version:experimental` field should be considered for models b
 before widespread deployment. This can be particularly useful for annotating models experiments during cross-validation
 training process to find the "best model". This field could also be used to indicate if a model is provided for
 educational purposes only.
+
+[stac-ext-version]: https://github.com/stac-extensions/version

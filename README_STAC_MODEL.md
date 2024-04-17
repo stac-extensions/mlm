@@ -1,5 +1,7 @@
 # stac-model
 
+<!--lint disable no-html -->
+
 <div align="center">
 
 [![Python support][bp1]][bp2]
@@ -15,43 +17,47 @@
 [![Semantic versions][blic3]][bp5]
 [![Pipelines][bscm6]][bscm7]
 
-_A PydanticV2 validation and serialization library for the STAC ML Model Extension_
+_A PydanticV2 and PySTAC validation and serialization library for the STAC ML Model Extension_
 
 </div>
 
+> :warning: <br>
+> FIXME: update description with ML framework connectors (pytorch, scikit-learn, etc.)
+
 ## Installation
 
-```bash
+```shell
 pip install -U stac-model
 ```
 
 or install with `Poetry`:
 
-```bash
+```shell
 poetry add stac-model
 ```
 Then you can run
 
-```bash
+```shell
 stac-model --help
 ```
 
-## Creating an example metadata json
+## Creating example metadata JSON for a STAC Item
 
-```
+```shell
 stac-model
 ```
 
-This will make [this example item](./examples/example.json) for an example model.
+This will make [this example item](./examples/item.json) for an example model.
 
 ## :chart_with_upwards_trend: Releases
 
-You can see the list of available releases on the [GitHub Releases][r1] page.
+You can see the list of available releases on the [GitHub Releases][github-releases] page.
 
 ## :page_facing_up:  License
 [![License][blic1]][blic2]
 
-This project is licenced under the terms of the `Apache Software License 2.0` licence. See [LICENSE][blic2] for more details.
+This project is licenced under the terms of the `Apache Software License 2.0` licence.
+See [LICENSE][blic2] for more details.
 
 ## :heartpulse: Credits
 [![Python project templated from galactipy.][bp6]][bp7]
@@ -77,7 +83,7 @@ This project is licenced under the terms of the `Apache Software License 2.0` li
 [blic2]: https://github.com/stac-extensions/stac-model/blob/main/LICENCE
 [blic3]: https://img.shields.io/badge/%F0%9F%93%A6-semantic%20versions-4053D6?style=for-the-badge
 
-[r1]: https://github.com/stac-extensions/stac-model/releases
+[github-releases]: https://github.com/stac-extensions/stac-model/releases
 
 [bscm1]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
 [bscm2]: https://img.shields.io/github/v/release/stac-extensions/stac-model?style=for-the-badge&logo=semantic-release&color=347d39

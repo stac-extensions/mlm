@@ -1,28 +1,52 @@
 # Changelog
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [Unreleased](https://github.com/crim-ca/dlm-extension/tree/main)
 
 ### Added
-- more [Task Enum](./README.md#task-enum) tasks
-- [accelerator](./README#accelerators) options in [Runtime Object](./README#runtime-object)
-- [Model Output Object](./README.md#model-output-object)
+- n/a
+
+### Changed
+- n/a
+
+### Deprecated
+- n/a
+
+### Removed
+- n/a
+
+### Fixed
+- n/a
+
+## [0.1.1.alpha4](https://github.com/crim-ca/dlm-extension/tree/0.1.1.alpha4)
+
+### Added
+- more [Task Enum](README.md#task-enum) tasks
+- [Model Output Object](README.md#model-output-object)
 - batch_size and hardware summary
-- [`disk_size`, `memory_size`](./README#architecture-object)
-- [`hardware_summary`, `accelerator`, `accelerator_constrained`](./README#runtime-object) to specify hardware requirements for inference
-- Use common metadata [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object) to refer to model asset and source code.
+- [`mlm:accelerator`, `mlm:accelerator_constrained`, `mlm:accelerator_summary`](./README.md#accelerator-type-enum)
+  to specify hardware requirements for the model
+- Use common metadata
+  [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object)
+  to refer to model asset and source code.
 - use `classification:classes` in Model Output
 - add `scene-classification` to the Enum Tasks to allow disambiguation between pixel-wise and patch-based classification
 
 ### Changed
+- `disk_size` replaced by `file:size` (see [Best Practices - File Extension](best-practices.md#file-extension))
+- `memory_size` under `dlm:architecture` moved directly under Item properties as `mlm:memory_size`
+- replaced all hardware/accelerator/runtime definitions into distinct `mlm` fields directly under the
+  STAC Item properties (top-level, not nested) to allow better search support by STAC API. 
 - reorganized `dlm:architecture` nested fields to exist at the top level of properties as `mlm:name`, `mlm:summary`
   and so on to provide STAC API search capabilities.
 - replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
 - added `pydantic` models for internal schema objects in `stac_model` package and published to PYPI
-- specified [rel_type](./README.md#relation-types) to be `derived_from` and specify how model item or collection json should be named
+- specified [rel_type](README.md#relation-types) to be `derived_from` and
+  specify how model item or collection json should be named
 - replaced all Enum Tasks names to use hyphens instead of spaces
 - replaced `dlm:task` by `mlm:tasks` using an array of value instead of a single one, allowing models to represent
   multiple tasks they support simultaneously or interchangeably depending on context
@@ -36,10 +60,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - Data Object, replaced with [Model Input Object](./README.md#model-input-object) that uses the `name` field from
-  the [common metadata band object](https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#bands)
-  which also records `data_type` and `nodata` type
+  the [common metadata band object][stac-bands] which also records `data_type` and `nodata` type
 
-# TODO link release here
+### Fixed
+- n/a
+
+[stac-bands]: https://github.com/radiantearth/stac-spec/blob/f9b3c59ba810541c9da70c5f8d39635f8cba7bcd/item-spec/common-metadata.md#bands
+
+## [v1.0.0-beta3](https://github.com/crim-ca/dlm-extension/tree/v1.0.0-beta3)
 
 ### Added
 - Added example model architecture summary text.
@@ -74,7 +102,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed examples to refer to local files.
 - Fixed formatting of tables and descriptions in README.
 
-[v1.0.0-beta2]: <https://github.com/sfoucher/dlm-extension/compare/v1.0.0...HEAD>
+## [v1.0.0-beta2](https://github.com/crim-ca/dlm-extension/tree/v1.0.0-beta2)
 
 ### Added
 - Initial release of the extension description and schema.

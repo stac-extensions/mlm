@@ -38,14 +38,19 @@ The Machine Learning Model Extension purposely omits and delegates some definiti
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
 never have the Machine Learning Model Extension exclusively in `stac_extensions`.
 
-Check the original [Technical Report](https://github.com/crim-ca/CCCOT03/raw/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf)
-for an earlier version of the MLM Extension, formerly known as the Deep Learning Model Extension (DLM). 
+For details about the earlier (legacy) version of the MLM Extension, formerly known as
+the *Deep Learning Model Extension* (DLM), please refer to the [DLM LEGACY](README_DLM_LEGACY.md) document.
 DLM was renamed to the current MLM Extension and refactored to form a cohesive definition across all machine
 learning approaches, regardless of whether the approach constitutes a deep neural network or other statistical approach.
 It also combines multiple definitions from the predecessor [ML-Model](https://github.com/stac-extensions/ml-model)
 extension to synthesize common use cases into a single reference for Machine Learning Models.
 
-![Image Description](https://i.imgur.com/cVAg5sA.png)
+For more details about the [`stac-model`](stac_model) Python package, which provides definitions of the MLM extension
+using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
+connectors, please refer to the [STAC Model](README_STAC_MODEL.md) document.
+
+> :warning: <br>
+> FIXME: update examples 
 
 - Examples:
   - [Example with a ??? trained with torchgeo](examples/item.json) TODO update example
@@ -63,24 +68,24 @@ The fields in the table below can be used in these parts of STAC documents:
 - [x] Assets (for both Collections and Items, incl. Item Asset Definitions in Collections, except `mlm:name`)
 - [ ] Links
 
-| Field Name                  | Type                                             | Description                                                                                                                                                                                                                                                                                 |
-|-----------------------------|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| mlm:name                    | string                                           | **REQUIRED** A unique name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
-| mlm:architecture            | [Model Architecture](#model-architecture) string | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
-| mlm:tasks                   | \[[Task Enum](#task-enum)]                       | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
-| mlm:framework               | string                                           | Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
-| mlm:framework_version       | string                                           | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
-| mlm:memory_size             | integer                                          | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
-| mlm:total_parameters        | integer                                          | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
-| mlm:pretrained              | boolean                                          | Indicates if the model was pretrained. If the model was pretrained, consider providing `pretrained_source` if it is known.                                                                                                                                                                  |
-| mlm:pretrained_source       | string \| null                                   | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch (i.e.: `pretrained = false`), the `null` value should be set explicitly.                                            |
-| mlm:batch_size_suggestion   | integer                                          | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
-| mlm:accelerator             | [Accelerator Enum](#accelerator-enum) \| null    | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
-| mlm:accelerator_constrained | boolean                                          | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
-| mlm:accelerator_summary     | string                                           | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
-| mlm:accelerator_count       | integer                                          | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
-| mlm:input                   | \[[Model Input Object](#model-input-object)]     | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
-| mlm:output                  | \[[Model Output Object](#model-output-object)]   | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
+| Field Name                  | Type                                                          | Description                                                                                                                                                                                                                                                                                 |
+|-----------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| mlm:name                    | string                                                        | **REQUIRED** A unique name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
+| mlm:architecture            | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
+| mlm:tasks                   | \[[Task Enum](#task-enum)]                                    | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
+| mlm:framework               | string                                                        | Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
+| mlm:framework_version       | string                                                        | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
+| mlm:memory_size             | integer                                                       | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
+| mlm:total_parameters        | integer                                                       | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
+| mlm:pretrained              | boolean                                                       | Indicates if the model was pretrained. If the model was pretrained, consider providing `pretrained_source` if it is known.                                                                                                                                                                  |
+| mlm:pretrained_source       | string \| null                                                | The source of the pretraining. Can refer to popular pretraining datasets by name (i.e. Imagenet) or less known datasets by URL and description. If trained from scratch (i.e.: `pretrained = false`), the `null` value should be set explicitly.                                            |
+| mlm:batch_size_suggestion   | integer                                                       | A suggested batch size for the accelerator and summarized hardware.                                                                                                                                                                                                                         |
+| mlm:accelerator             | [Accelerator Type Enum](#accelerator-type-enum) \| null       | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
+| mlm:accelerator_constrained | boolean                                                       | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
+| mlm:accelerator_summary     | string                                                        | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
+| mlm:accelerator_count       | integer                                                       | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
+| mlm:input                   | \[[Model Input Object](#model-input-object)]                  | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
+| mlm:output                  | \[[Model Output Object](#model-output-object)]                | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 | mlm:hyperparameters         | [Model Hyperparameters Object](#model-hyperparameters-object) | Additional hyperparameters relevant for the model.                                                                                                                                                                                                                                          |
 
 To decide whether above fields should be applied under Item `properties` or under respective Assets, the context of
@@ -96,12 +101,12 @@ In addition, fields from the multiple relevant extensions should be defined as a
 [Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-ml-model-extension)
 for more details.
 
-For the [Extent Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object)
+For the [Extent Object][stac-extent]
 in STAC Collections and the corresponding spatial and temporal fields in Items, please refer to section
-[Best Practices - Using STAC Common Metadata Fields for the ML Model Extension](best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension).
+[Best Practices - Using STAC Common Metadata Fields for the ML Model Extension][stac-mlm-meta].
 
-[stac-ext-sci]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/scientific/README.md
-[stac-ext-ver]: https://github.com/radiantearth/stac-spec/tree/v1.0.0-beta.2/extensions/version/README.md
+[stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension
+[stac-extent]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object
 
 ### Model Architecture
 
@@ -188,7 +193,7 @@ It is recommended to define `accelerator` with one of the following values:
 - `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
 - `macos-arm` for models trained on Apple Silicon
 
-> [!WARNING]
+> :warning: <br>
 > If `mlm:accelerator = amd64`, this explicitly indicates that the model does not (and will not try to) use any
 > accelerator, even if some are available from the runtime environment. This is to be distinguished from 
 > the value `mlm:accelerator = null`, which means that the model *could* make use of some accelerators if provided,
@@ -228,7 +233,7 @@ representing bands information, including notably the `nodata` value,
 the `data_type` (see also [Data Type Enum](#data-type-enum)),
 and [Common Band Names][stac-band-names].
 
-> [!NOTE]
+> :information_source: <br>
 > Due to how the schema for [`eo:bands`][stac-eo-band] is defined, it is not sufficient to *only* provide
 > the `eo:bands` property at the STAC Item level. The schema validation of the EO extension explicitly looks
 > for a corresponding set of bands under an Asset, and if none is found, it disallows `eo:bands` in the Item properties.
@@ -239,7 +244,7 @@ and [Common Band Names][stac-band-names].
 > <br><br>
 > For more details, refer to [stac-extensions/eo#12](https://github.com/stac-extensions/eo/issues/12).
 > <br>
-> For an example, please refer to [examples/example_eo_bands.json](examples/example_eo_bands.json).
+> For an example, please refer to [examples/item_eo_bands.json](examples/item_eo_bands.json).
 > Notably in this example, the `assets.weights.eo:bands` property provides the `name` to fulfill the Asset requirement,
 > while all additional band details are provided in `properties.eo:bands`.
 
@@ -378,14 +383,13 @@ the following formats are recommended as alternative scripts and function refere
 | `docker` | string | An URI with image and tag to a Docker. | `ghcr.io/NAMESPACE/IMAGE_NAME:latest`                                                                |
 | `uri`    | string | An URI to some binary or script.       | `{"href": "https://raw.githubusercontent.com/ORG/REPO/TAG/package/cli.py", "type": "text/x-python"}` |
 
-> [!NOTE]
+> :information_source: <br>
 > Above definitions are only indicative, and more can be added as desired with even more custom definitions.
 > It is left as an implementation detail for users to resolve how these expressions should be handled at runtime.
 
-> [!WARNING]
+> :warning: <br>
 > See also discussion regarding additional processing expressions:
 > [stac-extensions/processing#31](https://github.com/stac-extensions/processing/issues/31)
-
 
 [stac-proc-expr]: https://github.com/stac-extensions/processing#expression-object
 
@@ -462,8 +466,8 @@ appropriate [MLM Asset Roles](#mlm-asset-roles) to ensure their discovery.
 Asset `roles` should include relevant names that describe them. This does not only include 
 the [Recommended Asset Roles](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#asset-roles)
 from the core specification, such as `data` or `metadata`, but also descriptors such as `mlm:model`, `mlm:weights` and
-so on, as applicable for the relevant [MLM Asset](#mlm-assets) being described. Please refer to the following sections
-for `roles` requirements by specific [MLM Asset](#mlm-assets).
+so on, as applicable for the relevant MLM Assets being described. Please refer to the following sections
+for `roles` requirements by specific MLM Assets.
 
 Note that `mlm:` prefixed roles are used for identification purpose of the Assets, but non-prefixed roles can be
 provided as well to offer generic descriptors. For example, `["mlm:model", "model", "data"]` could be considered for
@@ -480,7 +484,7 @@ In order to provide more context, the following roles are also recommended were 
 | mlm:model                 | `model`                 | Required role for [Model Asset](#model-asset).                                           |
 | mlm:source_code           | `code`                  | Required role for [Model Asset](#source-code-asset).                                     |
 
-> [!NOTE]
+> :information_source: <br>
 > (*) These roles are offered as direct conversions from the previous extension
 > that provided [ML-Model Asset Roles][ml-model-asset-roles] to provide easier upgrade to the MLM extension.
 
@@ -545,7 +549,7 @@ the users understand the source explicitly, although this is not strictly requir
 
 | Artifact Type      | Description                                                                          |
 |--------------------|--------------------------------------------------------------------------------------|
-| `torch.save`       | A model artifact obtained by [Serialized Pickle Object][pytorch.save] (i.e.: `.pt`). |
+| `torch.save`       | A model artifact obtained by [Serialized Pickle Object][pytorch-save] (i.e.: `.pt`). |
 | `torch.jit.script` | A model artifact obtained by [`TorchScript`][pytorch-jit-script].                    |
 | `torch.export`     | A model artifact obtained by [`torch.export`][pytorch-export] (i.e.: `.pt2`).        |
 | `torch.compile`    | A model artifact obtained by [`torch.compile`][pytorch-compile].                     |
@@ -620,7 +624,7 @@ You can also use other base images. Pytorch and Tensorflow offer docker images f
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
 
-## Relation types
+## Relation Types
 
 The following types should be used as applicable `rel` types in the
 [Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object)
@@ -650,7 +654,9 @@ for running tests are copied here for convenience.
 
 ### Running tests
 
-The same checks that run as checks on PRs are part of the repository and can be run locally to verify that changes are valid. To run tests locally, you'll need `npm`, which is a standard part of any [node.js](https://nodejs.org/en/download/) installation.
+The same checks that run as checks on PRs are part of the repository and can be run locally to verify that changes 
+are valid. To run tests locally, you'll need `npm`, which is a standard part of 
+any [node.js](https://nodejs.org/en/download/) installation.
 
 First, install everything with npm once. Navigate to the root of this repository and on your command line run:
 

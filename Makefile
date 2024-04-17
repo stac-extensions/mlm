@@ -23,7 +23,7 @@ poetry-env:
 #* Installation
 .PHONY: install
 install: poetry-env
-	poetry lock -n && poetry export --without-hashes > requirements.txt
+	poetry lock -n && poetry export --without-hashes > requirements-lock.txt
 	poetry install -n
 	-poetry run mypy --install-types --non-interactive ./
 
@@ -68,8 +68,30 @@ lint:
 .PHONY: check-lint
 check-lint: lint
 
+.PHONY: install-npm
+install-npm:
+	npm install
+
+.PHONY: check-markdown
+check-markdown: install-npm
+	npm run check-markdown
+
+.PHONY: format-markdown
+format-markdown: install-npm
+	npm run format-markdown
+
+.PHONY: check-examples
+check-examples: install-npm
+	npm run check-examples
+
+.PHONY: format-examples
+format-examples: install-npm
+	npm run format-examples
+
+fix-%: format-%s
+
 .PHONY: lint-all
-lint: test lint mypy check-safety
+lint: test lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps:
