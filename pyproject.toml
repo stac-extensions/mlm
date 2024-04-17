@@ -59,6 +59,7 @@ pydantic = "^2.6.3" # bug in post 2.3 https://github.com/pydantic/pydantic/issue
 pydantic-core = "^2"
 pystac = "^1.9.0"
 shapely = "^2"
+jsonschema = "^4.21.1"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.0.0"
