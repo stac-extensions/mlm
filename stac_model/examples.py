@@ -155,8 +155,10 @@ def eurosat_resnet() -> ItemMLModelExtension:
     # TODO, this can't be serialized but pystac.item calls for a datetime
     # in docs. start_datetime=datetime.strptime("1900-01-01", "%Y-%m-%d")
     # Is this a problem that we don't do date validation if we supply as str?
-    start_datetime = "1900-01-01"
-    end_datetime = "9999-01-01"  # cannot be None, invalid against STAC Core!
+    start_datetime_str = "1900-01-01"
+    end_datetime_str = "9999-01-01"  # cannot be None, invalid against STAC Core!
+    start_datetime = parse_dt(start_datetime_str).isoformat() + "Z"
+    end_datetime = parse_dt(end_datetime_str).isoformat() + "Z"
     bbox = [
         -7.882190080512502,
         37.13739173208318,
@@ -164,7 +166,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         58.21798141355221
     ]
     geometry = shapely.geometry.Polygon.from_bounds(*bbox).__geo_interface__
-    item_name = "_".join(ml_model_meta.name.split(" ")).lower()
+    item_name = "item_basic"
     col_name = "ml-model-examples"
     item = pystac.Item(
         id=item_name,
@@ -173,25 +175,38 @@ def eurosat_resnet() -> ItemMLModelExtension:
         bbox=bbox,
         datetime=None,
         properties={
-            "start_datetime": parse_dt(start_datetime).isoformat() + "Z",
-            "end_datetime": parse_dt(end_datetime).isoformat() + "Z",
+            "start_datetime": start_datetime,
+            "end_datetime": end_datetime,
             "description": (
-                "Sourced from torchgeo python library," "identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
+                "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
             ),
         },
         assets=assets,
     )
-    item.add_derived_from("https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a")
+
+    # note: cannot use 'item.add_derived_from' since it expects a 'Item' object, but we refer to a 'Collection' here
+    # item.add_derived_from("https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a")
+    item.add_link(
+        pystac.Link(
+            target="https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+            rel=pystac.RelType.DERIVED_FROM,
+            media_type=pystac.MediaType.JSON,
+        )
+    )
 
     # define more link references
-    example_catalog = pystac.Catalog(
-        "ml-model-examples",
-        "ml-model-examples",
-        catalog_type=pystac.CatalogType.RELATIVE_PUBLISHED,
-        href="https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/",
+    col = pystac.Collection(
+        id=col_name,
+        title="Machine Learning Model examples",
+        description="Collection of items contained in the Machine Learning Model examples.",
+        extent=pystac.Extent(
+            temporal=pystac.TemporalExtent([[parse_dt(start_datetime), parse_dt(end_datetime)]]),
+            spatial=pystac.SpatialExtent([bbox]),
+        )
     )
-    item.set_root(example_catalog)
-    item.set_self_href(f"./{item_name}")
+    col.set_self_href("./examples/collection.json")
+    col.add_item(item)
+    item.set_self_href(f"./examples/{item_name}.json")
 
     model_asset = cast(
         FileExtension[pystac.Asset],
