@@ -14,8 +14,6 @@ plugins:
   - remark-lint-no-consecutive-blank-lines
   - - remark-lint-maximum-line-length
     - 120
-# GFM - autolink literals, footnotes, strikethrough, tables, tasklist
-  - remark-gfm
 # Code
   - remark-lint-fenced-code-flag
   - remark-lint-fenced-code-marker
