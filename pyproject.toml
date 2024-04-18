@@ -168,23 +168,7 @@ add_ignore = "D100,D101,D102,D103,D104,D105,D107,D200,D202,D204,D212,D401"
 # https://github.com/jsh9/pydoclint
 # https://jsh9.github.io/pydoclint/how_to_config.html
 style = "google"
-exclude = '''
-/(
-  \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | __pycache__
-  | _build
-  | buck-out
-  | build
-  | dist
-  | env
-  | venv
-  | node_modules
-)/
-'''
+exclude = '\.git|\.hg|\.mypy_cache|\.tox|.?v?env|__pycache__|_build|buck-out|dist|node_modules'
 # don't require type hints, since we have them in the signature instead (don't duplicate)
 arg-type-hints-in-docstring = false
 arg-type-hints-in-signature = true
