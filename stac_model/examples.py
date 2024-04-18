@@ -1,26 +1,20 @@
-import pystac
-import json
-import shapely
-from dateutil.parser import parse as parse_dt
 from typing import cast
 
+import pystac
+import shapely
+from dateutil.parser import parse as parse_dt
 from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
-from stac_model.input import ModelInput, InputStructure, MLMStatistic
-from stac_model.output import ModelOutput, ModelResult, MLMClassification
-from stac_model.schema import MLModelExtension, MLModelProperties
+from stac_model.input import InputStructure, MLMStatistic, ModelInput
+from stac_model.output import MLMClassification, ModelOutput, ModelResult
+from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
 
-def eurosat_resnet() -> MLModelExtension[pystac.Item]:
+def eurosat_resnet() -> ItemMLModelExtension:
     input_array = InputStructure(
         shape=[-1, 13, 64, 64],
-        dim_order=[
-            "batch",
-            "channel",
-            "height",
-            "width"
-        ],
+        dim_order=["batch", "channel", "height", "width"],
         data_type="float32",
     )
     band_names = [
@@ -82,7 +76,7 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
         statistics=stats,
         pre_processing_function=ProcessingExpression(
             format="python",
-            expression="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn"
+            expression="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn",
         ),  # noqa: E501
     )
     result_array = ModelResult(
@@ -178,15 +172,12 @@ def eurosat_resnet() -> MLModelExtension[pystac.Item]:
             "start_datetime": parse_dt(start_datetime).isoformat() + "Z",
             "end_datetime": parse_dt(end_datetime).isoformat() + "Z",
             "description": (
-                "Sourced from torchgeo python library,"
-                "identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
+                "Sourced from torchgeo python library," "identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
             ),
         },
         assets=assets,
     )
-    item.add_derived_from(
-        "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a"
-    )
+    item.add_derived_from("https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a")
 
     model_asset = cast(
         FileExtension[pystac.Asset],

@@ -1,8 +1,18 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Literal, Union, TypeAlias
+from typing import Any, Dict, List, Literal, TypeAlias, Union
 
-from pydantic import BaseModel, model_serializer
+from pydantic import BaseModel, ConfigDict, model_serializer
+
+Number: TypeAlias = Union[int, float]
+JSON: TypeAlias = Union[
+    Dict[str, "JSON"],
+    List["JSON"],
+    Number,
+    bool,
+    str,
+    None,
+]
 
 
 @dataclass
@@ -20,15 +30,17 @@ class MLMBaseModel(BaseModel):
     ```python
     field: Annotated[Optional[<desiredType>], OmitIfNone] = None
     # or
-    field: Annotated[<desiredType>, OmitIfNone] = None
-    # or
-    field: Annotated[<desiredType>, OmitIfNone] = Field(default=None)
+    field: Annotated[Optional[<desiredType>], OmitIfNone] = Field(default=None)
     ```
+
+    Since `OmitIfNone` implies that the value could be `None` (even though it would be dropped),
+    the `Optional` annotation must be specified to corresponding typings to avoid `mypy` lint issues.
 
     It is important to use `MLMBaseModel`, otherwise the serializer will not be called and applied.
 
     Reference: https://github.com/pydantic/pydantic/discussions/5461#discussioncomment-7503283
     """
+
     @model_serializer
     def model_serialize(self):
         omit_if_none_fields = {
@@ -38,9 +50,14 @@ class MLMBaseModel(BaseModel):
         }
         values = {
             self.__fields__[key].alias or key: val  # use the alias if specified
-            for key, val in self if key not in omit_if_none_fields or val is not None
+            for key, val in self
+            if key not in omit_if_none_fields or val is not None
         }
         return values
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+    )
 
 
 DataType: TypeAlias = Literal[
@@ -59,7 +76,7 @@ DataType: TypeAlias = Literal[
     "cint32",
     "cfloat32",
     "cfloat64",
-    "other"
+    "other",
 ]
 
 
@@ -80,19 +97,19 @@ class TaskEnum(str, Enum):
 
 
 ModelTaskNames: TypeAlias = Literal[
-  "regression",
-  "classification",
-  "scene-classification",
-  "detection",
-  "object-detection",
-  "segmentation",
-  "semantic-segmentation",
-  "instance-segmentation",
-  "panoptic-segmentation",
-  "similarity-search",
-  "generative",
-  "image-captioning",
-  "super-resolution"
+    "regression",
+    "classification",
+    "scene-classification",
+    "detection",
+    "object-detection",
+    "segmentation",
+    "semantic-segmentation",
+    "instance-segmentation",
+    "panoptic-segmentation",
+    "similarity-search",
+    "generative",
+    "image-captioning",
+    "super-resolution",
 ]
 
 

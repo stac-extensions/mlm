@@ -1,11 +1,8 @@
-from typing import Any, Annotated, List, Literal, Optional, Set, TypeAlias, Union
+from typing import Annotated, List, Literal, Optional, TypeAlias, Union
 
-from pystac.extensions.raster import Statistics
-from pydantic import ConfigDict, Field, model_serializer
+from pydantic import Field
 
-from stac_model.base import DataType, MLMBaseModel, ProcessingExpression, OmitIfNone
-
-Number: TypeAlias = Union[int, float]
+from stac_model.base import DataType, MLMBaseModel, Number, OmitIfNone, ProcessingExpression
 
 
 class InputStructure(MLMBaseModel):
@@ -23,40 +20,44 @@ class MLMStatistic(MLMBaseModel):  # FIXME: add 'Statistics' dep from raster ext
     valid_percent: Annotated[Optional[Number], OmitIfNone] = None
 
 
-NormalizeType: TypeAlias = Optional[Literal[
-    "min-max",
-    "z-score",
-    "l1",
-    "l2",
-    "l2sqr",
-    "hamming",
-    "hamming2",
-    "type-mask",
-    "relative",
-    "inf"
-]]
+NormalizeType: TypeAlias = Optional[
+    Literal[
+        "min-max",
+        "z-score",
+        "l1",
+        "l2",
+        "l2sqr",
+        "hamming",
+        "hamming2",
+        "type-mask",
+        "relative",
+        "inf"
+    ]
+]
 
-ResizeType: TypeAlias = Optional[Literal[
-    "crop",
-    "pad",
-    "interpolation-nearest",
-    "interpolation-linear",
-    "interpolation-cubic",
-    "interpolation-area",
-    "interpolation-lanczos4",
-    "interpolation-max",
-    "wrap-fill-outliers",
-    "wrap-inverse-map"
-]]
+ResizeType: TypeAlias = Optional[
+    Literal[
+        "crop",
+        "pad",
+        "interpolation-nearest",
+        "interpolation-linear",
+        "interpolation-cubic",
+        "interpolation-area",
+        "interpolation-lanczos4",
+        "interpolation-max",
+        "wrap-fill-outliers",
+        "wrap-inverse-map",
+    ]
+]
 
 
 class ModelInput(MLMBaseModel):
     name: str
     bands: List[str]  # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
     input: InputStructure
-    norm_by_channel: Annotated[bool, OmitIfNone] = None
-    norm_type: Annotated[NormalizeType, OmitIfNone] = None
-    norm_clip: Annotated[List[Union[float, int]], OmitIfNone] = None
-    resize_type: Annotated[ResizeType, OmitIfNone] = None
-    statistics: Annotated[List[MLMStatistic], OmitIfNone] = None
+    norm_by_channel: Annotated[Optional[bool], OmitIfNone] = None
+    norm_type: Annotated[Optional[NormalizeType], OmitIfNone] = None
+    norm_clip: Annotated[Optional[List[Union[float, int]]], OmitIfNone] = None
+    resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
+    statistics: Annotated[Optional[List[MLMStatistic]], OmitIfNone] = None
     pre_processing_function: Optional[ProcessingExpression] = None

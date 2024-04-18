@@ -1,7 +1,10 @@
-from typing import Any, Dict
+from typing import Any, Dict, cast
+
 import pystac
 import pytest
+from pystac.validation.stac_validator import STACValidator
 
+from stac_model.base import JSON
 from stac_model.schema import SCHEMA_URI
 
 
@@ -16,10 +19,10 @@ from stac_model.schema import SCHEMA_URI
     indirect=True,
 )
 def test_mlm_schema(
-    mlm_validator: pystac.validation.STACValidator,
-    mlm_example,
+    mlm_validator: STACValidator,
+    mlm_example: JSON,
 ) -> None:
-    mlm_item = pystac.Item.from_dict(mlm_example)
+    mlm_item = pystac.Item.from_dict(cast(Dict[str, Any], mlm_example))
     validated = pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert len(validated) >= len(mlm_item.stac_extensions)  # extra STAC core schemas
     assert SCHEMA_URI in validated

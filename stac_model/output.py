@@ -1,10 +1,9 @@
-from typing import Annotated, Any, Dict, List, Optional, Set, TypeAlias, Union
-from typing_extensions import NotRequired, TypedDict
+from typing import Annotated, Any, List, Optional, Set, Union, cast
 
+from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
-from pydantic import AliasChoices, ConfigDict, Field, PlainSerializer, model_serializer
 
-from stac_model.base import DataType, MLMBaseModel, ModelTask, ProcessingExpression, OmitIfNone
+from stac_model.base import JSON, DataType, MLMBaseModel, ModelTask, OmitIfNone, ProcessingExpression
 
 
 class ModelResult(MLMBaseModel):
@@ -33,15 +32,15 @@ class ModelResult(MLMBaseModel):
 
 class MLMClassification(MLMBaseModel, Classification):
     @model_serializer()
-    def model_dump(self, *_, **__) -> Dict[str, Any]:
-        return self.to_dict()
+    def model_dump(self, *_: Any, **__: Any) -> JSON:  # type: ignore[override]
+        return self.to_dict()  # type: ignore[call-arg]
 
     def __init__(
         self,
         value: int,
         description: Optional[str] = None,
         name: Optional[str] = None,
-        color_hint: Optional[str] = None
+        color_hint: Optional[str] = None,
     ) -> None:
         Classification.__init__(self, {})
         if not name and not description:
@@ -49,7 +48,7 @@ class MLMClassification(MLMBaseModel, Classification):
         self.apply(
             value=value,
             name=name or description,
-            description=description or name,
+            description=cast(str, description or name),
             color_hint=color_hint,
         )
 
@@ -63,6 +62,7 @@ class MLMClassification(MLMBaseModel, Classification):
             MLMBaseModel.__setattr__(self, key, value)
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
+
 
 # class ClassObject(BaseModel):
 #     value: int
@@ -85,10 +85,10 @@ class ModelOutput(MLMBaseModel):
     #   We also get some unhashable errors with 'Set', although 'MLMClassification' implements '__hash__'.
     classes: Annotated[List[MLMClassification], OmitIfNone] = Field(
         alias="classification:classes",
-        validation_alias=AliasChoices("classification:classes", "classification_classes"),
+        validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
     )
     post_processing_function: Optional[ProcessingExpression] = None
 
     model_config = ConfigDict(
-        populate_by_name=True
+        populate_by_name=True,
     )

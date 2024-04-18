@@ -47,7 +47,7 @@ stac-model --help
 stac-model
 ```
 
-This will make [this example item](./examples/item.json) for an example model.
+This will make [this example item](./examples/item_basic.json) for an example model.
 
 ## :chart_with_upwards_trend: Releases
 

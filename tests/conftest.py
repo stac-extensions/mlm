@@ -1,12 +1,16 @@
 import json
 import os
-from typing import Any, Dict, cast
+from typing import TYPE_CHECKING, Any, Dict, cast
 
 import pystac
 import pytest
 
+from stac_model.base import JSON
 from stac_model.examples import eurosat_resnet as make_eurosat_resnet
 from stac_model.schema import SCHEMA_URI
+
+if TYPE_CHECKING:
+    from _pytest.fixtures import SubRequest
 
 TEST_DIR = os.path.dirname(__file__)
 EXAMPLES_DIR = os.path.abspath(os.path.join(TEST_DIR, "../examples"))
@@ -14,14 +18,15 @@ JSON_SCHEMA_DIR = os.path.abspath(os.path.join(TEST_DIR, "../json-schema"))
 
 
 @pytest.fixture(scope="session")
-def mlm_schema() -> Dict[str, Any]:
+def mlm_schema() -> JSON:
     with open(os.path.join(JSON_SCHEMA_DIR, "schema.json")) as schema_file:
-        return json.load(schema_file)
+        data = json.load(schema_file)
+    return cast(JSON, data)
 
 
 @pytest.fixture(scope="session")
 def mlm_validator(
-    request: pytest.FixtureRequest,
+    request: "SubRequest",
     mlm_schema: Dict[str, Any],
 ) -> pystac.validation.stac_validator.JsonSchemaSTACValidator:
     """
@@ -40,9 +45,10 @@ def mlm_validator(
 
 
 @pytest.fixture
-def mlm_example(request) -> Dict[str, Any]:
+def mlm_example(request: "SubRequest") -> JSON:
     with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
-        return json.load(example_file)
+        data = json.load(example_file)
+    return cast(JSON, data)
 
 
 @pytest.fixture(name="eurosat_resnet")

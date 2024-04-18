@@ -13,3 +13,6 @@ repos:
     rev: 'v0.1.12'  # Use the latest version of ruff-pre-commit
     hooks:
       - id: ruff
+        pass_filenames: false
+        args:
+          - --config=pyproject.toml

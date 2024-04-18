@@ -1,7 +1,7 @@
 import json
 from typing import (
-    Any,
     Annotated,
+    Any,
     Generic,
     Iterable,
     List,
@@ -12,16 +12,15 @@ from typing import (
     Union,
     cast,
     get_args,
+    overload,
 )
 
 import pystac
 from pydantic import ConfigDict, Field
 from pydantic.fields import FieldInfo
-from pystac.extensions import item_assets
 from pystac.extensions.base import (
     ExtensionManagementMixin,
     PropertiesExtension,
-    S,  # generic pystac.STACObject
     SummariesExtension,
 )
 
@@ -31,7 +30,10 @@ from stac_model.output import ModelOutput
 from stac_model.runtime import Runtime
 
 T = TypeVar(
-    "T", pystac.Collection, pystac.Item, pystac.Asset, item_assets.AssetDefinition
+    "T",
+    pystac.Collection,
+    pystac.Item,
+    pystac.Asset,  # item_assets.AssetDefinition,
 )
 
 SchemaName = Literal["mlm"]
@@ -54,21 +56,27 @@ class MLModelProperties(Runtime):
     pretrained: Annotated[Optional[bool], OmitIfNone] = Field(default=True)
     pretrained_source: Annotated[Optional[str], OmitIfNone] = None
 
-    model_config = ConfigDict(
-        alias_generator=mlm_prefix_adder,
-        populate_by_name=True,
-        extra="ignore"
-    )
+    model_config = ConfigDict(alias_generator=mlm_prefix_adder, populate_by_name=True, extra="ignore")
 
 
 class MLModelExtension(
     Generic[T],
     PropertiesExtension,
-    ExtensionManagementMixin[Union[pystac.Asset, pystac.Item, pystac.Collection]],
+    # FIXME: resolve typing incompatibility?
+    #   'pystac.Asset' does not derive from STACObject
+    #   therefore, it technically cannot be used in 'ExtensionManagementMixin[T]'
+    #   however, this makes our extension definition much easier and avoids lots of code duplication
+    ExtensionManagementMixin[  # type: ignore[type-var]
+        Union[
+            pystac.Collection,
+            pystac.Item,
+            pystac.Asset,
+        ]
+    ],
 ):
     @property
     def name(self) -> SchemaName:
-        return get_args(SchemaName)[0]
+        return cast(SchemaName, get_args(SchemaName)[0])
 
     def apply(
         self,
@@ -87,8 +95,33 @@ class MLModelExtension(
     def get_schema_uri(cls) -> str:
         return SCHEMA_URI
 
+    @overload
     @classmethod
-    def ext(cls, obj: T, add_if_missing: bool = False) -> "MLModelExtension[T]":
+    def ext(cls, obj: pystac.Asset, add_if_missing: bool = False) -> "AssetMLModelExtension": ...
+
+    @overload
+    @classmethod
+    def ext(cls, obj: pystac.Item, add_if_missing: bool = False) -> "ItemMLModelExtension": ...
+
+    @overload
+    @classmethod
+    def ext(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "CollectionMLModelExtension": ...
+
+    # @overload
+    # @classmethod
+    # def ext(cls, obj: item_assets.AssetDefinition, add_if_missing: bool = False) -> "ItemAssetsMLModelExtension":
+    #     ...
+
+    @classmethod
+    def ext(
+        cls,
+        obj: Union[pystac.Collection, pystac.Item, pystac.Asset],  # item_assets.AssetDefinition
+        add_if_missing: bool = False,
+    ) -> Union[
+        "CollectionMLModelExtension",
+        "ItemMLModelExtension",
+        "AssetMLModelExtension",
+    ]:
         """Extends the given STAC Object with properties from the
         :stac-ext:`Machine Learning Model Extension <mlm>`.
 
@@ -101,23 +134,21 @@ class MLModelExtension(
         """
         if isinstance(obj, pystac.Collection):
             cls.ensure_has_extension(obj, add_if_missing)
-            return cast(MLModelExtension[T], CollectionMLModelExtension(obj))
+            return CollectionMLModelExtension(obj)
         elif isinstance(obj, pystac.Item):
             cls.ensure_has_extension(obj, add_if_missing)
-            return cast(MLModelExtension[T], ItemMLModelExtension(obj))
+            return ItemMLModelExtension(obj)
         elif isinstance(obj, pystac.Asset):
             cls.ensure_owner_has_extension(obj, add_if_missing)
-            return cast(MLModelExtension[T], AssetMLModelExtension(obj))
-        elif isinstance(obj, item_assets.AssetDefinition):
-            cls.ensure_owner_has_extension(obj, add_if_missing)
-            return cast(MLModelExtension[T], ItemAssetsMLModelExtension(obj))
+            return AssetMLModelExtension(obj)
+        # elif isinstance(obj, item_assets.AssetDefinition):
+        #     cls.ensure_owner_has_extension(obj, add_if_missing)
+        #     return ItemAssetsMLModelExtension(obj)
         else:
             raise pystac.ExtensionTypeError(cls._ext_error_message(obj))
 
     @classmethod
-    def summaries(
-        cls, obj: pystac.Collection, add_if_missing: bool = False
-    ) -> "SummariesMLModelExtension":
+    def summaries(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "SummariesMLModelExtension":
         """Returns the extended summaries object for the given collection."""
         cls.ensure_has_extension(obj, add_if_missing)
         return SummariesMLModelExtension(obj)
@@ -136,12 +167,15 @@ class SummariesMLModelExtension(SummariesExtension):
             raise AttributeError(f"Name '{prop}' is not a valid MLM property.") from err
 
     def _validate_mlm_property(self, prop: str, summaries: list[Any]) -> None:
-        model = MLModelProperties.model_construct()
+        # ignore mypy issue when combined with Annotated
+        #   - https://github.com/pydantic/pydantic/issues/6713
+        #   - https://github.com/pydantic/pydantic/issues/5190
+        model = MLModelProperties.model_construct()  # type: ignore[call-arg]
         validator = MLModelProperties.__pydantic_validator__
         for value in summaries:
             validator.validate_assignment(model, prop, value)
 
-    def get_mlm_property(self, prop: str) -> list[Any]:
+    def get_mlm_property(self, prop: str) -> Optional[list[Any]]:
         self._check_mlm_property(prop)
         return self.summaries.get_list(prop)
 
@@ -175,13 +209,13 @@ class ItemMLModelExtension(MLModelExtension[pystac.Item]):
         return f"<ItemMLModelExtension Item id={self.item.id}>"
 
 
-class ItemAssetsMLModelExtension(MLModelExtension[item_assets.AssetDefinition]):
-    properties: dict[str, Any]
-    asset_defn: item_assets.AssetDefinition
-
-    def __init__(self, item_asset: item_assets.AssetDefinition):
-        self.asset_defn = item_asset
-        self.properties = item_asset.properties
+# class ItemAssetsMLModelExtension(MLModelExtension[item_assets.AssetDefinition]):
+#     properties: dict[str, Any]
+#     asset_defn: item_assets.AssetDefinition
+#
+#     def __init__(self, item_asset: item_assets.AssetDefinition):
+#         self.asset_defn = item_asset
+#         self.properties = item_asset.properties
 
 
 class AssetMLModelExtension(MLModelExtension[pystac.Asset]):

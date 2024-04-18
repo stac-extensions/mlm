@@ -98,6 +98,9 @@ exclude = [
     "env",
     "venv"
 ]
+respect-gitignore = true
+line-length = 120
+show-fixes = true
 
 [tool.ruff.lint]
 select = [

@@ -1,15 +1,15 @@
+import json
+
 import typer
 from rich.console import Console
-import json
+
 from stac_model import __version__
 from stac_model.examples import eurosat_resnet
+from stac_model.schema import ItemMLModelExtension
 
 app = typer.Typer(
     name="stac-model",
-    help=(
-        "A PydanticV2 validation and serialization library for the STAC Machine"
-        "Learning Model Extension"
-    ),
+    help="A PydanticV2 validation and serialization library for the STAC Machine Learning Model Extension",
     add_completion=False,
 )
 console = Console()
@@ -32,7 +32,7 @@ def main(
         is_eager=True,
         help="Prints the version of the stac-model package.",
     ),
-) -> None:
+) -> ItemMLModelExtension:
     """Generate example spec."""
     ml_model_meta = eurosat_resnet()
     with open("example.json", "w") as json_file:
