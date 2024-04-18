@@ -1,4 +1,6 @@
-"""A PydanticV2 validation and serialization library for the STAC ML Model Extension"""
+"""
+A PydanticV2/PySTAC validation and serialization library for the STAC Machine Learning Model Extension.
+"""
 
 from importlib import metadata
 

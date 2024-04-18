@@ -96,7 +96,8 @@ exclude = [
     "build",
     "dist",
     "env",
-    "venv"
+    "venv",
+    "node_modules",
 ]
 respect-gitignore = true
 line-length = 120
@@ -159,7 +160,9 @@ warn_required_dynamic_aliases = true
 # https://github.com/PyCQA/pydocstyle
 # http://www.pydocstyle.org/en/stable/usage.html#available-options
 convention = "google"
-
+match_dir = "^(stac_model|tests)"
+# ignore missing documentation, just validate provided ones
+add_ignore = "D100,D101,D102,D103,D104,D105,D107,D200,D202,D204,D212,D401"
 
 [tool.pydoclint]
 # https://github.com/jsh9/pydoclint
@@ -179,9 +182,13 @@ exclude = '''
   | dist
   | env
   | venv
+  | node_modules
 )/
 '''
-
+# don't require type hints, since we have them in the signature instead (don't duplicate)
+arg-type-hints-in-docstring = false
+arg-type-hints-in-signature = true
+check-return-types = false
 
 [tool.pytest.ini_options]
 # https://github.com/pytest-dev/pytest
@@ -196,7 +203,8 @@ norecursedirs =[
   "docs",
   ".tox",
   ".git",
-  "__pycache__"
+  "__pycache__",
+  "node_modules",
 ]
 doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
 timeout = 1000

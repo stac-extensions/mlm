@@ -29,14 +29,10 @@ jobs:
     - name: Install dependencies
       run: make install-dev
 
-    - name: Run style checks
+    - name: Run checks
       run: |
-        make lint
+        make lint-all
 
     - name: Run tests
       run: |
         make test
-
-    - name: Run safety checks
-      run: |
-        make check-safety

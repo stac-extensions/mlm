@@ -53,7 +53,7 @@ connectors, please refer to the [STAC Model](README_STAC_MODEL.md) document.
 > FIXME: update examples 
 
 - Examples:
-  - [Example with a ??? trained with torchgeo](examples/item.json) TODO update example
+  - **Example with a ??? trained with torchgeo** :warning: TODO update example
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
 - [JSON Schema](json-schema/schema.json) TODO update
 - [Changelog](./CHANGELOG.md)

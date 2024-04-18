@@ -91,7 +91,7 @@ format-examples: install-npm
 fix-%: format-%s
 
 .PHONY: lint-all
-lint: test lint mypy check-safety check-markdown
+lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps:

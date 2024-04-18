@@ -82,8 +82,8 @@ class MLModelExtension(
         self,
         properties: Union[MLModelProperties, dict[str, Any]],
     ) -> None:
-        """Applies Machine Learning Model Extension properties to the extended
-        :class:`~pystac.Item` or :class:`~pystac.Asset`.
+        """
+        Applies Machine Learning Model Extension properties to the extended :mod:`~pystac` object.
         """
         if isinstance(properties, dict):
             properties = MLModelProperties(**properties)
@@ -122,14 +122,19 @@ class MLModelExtension(
         "ItemMLModelExtension",
         "AssetMLModelExtension",
     ]:
-        """Extends the given STAC Object with properties from the
-        :stac-ext:`Machine Learning Model Extension <mlm>`.
+        """
+        Extends the given STAC Object with properties from the :stac-ext:`Machine Learning Model Extension <mlm>`.
 
-        This extension can be applied to instances of :class:`~pystac.Item` or
-        :class:`~pystac.Asset`.
+        This extension can be applied to instances of :class:`~pystac.Item` or :class:`~pystac.Asset`.
+
+        Args:
+            obj: STAC Object to extend with the MLM extension fields.
+            add_if_missing: Add the MLM extension schema URI to the object if not already in `stac_extensions`.
+
+        Returns:
+            Extended object.
 
         Raises:
-
             pystac.ExtensionTypeError : If an invalid object type is passed.
         """
         if isinstance(obj, pystac.Collection):
@@ -155,7 +160,10 @@ class MLModelExtension(
 
 
 class SummariesMLModelExtension(SummariesExtension):
-    """A concrete implementation of :class:`~SummariesExtension` that extends
+    """
+    Summaries annotated with the Machine Learning Model Extension.
+
+    A concrete implementation of :class:`~SummariesExtension` that extends
     the ``summaries`` field of a :class:`~pystac.Collection` to include properties
     defined in the :stac-ext:`Machine Learning Model <mlm>`.
     """
@@ -192,7 +200,10 @@ class SummariesMLModelExtension(SummariesExtension):
 
 
 class ItemMLModelExtension(MLModelExtension[pystac.Item]):
-    """A concrete implementation of :class:`MLModelExtension` on an
+    """
+    Item annotated with the Machine Learning Model Extension.
+
+    A concrete implementation of :class:`MLModelExtension` on an
     :class:`~pystac.Item` that extends the properties of the Item to
     include properties defined in the :stac-ext:`Machine Learning Model
     Extension <mlm>`.
@@ -219,7 +230,10 @@ class ItemMLModelExtension(MLModelExtension[pystac.Item]):
 
 
 class AssetMLModelExtension(MLModelExtension[pystac.Asset]):
-    """A concrete implementation of :class:`MLModelExtension` on an
+    """
+    Asset annotated with the Machine Learning Model Extension.
+
+    A concrete implementation of :class:`MLModelExtension` on an
     :class:`~pystac.Asset` that extends the Asset fields to include
     properties defined in the :stac-ext:`Machine Learning Model
     Extension <mlm>`.
