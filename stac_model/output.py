@@ -1,9 +1,9 @@
-from typing import Annotated, Any, List, Optional, Set, Union, cast
+from typing import Annotated, Any, Dict, List, Optional, Set, Union, cast
 
 from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
 
-from stac_model.base import JSON, DataType, MLMBaseModel, ModelTask, OmitIfNone, ProcessingExpression
+from stac_model.base import DataType, MLMBaseModel, ModelTask, OmitIfNone, ProcessingExpression
 
 
 class ModelResult(MLMBaseModel):
@@ -32,7 +32,7 @@ class ModelResult(MLMBaseModel):
 
 class MLMClassification(MLMBaseModel, Classification):
     @model_serializer()
-    def model_dump(self, *_: Any, **__: Any) -> JSON:  # type: ignore[override]
+    def model_dump(self, *_: Any, **__: Any) -> Dict[str, Any]:
         return self.to_dict()  # type: ignore[call-arg]
 
     def __init__(
@@ -61,7 +61,10 @@ class MLMClassification(MLMBaseModel, Classification):
         else:
             MLMBaseModel.__setattr__(self, key, value)
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True,
+    )
 
 
 # class ClassObject(BaseModel):
