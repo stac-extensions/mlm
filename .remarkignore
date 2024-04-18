@@ -1,0 +1,16 @@
+# To save time scanning
+.idea/
+.vscode/
+.tox/
+.git/
+*.egg-info/
+build/
+dist/
+downloads/
+env/
+
+# actual items to ignore
+.pytest_cache/
+node_modules/
+docs/_build/
+docs/build/
