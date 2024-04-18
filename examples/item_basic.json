@@ -90,13 +90,21 @@
             "value": 0,
             "name": "BACKGROUND",
             "description": "Background non-city.",
-            "color_hint": [0, 0, 0]
+            "color_hint": [
+              0,
+              0,
+              0
+            ]
           },
           {
             "value": 1,
             "name": "CITY",
             "description": "A city is detected.",
-            "color_hint": [0, 0, 255]
+            "color_hint": [
+              0,
+              0,
+              255
+            ]
           }
         ]
       }

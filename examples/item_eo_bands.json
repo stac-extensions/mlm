@@ -506,19 +506,45 @@
       ],
       "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
       "eo:bands": [
-        {"name": "coastal"},
-        {"name": "blue"},
-        {"name": "green"},
-        {"name": "red"},
-        {"name": "rededge1"},
-        {"name": "rededge2"},
-        {"name": "rededge3"},
-        {"name": "nir"},
-        {"name": "nir08"},
-        {"name": "nir09"},
-        {"name": "cirrus"},
-        {"name": "swir16"},
-        {"name": "swir22"}
+        {
+          "name": "coastal"
+        },
+        {
+          "name": "blue"
+        },
+        {
+          "name": "green"
+        },
+        {
+          "name": "red"
+        },
+        {
+          "name": "rededge1"
+        },
+        {
+          "name": "rededge2"
+        },
+        {
+          "name": "rededge3"
+        },
+        {
+          "name": "nir"
+        },
+        {
+          "name": "nir08"
+        },
+        {
+          "name": "nir09"
+        },
+        {
+          "name": "cirrus"
+        },
+        {
+          "name": "swir16"
+        },
+        {
+          "name": "swir22"
+        }
       ]
     },
     "source_code": {

@@ -143,7 +143,11 @@
             "value": 1,
             "name": "VEGETATION",
             "description": "pixels where vegetation was detected",
-            "color_hint": [0, 255, 0]
+            "color_hint": [
+              0,
+              255,
+              0
+            ]
           }
         ],
         "post_processing_function": null
@@ -169,13 +173,21 @@
             "value": 0,
             "name": "NON_VEGETATION",
             "description": "background pixels",
-            "color_hint": [255, 255, 255]
+            "color_hint": [
+              255,
+              255,
+              255
+            ]
           },
           {
             "value": 1,
             "name": "VEGETATION",
             "description": "pixels where vegetation was detected",
-            "color_hint": [0, 0, 0]
+            "color_hint": [
+              0,
+              0,
+              0
+            ]
           }
         ],
         "post_processing_function": {
