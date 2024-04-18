@@ -3,6 +3,8 @@
 .vscode/
 .tox/
 .git/
+.github/**/*.yaml
+.github/**/*.yml
 *.egg-info/
 build/
 dist/
