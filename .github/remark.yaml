@@ -4,7 +4,8 @@ plugins:
 # Apply some recommended defaults for consistency
   - remark-preset-lint-consistent
   - remark-preset-lint-recommended
-  - lint-no-html
+  - - lint-no-html
+    - false
 # General formatting
   - - remark-lint-emphasis-marker
     - '*'
@@ -12,7 +13,9 @@ plugins:
   - remark-lint-blockquote-indentation
   - remark-lint-no-consecutive-blank-lines
   - - remark-lint-maximum-line-length
-    - 150
+    - 120
+# GFM - autolink literals, footnotes, strikethrough, tables, tasklist
+  - remark-gfm
 # Code
   - remark-lint-fenced-code-flag
   - remark-lint-fenced-code-marker
@@ -37,7 +40,7 @@ plugins:
   - - remark-lint-unordered-list-marker-style
     - '-'
   - - remark-lint-list-item-indent
-    - space 
+    - space
 # Tables
   - remark-lint-table-pipes
   - remark-lint-no-literal-urls

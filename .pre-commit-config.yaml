@@ -1,0 +1,18 @@
+default_language_version:
+  python: python3.10
+
+default_stages: [commit, push]
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: 'v0.1.12'  # Use the latest version of ruff-pre-commit
+    hooks:
+      - id: ruff
+        pass_filenames: false
+        args:
+          - --config=pyproject.toml
