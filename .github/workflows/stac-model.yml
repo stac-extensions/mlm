@@ -1,15 +1,13 @@
-
-# UPDATEME to suit your project's workflow
-name: build
+name: Check Python Linting and Tests
 
 on: [push, pull_request]
 
 jobs:
-  build:
+  stac-model:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
+        python-version: ["3.10", "3.11", "3.12"]
 
     steps:
     - uses: actions/checkout@v2
