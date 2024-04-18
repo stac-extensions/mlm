@@ -12,7 +12,7 @@ from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelPro
 
 
 def eurosat_resnet() -> ItemMLModelExtension:
-    input_array = InputStructure(
+    input_struct = InputStructure(
         shape=[-1, 13, 64, 64],
         dim_order=["batch", "channel", "height", "width"],
         data_type="float32",
@@ -66,10 +66,10 @@ def eurosat_resnet() -> ItemMLModelExtension:
         MLMStatistic(mean=mean, stddev=stddev)
         for mean, stddev in zip(stats_mean, stats_stddev)
     ]
-    input = ModelInput(
+    model_input = ModelInput(
         name="13 Band Sentinel-2 Batch",
         bands=band_names,
-        input=input_array,
+        input=input_struct,
         norm_by_channel=True,
         norm_type="z-score",
         resize_type=None,
@@ -79,7 +79,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
             expression="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn",
         ),  # noqa: E501
     )
-    result_array = ModelResult(
+    result_struct = ModelResult(
         shape=[-1, 10],
         dim_order=["batch", "class"],
         data_type="float32"
@@ -100,11 +100,11 @@ def eurosat_resnet() -> ItemMLModelExtension:
         MLMClassification(value=class_value, name=class_name)
         for class_name, class_value in class_map.items()
     ]
-    output = ModelOutput(
+    model_output = ModelOutput(
         name="classification",
         tasks={"classification"},
         classes=class_objects,
-        result=result_array,
+        result=result_struct,
         post_processing_function=None,
     )
     assets = {
@@ -123,6 +123,8 @@ def eurosat_resnet() -> ItemMLModelExtension:
             ]
         ),
         "source_code": pystac.Asset(
+            title="Model implementation.",
+            description="Source code to run the model.",
             href="https://github.com/microsoft/torchgeo/blob/61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a/torchgeo/models/resnet.py#L207",
             media_type="text/x-python",
             roles=[
@@ -147,8 +149,8 @@ def eurosat_resnet() -> ItemMLModelExtension:
         pretrained=True,
         pretrained_source="EuroSat Sentinel-2",
         total_parameters=11_700_000,
-        input=[input],
-        output=[output],
+        input=[model_input],
+        output=[model_output],
     )
     # TODO, this can't be serialized but pystac.item calls for a datetime
     # in docs. start_datetime=datetime.strptime("1900-01-01", "%Y-%m-%d")
@@ -162,9 +164,11 @@ def eurosat_resnet() -> ItemMLModelExtension:
         58.21798141355221
     ]
     geometry = shapely.geometry.Polygon.from_bounds(*bbox).__geo_interface__
-    name = "_".join(ml_model_meta.name.split(" ")).lower()
+    item_name = "_".join(ml_model_meta.name.split(" ")).lower()
+    col_name = "ml-model-examples"
     item = pystac.Item(
-        id=name,
+        id=item_name,
+        collection=col_name,
         geometry=geometry,
         bbox=bbox,
         datetime=None,
@@ -178,6 +182,16 @@ def eurosat_resnet() -> ItemMLModelExtension:
         assets=assets,
     )
     item.add_derived_from("https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a")
+
+    # define more link references
+    example_catalog = pystac.Catalog(
+        "ml-model-examples",
+        "ml-model-examples",
+        catalog_type=pystac.CatalogType.RELATIVE_PUBLISHED,
+        href="https://raw.githubusercontent.com/crim-ca/dlm-extension/main/json-schema/",
+    )
+    item.set_root(example_catalog)
+    item.set_self_href(f"./{item_name}")
 
     model_asset = cast(
         FileExtension[pystac.Asset],

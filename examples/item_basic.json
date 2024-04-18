@@ -5,6 +5,7 @@
   ],
   "type": "Feature",
   "id": "example-model",
+  "collection": "ml-model-examples",
   "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -18,11 +19,11 @@
           58.21798141355221
         ],
         [
-          27.911651652899925,
+          27.911651652899923,
           58.21798141355221
         ],
         [
-          27.911651652899925,
+          27.911651652899923,
           37.13739173208318
         ],
         [
@@ -39,6 +40,7 @@
     58.21798141355221
   ],
   "properties": {
+    "description": "Basic STAC Item with only the MLM extension and no other extension cross-references.",
     "datetime": null,
     "start_datetime": "1900-01-01T00:00:00Z",
     "end_datetime": "9999-12-31T23:59:59Z",
@@ -120,5 +122,17 @@
         "mlm:model"
       ]
     }
-  }
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./item_basic.json",
+      "type": "application/geo+json"
+    }
+  ]
 }

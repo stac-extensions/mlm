@@ -8,6 +8,7 @@
   ],
   "type": "Feature",
   "id": "resnet-18_sentinel-2_all_moco_classification",
+  "collection": "ml-model-examples",
   "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -21,11 +22,11 @@
           58.21798141355221
         ],
         [
-          27.911651652899925,
+          27.911651652899923,
           58.21798141355221
         ],
         [
-          27.911651652899925,
+          27.911651652899923,
           37.13739173208318
         ],
         [
@@ -250,5 +251,23 @@
         "mlm:weights"
       ]
     }
-  }
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./item_multi_io.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "derived_from",
+      "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+      "type": "application/json",
+      "ml-aoi:split": "train"
+    }
+  ]
 }
