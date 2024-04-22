@@ -1,0 +1,8 @@
+.*
+!.gitignore
+node_modules
+package*.json
+*-lock.*
+stac_model
+tests
+
