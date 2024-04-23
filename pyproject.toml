@@ -82,6 +82,40 @@ pytest-click = "^1.1.0"
 pytest-pikachu = "^1.0.0"
 coverage = "^7.3.0"
 ruff = "^0.2.2"
+bump-my-version = "^0.20.2"
+
+[tool.bumpversion]
+current_version = "1.0.0"
+parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
+serialize = ["{major}.{minor}.{patch}"]
+search = "{current_version}"
+replace = "{new_version}"
+regex = false
+ignore_missing_version = true
+ignore_missing_files = false
+tag = true
+sign_tags = false
+tag_name = "v{new_version}"
+tag_message = "Bump version: {current_version} → {new_version}"
+allow_dirty = false
+commit = true
+commit_args = "--no-verify"
+message = "Bump version: {current_version} → {new_version}"
+
+[[tool.bumpversion.files]]
+glob = "**/*.json"
+search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
+replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
+glob = "**/*.md"
+search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
+replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
+glob = "**/*.py"
+search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
+replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
 
 [tool.ruff]
 exclude = [
