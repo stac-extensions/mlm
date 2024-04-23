@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/lekSD_RVRiquNHRloXRzeg/badge)](https://hackmd.io/lekSD_RVRiquNHRloXRzeg?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://stac-extensions.github.io/mlm/v1.0.0/schema.json](https://stac-extensions.github.io/mlm/v1.0.0/schema.json)
+- **Identifier:** [https://crim-ca.github.io/mlm-extension/v0.0.0/schema.json](https://crim-ca.github.io/mlm-extension/v0.0.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Proposal
