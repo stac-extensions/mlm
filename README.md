@@ -6,7 +6,7 @@
 - **Identifier:** [https://crim-ca.github.io/mlm-extension/v1.0.0/schema.json](https://crim-ca.github.io/mlm-extension/v1.0.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
-- **Extension Maturity Classification:** Proposal
+- **Extension Maturity Classification:** Pilot
 - **Owner:**
   - [@fmigneault](https://github.com/fmigneault)
   - [@rbavery](https://github.com/rbavery)
