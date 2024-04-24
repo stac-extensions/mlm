@@ -14,6 +14,7 @@ from stac_model.schema import SCHEMA_URI
         "item_basic.json",
         "item_raster_bands.json",
         "item_eo_bands.json",
+        "item_eo_and_raster_bands.json",
         "item_multi_io.json",
     ],
     indirect=True,

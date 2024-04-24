@@ -353,6 +353,138 @@
         "center_wavelength": 2.19,
         "full_width_half_max": 0.242
       }
+    ],
+    "raster:bands": [
+      {
+        "name": "B01",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 60,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B02",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 10,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B03",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 10,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B04",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 10,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B05",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B06",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B07",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B08",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 10,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B8A",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B09",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 60,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B10",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 60,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B11",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      },
+      {
+        "name": "B12",
+        "nodata": 0,
+        "data_type": "uint16",
+        "bits_per_sample": 15,
+        "spatial_resolution": 20,
+        "scale": 0.0001,
+        "offset": 0,
+        "unit": "m"
+      }
     ]
   },
   "assets": {

@@ -169,8 +169,8 @@ to use common names when applicable. Below are a few notable entries.
 
 - `PyTorch`
 - `TensorFlow`
-- `Scikit-learn`
-- `Huggingface`
+- `scikit-learn`
+- `Hugging Face`
 - `Keras`
 - `ONNX`
 - `rgee`

@@ -30,12 +30,13 @@ def mlm_validator(
     mlm_schema: Dict[str, Any],
 ) -> pystac.validation.stac_validator.JsonSchemaSTACValidator:
     """
-    Update the :class:`pystac.validation.RegisteredValidator` with the local ML-AOI JSON schema definition.
+    Update the :class:`pystac.validation.RegisteredValidator` with the local MLM JSON schema definition.
 
     Because the schema is *not yet* uploaded to the expected STAC schema URI,
     any call to :func:`pystac.validation.validate` or :meth:`pystac.stac_object.STACObject.validate` results
-    in ``GetSchemaError`` when the schema retrieval is attempted by the validator. By adding the schema to the
-    mapping beforehand, remote resolution can be bypassed temporarily.
+    in ``GetSchemaError`` when the schema retrieval is attempted by the validator.By adding the schema to the
+    mapping beforehand, remote resolution can be bypassed temporarily. When evaluating modifications to the
+    current schema, this also ensures that local changes are used instead of the remote reference.
     """
     validator = pystac.validation.RegisteredValidator.get_validator()
     validator = cast(pystac.validation.stac_validator.JsonSchemaSTACValidator, validator)

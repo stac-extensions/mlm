@@ -117,6 +117,32 @@ glob = "**/*.py"
 search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
 replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
 
+[[tool.bumpversion.files]]
+filename = "CHANGELOG.md"
+search = """
+## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
+"""
+replace = """
+## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
+
+### Added
+- n/a
+
+### Changed
+- n/a
+
+### Deprecated
+- n/a
+
+### Removed
+- n/a
+
+### Fixed
+- n/a
+
+## [v{new_version}](https://github.com/crim-ca/mlm-extension/tree/v{new_version})
+"""
+
 [tool.ruff]
 exclude = [
     ".git",

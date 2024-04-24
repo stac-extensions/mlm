@@ -230,8 +230,8 @@
           "enum": [
             "PyTorch",
             "TensorFlow",
-            "Scikit-learn",
-            "Huggingface",
+            "scikit-learn",
+            "Hugging Face",
             "Keras",
             "ONNX",
             "rgee",
@@ -246,6 +246,7 @@
         {
           "type": "string",
           "minLength": 1,
+          "pattern": "^(?=[^\\s._\\-]).*[^\\s._\\-]$",
           "description": "Any other framework name to allow extension. Enum names should be preferred when possible to allow better portability."
         }
       ]
@@ -632,12 +633,12 @@
         },
         {
           "$comment": "However, if any band is indicated, a 'bands'-compliant section should describe them.",
-          "FIXME_$ref": "#/$defs/AnyBandsRef"
+          "$ref": "#/$defs/AnyBandsRef"
         }
       ]
     },
     "AnyBandsRef": {
-      "$comment": "This definition ensures that, if at least 1 named MLM 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well.",
+      "$comment": "This definition ensures that, if at least 1 named MLM input 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well. Otherwise, 'bands' must be explicitly empty.",
       "if": {
         "$comment": "This is the JSON-object 'properties' definition.",
         "properties": {
@@ -659,10 +660,11 @@
                   "properties": {
                     "bands": {
                       "type": "array",
+                      "$comment": "This 'minItems' is the purpose of this whole 'if/then' block.",
                       "minItems": 1,
                       "items": {
                         "type": "string",
-                        "$comment": "This 'minItems' is the purpose of this whole 'if/then' block."
+                        "minLength": 1
                       }
                     }
                   }
@@ -775,15 +777,9 @@
                   "$comment": "This is the 'Model Input Object' properties.",
                   "properties": {
                     "bands": {
-                      "oneOf": [
-                        {
-                          "type": "null"
-                        },
-                        {
-                          "type": "array",
-                          "maxItems": 0
-                        }
-                      ]
+                      "$comment": "No bands reference provided, therefore none permitted in model inputs.",
+                      "type": "array",
+                      "maxItems": 0
                     }
                   }
                 }
