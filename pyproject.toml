@@ -178,6 +178,10 @@ select = [
     "I",
 ]
 
+[tool.ruff.lint.isort]
+known-local-folder = ["tests", "conftest"]
+known-first-party = ["stac_model"]
+
 [tool.mypy]
 # https://github.com/python/mypy
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file

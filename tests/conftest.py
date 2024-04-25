@@ -57,10 +57,10 @@ def mlm_validator(
 
 
 @pytest.fixture
-def mlm_example(request: "SubRequest") -> JSON:
+def mlm_example(request: "SubRequest") -> Dict[str, JSON]:
     with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
         data = json.load(example_file)
-    return cast(JSON, data)
+    return cast(Dict[str, JSON], data)
 
 
 @pytest.fixture(name="eurosat_resnet")

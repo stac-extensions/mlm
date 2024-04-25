@@ -19,7 +19,7 @@ from conftest import get_all_stac_item_examples
 )
 def test_mlm_schema(
     mlm_validator: STACValidator,
-    mlm_example: JSON,
+    mlm_example: Dict[str, JSON],
 ) -> None:
     mlm_item = pystac.Item.from_dict(cast(Dict[str, Any], mlm_example))
     validated = pystac.validation.validate(mlm_item, validator=mlm_validator)
@@ -34,13 +34,13 @@ def test_mlm_schema(
 )
 def test_mlm_eo_bands_invalid_only_in_item_properties(
     mlm_validator: STACValidator,
-    mlm_example: JSON,
+    mlm_example: Dict[str, JSON],
 ) -> None:
     mlm_item = pystac.Item.from_dict(mlm_example)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    mlm_eo_bands_bad_data: Dict[str, JSON] = copy.deepcopy(mlm_example)
-    mlm_eo_bands_bad_data["assets"]["weights"].pop("eo:bands")
+    mlm_eo_bands_bad_data = copy.deepcopy(mlm_example)
+    mlm_eo_bands_bad_data["assets"]["weights"].pop("eo:bands")  # type: ignore
     with pytest.raises(pystac.errors.STACValidationError):
         mlm_eo_bands_bad_item = pystac.Item.from_dict(mlm_eo_bands_bad_data)
         pystac.validation.validate(mlm_eo_bands_bad_item, validator=mlm_validator)
@@ -53,15 +53,15 @@ def test_mlm_eo_bands_invalid_only_in_item_properties(
 )
 def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     mlm_validator: STACValidator,
-    mlm_example: JSON,
+    mlm_example: Dict[str, JSON],
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
-    mlm_data["properties"]["mlm:input"] = []
+    mlm_data["properties"]["mlm:input"] = []  # type: ignore
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)
 
     with pytest.raises(pystac.errors.STACValidationError):
-        mlm_data["properties"].pop("mlm:input")
+        mlm_data["properties"].pop("mlm:input")  # type: ignore
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
 
@@ -85,11 +85,11 @@ def test_validate_model_against_schema(eurosat_resnet, mlm_validator):
     ["collection.json"],
     indirect=True,
 )
-def test_collection_include_all_items(mlm_example: JSON):
+def test_collection_include_all_items(mlm_example):
     """
     This is only for self-validation, to make sure all examples are contained in the example STAC collection.
     """
-    col_links: List[JSON] = mlm_example["links"]
+    col_links: List[Dict[str, str]] = mlm_example["links"]
     col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
     all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
     assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
