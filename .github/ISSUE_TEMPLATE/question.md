@@ -10,7 +10,7 @@ assignees:
 
 <!-- Mark with an `x` all the checkboxes that apply (like `[x]`) -->
 
-- [ ] I've searched the project's [`issues`][1], looking for the following terms:
+- [ ] I've searched the project's [`issues`](..), looking for the following terms:
   - [...]
 
 ## :question: Question
@@ -24,5 +24,3 @@ Is it possible to [...]?
 ## :paperclip: Additional context
 
 <!-- Add any other context or screenshots about the feature request here. -->
-
-[1]: https://github.com/crim-ca/stac-model/issues
