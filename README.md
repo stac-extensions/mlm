@@ -1,6 +1,6 @@
 # Machine Learning Model Extension Specification
 
-[![hackmd-github-sync-badge](https://hackmd.io/lekSD_RVRiquNHRloXRzeg/badge)](https://hackmd.io/lekSD_RVRiquNHRloXRzeg?both)
+[![hackmd-github-sync-badge](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A/badge)](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A?both)
 
 - **Title:** Machine Learning Model Extension
 - **Identifier:** [https://crim-ca.github.io/mlm-extension/v1.0.0/schema.json](https://crim-ca.github.io/mlm-extension/v1.0.0/schema.json)
