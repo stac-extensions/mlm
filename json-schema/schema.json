@@ -425,6 +425,10 @@
           "input": {
             "$ref": "#/$defs/InputStructure"
           },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
           "norm_by_channel": {
             "type": "boolean"
           },
@@ -466,6 +470,10 @@
           },
           "result": {
             "$ref": "#/$defs/ResultStructure"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
           },
           "classification:classes": {
             "$ref": "#/$defs/ClassificationClasses"
@@ -668,10 +676,11 @@
     "AnyBandsRef": {
       "$comment": "This definition ensures that, if at least 1 named MLM input 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well. Otherwise, 'bands' must be explicitly empty.",
       "if": {
-        "$comment": "This is the JSON-object 'properties' definition.",
+        "type": "object",
         "properties": {
           "$comment": "This is the STAC-Item 'properties' field.",
           "properties": {
+            "type": "object",
             "required": [
               "mlm:input"
             ],
@@ -688,12 +697,7 @@
                   "properties": {
                     "bands": {
                       "type": "array",
-                      "$comment": "This 'minItems' is the purpose of this whole 'if/then' block.",
-                      "minItems": 1,
-                      "items": {
-                        "type": "string",
-                        "minLength": 1
-                      }
+                      "minItems": 1
                     }
                   }
                 }
@@ -703,7 +707,7 @@
         }
       },
       "then": {
-        "$comment": "Need at least one 'bands', but multiple is allowed.",
+        "$comment": "Need at least one 'bands' definition, but multiple are allowed.",
         "anyOf": [
           {
             "$comment": "Bands described by raster extension.",
@@ -740,7 +744,7 @@
                 "$ref": "#/$defs/stac_extensions_eo"
               },
               {
-                "$comment": "EO extension expects at 'eo:bands' in (at least) 1 asset, and possibly in Item properties. Items are for summarizing. Since MLM also uses it by 'name' reference, allow any combination, and let 'eo' validate remaining combinations.",
+                "$comment": "EO extension expects at 'eo:bands' in (at least) 1 asset, and possibly in Item properties. Items are for summarizing. Since MLM also uses bands by 'name' reference, allow any combination, and let 'eo' validate remaining combinations.",
                 "anyOf": [
                   {
                     "$comment": "This is the JSON-object 'properties' definition.",
@@ -781,7 +785,9 @@
                 "properties": {
                   "$comment": "This is the STAC-Item 'properties' field.",
                   "properties": {
-                    "required": ["bands"],
+                    "required": [
+                      "bands"
+                    ],
                     "$comment": "This is the JSON-object 'properties' definition for the STAC Item 'properties' field.",
                     "properties": {
                       "$comment": "https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#bands",
@@ -817,6 +823,9 @@
                   "mlm:input": {
                     "type": "array",
                     "items": {
+                      "required": [
+                        "bands"
+                      ],
                       "$comment": "This is the 'Model Input Object' properties.",
                       "properties": {
                         "bands": {

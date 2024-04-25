@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   without leading or trailing non-alphanumeric characters.
 - Add [`examples/item_eo_and_raster_bands.json`](examples/item_eo_and_raster_bands.json) demonstrating the original
   use case represented by the previous [`examples/item_eo_bands.json`](examples/item_eo_bands.json) contents.
+- Add a `description` field for `mlm:input` and `mlm:output` definitions.
 
 ### Changed
 - Adjust `scikit-learn` and `Hugging Face` framework names to match the format employed by the official documentation.

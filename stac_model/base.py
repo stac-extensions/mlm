@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Literal, TypeAlias, Union
+from typing import Any, Dict, List, Literal, TypeAlias, TypedDict, Union
 
 from pydantic import BaseModel, ConfigDict, model_serializer
 

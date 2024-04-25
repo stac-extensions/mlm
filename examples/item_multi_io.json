@@ -7,7 +7,7 @@
     "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json"
   ],
   "type": "Feature",
-  "id": "resnet-18_sentinel-2_all_moco_classification",
+  "id": "model-multi-input",
   "collection": "ml-model-examples",
   "geometry": {
     "type": "Polygon",
@@ -43,7 +43,7 @@
     58.21798141355221
   ],
   "properties": {
-    "description": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
+    "description": "Generic model that employs multiple input sources with different combination of bands.",
     "datetime": null,
     "start_datetime": "1900-01-01T00:00:00Z",
     "end_datetime": "9999-12-31T23:59:59Z",
@@ -113,6 +113,26 @@
             "width"
           ],
           "data_type": "uint16"
+        }
+      },
+      {
+        "name": "DEM",
+        "description": "Digital elevation model. Comes from another source than the Sentinel bands. Therefore, no 'bands' associated to it.",
+        "bands": [],
+        "input": {
+          "shape": [
+            -1,
+            1,
+            64,
+            64
+          ],
+          "dim_order": [
+            "batch",
+            "ndvi",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
         }
       }
     ],

@@ -1,6 +1,7 @@
+import glob
 import json
 import os
-from typing import TYPE_CHECKING, Any, Dict, cast
+from typing import TYPE_CHECKING, Any, Dict, List, cast
 
 import pystac
 import pytest
@@ -15,6 +16,16 @@ if TYPE_CHECKING:
 TEST_DIR = os.path.dirname(__file__)
 EXAMPLES_DIR = os.path.abspath(os.path.join(TEST_DIR, "../examples"))
 JSON_SCHEMA_DIR = os.path.abspath(os.path.join(TEST_DIR, "../json-schema"))
+
+
+def get_all_stac_item_examples() -> List[str]:
+    all_json = glob.glob("**/*.json", root_dir=EXAMPLES_DIR, recursive=True)
+    all_geojson = glob.glob("**/*.geojson", root_dir=EXAMPLES_DIR, recursive=True)
+    all_stac_items = [
+        path for path in all_json + all_geojson
+        if os.path.splitext(os.path.basename(path))[0] not in ["collection", "catalog"]
+    ]
+    return all_stac_items
 
 
 @pytest.fixture(scope="session")
