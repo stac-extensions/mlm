@@ -5,24 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/crim-ca/dlm-extension/tree/main)
+## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
-- n/a
+- Add pattern for `mlm:framework`, needing at least one alphanumeric character,
+  without leading or trailing non-alphanumeric characters.
+- Add [`examples/item_eo_and_raster_bands.json`](examples/item_eo_and_raster_bands.json) demonstrating the original
+  use case represented by the previous [`examples/item_eo_bands.json`](examples/item_eo_bands.json) contents.
+- Add a `description` field for `mlm:input` and `mlm:output` definitions.
 
 ### Changed
-- n/a
+- Adjust `scikit-learn` and `Hugging Face` framework names to match the format employed by the official documentation.
 
 ### Deprecated
 - n/a
 
 ### Removed
-- n/a
+- Removed combination of `mlm:input` with `bands: null` that could never occur due to pre-requirement of `type: array`.
 
 ### Fixed
-- n/a
+- Fix `AnyBands` definition and use in the JSON schema to better consider possible use cases with `eo` extension.
+- Fix [`examples/item_eo_bands.json`](examples/item_eo_bands.json) that was incorrectly also using `raster` extension.
+  This is not fundamentally wrong, but it did not allow to validate the `eo` extension use case properly, since
+  the `raster:bands` reference caused a bypass for the `mlm:input[*].bands` to succeed validation.
 
-## [0.1.1.alpha4](https://github.com/crim-ca/dlm-extension/tree/0.1.1.alpha4)
+## [v1.0.0](https://github.com/crim-ca/mlm-extension/tree/v1.0.0)
 
 ### Added
 - more [Task Enum](README.md#task-enum) tasks

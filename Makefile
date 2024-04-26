@@ -49,9 +49,18 @@ format: codestyle
 test:
 	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
 
+.PHONY: check
+check: check-examples check-markdown check-lint check-mypy check-safety
+
+.PHONY: check-all
+check-all: check
+
 .PHONY: mypy
 mypy:
 	poetry run mypy --config-file pyproject.toml ./
+
+.PHONY: check-mypy
+check-mypy: mypy
 
 .PHONY: check-safety
 check-safety:

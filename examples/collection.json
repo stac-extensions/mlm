@@ -57,6 +57,14 @@
       "rel": "item"
     },
     {
+      "href": "item_eo_and_raster_bands.json",
+      "rel": "item"
+    },
+    {
+      "href": "item_eo_bands_summarized.json",
+      "rel": "item"
+    },
+    {
       "href": "item_raster_bands.json",
       "rel": "item"
     },

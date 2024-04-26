@@ -21,10 +21,7 @@
 
 <!-- Mark with an `x` all the checkboxes that apply (like `[x]`) -->
 
-- [ ] I've read the [`CONTRIBUTING.md`][2] guide;
+- [ ] I've read the [`CONTRIBUTING.md`](../CONTRIBUTING.md) guide;
 - [ ] I've updated the code style using `make codestyle`;
 - [ ] I've written tests for all new methods and classes that I created;
 - [ ] I've written the docstring in `Google` format for all the methods and classes that I used.
-
-[1]: https://github.com/rbavery/stac-model/blob/master/CODE_OF_CONDUCT.md
-[2]: https://github.com/rbavery/stac-model/blob/master/CONTRIBUTING.md

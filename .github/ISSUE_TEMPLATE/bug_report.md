@@ -22,7 +22,7 @@ Steps to reproduce the behavior:
 
 ### Environment
 
-* OS: [e.g. Linux / Windows / macOS]
+* OS: (e.g. Linux / Windows / macOS)
 * Python version
 * stac-model version
 
