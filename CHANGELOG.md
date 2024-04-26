@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
+- n/a
+
+### Changed
+- n/a
+
+### Deprecated
+- n/a
+
+### Removed
+- n/a
+
+### Fixed
+- n/a
+
+## [v1.1.0](https://github.com/crim-ca/mlm-extension/tree/v1.1.0)
+
+### Added
 - Add pattern for `mlm:framework`, needing at least one alphanumeric character,
   without leading or trailing non-alphanumeric characters.
 - Add [`examples/item_eo_and_raster_bands.json`](examples/item_eo_and_raster_bands.json) demonstrating the original
