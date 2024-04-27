@@ -79,13 +79,13 @@ def test_mlm_other_non_mlm_assets_allowed(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
 
-    mlm_data["assets"]["sample"] = {
+    mlm_data["assets"]["sample"] = {  # type: ignore
         "type": "image/jpeg",
         "href": "https://example.com/sample/output.jpg",
         "roles": ["preview"],
         "title": "Model Output Predictions Sample",
     }
-    mlm_data["assets"]["model-cart"] = {
+    mlm_data["assets"]["model-cart"] = {  # type: ignore
         "type": "text/markdown",
         "href": "https://example.com/sample/model.md",
         "roles": ["metadata"],
