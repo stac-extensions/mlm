@@ -79,6 +79,12 @@
               "additionalProperties": {
                 "$ref": "#/$defs/fields"
               }
+            },
+            "item_assets": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/$defs/fields"
+              }
             }
           }
         },

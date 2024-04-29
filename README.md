@@ -65,12 +65,14 @@ The fields in the table below can be used in these parts of STAC documents:
 - [ ] Catalogs
 - [x] Collections
 - [x] Item Properties (incl. Summaries in Collections)
-- [x] Assets (for both Collections and Items, incl. Item Asset Definitions in Collections, except `mlm:name`)
+- [x] Assets (for both Collections and Items, incl. [Item-Assets][item-assets] definitions in Collections)
 - [ ] Links
+
+[item-assets]: https://github.com/stac-extensions/item-assets
 
 | Field Name                  | Type                                                          | Description                                                                                                                                                                                                                                                                                 |
 |-----------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| mlm:name                    | string                                                        | **REQUIRED** A unique name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
+| mlm:name                    | string                                                        | **REQUIRED** A name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
 | mlm:architecture            | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
 | mlm:tasks                   | \[[Task Enum](#task-enum)]                                    | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                                        | Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
