@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
-- n/a
+- Add the missing JSON schema `item_assets` definition under a Collection to ensure compatibility with
+  the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
 
 ### Changed
 - n/a
@@ -17,7 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - n/a
 
 ### Removed
-- n/a
+- Field `mlm:name` requirement to be unique. There is no way to guarantee this from a single Item's definition
+  and their JSON schema validation. For uniqueness requirement, users should instead rely on the `id` property  
+  of the Item, which is ensured to be unique under the corresponding Collection, since it would not be retrievable
+  otherwise (i.e.: `collections/{collectionID}/items/{itemID}`).
 
 ### Fixed
 - n/a
