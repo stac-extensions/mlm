@@ -209,18 +209,18 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 
 ### Model Input Object
 
-| Field Name              | Type                                                    | Description                                                                                                                                                                                                                                   |
-|-------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                               | 
-| bands                   | \[string]                                               | **REQUIRED** The names of the raster bands used to train or fine-tune the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array. |
-| input                   | [Input Structure Object](#input-structure-object)       | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                  |
-| description             | string                                                  | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                          | 
-| norm_by_channel         | boolean                                                 | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                               |
-| norm_type               | [Normalize Enum](#normalize-enum) \| null               | Normalization method. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                             |
-| norm_clip               | \[number]                                               | When `norm_type = "clip"`, this array supplies the value for each `bands` item, which is used to divide each band before clipping values between 0 and 1.                                                                                     |
-| resize_type             | [Resize Enum](#resize-enum) \| null                     | High-level descriptor of the rescaling method to change image shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.              |
-| statistics              | \[[Statistics Object](#bands-and-statistics)]           | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                     |
-| pre_processing_function | [Processing Expression](#processing-expression) \| null | Custom preprocessing function where normalization and rescaling, and any other significant operations takes place.                                                                                                                            |
+| Field Name              | Type                                                    | Description                                                                                                                                                                                                                                                                 |
+|-------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                             |
+| bands                   | \[string \| [Model Band Object](#model-band-object)]    | **REQUIRED** The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array.          |
+| input                   | [Input Structure Object](#input-structure-object)       | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                |
+| description             | string                                                  | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                                                        |
+| norm_by_channel         | boolean                                                 | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                                                             |
+| norm_type               | [Normalize Enum](#normalize-enum) \| null               | Normalization method. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                           |
+| norm_clip               | \[number]                                               | When `norm_type = "clip"`, this array supplies the value for each `bands` item, which is used to divide each band before clipping values between 0 and 1.                                                                                                                   |
+| resize_type             | [Resize Enum](#resize-enum) \| null                     | High-level descriptor of the rescaling method to change image shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                            |
+| statistics              | \[[Statistics Object](#bands-and-statistics)]           | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                                                   |
+| pre_processing_function | [Processing Expression](#processing-expression) \| null | Custom preprocessing function where normalization and rescaling, and any other significant operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object). |
 
 Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
 However, setting `null` explicitly when this information is known by the model provider can help users understand
@@ -253,6 +253,9 @@ and [Common Band Names][stac-band-names].
 
 Only bands used as input to the model should be included in the MLM `bands` field.
 To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
+An input's `bands` definition can either be a plain `string` or a [Model Band Object](#model-band-object).
+When a `string` is employed directly, the value should be implicitly mapped to the `name` property of the
+explicit object representation.
 
 One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Statistics][stac-1.1-stats] object
 (or the corresponding [STAC Raster - Statistics][stac-raster-stats] for STAC 1.0) are not
@@ -268,6 +271,29 @@ properties of the model.
 [stac-raster-band]: https://github.com/stac-extensions/raster?tab=readme-ov-file#raster-band-object
 [stac-raster-stats]: https://github.com/stac-extensions/raster?tab=readme-ov-file#statistics-object
 [stac-band-names]: https://github.com/stac-extensions/eo?tab=readme-ov-file#common-band-names
+
+#### Model Band Object
+
+| Field Name | Type   | Description                                                                                                                 |
+|------------|--------|-----------------------------------------------------------------------------------------------------------------------------|
+| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics).                 |
+| format     | string | The type of expression that is specified in the `expression` property.                                                      |
+| expression | \*     | An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given. |
+
+> :information_source: <br>
+> Although `format` and `expression` are not required in this context, they are mutually dependent of each other. <br>
+> See also [Processing Expression](#processing-expression) for more details and examples.
+
+The `format` and `expression` properties can serve multiple purpose.
+
+1. Applying a band-specific pre-processing step,
+   in contrast to [`pre_processing_function`](#model-input-object) applied over all bands.
+   For example, reshaping a band to align its dimensions with other bands before stacking them.
+
+2. Defining a derived-band operation or a calculation that produces a virtual band from other band references.
+   For example, computing an indice that applies an arithmetic combination of other bands.
+
+For a concrete example, see [examples/item_bands_expression.json](examples/item_bands_expression.json).
 
 #### Data Type Enum
 
