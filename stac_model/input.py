@@ -38,7 +38,7 @@ NormalizeType: TypeAlias = Optional[
         "hamming2",
         "type-mask",
         "relative",
-        "inf"
+        "inf",
     ]
 ]
 
@@ -77,9 +77,9 @@ class ModelBand(MLMBaseModel):
 
     @model_validator(mode="after")
     def validate_expression(self) -> Self:
-        if (
-            (self.format is not None or self.expression is not None) and
-            (self.format is None or self.expression is None)
+        if (  # mutually dependant
+            (self.format is not None or self.expression is not None)
+            and (self.format is None or self.expression is None)
         ):
             raise ValueError("Model band 'format' and 'expression' are mutually dependant.")
         return self
@@ -102,9 +102,9 @@ class ModelInput(MLMBaseModel):
                     "name": "NDVI",
                     "format": "rio-calc",
                     "expression": "(B08 - B04) / (B08 + B04)",
-                }
-            ]
-        ]
+                },
+            ],
+        ],
     )
     input: InputStructure
     norm_by_channel: Annotated[Optional[bool], OmitIfNone] = None

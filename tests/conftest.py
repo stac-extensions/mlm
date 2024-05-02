@@ -22,7 +22,8 @@ def get_all_stac_item_examples() -> List[str]:
     all_json = glob.glob("**/*.json", root_dir=EXAMPLES_DIR, recursive=True)
     all_geojson = glob.glob("**/*.geojson", root_dir=EXAMPLES_DIR, recursive=True)
     all_stac_items = [
-        path for path in all_json + all_geojson
+        path
+        for path in all_json + all_geojson
         if os.path.splitext(os.path.basename(path))[0] not in ["collection", "catalog"]
     ]
     return all_stac_items

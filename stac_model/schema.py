@@ -97,15 +97,18 @@ class MLModelExtension(
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Asset, add_if_missing: bool = False) -> "AssetMLModelExtension": ...
+    def ext(cls, obj: pystac.Asset, add_if_missing: bool = False) -> "AssetMLModelExtension":
+        ...
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Item, add_if_missing: bool = False) -> "ItemMLModelExtension": ...
+    def ext(cls, obj: pystac.Item, add_if_missing: bool = False) -> "ItemMLModelExtension":
+        ...
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "CollectionMLModelExtension": ...
+    def ext(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "CollectionMLModelExtension":
+        ...
 
     # @overload
     # @classmethod
