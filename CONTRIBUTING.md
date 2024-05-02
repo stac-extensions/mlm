@@ -8,7 +8,7 @@
 make poetry-install
 ```
 
-> This installs Poetry as a [standalone application][poetry-install]. 
+> This installs Poetry as a [standalone application][poetry-install].
 > If you prefer, you can simply install it inside your virtual environment.
 
 2. Initialize project dependencies with poetry and install `pre-commit` hooks:
@@ -24,7 +24,7 @@ To activate your `virtualenv` run `poetry shell`.
 
 Want to know more about Poetry? Check [its documentation][poetry-docs].
 
-Poetry's [commands][poetry-cli] let you easily make descriptive python environments 
+Poetry's [commands][poetry-cli] let you easily make descriptive python environments
 and run commands in those environments, like:
 
 - `poetry add numpy@latest`
@@ -51,7 +51,7 @@ make test
 git checkout -b your-branch
 git add .
 git commit -m ":tada: Initial commit"
-git remote add origin https://github.com/your-fork/stac-model.git
+git remote add origin https://github.com/your-fork/mlm-extension.git
 git push -u origin your-branch
 ```
 
