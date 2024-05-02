@@ -1,4 +1,4 @@
-from typing import Annotated, Any, List, Literal, Optional, TypeAlias, Union
+from typing import Annotated, Any, List, Literal, Optional, Sequence, TypeAlias, Union
 from typing_extensions import Self
 
 from pydantic import Field, model_validator
@@ -88,7 +88,7 @@ class ModelBand(MLMBaseModel):
 class ModelInput(MLMBaseModel):
     name: str
     # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
-    bands: List[Union[str, ModelBand]] = Field(
+    bands: Sequence[Union[str, ModelBand]] = Field(
         description=(
             "List of bands that compose the input. "
             "If a string is used, it is implied to correspond to a named-band. "
