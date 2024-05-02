@@ -181,6 +181,7 @@ select = [
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
 known-first-party = ["stac_model"]
+extra-standard-library = ["typing_extensions"]
 
 [tool.mypy]
 # https://github.com/python/mypy
