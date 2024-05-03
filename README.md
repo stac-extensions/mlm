@@ -274,14 +274,14 @@ properties of the model.
 
 #### Model Band Object
 
-| Field Name | Type   | Description                                                                                                                 |
-|------------|--------|-----------------------------------------------------------------------------------------------------------------------------|
-| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics).                 |
-| format     | string | The type of expression that is specified in the `expression` property.                                                      |
-| expression | \*     | An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given. |
+| Field Name | Type   | Description                                                                                                                            |
+|------------|--------|----------------------------------------------------------------------------------------------------------------------------------------|
+| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics).                            |
+| format     | string | The type of expression that is specified in the `expression` property.                                                                 |
+| expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given. |
 
 > :information_source: <br>
-> Although `format` and `expression` are not required in this context, they are mutually dependent of each other. <br>
+> Although `format` and `expression` are not required in this context, they are mutually dependent on each other. <br>
 > See also [Processing Expression](#processing-expression) for more details and examples.
 
 The `format` and `expression` properties can serve multiple purpose.
