@@ -82,7 +82,7 @@ pytest-click = "^1.1.0"
 pytest-pikachu = "^1.0.0"
 coverage = "^7.3.0"
 ruff = "^0.2.2"
-bump-my-version = "^0.20.2"
+bump-my-version = "^0.21"
 
 [tool.bumpversion]
 current_version = "1.1.0"
@@ -104,16 +104,49 @@ message = "Bump version: {current_version} → {new_version}"
 
 [[tool.bumpversion.files]]
 glob = "**/*.json"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
 search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
 replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
 glob = "**/*.md"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
 search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
 replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
 glob = "**/*.py"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
 search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
 replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
 
