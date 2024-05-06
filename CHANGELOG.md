@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
 
 ### Changed
-- correct stac-model version in code and publish matching release on pypi, addresses https://github.com/crim-ca/mlm-extension/issues/13
+- correct stac-model version in code and publish matching release on pypi
 - Adds a job to publish.yaml to publish the stac-model package
 
 ### Deprecated
