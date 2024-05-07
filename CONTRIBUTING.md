@@ -9,7 +9,7 @@ make poetry-install
 ```
 
 > This installs Poetry as a [standalone application][poetry-install]. <br>
-> For more details, see also the [Poetry Documentation][[poetry-docs]. <br>
+> For more details, see also the [Poetry Documentation][poetry-docs]. <br>
 > If you prefer, you can simply install it inside your virtual environment.
 
 2. Initialize project dependencies with poetry and install `pre-commit` hooks:
@@ -55,10 +55,10 @@ git push -u origin your-branch
 
 > :warning: <br>
 > There are multiple types of releases for this repository: <br>
->  1. Release for MLM specification (usually, this should include one for `stac-model` as well to support it)
->  2. Release for `stac-model` only
+> 1. Release for MLM specification (usually, this should include one for `stac-model` as well to support it)
+> 2. Release for `stac-model` only
 
-### Building a new version of MLM specification contains steps:
+### Building a new version of MLM specification
 
 - Checkout to the `main` branch by making sure the CI passed all previous tests.
 - Bump the version with `bump-my-version bump --verbose <version-level>`.
@@ -73,7 +73,7 @@ git push -u origin your-branch
   > - Ensure the "Set as the latest release" option is selected :heavy_check_mark:.
   > - Ensure the diff ranges from the previous MLM version, and not an intermediate `stac-model` release.
 
-### Building a new version of `stac-model` contains steps:
+### Building a new version of `stac-model`
 
 - Apply any relevant changes and `CHANGELOG.md` entries in a PR that modifies `stac-model`.
 - Bump the version with `poetry version <version>`.
