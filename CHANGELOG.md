@@ -12,20 +12,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
 
 ### Changed
-- n/a
+- Adds a job to publish.yaml to publish the stac-model package
 
 ### Deprecated
 - n/a
 
 ### Removed
 - Field `mlm:name` requirement to be unique. There is no way to guarantee this from a single Item's definition
-  and their JSON schema validation. For uniqueness requirement, users should instead rely on the `id` property  
+  and their JSON schema validation. For uniqueness requirement, users should instead rely on the `id` property
   of the Item, which is ensured to be unique under the corresponding Collection, since it would not be retrievable
   otherwise (i.e.: `collections/{collectionID}/items/{itemID}`).
 
 ### Fixed
 - Fix the validation strategy of the `mlm:model` role required by at least one Asset under a STAC Item.
   Although the role requirement was validated, the definition did not allow for other Assets without it to exist.
+- correct `stac-model` version in code and publish matching release on pypi
 
 ## [v1.1.0](https://github.com/crim-ca/mlm-extension/tree/v1.1.0)
 
@@ -69,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `disk_size` replaced by `file:size` (see [Best Practices - File Extension](best-practices.md#file-extension))
 - `memory_size` under `dlm:architecture` moved directly under Item properties as `mlm:memory_size`
 - replaced all hardware/accelerator/runtime definitions into distinct `mlm` fields directly under the
-  STAC Item properties (top-level, not nested) to allow better search support by STAC API. 
+  STAC Item properties (top-level, not nested) to allow better search support by STAC API.
 - reorganized `dlm:architecture` nested fields to exist at the top level of properties as `mlm:name`, `mlm:summary`
   and so on to provide STAC API search capabilities.
 - replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata

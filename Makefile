@@ -20,6 +20,10 @@ poetry-plugins:
 poetry-env:
 	poetry config virtualenvs.in-project true
 
+.PHONY: publish
+publish:
+	poetry publish --build
+
 #* Installation
 .PHONY: install
 install: poetry-env
