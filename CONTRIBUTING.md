@@ -1,4 +1,4 @@
-# How to contribute to stac-model
+# How to contribute to MLM specification or `stac-model`
 
 ## Project setup
 
@@ -8,7 +8,8 @@
 make poetry-install
 ```
 
-> This installs Poetry as a [standalone application][poetry-install].
+> This installs Poetry as a [standalone application][poetry-install]. <br>
+> For more details, see also the [Poetry Documentation][[poetry-docs]. <br>
 > If you prefer, you can simply install it inside your virtual environment.
 
 2. Initialize project dependencies with poetry and install `pre-commit` hooks:
@@ -18,28 +19,23 @@ make install-dev
 make pre-commit-install
 ```
 
+## PR submittion
+
+Before submitting your code please do the following steps:
+
+1. Add any changes you want
+2. Add tests for the new changes
+3. Edit documentation if you have changed something significant
+
 You're then ready to run and test your contributions.
 
-To activate your `virtualenv` run `poetry shell`.
-
-Want to know more about Poetry? Check [its documentation][poetry-docs].
-
-Poetry's [commands][poetry-cli] let you easily make descriptive python environments
-and run commands in those environments, like:
-
-- `poetry add numpy@latest`
-- `poetry run pytest`
-- `poetry publish --build`
-
-etc.
-
-3. Run linting checks:
+4. Run linting checks:
 
 ```bash
 make lint-all
 ```
 
-4. Run `pytest` with
+5. Run `tests` (including your new ones) with
 
 ```bash
 make test
@@ -55,26 +51,41 @@ git remote add origin https://github.com/your-fork/mlm-extension.git
 git push -u origin your-branch
 ```
 
-## Building and releasing stac-model
+## Building and releasing
 
-Building a new version of `stac-model` contains steps:
+> :warning: <br>
+> There are multiple types of releases for this repository: <br>
+>  1. Release for MLM specification (usually, this should include one for `stac-model` as well to support it)
+>  2. Release for `stac-model` only
 
+### Building a new version of MLM specification contains steps:
+
+- Checkout to the `main` branch by making sure the CI passed all previous tests.
+- Bump the version with `bump-my-version bump --verbose <version-level>`.
+  - Consider using `--dry-run` before hand to inspect the changes.
+  - The `<version-level>` should be one of `major`, `minor`, or `patch`. <br>
+    Alternatively, the version can be set explicitly with `--new-version <version> patch`. <br>
+    For more details, refer to the [Semantic Versions][semver] standard;
+- Make a commit to `GitHub` and push the corresponding auto-generated `v{MAJOR}.{MINOR}.{PATCH}` tag.
+- Validate that the CI validated everything once again.
+- Create a `GitHub release` with the created tag.
+  > :warning: <br>
+  > - Ensure the "Set as the latest release" option is selected :heavy_check_mark:.
+  > - Ensure the diff ranges from the previous MLM version, and not an intermediate `stac-model` release.
+
+### Building a new version of `stac-model` contains steps:
+
+- Apply any relevant changes and `CHANGELOG.md` entries in a PR that modifies `stac-model`.
 - Bump the version with `poetry version <version>`.
-  You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`.
-  For more details, refer to the [Semantic Versions][semver] standard;
-- Make a commit to `GitHub`;
-- Create a `GitHub release`;
-- And... publish :slight_smile: `poetry publish --build`
-
-### Before submitting
-
-Before submitting your code please do the following steps:
-
-1. Add any changes you want
-2. Add tests for the new changes
-3. Edit documentation if you have changed something significant
-4. Run `make codestyle` to format your changes.
-5. Run `make lint-all` to ensure that types, security and docstrings are okay.
+  - You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. <br>
+    For more details, refer to the [Semantic Versions][semver] standard;
+- Once CI validation succeeded, merge the corresponding PR branch.
+- Checkout to `main` branch that contais the freshly created merge commit.
+- Push the tag `stac-model-v{MAJOR}.{MINOR}.{PATCH}`. The CI should auto-publish it to PyPI.
+- Create a `GitHub release`
+  > :warning: <br>
+  > - Ensure the "Set as the latest release" option is deselected :x:.
+  > - Ensure the diff ranges from the previous release of `stac-model`, not an intermediate MLM release.
 
 ## Other help
 
@@ -87,5 +98,4 @@ Issues for bugs.
 
 [poetry-install]: https://github.com/python-poetry/install.python-poetry.org
 [poetry-docs]: https://python-poetry.org/docs/
-[poetry-cli]: https://python-poetry.org/docs/cli/#commands
 [semver]: https://semver.org/
