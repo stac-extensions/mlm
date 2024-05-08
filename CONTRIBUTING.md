@@ -62,7 +62,7 @@ git push -u origin your-branch
 
 - Checkout to the `main` branch by making sure the CI passed all previous tests.
 - Bump the version with `bump-my-version bump --verbose <version-level>`.
-  - Consider using `--dry-run` before hand to inspect the changes.
+  - Consider using `--dry-run` beforehand to inspect the changes.
   - The `<version-level>` should be one of `major`, `minor`, or `patch`. <br>
     Alternatively, the version can be set explicitly with `--new-version <version> patch`. <br>
     For more details, refer to the [Semantic Versions][semver] standard;
