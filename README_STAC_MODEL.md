@@ -21,7 +21,7 @@ _A PydanticV2 and PySTAC validation and serialization library for the STAC ML Mo
 
 </div>
 
-> :warning: <br>
+> ⚠️ <br>
 > FIXME: update description with ML framework connectors (pytorch, scikit-learn, etc.)
 
 ## Installation
@@ -49,17 +49,17 @@ stac-model
 
 This will make [this example item](./examples/item_basic.json) for an example model.
 
-## :chart_with_upwards_trend: Releases
+## 📈 Releases
 
 You can see the list of available releases on the [GitHub Releases][github-releases] page.
 
-## :page_facing_up:  License
+## 📄 License
 [![License][blic1]][blic2]
 
 This project is licenced under the terms of the `Apache Software License 2.0` licence.
 See [LICENSE][blic2] for more details.
 
-## :heartpulse: Credits
+## 💗 Credits
 [![Python project templated from galactipy.][bp6]][bp7]
 
 <!-- Anchors -->
@@ -86,9 +86,9 @@ See [LICENSE][blic2] for more details.
 [github-releases]: https://github.com/crim-ca/mlm-extension/releases
 
 [bscm1]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
-[bscm2]: https://img.shields.io/github/v/release/crim-ca/mlm-extension?style=for-the-badge&logo=semantic-release&color=347d39
-[bscm6]: https://img.shields.io/github/actions/workflow/status/crim-ca/mlm-extension/build.yml?style=for-the-badge&logo=github
-[bscm7]: https://github.com/crim-ca/mlm-extension/actions/workflows/build.yml
+[bscm2]: https://img.shields.io/github/v/release/crim-ca/mlm-extension?filter=stac-model-v*&style=for-the-badge&logo=semantic-release&color=347d39
+[bscm6]: https://img.shields.io/github/actions/workflow/status/crim-ca/mlm-extension/publish.yaml?style=for-the-badge&logo=github
+[bscm7]: https://github.com/crim-ca/mlm-extension/blob/main/.github/workflows/publish.yaml
 
 [hub1]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates#enabling-dependabot-version-updates
 [hub2]: https://github.com/marketplace/actions/close-stale-issues
