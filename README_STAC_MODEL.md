@@ -80,7 +80,7 @@ See [LICENSE][blic2] for more details.
 [bp16]: https://github.com/crim-ca/mlm-extension/blob/main/.pre-commit-config.yaml
 
 [blic1]: https://img.shields.io/github/license/crim-ca/mlm-extension?style=for-the-badge
-[blic2]: https://github.com/crim-ca/mlm-extension/blob/main/LICENCE
+[blic2]: https://github.com/crim-ca/mlm-extension/blob/main/LICENSE
 [blic3]: https://img.shields.io/badge/%F0%9F%93%A6-semantic%20versions-4053D6?style=for-the-badge
 
 [github-releases]: https://github.com/crim-ca/mlm-extension/releases
@@ -92,7 +92,6 @@ See [LICENSE][blic2] for more details.
 
 [hub1]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates#enabling-dependabot-version-updates
 [hub2]: https://github.com/marketplace/actions/close-stale-issues
-[hub5]: https://github.com/crim-ca/mlm-extension/blob/main/.github/workflows/build.yml
 [hub6]: https://docs.github.com/en/code-security/dependabot
 [hub8]: https://github.com/crim-ca/mlm-extension/blob/main/.github/release-drafter.yml
 [hub9]: https://github.com/crim-ca/mlm-extension/blob/main/.github/.stale.yml
