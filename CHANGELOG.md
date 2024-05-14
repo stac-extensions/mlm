@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
+- n/a
+
+### Changed
+- n/a
+
+### Deprecated
+- n/a
+
+### Removed
+- n/a
+
+### Fixed
+- n/a
+
+## [v1.2.0](https://github.com/crim-ca/mlm-extension/tree/v1.2.0)
+
+### Added
 - Add the missing JSON schema `item_assets` definition under a Collection to ensure compatibility with
   the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
 - Add `ModelBand` representation using `name`, `format` and `expression` properties to allow derived band references

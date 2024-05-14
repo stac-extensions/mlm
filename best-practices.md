@@ -145,7 +145,7 @@ leading to a new MLM STAC Item definition (see also [STAC Version Extension](#ve
 {
   "id": "stac-item-model",
   "stac_extensions": [
-    "https://crim-ca.github.io/mlm-extension/v1.1.0/schema.json",
+    "https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json",
     "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json"
   ],
   "assets": {
@@ -216,7 +216,7 @@ that the model is properly instantiated from the expected weights, or that suffi
 ```json
 {
   "stac_extensions": [
-    "https://crim-ca.github.io/mlm-extension/v1.1.0/schema.json",
+    "https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json",
     "https://stac-extensions.github.io/file/v2.1.0/schema.json"
   ],
   "assets": {
