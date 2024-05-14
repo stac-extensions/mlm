@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fix the validation strategy of the `mlm:model` role required by at least one Asset under a STAC Item.
   Although the role requirement was validated, the definition did not allow for other Assets without it to exist.
-- correct `stac-model` version in code and publish matching release on pypi
+- Correct `stac-model` version in code and publish matching release on PyPI.
 
 ## [v1.1.0](https://github.com/crim-ca/mlm-extension/tree/v1.1.0)
 

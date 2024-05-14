@@ -7,7 +7,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "stac-model"
-version = "0.1.4"
+version = "0.2.0"
 description = "A PydanticV2 validation and serialization libary for the STAC ML Model Extension"
 readme = "README_STAC_MODEL.md"
 authors = [
