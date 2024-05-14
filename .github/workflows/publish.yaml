@@ -27,5 +27,7 @@ jobs:
         python-version: "3.10"
     - name: Install poetry
       run: make poetry-install
-    - name: Publish to PyPI
-      run: poetry publish --username __token__ --password ${{ secrets.PYPI_SECRET }}
+    - name: Publish stac-model to PyPI
+      run: |
+       poetry build
+       poetry publish --username __token__ --password ${{ secrets.PYPI_SECRET }}

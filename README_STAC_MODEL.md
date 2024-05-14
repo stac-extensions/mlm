@@ -21,7 +21,7 @@ _A PydanticV2 and PySTAC validation and serialization library for the STAC ML Mo
 
 </div>
 
-> :warning: <br>
+> ⚠️ <br>
 > FIXME: update description with ML framework connectors (pytorch, scikit-learn, etc.)
 
 ## Installation
@@ -49,17 +49,17 @@ stac-model
 
 This will make [this example item](./examples/item_basic.json) for an example model.
 
-## :chart_with_upwards_trend: Releases
+## 📈 Releases
 
 You can see the list of available releases on the [GitHub Releases][github-releases] page.
 
-## :page_facing_up:  License
+## 📄 License
 [![License][blic1]][blic2]
 
 This project is licenced under the terms of the `Apache Software License 2.0` licence.
 See [LICENSE][blic2] for more details.
 
-## :heartpulse: Credits
+## 💗 Credits
 [![Python project templated from galactipy.][bp6]][bp7]
 
 <!-- Anchors -->
@@ -67,35 +67,34 @@ See [LICENSE][blic2] for more details.
 [bp1]: https://img.shields.io/pypi/pyversions/stac-model?style=for-the-badge
 [bp2]: https://pypi.org/project/stac-model/
 [bp3]: https://img.shields.io/pypi/v/stac-model?style=for-the-badge&logo=pypi&color=3775a9
-[bp4]: https://github.com/stac-extensions/stac-model
-[bp5]: https://github.com/stac-extensions/stac-model/releases
+[bp4]: https://github.com/crim-ca/mlm-extension
+[bp5]: https://github.com/crim-ca/mlm-extension/releases
 [bp6]: https://img.shields.io/badge/made%20with-galactipy%20%F0%9F%8C%8C-179287?style=for-the-badge&labelColor=193A3E
 [bp7]: https://kutt.it/7fYqQl
 [bp8]: https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=for-the-badge
-[bp9]: https://github.com/stac-extensions/stac-model/blob/main/CONTRIBUTING.md
+[bp9]: https://github.com/crim-ca/mlm-extension/blob/main/CONTRIBUTING.md
 [bp11]: https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json&style=for-the-badge
 [bp12]: https://python-poetry.org/
 
 [bp15]: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
-[bp16]: https://github.com/stac-extensions/stac-model/blob/main/.pre-commit-config.yaml
+[bp16]: https://github.com/crim-ca/mlm-extension/blob/main/.pre-commit-config.yaml
 
-[blic1]: https://img.shields.io/github/license/stac-extensions/stac-model?style=for-the-badge
-[blic2]: https://github.com/stac-extensions/stac-model/blob/main/LICENCE
+[blic1]: https://img.shields.io/github/license/crim-ca/mlm-extension?style=for-the-badge
+[blic2]: https://github.com/crim-ca/mlm-extension/blob/main/LICENSE
 [blic3]: https://img.shields.io/badge/%F0%9F%93%A6-semantic%20versions-4053D6?style=for-the-badge
 
-[github-releases]: https://github.com/stac-extensions/stac-model/releases
+[github-releases]: https://github.com/crim-ca/mlm-extension/releases
 
 [bscm1]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
-[bscm2]: https://img.shields.io/github/v/release/stac-extensions/stac-model?style=for-the-badge&logo=semantic-release&color=347d39
-[bscm6]: https://img.shields.io/github/actions/workflow/status/stac-extensions/stac-model/build.yml?style=for-the-badge&logo=github
-[bscm7]: https://github.com/stac-extensions/stac-model/actions/workflows/build.yml
+[bscm2]: https://img.shields.io/github/v/release/crim-ca/mlm-extension?filter=stac-model-v*&style=for-the-badge&logo=semantic-release&color=347d39
+[bscm6]: https://img.shields.io/github/actions/workflow/status/crim-ca/mlm-extension/publish.yaml?style=for-the-badge&logo=github
+[bscm7]: https://github.com/crim-ca/mlm-extension/blob/main/.github/workflows/publish.yaml
 
 [hub1]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates#enabling-dependabot-version-updates
 [hub2]: https://github.com/marketplace/actions/close-stale-issues
-[hub5]: https://github.com/stac-extensions/stac-model/blob/main/.github/workflows/build.yml
 [hub6]: https://docs.github.com/en/code-security/dependabot
-[hub8]: https://github.com/stac-extensions/stac-model/blob/main/.github/release-drafter.yml
-[hub9]: https://github.com/stac-extensions/stac-model/blob/main/.github/.stale.yml
+[hub8]: https://github.com/crim-ca/mlm-extension/blob/main/.github/release-drafter.yml
+[hub9]: https://github.com/crim-ca/mlm-extension/blob/main/.github/.stale.yml
 
 [bdoc1]: https://img.shields.io/badge/docs-github%20pages-0a507a?style=for-the-badge
-[bdoc2]: https://stac-extensions.github.io/stac-model
+[bdoc2]: https://github.com/crim-ca/mlm-extension/blob/main/README_STAC_MODEL.md
