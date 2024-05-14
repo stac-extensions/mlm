@@ -53,6 +53,10 @@
       "rel": "item"
     },
     {
+      "href": "item_bands_expression.json",
+      "rel": "item"
+    },
+    {
       "href": "item_eo_bands.json",
       "rel": "item"
     },

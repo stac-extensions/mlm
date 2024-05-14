@@ -711,13 +711,45 @@
       }
     },
     "ModelBands": {
+      "description": "List of bands (if any) that compose the input. Band order represents the index position of the bands.",
       "allOf": [
         {
           "$comment": "No 'minItems' here to support model inputs not using any band (other data source).",
           "type": "array",
           "items": {
-            "type": "string",
-            "minLength": 1
+            "oneOf": [
+              {
+                "description": "Implied named-band with the name directly provided.",
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "description": "Explicit named-band with optional derived expression to obtain it.",
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "format": {
+                    "description": "Format to interpret the specified expression used to obtain the band.",
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "expression": {
+                    "description": "Any representation relevant for the specified 'format'."
+                  }
+                },
+                "dependencies": {
+                  "format": ["expression"],
+                  "expression": ["format"]
+                },
+                "additionalProperties": false
+              }
+            ]
           }
         },
         {

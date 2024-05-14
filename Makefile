@@ -81,6 +81,10 @@ lint:
 .PHONY: check-lint
 check-lint: lint
 
+.PHONY: format-lint
+format-lint:
+	poetry run ruff --config=pyproject.toml --fix ./
+
 .PHONY: install-npm
 install-npm:
 	npm install
@@ -101,7 +105,8 @@ check-examples: install-npm
 format-examples: install-npm
 	npm run format-examples
 
-fix-%: format-%s
+FORMATTERS := lint markdown examples
+$(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 
 .PHONY: lint-all
 lint-all: lint mypy check-safety check-markdown

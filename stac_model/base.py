@@ -116,7 +116,7 @@ ModelTaskNames: TypeAlias = Literal[
 ModelTask = Union[ModelTaskNames, TaskEnum]
 
 
-class ProcessingExpression(BaseModel):
+class ProcessingExpression(MLMBaseModel):
     # FIXME: should use 'pystac' reference, but 'processing' extension is not implemented yet!
     format: str
     expression: Any

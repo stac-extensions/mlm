@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add the missing JSON schema `item_assets` definition under a Collection to ensure compatibility with
   the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
+- Add `ModelBand` representation using `name`, `format` and `expression` properties to allow derived band references
+  (fixes [crim-ca/mlm-extension#7](https://github.com/crim-ca/mlm-extension/discussions/7)).
 
 ### Changed
 - Adds a job to publish.yaml to publish the stac-model package

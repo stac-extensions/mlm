@@ -63,7 +63,10 @@ def eurosat_resnet() -> ItemMLModelExtension:
         1231.58581042,
     ]
     stats = [
-        MLMStatistic(mean=mean, stddev=stddev)
+        MLMStatistic(
+            mean=mean,
+            stddev=stddev,
+        )
         for mean, stddev in zip(stats_mean, stats_stddev)
     ]
     model_input = ModelInput(
@@ -82,7 +85,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
     result_struct = ModelResult(
         shape=[-1, 10],
         dim_order=["batch", "class"],
-        data_type="float32"
+        data_type="float32",
     )
     class_map = {
         "Annual Crop": 0,
@@ -97,7 +100,10 @@ def eurosat_resnet() -> ItemMLModelExtension:
         "SeaLake": 9,
     }
     class_objects = [
-        MLMClassification(value=class_value, name=class_name)
+        MLMClassification(
+            value=class_value,
+            name=class_name,
+        )
         for class_name, class_value in class_map.items()
     ]
     model_output = ModelOutput(
@@ -119,8 +125,8 @@ def eurosat_resnet() -> ItemMLModelExtension:
             roles=[
                 "mlm:model",
                 "mlm:weights",
-                "data"
-            ]
+                "data",
+            ],
         ),
         "source_code": pystac.Asset(
             title="Model implementation.",
@@ -129,9 +135,9 @@ def eurosat_resnet() -> ItemMLModelExtension:
             media_type="text/x-python",
             roles=[
                 "mlm:model",
-                "code"
-            ]
-        )
+                "code",
+            ],
+        ),
     }
 
     ml_model_size = 43000000
@@ -163,7 +169,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         -7.882190080512502,
         37.13739173208318,
         27.911651652899923,
-        58.21798141355221
+        58.21798141355221,
     ]
     geometry = shapely.geometry.Polygon.from_bounds(*bbox).__geo_interface__
     item_name = "item_basic"
@@ -177,9 +183,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         properties={
             "start_datetime": start_datetime,
             "end_datetime": end_datetime,
-            "description": (
-                "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO"
-            ),
+            "description": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
         },
         assets=assets,
     )
@@ -202,7 +206,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         extent=pystac.Extent(
             temporal=pystac.TemporalExtent([[parse_dt(start_datetime), parse_dt(end_datetime)]]),
             spatial=pystac.SpatialExtent([bbox]),
-        )
+        ),
     )
     col.set_self_href("./examples/collection.json")
     col.add_item(item)
@@ -210,7 +214,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
 
     model_asset = cast(
         FileExtension[pystac.Asset],
-        pystac.extensions.file.FileExtension.ext(assets["model"], add_if_missing=True)
+        pystac.extensions.file.FileExtension.ext(assets["model"], add_if_missing=True),
     )
     model_asset.apply(size=ml_model_size)
 

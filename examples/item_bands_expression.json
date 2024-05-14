@@ -1,0 +1,204 @@
+{
+  "$comment": "Demonstrate the use of MLM and EO for bands description, with EO bands directly in the Model Asset.",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://crim-ca.github.io/mlm-extension/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/file/v1.0.0/schema.json",
+    "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json"
+  ],
+  "type": "Feature",
+  "id": "resnet-18_sentinel-2_all_moco_classification",
+  "collection": "ml-model-examples",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.882190080512502,
+          37.13739173208318
+        ],
+        [
+          -7.882190080512502,
+          58.21798141355221
+        ],
+        [
+          27.911651652899923,
+          58.21798141355221
+        ],
+        [
+          27.911651652899923,
+          37.13739173208318
+        ],
+        [
+          -7.882190080512502,
+          37.13739173208318
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -7.882190080512502,
+    37.13739173208318,
+    27.911651652899923,
+    58.21798141355221
+  ],
+  "properties": {
+    "description": "Sourced from torchgeo python library, identifier is ResNet18_Weights.SENTINEL2_ALL_MOCO",
+    "datetime": null,
+    "start_datetime": "1900-01-01T00:00:00Z",
+    "end_datetime": "9999-12-31T23:59:59Z",
+    "mlm:name": "Resnet-18 Sentinel-2 ALL MOCO",
+    "mlm:tasks": [
+      "classification"
+    ],
+    "mlm:architecture": "ResNet",
+    "mlm:framework": "pytorch",
+    "mlm:framework_version": "2.1.2+cu121",
+    "file:size": 43000000,
+    "mlm:memory_size": 1,
+    "mlm:total_parameters": 11700000,
+    "mlm:pretrained_source": "EuroSat Sentinel-2",
+    "mlm:accelerator": "cuda",
+    "mlm:accelerator_constrained": false,
+    "mlm:accelerator_summary": "Unknown",
+    "mlm:batch_size_suggestion": 256,
+    "mlm:input": [
+      {
+        "name": "RBG+NDVI Bands Sentinel-2 Batch",
+        "bands": [
+          {
+            "name": "B04"
+          },
+          {
+            "name": "B03"
+          },
+          {
+            "name": "B02"
+          },
+          {
+            "name": "NDVI",
+            "format": "rio-calc",
+            "expression": "(B08 - B04) / (B08 + B04)"
+          }
+        ],
+        "input": {
+          "shape": [
+            -1,
+            13,
+            64,
+            64
+          ],
+          "dim_order": [
+            "batch",
+            "channel",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        }
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "classification",
+        "tasks": [
+          "segmentation",
+          "semantic-segmentation"
+        ],
+        "result": {
+          "shape": [
+            -1,
+            10
+          ],
+          "dim_order": [
+            "batch",
+            "class"
+          ],
+          "data_type": "float32"
+        },
+        "classification_classes": [
+          {
+            "value": 1,
+            "name": "vegetation",
+            "title": "Vegetation",
+            "description": "Pixels were vegetation is detected.",
+            "color_hint": "00FF00",
+            "nodata": false
+          },
+          {
+            "value": 0,
+            "name": "background",
+            "title": "Non-Vegetation",
+            "description": "Anything that is not classified as vegetation.",
+            "color_hint": "000000",
+            "nodata": false
+          }
+        ],
+        "post_processing_function": null
+      }
+    ]
+  },
+  "assets": {
+    "weights": {
+      "href": "https://example.com/model-rgb-ndvi.pth",
+      "title": "Pytorch weights checkpoint",
+      "description": "A vegetation classification model trained on Sentinel-2 imagery and NDVI.",
+      "type": "application/octet-stream; application=pytorch",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ],
+      "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
+      "eo:bands": [
+        {
+          "name": "B02",
+          "common_name": "blue",
+          "description": "Blue (band 2)",
+          "center_wavelength": 0.49,
+          "full_width_half_max": 0.098
+        },
+        {
+          "name": "B03",
+          "common_name": "green",
+          "description": "Green (band 3)",
+          "center_wavelength": 0.56,
+          "full_width_half_max": 0.045
+        },
+        {
+          "name": "B04",
+          "common_name": "red",
+          "description": "Red (band 4)",
+          "center_wavelength": 0.665,
+          "full_width_half_max": 0.038
+        },
+        {
+          "name": "B08",
+          "common_name": "nir",
+          "description": "NIR 1 (band 8)",
+          "center_wavelength": 0.842,
+          "full_width_half_max": 0.145
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./item_bands_expression.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "derived_from",
+      "href": "https://earth-search.aws.element84.com/v1/collections/sentinel-2-l2a",
+      "type": "application/json",
+      "ml-aoi:split": "train"
+    }
+  ]
+}
