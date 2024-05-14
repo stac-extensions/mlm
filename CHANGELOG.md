@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (fixes [crim-ca/mlm-extension#7](https://github.com/crim-ca/mlm-extension/discussions/7)).
 
 ### Changed
-- Adds a job to publish.yaml to publish the stac-model package
+- Adds a job to `.github/workflows/publish.yaml` to publish the `stac-model` package to PyPI.
 
 ### Deprecated
 - n/a
