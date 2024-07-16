@@ -53,9 +53,9 @@ connectors, please refer to the [STAC Model](README_STAC_MODEL.md) document.
 > FIXME: update examples 
 
 - Examples:
-  - **Example with a ??? trained with torchgeo** :warning: TODO update example
+  - [Item examples for scene-classification, object detection, and semantic segmentation](https://huggingface.co/rybavery/wherobots-mlm/tree/main): Shows real world use of the extension for describing models in [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/)
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
-- [JSON Schema](json-schema/schema.json) TODO update
+- [JSON Schema](https://crim-ca.github.io/mlm-extension/)
 - [Changelog](./CHANGELOG.md)
 
 ## Item Properties and Collection Fields
