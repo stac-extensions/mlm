@@ -53,7 +53,7 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 > FIXME: update examples
 
 - Examples:
-  - [Item examples](https://huggingface.co/rybavery/wherobots-mlm/tree/main) for scene-classification,
+  - [Item examples](https://huggingface.co/wherobots/mlm-stac) for scene-classification,
       object detection, and semantic segmentation: Shows real world use of the
       extension for describing models run on
       [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/)
