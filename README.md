@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A/badge)](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json](https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json)
+- **Identifier:** <https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json>
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Pilot
@@ -45,18 +45,18 @@ learning approaches, regardless of whether the approach constitutes a deep neura
 It also combines multiple definitions from the predecessor [ML-Model](https://github.com/stac-extensions/ml-model)
 extension to synthesize common use cases into a single reference for Machine Learning Models.
 
-For more details about the [`stac-model`](stac_model) Python package, which provides definitions of the MLM extension
+For more details about the [`stac-model`](./stac_model) Python package, which provides definitions of the MLM extension
 using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
-connectors, please refer to the [STAC Model](README_STAC_MODEL.md) document.
+connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 
 > :warning: <br>
-> FIXME: update examples 
+> FIXME: update examples
 
 - Examples:
-  - [Item examples for scene-classification, object detection, and semantic segmentation]
-  (https://huggingface.co/rybavery/wherobots-mlm/tree/main): Shows real world use of the 
-  extension for describing models in [WherobotsAI Raster Inference](https://wherobots.com/
-  wherobotsai-for-raster-inference/)
+  - [Item examples](https://huggingface.co/rybavery/wherobots-mlm/tree/main) for scene-classification,
+      object detection, and semantic segmentation: Shows real world use of the
+      extension for describing models run on
+      [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/)
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
 - [JSON Schema](https://crim-ca.github.io/mlm-extension/)
 - [Changelog](./CHANGELOG.md)
@@ -76,7 +76,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | Field Name                  | Type                                                          | Description                                                                                                                                                                                                                                                                                 |
 |-----------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | mlm:name                    | string                                                        | **REQUIRED** A name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                    |
-| mlm:architecture            | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 | 
+| mlm:architecture            | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 |
 | mlm:tasks                   | \[[Task Enum](#task-enum)]                                    | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
 | mlm:framework               | string                                                        | Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                   |
 | mlm:framework_version       | string                                                        | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
@@ -88,7 +88,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:accelerator             | [Accelerator Type Enum](#accelerator-type-enum) \| null       | The intended computational hardware that runs inference. If undefined or set to `null` explicitly, the model does not require any specific accelerator.                                                                                                                                     |
 | mlm:accelerator_constrained | boolean                                                       | Indicates if the intended `accelerator` is the only `accelerator` that can run inference. If undefined, it should be assumed `false`.                                                                                                                                                       |
 | mlm:accelerator_summary     | string                                                        | A high level description of the `accelerator`, such as its specific generation, or other relevant inference details.                                                                                                                                                                        |
-| mlm:accelerator_count       | integer                                                       | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      | 
+| mlm:accelerator_count       | integer                                                       | A minimum amount of `accelerator` instances required to run the model.                                                                                                                                                                                                                      |
 | mlm:input                   | \[[Model Input Object](#model-input-object)]                  | **REQUIRED** Describes the transformation between the EO data and the model input.                                                                                                                                                                                                          |
 | mlm:output                  | \[[Model Output Object](#model-output-object)]                | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 | mlm:hyperparameters         | [Model Hyperparameters Object](#model-hyperparameters-object) | Additional hyperparameters relevant for the model.                                                                                                                                                                                                                                          |
@@ -200,7 +200,7 @@ It is recommended to define `accelerator` with one of the following values:
 
 > :warning: <br>
 > If `mlm:accelerator = amd64`, this explicitly indicates that the model does not (and will not try to) use any
-> accelerator, even if some are available from the runtime environment. This is to be distinguished from 
+> accelerator, even if some are available from the runtime environment. This is to be distinguished from
 > the value `mlm:accelerator = null`, which means that the model *could* make use of some accelerators if provided,
 > but is not constrained by any specific one. To improve comprehension by users, it is recommended that any model
 > using `mlm:accelerator = amd64` also set explicitly `mlm:accelerator_constrained = true` to illustrate that the
@@ -232,7 +232,7 @@ what is the expected behavior of the model. It is therefore recommended to provi
 #### Bands and Statistics
 
 Depending on the supported `stac_version` and other `stac_extensions` employed by the STAC Item using MLM,
-the [STAC 1.1 - Band Object][stac-1.1-band], 
+the [STAC 1.1 - Band Object][stac-1.1-band],
 the [STAC Raster - Band Object][stac-raster-band] or
 the [STAC EO - Band Object][stac-eo-band] can be used for
 representing bands information, including notably the `nodata` value,
@@ -340,7 +340,7 @@ Below are some notable common names recommended for use, but others can be emplo
 - `score`
 - `confidence`
 
-For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should 
+For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 #### Normalize Enum
@@ -438,7 +438,7 @@ the following formats are recommended as alternative scripts and function refere
 
 While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
 shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
-appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such 
+appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such
 as for `regression`, `image-captioning`, `super-resolution` and some `generative` tasks, to name a few, the
 `classification:classes` can be omitted.
 
@@ -487,7 +487,7 @@ Following is an example of what the hyperparameters definition could look like:
 | mlm:training    | [Asset Object][stac-asset] | **RECOMMENDED** Information to run the training pipeline of the model being described.    |
 | mlm:inference   | [Asset Object][stac-asset] | **RECOMMENDED** Information to run the inference pipeline of the model being described.   |
 
-It is recommended that the [Assets][stac-asset] defined in a STAC Item using MLM extension use the above field property 
+It is recommended that the [Assets][stac-asset] defined in a STAC Item using MLM extension use the above field property
 names for nesting the Assets in order to improve their quick identification, although the specific names employed are
 left up to user preference. However, the MLM Asset definitions **MUST** include the
 appropriate [MLM Asset Roles](#mlm-asset-roles) to ensure their discovery.
@@ -496,7 +496,7 @@ appropriate [MLM Asset Roles](#mlm-asset-roles) to ensure their discovery.
 
 ### MLM Asset Roles
 
-Asset `roles` should include relevant names that describe them. This does not only include 
+Asset `roles` should include relevant names that describe them. This does not only include
 the [Recommended Asset Roles](https://github.com/radiantearth/stac-spec/blob/master/item-spec/item-spec.md#asset-roles)
 from the core specification, such as `data` or `metadata`, but also descriptors such as `mlm:model`, `mlm:weights` and
 so on, as applicable for the relevant MLM Assets being described. Please refer to the following sections
@@ -687,8 +687,8 @@ for running tests are copied here for convenience.
 
 ### Running tests
 
-The same checks that run as checks on PRs are part of the repository and can be run locally to verify that changes 
-are valid. To run tests locally, you'll need `npm`, which is a standard part of 
+The same checks that run as checks on PRs are part of the repository and can be run locally to verify that changes
+are valid. To run tests locally, you'll need `npm`, which is a standard part of
 any [node.js](https://nodejs.org/en/download/) installation.
 
 First, install everything with npm once. Navigate to the root of this repository and on your command line run:
