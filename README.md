@@ -13,6 +13,35 @@
   - [@ymoisan](https://github.com/ymoisan)
   - [@sfoucher](https://github.com/sfoucher)
 
+## Contributors
+
+<table>
+    <tr>
+        <td><img src="docs/static/crim.png" width="200px" alt="CRIM"></td>
+        <td>
+            <a href="https://www.crim.ca/en/">Computer Research Institute of Montréal</a>
+            <br>
+            <a href="https://www.crim.ca/fr/">Centre de Recherche Informatique de Montréal</a>
+        </td>
+    </tr>
+    <tr>
+        <td><img src="docs/static/wherobots.png" width="200px" alt="Wherobots"></td>
+        <td><a href="https://wherobots.com/">Wherobots</a></td>
+    </tr>
+    <tr>
+        <td><img src="docs/static/nrcan.png" width="200px" alt="NRCan"></td>
+        <td>
+            <a href="https://natural-resources.canada.ca/">Natural Resources Canada</a>
+            <br>
+            <a href="https://natural-resources.canada.ca/research-centres-and-labs/canada-centre-for-mapping-and-earth-observation/25735">
+                Canada Centre for Mapping and Earth Observation (CCMEO)
+            </a>
+        </td>
+    </tr>
+</table>
+
+## Description
+
 The STAC Machine Learning Model (MLM) Extension provides a standard set of fields to describe machine learning models
 trained on overhead imagery and enable running model inference.
 
