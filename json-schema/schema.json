@@ -51,6 +51,10 @@
           "$ref": "#/$defs/stac_extensions_mlm"
         },
         {
+          "$comment": "Schema to validate cross-references of bands between MLM inputs and any 'bands'-compliant section describing them using another STAC definition.",
+          "$ref": "#/$defs/AnyBandsRef"
+        },
+        {
           "$comment": "Schema to validate model role requirement.",
           "$ref": "#/$defs/AssetModelRoleMinimumOneDefinition"
         }
@@ -706,51 +710,44 @@
     },
     "ModelBands": {
       "description": "List of bands (if any) that compose the input. Band order represents the index position of the bands.",
-      "allOf": [
-        {
-          "$comment": "No 'minItems' here to support model inputs not using any band (other data source).",
-          "type": "array",
-          "items": {
-            "oneOf": [
-              {
-                "description": "Implied named-band with the name directly provided.",
+      "$comment": "No 'minItems' here to support model inputs not using any band (other data source).",
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "description": "Implied named-band with the name directly provided.",
+            "type": "string",
+            "minLength": 1
+          },
+          {
+            "description": "Explicit named-band with optional derived expression to obtain it.",
+            "type": "object",
+            "required": [
+              "name"
+            ],
+            "properties": {
+              "name": {
                 "type": "string",
                 "minLength": 1
               },
-              {
-                "description": "Explicit named-band with optional derived expression to obtain it.",
-                "type": "object",
-                "required": [
-                  "name"
-                ],
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "format": {
-                    "description": "Format to interpret the specified expression used to obtain the band.",
-                    "type": "string",
-                    "minLength": 1
-                  },
-                  "expression": {
-                    "description": "Any representation relevant for the specified 'format'."
-                  }
-                },
-                "dependencies": {
-                  "format": ["expression"],
-                  "expression": ["format"]
-                },
-                "additionalProperties": false
+              "format": {
+                "description": "Format to interpret the specified expression used to obtain the band.",
+                "type": "string",
+                "minLength": 1
+              },
+              "expression": {
+                "description": "Any representation relevant for the specified 'format'.",
+                "type": {}
               }
-            ]
+            },
+            "dependencies": {
+              "format": ["expression"],
+              "expression": ["format"]
+            },
+            "additionalProperties": false
           }
-        },
-        {
-          "$comment": "However, if any band is indicated, a 'bands'-compliant section should describe them.",
-          "$ref": "#/$defs/AnyBandsRef"
-        }
-      ]
+        ]
+      }
     },
     "AnyBandsRef": {
       "$comment": "This definition ensures that, if at least 1 named MLM input 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well. Otherwise, 'bands' must be explicitly empty.",
