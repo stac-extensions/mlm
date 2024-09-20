@@ -78,9 +78,6 @@ For more details about the [`stac-model`](./stac_model) Python package, which pr
 using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
 connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 
-> :warning: <br>
-> FIXME: update examples
-
 - Examples:
   - [Item examples](https://huggingface.co/wherobots/mlm-stac) for scene-classification,
       object detection, and semantic segmentation: Shows real world use of the
