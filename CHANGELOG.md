@@ -8,16 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
-- n/a
+- Add `AnyBandsRef` definition explicitly to STAC *Item* JSON schema, rather than implicitly inferred via ``mlm:input``.
 
 ### Changed
-- n/a
+- Split `ModelBands` and `AnyBandsRef` definitions in the JSON schema to allow them to be referenced individually.
 
 ### Deprecated
 - n/a
 
 ### Removed
-- n/a
+- Removed `$comment` entries from the JSON schema that are considered as invalid by some parsers.
 
 ### Fixed
 - n/a
