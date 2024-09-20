@@ -736,8 +736,7 @@
                 "minLength": 1
               },
               "expression": {
-                "description": "Any representation relevant for the specified 'format'.",
-                "type": {}
+                "description": "Any representation relevant for the specified 'format'."
               }
             },
             "dependencies": {
