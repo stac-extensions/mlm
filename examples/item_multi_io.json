@@ -43,7 +43,7 @@
     58.21798141355221
   ],
   "properties": {
-    "description": "Generic model that employs multiple input sources with different combination of bands.",
+    "description": "Generic model that employs multiple input sources with different combination of bands, and some inputs without any band at all.",
     "datetime": null,
     "start_datetime": "1900-01-01T00:00:00Z",
     "end_datetime": "9999-12-31T23:59:59Z",
@@ -216,48 +216,6 @@
           "expression": "logical_not(A)"
         }
       }
-    ],
-    "raster:bands": [
-      {
-        "name": "B02 - blue",
-        "nodata": 0,
-        "data_type": "uint16",
-        "bits_per_sample": 15,
-        "spatial_resolution": 10,
-        "scale": 0.0001,
-        "offset": 0,
-        "unit": "m"
-      },
-      {
-        "name": "B03 - green",
-        "nodata": 0,
-        "data_type": "uint16",
-        "bits_per_sample": 15,
-        "spatial_resolution": 10,
-        "scale": 0.0001,
-        "offset": 0,
-        "unit": "m"
-      },
-      {
-        "name": "B04 - red",
-        "nodata": 0,
-        "data_type": "uint16",
-        "bits_per_sample": 15,
-        "spatial_resolution": 10,
-        "scale": 0.0001,
-        "offset": 0,
-        "unit": "m"
-      },
-      {
-        "name": "B08 - nir",
-        "nodata": 0,
-        "data_type": "uint16",
-        "bits_per_sample": 15,
-        "spatial_resolution": 10,
-        "scale": 0.0001,
-        "offset": 0,
-        "unit": "m"
-      }
     ]
   },
   "assets": {
@@ -269,6 +227,48 @@
       "roles": [
         "mlm:model",
         "mlm:weights"
+      ],
+      "raster:bands": [
+        {
+          "name": "B02 - blue",
+          "nodata": 0,
+          "data_type": "uint16",
+          "bits_per_sample": 15,
+          "spatial_resolution": 10,
+          "scale": 0.0001,
+          "offset": 0,
+          "unit": "m"
+        },
+        {
+          "name": "B03 - green",
+          "nodata": 0,
+          "data_type": "uint16",
+          "bits_per_sample": 15,
+          "spatial_resolution": 10,
+          "scale": 0.0001,
+          "offset": 0,
+          "unit": "m"
+        },
+        {
+          "name": "B04 - red",
+          "nodata": 0,
+          "data_type": "uint16",
+          "bits_per_sample": 15,
+          "spatial_resolution": 10,
+          "scale": 0.0001,
+          "offset": 0,
+          "unit": "m"
+        },
+        {
+          "name": "B08 - nir",
+          "nodata": 0,
+          "data_type": "uint16",
+          "bits_per_sample": 15,
+          "spatial_resolution": 10,
+          "scale": 0.0001,
+          "offset": 0,
+          "unit": "m"
+        }
       ]
     }
   },

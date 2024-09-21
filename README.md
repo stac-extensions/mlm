@@ -224,13 +224,17 @@ It is recommended to define `accelerator` with one of the following values:
 - `intel-ipex-gpu` for models optimized with IPEX for Intel GPUs
 - `macos-arm` for models trained on Apple Silicon
 
-> :warning: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
 > If `mlm:accelerator = amd64`, this explicitly indicates that the model does not (and will not try to) use any
 > accelerator, even if some are available from the runtime environment. This is to be distinguished from
 > the value `mlm:accelerator = null`, which means that the model *could* make use of some accelerators if provided,
 > but is not constrained by any specific one. To improve comprehension by users, it is recommended that any model
 > using `mlm:accelerator = amd64` also set explicitly `mlm:accelerator_constrained = true` to illustrate that the
 > model **WILL NOT** use accelerators, although the hardware resolution should be identical nonetheless.
+
+<!-- lint enable no-undefined-references -->
 
 When `mlm:accelerator = null` is employed, the value of `mlm:accelerator_constrained` can be ignored, since even if
 set to `true`, there would be no `accelerator` to contain against. To avoid confusion, it is suggested to set the
@@ -265,7 +269,15 @@ representing bands information, including notably the `nodata` value,
 the `data_type` (see also [Data Type Enum](#data-type-enum)),
 and [Common Band Names][stac-band-names].
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
+> Only versions `v1.x` of `eo` and `raster` are supported to provide `mlm:input` band references.
+> Versions `2.x` of those extensions rely on the [STAC 1.1 - Band Object][stac-1.1-band] instead.
+> If those versions are desired, consider migrating your MLM definition to use [STAC 1.1 - Band Object][stac-1.1-band]
+> as well for referencing `mlm:input` with band names.
+
+> [!NOTE]
 > Due to how the schema for [`eo:bands`][stac-eo-band] is defined, it is not sufficient to *only* provide
 > the `eo:bands` property at the STAC Item level. The schema validation of the EO extension explicitly looks
 > for a corresponding set of bands under an Asset, and if none is found, it disallows `eo:bands` in the Item properties.
@@ -273,12 +285,21 @@ and [Common Band Names][stac-band-names].
 > (see [Model Asset](#model-asset)), or define them *both* under the Asset and Item properties. If the second
 > approach is selected, it is recommended that the `eo:bands` under the Asset contains only the `name` or the
 > `common_name` property, such that all other details about the bands are defined at the Item level.
+> An example of such representation is provided in
+> [examples/item_eo_bands_summarized.json](examples/item_eo_bands_summarized.json).
+> <br><br>
+> For an example where `eo:bands` are entirely defined in the Asset on their own, please refer to
+> [examples/item_eo_bands.json](examples/item_eo_bands.json) instead.
 > <br><br>
 > For more details, refer to [stac-extensions/eo#12](https://github.com/stac-extensions/eo/issues/12).
 > <br>
-> For an example, please refer to [examples/item_eo_bands.json](examples/item_eo_bands.json).
-> Notably in this example, the `assets.weights.eo:bands` property provides the `name` to fulfill the Asset requirement,
-> while all additional band details are provided in `properties.eo:bands`.
+
+> [!NOTE]
+> When using `raster:bands`, and additional `name` parameter **MUST** be provided for each band. This parameter
+> is not defined in `raster` extension itself, but is permitted. This addition is required to ensure
+> that `mlm:input` bands referenced by name can be associated to their respective `raster:bands` definitions.
+
+<!-- lint enable no-undefined-references -->
 
 Only bands used as input to the model should be included in the MLM `bands` field.
 To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
@@ -294,12 +315,12 @@ to normalize all bands, rather than normalizing the values over a single product
 applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
 properties of the model.
 
-[stac-1.1-band]: https://github.com/radiantearth/stac-spec/pull/1254
-[stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#statistics-object
-[stac-eo-band]: https://github.com/stac-extensions/eo?tab=readme-ov-file#band-object
-[stac-raster-band]: https://github.com/stac-extensions/raster?tab=readme-ov-file#raster-band-object
-[stac-raster-stats]: https://github.com/stac-extensions/raster?tab=readme-ov-file#statistics-object
-[stac-band-names]: https://github.com/stac-extensions/eo?tab=readme-ov-file#common-band-names
+[stac-1.1-band]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#bands
+[stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#statistics-object
+[stac-eo-band]: https://github.com/stac-extensions/eo/tree/v1.1.0#band-object
+[stac-raster-band]: https://github.com/stac-extensions/raster/tree/v1.1.0#raster-band-object
+[stac-raster-stats]: https://github.com/stac-extensions/raster/tree/v1.1.0#statistics-object
+[stac-band-names]: https://github.com/stac-extensions/eo#common-band-names
 
 #### Model Band Object
 
@@ -309,9 +330,13 @@ properties of the model.
 | format     | string | The type of expression that is specified in the `expression` property.                                                                 |
 | expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given. |
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
 > Although `format` and `expression` are not required in this context, they are mutually dependent on each other. <br>
 > See also [Processing Expression](#processing-expression) for more details and examples.
+
+<!-- lint enable no-undefined-references -->
 
 The `format` and `expression` properties can serve multiple purpose.
 
@@ -441,13 +466,17 @@ the following formats are recommended as alternative scripts and function refere
 | `docker` | string | An URI with image and tag to a Docker. | `ghcr.io/NAMESPACE/IMAGE_NAME:latest`                                                                |
 | `uri`    | string | An URI to some binary or script.       | `{"href": "https://raw.githubusercontent.com/ORG/REPO/TAG/package/cli.py", "type": "text/x-python"}` |
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
 > Above definitions are only indicative, and more can be added as desired with even more custom definitions.
 > It is left as an implementation detail for users to resolve how these expressions should be handled at runtime.
 
-> :warning: <br>
+> [!WARNING]
 > See also discussion regarding additional processing expressions:
 > [stac-extensions/processing#31](https://github.com/stac-extensions/processing/issues/31)
+
+<!-- lint enable no-undefined-references -->
 
 [stac-proc-expr]: https://github.com/stac-extensions/processing#expression-object
 
@@ -543,9 +572,13 @@ In order to provide more context, the following roles are also recommended were 
 | mlm:model                 | `model`                 | Required role for [Model Asset](#model-asset).                                           |
 | mlm:source_code           | `code`                  | Required role for [Model Asset](#source-code-asset).                                     |
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
 > (*) These roles are offered as direct conversions from the previous extension
 > that provided [ML-Model Asset Roles][ml-model-asset-roles] to provide easier upgrade to the MLM extension.
+
+<!-- lint enable no-undefined-references -->
 
 [ml-model-asset-roles]: https://github.com/stac-extensions/ml-model?tab=readme-ov-file#asset-objects
 

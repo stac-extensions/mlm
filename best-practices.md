@@ -41,13 +41,17 @@ could include the bbox of "the world" `[-90, -180, 90, 180]` and the `start_date
 would ideally be generic values like `["1900-01-01T00:00:00Z", null]` (see warning below).
 However, due to limitations with the STAC 1.0 specification, this time extent is not applicable.
 
-> :warning: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
 > The `null` value is not allowed for datetime specification.
 > As a workaround, the `end_datetime` can be set with a "very large value"
 > (similarly to `start_datetime` set with a small value), such as `"9999-12-31T23:59:59Z"`.
 > Alternatively, the model can instead be described with only `datetime` corresponding to its publication date.
 > <br><br>
 > For more details, see the following [discussion](https://github.com/radiantearth/stac-spec/issues/1268).
+
+<!-- lint enable no-undefined-references -->
 
 It is to be noted that generic and very broad spatiotemporal
 extents like above rarely reflect the reality regarding the capabilities and precision of the model to predict reliable
@@ -187,8 +191,12 @@ MLM definition to indicate which class values can be contained in the resulting 
 
 For more details, see the [Model Output Object](README.md#model-output-object) definition.
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
 > Update according to [stac-extensions/classification#48](https://github.com/stac-extensions/classification/issues/48).
+
+<!-- lint enable no-undefined-references -->
 
 ### Scientific Extension
 
@@ -252,8 +260,12 @@ inference strategies to apply a model should define the [Source Code Asset](READ
 This code is in itself ideal to guide users how to run it, and should therefore be replicated as an `example` link
 reference to offer more code samples to execute the model.
 
-> :information_source: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
 > Update according to [stac-extensions/example-links#4](https://github.com/stac-extensions/example-links/issues/4).
+
+<!-- lint enable no-undefined-references -->
 
 ### Version Extension
 

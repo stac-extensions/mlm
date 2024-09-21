@@ -19,7 +19,7 @@ make install-dev
 make pre-commit-install
 ```
 
-## PR submittion
+## PR submission
 
 Before submitting your code please do the following steps:
 
@@ -41,7 +41,7 @@ make lint-all
 make test
 ```
 
-5. Upload your changes to your fork, then make a PR from there to the main repo:
+6. Upload your changes to your fork, then make a PR from there to the main repo:
 
 ```bash
 git checkout -b your-branch
@@ -53,10 +53,14 @@ git push -u origin your-branch
 
 ## Building and releasing
 
-> :warning: <br>
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
 > There are multiple types of releases for this repository: <br>
 > 1. Release for MLM specification (usually, this should include one for `stac-model` as well to support it)
 > 2. Release for `stac-model` only
+
+<!-- lint enable no-undefined-references -->
 
 ### Building a new version of MLM specification
 
@@ -69,9 +73,14 @@ git push -u origin your-branch
 - Make a commit to `GitHub` and push the corresponding auto-generated `v{MAJOR}.{MINOR}.{PATCH}` tag.
 - Validate that the CI validated everything once again.
 - Create a `GitHub release` with the created tag.
-  > :warning: <br>
-  > - Ensure the "Set as the latest release" option is selected :heavy_check_mark:.
-  > - Ensure the diff ranges from the previous MLM version, and not an intermediate `stac-model` release.
+
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
+> - Ensure the "Set as the latest release" option is selected :heavy_check_mark:.
+> - Ensure the diff ranges from the previous MLM version, and not an intermediate `stac-model` release.
+
+<!-- lint enable no-undefined-references -->
 
 ### Building a new version of `stac-model`
 
@@ -83,9 +92,14 @@ git push -u origin your-branch
 - Checkout to `main` branch that contais the freshly created merge commit.
 - Push the tag `stac-model-v{MAJOR}.{MINOR}.{PATCH}`. The CI should auto-publish it to PyPI.
 - Create a `GitHub release`
-  > :warning: <br>
-  > - Ensure the "Set as the latest release" option is deselected :x:.
-  > - Ensure the diff ranges from the previous release of `stac-model`, not an intermediate MLM release.
+
+<!-- lint disable no-undefined-references -->
+
+> [!WARNING]
+> - Ensure the "Set as the latest release" option is deselected :x:.
+> - Ensure the diff ranges from the previous release of `stac-model`, not an intermediate MLM release.
+
+<!-- lint enable no-undefined-references -->
 
 ## Other help
 
@@ -93,7 +107,7 @@ You can contribute by spreading a word about this library.
 It would also be a huge contribution to write
 a short article on how you are using this project.
 You can also share how the ML Model extension does or does
-not serve your needs with us in the Github Discussions or raise
+not serve your needs with us in the GitHub Discussions or raise
 Issues for bugs.
 
 [poetry-install]: https://github.com/python-poetry/install.python-poetry.org

@@ -8,19 +8,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
-- Add `AnyBandsRef` definition explicitly to STAC *Item* JSON schema, rather than implicitly inferred via ``mlm:input``.
+- Add `raster:bands` required property `name` for describing `mlm:input` bands
+  (see [README - Bands and Statistics](README.md#bands-and-statistics) for details).
+- Add README warnings about new extension `eo` and `raster` versions.
 
 ### Changed
 - Split `ModelBands` and `AnyBandsRef` definitions in the JSON schema to allow them to be referenced individually.
+- Move `AnyBandsRef` definition explicitly to STAC Item JSON schema, rather than implicitly inferred via `mlm:input`.
+- Modified the JSON schema to use a `if` check of the `type` (STAC Item or Collection) prior to validating further
+  properties. This allows some validators (e.g. `pystac`) to better report the *real* error that causes the schema
+  to fail, rather than reporting the first mismatching `type` case with a poor error description to debug the issue.
 
 ### Deprecated
 - n/a
 
 ### Removed
 - Removed `$comment` entries from the JSON schema that are considered as invalid by some parsers.
+- When `mlm:input` objects do **NOT** define band references (i.e.: `bands: []` is used), the JSON schema will not
+  fail if an Asset with the `mlm:model` role contains a band definition. This is to allow MLM model definitions to
+  simultaneously use some inputs with `bands` reference names while others do not.
 
 ### Fixed
-- n/a
+- Band checks against [`eo`](https://github.com/stac-extensions/eo), [`raster`](https://github.com/stac-extensions/eo)
+  or STAC Core 1.1 [`bands`](https://github.com/radiantearth/stac-spec/blob/master/commons/common-metadata.md#bands)
+  when a `mlm:input` references names in `bands` are now properly validated.
+- Fix the examples using `raster:bands` incorrectly defined in STAC Item properties.
+  The correct use is for them to be defined under the STAC Asset using the `mlm:model` role.
+- Fix the [EuroSAT ResNet pydantic example](./stac_model/examples.py) that incorrectly referenced some `bands`
+  in its `mlm:input` definition without providing any definition of those bands. The `eo:bands` properties have
+  been added to the corresponding `model` Asset using
+  the [`pystac.extensions.eo`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/eo.py) utilities.
+- Fix various STAC Asset definitions erroneously employing `mlm:model` role instead of the intended `mlm:source_code`. 
 
 ## [v1.2.0](https://github.com/crim-ca/mlm-extension/tree/v1.2.0)
 
