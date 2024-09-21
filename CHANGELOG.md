@@ -38,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in its `mlm:input` definition without providing any definition of those bands. The `eo:bands` properties have
   been added to the corresponding `model` Asset using
   the [`pystac.extensions.eo`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/eo.py) utilities.
-- Fix various STAC Asset definitions erroneously employing `mlm:model` role instead of the intended `mlm:source_code`. 
+- Fix various STAC Asset definitions erroneously employing `mlm:model` role instead of the intended `mlm:source_code`.
 
 ## [v1.2.0](https://github.com/crim-ca/mlm-extension/tree/v1.2.0)
 
