@@ -847,7 +847,10 @@
             "properties": {
               "mlm:input": {
                 "type": "array",
+                "$comment": "Below 'minItems' ensures that band check does not fail for explicitly empty 'mlm:inputs'.",
+                "minItems": 1,
                 "items": {
+                  "type": "object",
                   "required": [
                     "bands"
                   ],
