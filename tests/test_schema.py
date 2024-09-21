@@ -41,7 +41,7 @@ def test_mlm_missing_bands_invalid_if_mlm_input_lists_bands(
 
     mlm_bands_bad_data = copy.deepcopy(mlm_example)
     mlm_bands_bad_data["assets"]["weights"].pop("raster:bands")  # type: ignore  # no 'None' to raise in case modified
-    with pytest.raises(pystac.errors.STACValidationError) as err:
+    with pytest.raises(pystac.errors.STACValidationError):
         mlm_bands_bad_item = pystac.Item.from_dict(mlm_bands_bad_data)
         pystac.validation.validate(mlm_bands_bad_item, validator=mlm_validator)
 

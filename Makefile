@@ -1,7 +1,8 @@
 #* Variables
-SHELL := /usr/bin/env bash
-PYTHON := python
+SHELL ?= /usr/bin/env bash
+PYTHON ?= python
 PYTHONPATH := `pwd`
+POETRY ?= poetry
 
 #* Poetry
 .PHONY: poetry-install
@@ -14,36 +15,36 @@ poetry-remove:
 
 .PHONY: poetry-plugins
 poetry-plugins:
-	poetry self add poetry-plugin-up
+	$(POETRY) self add poetry-plugin-up
 
 .PHONY: poetry-env
 poetry-env:
-	poetry config virtualenvs.in-project true
+	$(POETRY) config virtualenvs.in-project true
 
 .PHONY: publish
 publish:
-	poetry publish --build
+	$(POETRY) publish --build
 
 #* Installation
 .PHONY: install
 install: poetry-env
-	poetry lock -n && poetry export --without-hashes > requirements-lock.txt
-	poetry install -n
+	$(POETRY) lock -n && poetry export --without-hashes > requirements-lock.txt
+	$(POETRY) install -n
 	-poetry run mypy --install-types --non-interactive ./
 
 .PHONY: install-dev
 install-dev: poetry-env install
-	poetry install -n --with dev
+	$(POETRY) install -n --with dev
 
 .PHONY: pre-commit-install
 pre-commit-install:
-	poetry run pre-commit install
+	$(POETRY) run pre-commit install
 
 
 #* Formatters
 .PHONY: codestyle
 codestyle:
-	poetry run ruff format --config=pyproject.toml stac_model tests
+	$(POETRY) run ruff format --config=pyproject.toml stac_model tests
 
 .PHONY: format
 format: codestyle
@@ -61,29 +62,29 @@ check-all: check
 
 .PHONY: mypy
 mypy:
-	poetry run mypy --config-file pyproject.toml ./
+	$(POETRY) run mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
 check-mypy: mypy
 
 .PHONY: check-safety
 check-safety:
-	poetry check
-	poetry run safety check --full-report
-	poetry run bandit -ll --recursive stac_model tests
+	$(POETRY) check
+	$(POETRY) run safety check --full-report
+	$(POETRY) run bandit -ll --recursive stac_model tests
 
 .PHONY: lint
 lint:
-	poetry run ruff --config=pyproject.toml ./
-	poetry run pydocstyle --count --config=pyproject.toml ./
-	poetry run pydoclint --config=pyproject.toml ./
+	$(POETRY) run ruff --config=pyproject.toml ./
+	$(POETRY) run pydocstyle --count --config=pyproject.toml ./
+	$(POETRY) run pydoclint --config=pyproject.toml ./
 
 .PHONY: check-lint
 check-lint: lint
 
 .PHONY: format-lint
 format-lint:
-	poetry run ruff --config=pyproject.toml --fix ./
+	$(POETRY) run ruff --config=pyproject.toml --fix ./
 
 .PHONY: install-npm
 install-npm:
@@ -113,7 +114,7 @@ lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps:
-	poetry up --only=dev-dependencies --latest
+	$(POETRY) up --only=dev-dependencies --latest
 
 #* Cleaning
 .PHONY: pycache-remove

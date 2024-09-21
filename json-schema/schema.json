@@ -8,7 +8,9 @@
     {
       "$comment": "This is the schema for STAC extension MLM in Items.",
       "if": {
-        "required": ["type"],
+        "required": [
+          "type"
+        ],
         "properties": {
           "type": {
             "const": "Feature"
@@ -70,7 +72,9 @@
     {
       "$comment": "This is the schema for STAC extension MLM in Collections.",
       "if": {
-        "required": ["type"],
+        "required": [
+          "type"
+        ],
         "properties": {
           "type": {
             "const": "Collection"
@@ -143,7 +147,9 @@
       "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Item field named 'properties' containing 'eo:bands' as described in [https://github.com/stac-extensions/eo#item-properties-or-asset-fields].",
       "properties": {
         "properties": {
-          "required": ["eo:bands"],
+          "required": [
+            "eo:bands"
+          ],
           "properties": {
             "eo:bands": {
               "type": "array",
@@ -157,7 +163,9 @@
       }
     },
     "stac_extensions_eo_bands_asset": {
-      "required": ["assets"],
+      "required": [
+        "assets"
+      ],
       "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Asset containing 'eo:bands' as described in [https://github.com/stac-extensions/eo#item-properties-or-asset-fields].",
       "properties": {
         "assets": {
@@ -166,7 +174,9 @@
               "$ref": "#/$defs/AssetModelRole"
             },
             "then": {
-              "required": ["eo:bands"],
+              "required": [
+                "eo:bands"
+              ],
               "properties": {
                 "eo:bands": {
                   "type": "array",
@@ -197,7 +207,9 @@
       }
     },
     "stac_extensions_raster_bands_asset": {
-      "required": ["assets"],
+      "required": [
+        "assets"
+      ],
       "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Item at least one Asset field containing 'raster:bands' as described in [https://github.com/stac-extensions/raster/tree/v1.1.0#item-asset-fields].",
       "properties": {
         "assets": {
@@ -216,7 +228,9 @@
                   "items": {
                     "$comment": "Raster extension does not explicitly indicate a 'name', but one is needed for MLM.",
                     "type": "object",
-                    "required": ["name"],
+                    "required": [
+                      "name"
+                    ],
                     "properties": {
                       "name": {
                         "type": "string",
@@ -408,7 +422,9 @@
         "properties": {
           "properties": {
             "$comment": "This is the JSON-object 'properties' definition for the STAC MLM pretraining reference.",
-            "required": ["mlm:pretrained_source"],
+            "required": [
+              "mlm:pretrained_source"
+            ],
             "properties": {
               "mlm:pretrained_source": {
                 "const": null
@@ -760,7 +776,9 @@
       ]
     },
     "AssetModelRole": {
-      "required": ["roles"],
+      "required": [
+        "roles"
+      ],
       "properties": {
         "roles": {
           "contains": {
@@ -802,8 +820,12 @@
               }
             },
             "dependencies": {
-              "format": ["expression"],
-              "expression": ["format"]
+              "format": [
+                "expression"
+              ],
+              "expression": [
+                "format"
+              ]
             },
             "additionalProperties": false
           }
