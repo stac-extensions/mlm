@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
 
 ### Added
+- n/a
+
+### Changed
+- n/a
+
+### Deprecated
+- n/a
+
+### Removed
+- n/a
+
+### Fixed
+- n/a
+
+## [v1.3.0](https://github.com/crim-ca/mlm-extension/tree/v1.3.0)
+
+### Added
 - Add `raster:bands` required property `name` for describing `mlm:input` bands
   (see [README - Bands and Statistics](README.md#bands-and-statistics) for details).
 - Add README warnings about new extension `eo` and `raster` versions.

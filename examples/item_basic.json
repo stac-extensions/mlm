@@ -1,7 +1,7 @@
 {
   "stac_version": "1.0.0",
   "stac_extensions": [
-    "https://crim-ca.github.io/mlm-extension/v1.2.0/schema.json"
+    "https://crim-ca.github.io/mlm-extension/v1.3.0/schema.json"
   ],
   "type": "Feature",
   "id": "example-model",
