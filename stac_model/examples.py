@@ -3,6 +3,7 @@ from typing import cast
 import pystac
 import shapely
 from dateutil.parser import parse as parse_dt
+from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
@@ -134,7 +135,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
             href="https://github.com/microsoft/torchgeo/blob/61efd2e2c4df7ebe3bd03002ebbaeaa3cfe9885a/torchgeo/models/resnet.py#L207",
             media_type="text/x-python",
             roles=[
-                "mlm:model",
+                "mlm:source_code",
                 "code",
             ],
         ),
@@ -214,9 +215,23 @@ def eurosat_resnet() -> ItemMLModelExtension:
 
     model_asset = cast(
         FileExtension[pystac.Asset],
-        pystac.extensions.file.FileExtension.ext(assets["model"], add_if_missing=True),
+        FileExtension.ext(assets["model"], add_if_missing=True),
     )
     model_asset.apply(size=ml_model_size)
+
+    eo_model_asset = cast(
+        EOExtension[pystac.Asset],
+        EOExtension.ext(assets["model"], add_if_missing=True),
+    )
+    # NOTE:
+    #  typically, it is recommended to add as much details as possible for the band description
+    #  minimally, the names (which are well-known for sentinel-2) are sufficient
+    eo_bands = []
+    for name in band_names:
+        band = Band({})
+        band.apply(name=name)
+        eo_bands.append(band)
+    eo_model_asset.apply(bands=eo_bands)
 
     item_mlm = MLModelExtension.ext(item, add_if_missing=True)
     item_mlm.apply(ml_model_meta.model_dump(by_alias=True, exclude_unset=True, exclude_defaults=True))

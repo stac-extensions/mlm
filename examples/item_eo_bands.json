@@ -374,7 +374,7 @@
       "description": "Source code to run the model.",
       "type": "text/x-python",
       "roles": [
-        "mlm:model",
+        "mlm:source_code",
         "code",
         "metadata"
       ]

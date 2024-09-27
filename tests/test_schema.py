@@ -29,6 +29,25 @@ def test_mlm_schema(
 
 @pytest.mark.parametrize(
     "mlm_example",
+    ["item_raster_bands.json"],
+    indirect=True,
+)
+def test_mlm_missing_bands_invalid_if_mlm_input_lists_bands(
+    mlm_validator: STACValidator,
+    mlm_example: Dict[str, JSON],
+) -> None:
+    mlm_item = pystac.Item.from_dict(mlm_example)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    mlm_bands_bad_data = copy.deepcopy(mlm_example)
+    mlm_bands_bad_data["assets"]["weights"].pop("raster:bands")  # type: ignore  # no 'None' to raise in case modified
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_bands_bad_item = pystac.Item.from_dict(mlm_bands_bad_data)
+        pystac.validation.validate(mlm_bands_bad_item, validator=mlm_validator)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
     ["item_eo_bands_summarized.json"],
     indirect=True,
 )
@@ -40,7 +59,7 @@ def test_mlm_eo_bands_invalid_only_in_item_properties(
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
     mlm_eo_bands_bad_data = copy.deepcopy(mlm_example)
-    mlm_eo_bands_bad_data["assets"]["weights"].pop("eo:bands")  # type: ignore
+    mlm_eo_bands_bad_data["assets"]["weights"].pop("eo:bands")  # type: ignore  # no 'None' to raise in case modified
     with pytest.raises(pystac.errors.STACValidationError):
         mlm_eo_bands_bad_item = pystac.Item.from_dict(mlm_eo_bands_bad_data)
         pystac.validation.validate(mlm_eo_bands_bad_item, validator=mlm_validator)
@@ -61,7 +80,7 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     pystac.validation.validate(mlm_item, validator=mlm_validator)
 
     with pytest.raises(pystac.errors.STACValidationError):
-        mlm_data["properties"].pop("mlm:input")  # type: ignore
+        mlm_data["properties"].pop("mlm:input")  # type: ignore  # no 'None' to raise in case modified
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
 
