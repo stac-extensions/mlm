@@ -1,6 +1,6 @@
 # Machine Learning Model Extension Specification
 
-[![hackmd-github-sync-badge](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A/badge)](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A?both)
+[![hackmd-github-sync-badge](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA/badge)](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA?both)
 
 - **Title:** Machine Learning Model Extension
 - **Identifier:** [https://stac-extensions.github.io/mlm/v1.3.0/schema.json](https://stac-extensions.github.io/mlm/v1.3.0/schema.json)
