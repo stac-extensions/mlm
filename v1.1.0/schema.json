@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://crim-ca.github.io/mlm-extension/v1.1.0/schema.json",
+  "$id": "https://stac-extensions/mlm/v1.1.0/schema.json",
   "title": "Machine Learning Model STAC Extension Schema",
   "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
   "oneOf": [
@@ -97,7 +97,7 @@
         "stac_extensions": {
           "type": "array",
           "contains": {
-            "const": "https://crim-ca.github.io/mlm-extension/v1.1.0/schema.json"
+            "const": "https://stac-extensions/mlm/v1.1.0/schema.json"
           }
         }
       }
