@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
+## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
 - n/a
@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - n/a
 
-## [v1.3.0](https://github.com/crim-ca/mlm-extension/tree/v1.3.0)
+## [v1.3.0](https://github.com/stac-extensions/mlm/tree/v1.3.0)
 
 ### Added
 - Add `raster:bands` required property `name` for describing `mlm:input` bands
@@ -57,13 +57,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the [`pystac.extensions.eo`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/eo.py) utilities.
 - Fix various STAC Asset definitions erroneously employing `mlm:model` role instead of the intended `mlm:source_code`.
 
-## [v1.2.0](https://github.com/crim-ca/mlm-extension/tree/v1.2.0)
+## [v1.2.0](https://github.com/stac-extensions/mlm/tree/v1.2.0)
 
 ### Added
 - Add the missing JSON schema `item_assets` definition under a Collection to ensure compatibility with
   the [Item Assets](https://github.com/stac-extensions/item-assets) extension, as mentioned this specification.
 - Add `ModelBand` representation using `name`, `format` and `expression` properties to allow derived band references
-  (fixes [crim-ca/mlm-extension#7](https://github.com/crim-ca/mlm-extension/discussions/7)).
+  (fixes [crim-ca/mlm-extension#7](https://github.com/stac-extensions/mlm/discussions/7)).
 
 ### Changed
 - Adds a job to `.github/workflows/publish.yaml` to publish the `stac-model` package to PyPI.
@@ -82,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Although the role requirement was validated, the definition did not allow for other Assets without it to exist.
 - Correct `stac-model` version in code and publish matching release on PyPI.
 
-## [v1.1.0](https://github.com/crim-ca/mlm-extension/tree/v1.1.0)
+## [v1.1.0](https://github.com/stac-extensions/mlm/tree/v1.1.0)
 
 ### Added
 - Add pattern for `mlm:framework`, needing at least one alphanumeric character,
@@ -106,7 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This is not fundamentally wrong, but it did not allow to validate the `eo` extension use case properly, since
   the `raster:bands` reference caused a bypass for the `mlm:input[*].bands` to succeed validation.
 
-## [v1.0.0](https://github.com/crim-ca/mlm-extension/tree/v1.0.0)
+## [v1.0.0](https://github.com/stac-extensions/mlm/tree/v1.0.0)
 
 ### Added
 - more [Task Enum](README.md#task-enum) tasks

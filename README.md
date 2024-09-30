@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A/badge)](https://hackmd.io/N1cWyDM2S9eaAQtSvS0J_A?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://crim-ca.github.io/mlm-extension/v1.3.0/schema.json](https://crim-ca.github.io/mlm-extension/v1.3.0/schema.json)
+- **Identifier:** [https://stac-extensions.github.io/mlm/v1.3.0/schema.json](https://stac-extensions.github.io/mlm/v1.3.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Pilot
@@ -84,7 +84,7 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
       extension for describing models run on
       [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/)
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
-- [JSON Schema](https://crim-ca.github.io/mlm-extension/)
+- [JSON Schema](https://stac-extensions.github.io/mlm/)
 - [Changelog](./CHANGELOG.md)
 
 ## Item Properties and Collection Fields
