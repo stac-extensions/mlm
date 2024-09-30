@@ -67,34 +67,34 @@ See [LICENSE][blic2] for more details.
 [bp1]: https://img.shields.io/pypi/pyversions/stac-model?style=for-the-badge
 [bp2]: https://pypi.org/project/stac-model/
 [bp3]: https://img.shields.io/pypi/v/stac-model?style=for-the-badge&logo=pypi&color=3775a9
-[bp4]: https://github.com/crim-ca/mlm-extension
-[bp5]: https://github.com/crim-ca/mlm-extension/releases
+[bp4]: https://github.com/stac-extensions/mlm
+[bp5]: https://github.com/stac-extensions/mlm/releases
 [bp6]: https://img.shields.io/badge/made%20with-galactipy%20%F0%9F%8C%8C-179287?style=for-the-badge&labelColor=193A3E
 [bp7]: https://kutt.it/7fYqQl
 [bp8]: https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=for-the-badge
-[bp9]: https://github.com/crim-ca/mlm-extension/blob/main/CONTRIBUTING.md
+[bp9]: https://github.com/stac-extensions/mlm/blob/main/CONTRIBUTING.md
 [bp11]: https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json&style=for-the-badge
 [bp12]: https://python-poetry.org/
 
 [bp15]: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
-[bp16]: https://github.com/crim-ca/mlm-extension/blob/main/.pre-commit-config.yaml
+[bp16]: https://github.com/stac-extensions/mlm/blob/main/.pre-commit-config.yaml
 
-[blic1]: https://img.shields.io/github/license/crim-ca/mlm-extension?style=for-the-badge
-[blic2]: https://github.com/crim-ca/mlm-extension/blob/main/LICENSE
+[blic1]: https://img.shields.io/github/license/stac-extensions/mlm?style=for-the-badge
+[blic2]: https://github.com/stac-extensions/mlm/blob/main/LICENSE
 [blic3]: https://img.shields.io/badge/%F0%9F%93%A6-semantic%20versions-4053D6?style=for-the-badge
 
-[github-releases]: https://github.com/crim-ca/mlm-extension/releases
+[github-releases]: https://github.com/stac-extensions/mlm/releases
 
 [bscm1]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
-[bscm2]: https://img.shields.io/github/v/release/crim-ca/mlm-extension?filter=stac-model-v*&style=for-the-badge&logo=semantic-release&color=347d39
-[bscm6]: https://img.shields.io/github/actions/workflow/status/crim-ca/mlm-extension/publish.yaml?style=for-the-badge&logo=github
-[bscm7]: https://github.com/crim-ca/mlm-extension/blob/main/.github/workflows/publish.yaml
+[bscm2]: https://img.shields.io/github/v/release/stac-extensions/mlm?filter=stac-model-v*&style=for-the-badge&logo=semantic-release&color=347d39
+[bscm6]: https://img.shields.io/github/actions/workflow/status/stac-extensions/mlm/publish.yaml?style=for-the-badge&logo=github
+[bscm7]: https://github.com/stac-extensions/mlm/blob/main/.github/workflows/publish.yaml
 
 [hub1]: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuring-dependabot-version-updates#enabling-dependabot-version-updates
 [hub2]: https://github.com/marketplace/actions/close-stale-issues
 [hub6]: https://docs.github.com/en/code-security/dependabot
-[hub8]: https://github.com/crim-ca/mlm-extension/blob/main/.github/release-drafter.yml
-[hub9]: https://github.com/crim-ca/mlm-extension/blob/main/.github/.stale.yml
+[hub8]: https://github.com/stac-extensions/mlm/blob/main/.github/release-drafter.yml
+[hub9]: https://github.com/stac-extensions/mlm/blob/main/.github/.stale.yml
 
 [bdoc1]: https://img.shields.io/badge/docs-github%20pages-0a507a?style=for-the-badge
-[bdoc2]: https://github.com/crim-ca/mlm-extension/blob/main/README_STAC_MODEL.md
+[bdoc2]: https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md

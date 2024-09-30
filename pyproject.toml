@@ -16,7 +16,7 @@ authors = [
 ]
 license = "Apache Software License 2.0"
 repository = "https://github.com/crim-ca/mlm-extension"
-homepage = "https://github.com/crim-ca/mlm-extension/blob/main/README_STAC_MODEL.md"
+homepage = "https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md"
 packages = [
   {include = "stac_model"}
 ]
@@ -94,7 +94,7 @@ bump-my-version = "^0.21"
 #   Although these definitions are provided in this 'stac-model' project file,
 #   they are actually intented for versioning the MLM specification itself.
 #   To version 'stac-model', use the 'poetry version' operations.
-#   See also https://github.com/crim-ca/mlm-extension/blob/main/CONTRIBUTING.md#building-and-releasing
+#   See also https://github.com/stac-extensions/mlm/blob/main/CONTRIBUTING.md#building-and-releasing
 current_version = "1.3.0"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
@@ -125,8 +125,8 @@ glob_exclude = [
   "dist/**",
   "node_modules/**",
 ]
-search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
-replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
 glob = "**/*.md"
@@ -141,8 +141,8 @@ glob_exclude = [
   "dist/**",
   "node_modules/**",
 ]
-search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
-replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
 glob = "**/*.py"
@@ -157,16 +157,16 @@ glob_exclude = [
   "dist/**",
   "node_modules/**",
 ]
-search = "https://crim-ca.github.io/mlm-extension/v{current_version}/schema.json"
-replace = "https://crim-ca.github.io/mlm-extension/v{new_version}/schema.json"
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
 filename = "CHANGELOG.md"
 search = """
-## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
+## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 """
 replace = """
-## [Unreleased](https://github.com/crim-ca/mlm-extension/tree/main)
+## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
 - n/a
@@ -183,7 +183,7 @@ replace = """
 ### Fixed
 - n/a
 
-## [v{new_version}](https://github.com/crim-ca/mlm-extension/tree/v{new_version})
+## [v{new_version}](https://github.com/stac-extensions/mlm/tree/v{new_version})
 """
 
 [tool.ruff]
