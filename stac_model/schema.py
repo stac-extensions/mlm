@@ -138,7 +138,7 @@ class MLModelExtension(
             Extended object.
 
         Raises:
-            pystac.ExtensionTypeError : If an invalid object type is passed.
+            pystac.ExtensionTypeError: If an invalid object type is passed.
         """
         if isinstance(obj, pystac.Collection):
             cls.ensure_has_extension(obj, add_if_missing)
