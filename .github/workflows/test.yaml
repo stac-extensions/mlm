@@ -3,14 +3,11 @@ on: [push, pull_request]
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16]
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: npm
+          node-version: 'lts/*'
+          #cache: npm
       - uses: actions/checkout@v4
       - run: |
           npm install
