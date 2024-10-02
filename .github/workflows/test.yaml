@@ -7,7 +7,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
-          cache: npm
+          #cache: npm
       - uses: actions/checkout@v4
       - run: |
           npm install
