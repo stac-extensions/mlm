@@ -75,7 +75,7 @@ safety = "^2.3.4"
 pystac = "^1.10.0"  # custom validator required (https://github.com/stac-utils/pystac/pull/1320)
 
 pydocstyle = {extras = ["toml"], version = "^6.2.0"}
-pydoclint = "^0.3.0"
+pydoclint = ">=0.3,<0.6"
 
 pytest = "^7.2.1"
 pytest-cov = "^4.1.0"

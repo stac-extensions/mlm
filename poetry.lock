@@ -317,13 +317,13 @@ files = [
 
 [[package]]
 name = "docstring-parser-fork"
-version = "0.0.5"
+version = "0.0.9"
 description = "Parse Python docstrings in reST, Google and Numpydoc format"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = "<4.0,>=3.7"
 files = [
-    {file = "docstring_parser_fork-0.0.5-py3-none-any.whl", hash = "sha256:d521dea9b9cc6c60ab5569fa0c1115e3b84a83e6413266fb111a7c81cb935997"},
-    {file = "docstring_parser_fork-0.0.5.tar.gz", hash = "sha256:395ae8ee6a359e268670ebc4fe9a40dab917a94f6decd7cda8e86f9bea5c9456"},
+    {file = "docstring_parser_fork-0.0.9-py3-none-any.whl", hash = "sha256:0be85ad00cb25bf5beeb673e46e777facf0f47552fa3a7570d120ef7e3374401"},
+    {file = "docstring_parser_fork-0.0.9.tar.gz", hash = "sha256:95b23cc5092af85080c716a6da68360f5ae4fcffa75f4a3aca5e539783cbcc3d"},
 ]
 
 [[package]]
@@ -823,18 +823,18 @@ yaml = ["pyyaml (>=6.0.1)"]
 
 [[package]]
 name = "pydoclint"
-version = "0.3.10"
+version = "0.5.9"
 description = "A Python docstring linter that checks arguments, returns, yields, and raises sections"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pydoclint-0.3.10-py2.py3-none-any.whl", hash = "sha256:aef97818334503693f5e291580b71432f39d1688eabdd4aeb3df0367472af39c"},
-    {file = "pydoclint-0.3.10.tar.gz", hash = "sha256:d078e521939e222f605e27b409383c9fc4ce64d805ca224612cdfb1040054e00"},
+    {file = "pydoclint-0.5.9-py2.py3-none-any.whl", hash = "sha256:089327003cef6fe5605cbaa9887859ea5229ce0c9abb52775ffd57513094c1ae"},
+    {file = "pydoclint-0.5.9.tar.gz", hash = "sha256:e200f964a5d9fbbb2ff1078bd7cb5433a0564d2482b6a1ba1be848f66bc4924f"},
 ]
 
 [package.dependencies]
-click = ">=8.0.0"
-docstring-parser-fork = ">=0.0.5"
+click = ">=8.1.0"
+docstring-parser-fork = ">=0.0.9"
 tomli = {version = ">=2.0.1", markers = "python_version < \"3.11\""}
 
 [package.extras]
@@ -1704,4 +1704,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "94063ac56871ec7085c0e68acc2a4df70dfa1382d144ab624942f933b677422c"
+content-hash = "f0d33ddfca67a2ee9ccb540858cacf1574705e3d7a32a298f401e3bebcde9a63"
