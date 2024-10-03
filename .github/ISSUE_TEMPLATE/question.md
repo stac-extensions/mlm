@@ -1,5 +1,5 @@
 ---
-name: :red_question_mark: Question
+name: ❓Question
 about: Ask a question about this project 🎓
 title: ''
 labels: question, needs-triage
