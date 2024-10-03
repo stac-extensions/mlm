@@ -1,5 +1,5 @@
 ---
-name: ":bug: Bug report"
+name: 🐛 Bug report
 about: If something isn't working 🔧
 title: ''
 labels: bug, needs-triage
