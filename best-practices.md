@@ -49,7 +49,8 @@ However, due to limitations with the STAC 1.0 specification, this time extent is
 > (similarly to `start_datetime` set with a small value), such as `"9999-12-31T23:59:59Z"`.
 > Alternatively, the model can instead be described with only `datetime` corresponding to its publication date.
 > <br><br>
-> For more details, see the following [discussion](https://github.com/radiantearth/stac-spec/issues/1268).
+> For more details, see the following [discussion](https://github.com/radiantearth/stac-spec/issues/1268)
+> and issue [radiantearth/stac-spec#1161](https://github.com/radiantearth/stac-spec/issues/1161).
 
 <!-- lint enable no-undefined-references -->
 
