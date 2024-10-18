@@ -633,7 +633,7 @@ For example, PyTorch offers [various strategies][pytorch-frameworks] for providi
 such as Pickle (`.pt`), [TorchScript][pytorch-jit-script],
 or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach.
 Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type)
-can be insufficient in this case to detect which strategy should be used with.
+can be insufficient in this case to detect which strategy should be used to employ the model definition.
 
 Following are some proposed *Artifact Type* values for corresponding approaches, but other names are
 permitted as well. Note that the names are selected using the framework-specific definitions to help
