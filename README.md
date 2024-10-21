@@ -51,6 +51,8 @@ The main objectives of the extension are:
 2) record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy
    an inference service.
 
+<img src="./STAC_MLM.png" width="1000px" alt="STAC_MLM">
+
 Specifically, this extension records the following information to make ML models searchable and reusable:
 1. Sensor band specifications
 2. Model input transforms including resize and normalization
