@@ -55,7 +55,7 @@ test:
 	PYTHONPATH=$(PYTHONPATH) poetry run pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
-check: check-examples check-markdown check-lint check-mypy check-safety
+check: check-examples check-markdown check-lint check-mypy check-safety check-citation
 
 .PHONY: check-all
 check-all: check
@@ -66,6 +66,13 @@ mypy:
 
 .PHONY: check-mypy
 check-mypy: mypy
+
+# NOTE:
+#  purposely running with docker rather than python package due to conflicting dependencies
+#  see https://github.com/citation-file-format/cffconvert/issues/292
+.PHONY: check-citation
+check-citation:
+	docker run --rm -v $(PYTHONPATH)/CITATION.cff:/app/CITATION.cff citationcff/cffconvert --validate
 
 .PHONY: check-safety
 check-safety:

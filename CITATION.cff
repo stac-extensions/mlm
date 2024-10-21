@@ -1,9 +1,12 @@
 cff-version: 1.2.0
+message: If you use this standard or software, please cite it using the metadata from this file.
 title: Machine Learning Model Extension Specification for SpatioTemporal Asset Catalog
-alias: mlm
-message: >-
-  If you use this standard or software, please cite it using the metadata from this file.
-type: standard
+type: software
+keywords:
+  - mlm
+  - Machine Learning
+  - Model
+  - STAC
 repository: "https://github.com/crim-ca/mlm-extension"
 repository-code: "https://github.com/stac-extensions/mlm"
 license: Apache-2.0
@@ -14,8 +17,20 @@ identifiers:
     description: "Conference paper presenting the standard."
   - type: url
     value: "https://stac-extensions.github.io/mlm/"
-    description: "The URL of the specific extension used in 'stac_extensions' references."
-authors:
+    description: "Generic URL of the MLM extension versions available for 'stac_extensions' references."
+contact:
+  - given-names: Francis
+    family-names: Charette-Migneault
+    email: francis.charette-migneault@crim.ca
+    affiliation: Computer Research Institute of Montréal (CRIM)
+    orcid: "https://orcid.org/0000-0003-4862-3349"
+  - given-names: Ryan
+    family-names: Avery
+    alias: rbavery
+    email: ryan@wherobots.com
+    affiliation: "Wherobots, Inc."
+    orcid: "https://orcid.org/0000-0001-7392-1474"
+authors: &authors
   - given-names: Francis
     family-names: Charette-Migneault
     alias: fmigneault
@@ -46,104 +61,86 @@ authors:
     region: California
     website: "https://www.wherobots.ai/"
     location: Floor 1 - Lincoln Towne Center
+
 references:
   - type: software-code
-    name: stac_model
-    repository-code:
+    title: "A PydanticV2 and PySTAC validation and serialization library for the STAC ML Model Extension"
+    keywords:
+      - stac_model
+    repository-code: "https://github.com/crim-ca/mlm-extension/tree/main/stac_model"
     repository-artifact: "https://pypi.org/project/stac-model/"
     url: "https://github.com/crim-ca/mlm-extension/tree/main/stac_model"
     authors:
-    - given-names: Ryan
-      family-names: Avery
-      alias: rbavery
-      email: ryan@wherobots.com
-      affiliation: "Wherobots, Inc."
-      orcid: "https://orcid.org/0000-0001-7392-1474"
-    - given-names: Francis
-      family-names: Charette-Migneault
-      alias: fmigneault
-      email: francis.charette-migneault@crim.ca
-      affiliation: Computer Research Institute of Montréal (CRIM)
-      orcid: "https://orcid.org/0000-0003-4862-3349"
+      - given-names: Ryan
+        family-names: Avery
+        alias: rbavery
+        email: ryan@wherobots.com
+        affiliation: "Wherobots, Inc."
+        orcid: "https://orcid.org/0000-0001-7392-1474"
+      - given-names: Francis
+        family-names: Charette-Migneault
+        alias: fmigneault
+        email: francis.charette-migneault@crim.ca
+        affiliation: Computer Research Institute of Montréal (CRIM)
+        orcid: "https://orcid.org/0000-0003-4862-3349"
+
+  - type: standard
+    title: STAC MLM specification
+    authors: *authors
+    identifiers:
+    - type: url
+      value: "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
+      description: "Latest extension URL used in 'stac_extensions' references."
+
   - type: report
     title: Project CCCOT03 – Technical Report
-    alias: dlm
+    keywords:
+      - dlm
+      - Deep Learning
+      - Model
+      - STAC
     repository: "https://raw.githubusercontent.com/crim-ca/CCCOT03/main/CCCOT03_Rapport%20Final_FINAL_EN.pdf"
     repository-code: "https://github.com/crim-ca/dlm-extension"
     license: Apache-2.0
     license-url: https://github.com/crim-ca/dlm-extension/blob/main/LICENSE
     date-released: "2020-12-14"
     languages:
-    - en
+      - en
     authors:
-    - given-names: Francis
-      family-names: Charette-Migneault
-      alias: fmigneault
-      email: francis.charette-migneault@crim.ca
-      affiliation: Computer Research Institute of Montréal (CRIM)
-      orcid: "https://orcid.org/0000-0003-4862-3349"
-    - given-names: Samuel
-      family-names: Foucher
-      alias: sfoucher
-      orcid: "https://orcid.org/0000-0001-9557-6907"
-    - given-names: David
-      family-names: Landry
-      orcid: "https://orcid.org/0000-0001-5343-2235"
-    - given-names: Yves
-      family-names: Moisan
-      alias: ymoisan
-    - name: Computer Research Institute of Montréal
-      city: Montréal
-      region: Québec
-      alias: CRIM
-      website: "https://www.crim.ca/"
-      email: info@crim.ca
-      tel: 1 (514) 840-1234
-      country: CA
-      post-code: H3N 1M3
-      address: "101 – 405, avenue Ogilvy"
-    - name: "Natural Resources Canada"
-      country: CA
-      website: "https://natural-resources.canada.ca/"
-    - name: "Canada Centre for Mapping and Earth Observation"
-      alias: CCMEO
-      country: CA
-      website: "https://natural-resources.canada.ca/research-centres-and-labs/canada-centre-for-mapping-and-earth-observation/25735"
-abstract: >-
-  The Machine Learning Model (MLM) extension is a
-  specification that extends the SpatioTemporal Asset
-  Catalogs (STAC) framework to catalog machine learning
-  models. This demo paper introduces the goals of the MLM,
-  highlighting its role in improving
-  searchability and reproducibility of geospatial models.
-  The MLM is contextualized within the STAC ecosystem,
-  demonstrating its compatibility and the advantages it
-  brings to discovering relevant geospatial models and
-  describing their inference requirements.
+      - given-names: Francis
+        family-names: Charette-Migneault
+        alias: fmigneault
+        email: francis.charette-migneault@crim.ca
+        affiliation: Computer Research Institute of Montréal (CRIM)
+        orcid: "https://orcid.org/0000-0003-4862-3349"
+      - given-names: Samuel
+        family-names: Foucher
+        alias: sfoucher
+        orcid: "https://orcid.org/0000-0001-9557-6907"
+      - given-names: David
+        family-names: Landry
+        orcid: "https://orcid.org/0000-0001-5343-2235"
+      - given-names: Yves
+        family-names: Moisan
+        alias: ymoisan
+      - name: Computer Research Institute of Montréal
+        city: Montréal
+        region: Québec
+        alias: CRIM
+        website: "https://www.crim.ca/"
+        email: info@crim.ca
+        tel: 1 (514) 840-1234
+        country: CA
+        post-code: H3N 1M3
+        address: "101 – 405, avenue Ogilvy"
+      - name: "Natural Resources Canada"
+        country: CA
+        website: "https://natural-resources.canada.ca/"
+      - name: "Canada Centre for Mapping and Earth Observation"
+        alias: CCMEO
+        country: CA
+        website: "https://natural-resources.canada.ca/research-centres-and-labs/canada-centre-for-mapping-and-earth-observation/25735"
 
-  A detailed overview of the MLM's structure and fields
-  describes the tasks, hardware requirements, frameworks,
-  and inputs/outputs associated with machine learning
-  models. Three use cases are presented, showcasing the
-  application of the MLM in describing models for land cover
-  classification and image segmentation. These examples
-  illustrate how the MLM facilitates easier search and better
-  understanding of how to deploy models in inference pipelines.
-
-  The discussion addresses future challenges in extending
-  the MLM to account for the diversity in machine learning
-  models, including foundational and fine-tuned models,
-  multi-modal models, and the importance of describing the
-  data pipeline and infrastructure models depend on.
-  Finally, the paper demonstrates the potential of the MLM
-  to be a unifying standard to enable benchmarking and
-  comparing geospatial machine learning models.
-keywords:
-  - STAC
-  - Catalog
-  - Machine Learning
-  - Spatio-Temporal Models
-  - Search
 preferred-citation:
   type: conference-paper
   doi: "10.1145/3681769.3698586"
@@ -161,56 +158,91 @@ preferred-citation:
     region: Georgia
     country: US
   languages:
-  - en
+    - en
+  abstract: >-
+    The Machine Learning Model (MLM) extension is a
+    specification that extends the SpatioTemporal Asset
+    Catalogs (STAC) framework to catalog machine learning
+    models. This demo paper introduces the goals of the MLM,
+    highlighting its role in improving
+    searchability and reproducibility of geospatial models.
+    The MLM is contextualized within the STAC ecosystem,
+    demonstrating its compatibility and the advantages it
+    brings to discovering relevant geospatial models and
+    describing their inference requirements.
+
+    A detailed overview of the MLM's structure and fields
+    describes the tasks, hardware requirements, frameworks,
+    and inputs/outputs associated with machine learning
+    models. Three use cases are presented, showcasing the
+    application of the MLM in describing models for land cover
+    classification and image segmentation. These examples
+    illustrate how the MLM facilitates easier search and better
+    understanding of how to deploy models in inference pipelines.
+
+    The discussion addresses future challenges in extending
+    the MLM to account for the diversity in machine learning
+    models, including foundational and fine-tuned models,
+    multi-modal models, and the importance of describing the
+    data pipeline and infrastructure models depend on.
+    Finally, the paper demonstrates the potential of the MLM
+    to be a unifying standard to enable benchmarking and
+    comparing geospatial machine learning models.
+  keywords:
+    - STAC
+    - Catalog
+    - Machine Learning
+    - Spatio-Temporal Models
+    - Search
   contact:
-  - given-names: Francis
-    family-names: Charette-Migneault
-    email: francis.charette-migneault@crim.ca
-    affiliation: Computer Research Institute of Montréal (CRIM)
-    orcid: "https://orcid.org/0000-0003-4862-3349"
+    - given-names: Francis
+      family-names: Charette-Migneault
+      email: francis.charette-migneault@crim.ca
+      affiliation: Computer Research Institute of Montréal (CRIM)
+      orcid: "https://orcid.org/0000-0003-4862-3349"
   authors:
-  - given-names: Francis
-    family-names: Charette-Migneault
-    email: francis.charette-migneault@crim.ca
-    affiliation: Computer Research Institute of Montréal (CRIM)
-    orcid: "https://orcid.org/0000-0003-4862-3349"
-  - given-names: Ryan
-    family-names: Avery
-    email: ryan@wherobots.com
-    affiliation: "Wherobots, Inc."
-    orcid: "https://orcid.org/0000-0001-7392-1474"
-  - given-names: Brian
-    family-names: Pondi
-    email: brian.pondi@uni-muenster.de
-    affiliation: "Institute for Geoinformatics, University of Münster"
-    orcid: "https://orcid.org/0009-0008-0367-1690"
-  - given-names: Joses
-    family-names: Omojola
-    affiliation: University of Arizona
-    email: jomojo1@arizona.edu
-    orcid: "https://orcid.org/0000-0001-5807-2953"
-  - given-names: Simone
-    family-names: Vaccari
-    email: simone.vaccari@terradue.com
-    affiliation: Terradue
-    orcid: "https://orcid.org/0000-0002-2757-4165"
-  - given-names: Parham
-    family-names: Membari
-    email: parham.membari@terradue.com
-    affiliation: Terradue
-    orcid: "https://orcid.org/0009-0004-7594-4011"
-  - given-names: Devis
-    family-names: Peressutti
-    email: devis.peressutti@planet.com
-    affiliation: "Sinergise Solutions, a Planet Labs company"
-    orcid: "https://orcid.org/0000-0002-4660-0576"
-  - given-names: Jia
-    family-names: Yu
-    email: jiayu@wherobots.com
-    affiliation: "Wherobots, Inc."
-    orcid: "https://orcid.org/0000-0003-1340-6475"
-  - given-names: Jed
-    family-names: Sundwall
-    email: jed@radiant.earth
-    affiliation: Radiant Earth
-    orcid: "https://orcid.org/0000-0001-9681-230X"
+    - given-names: Francis
+      family-names: Charette-Migneault
+      email: francis.charette-migneault@crim.ca
+      affiliation: Computer Research Institute of Montréal (CRIM)
+      orcid: "https://orcid.org/0000-0003-4862-3349"
+    - given-names: Ryan
+      family-names: Avery
+      email: ryan@wherobots.com
+      affiliation: "Wherobots, Inc."
+      orcid: "https://orcid.org/0000-0001-7392-1474"
+    - given-names: Brian
+      family-names: Pondi
+      email: brian.pondi@uni-muenster.de
+      affiliation: "Institute for Geoinformatics, University of Münster"
+      orcid: "https://orcid.org/0009-0008-0367-1690"
+    - given-names: Joses
+      family-names: Omojola
+      affiliation: University of Arizona
+      email: jomojo1@arizona.edu
+      orcid: "https://orcid.org/0000-0001-5807-2953"
+    - given-names: Simone
+      family-names: Vaccari
+      email: simone.vaccari@terradue.com
+      affiliation: Terradue
+      orcid: "https://orcid.org/0000-0002-2757-4165"
+    - given-names: Parham
+      family-names: Membari
+      email: parham.membari@terradue.com
+      affiliation: Terradue
+      orcid: "https://orcid.org/0009-0004-7594-4011"
+    - given-names: Devis
+      family-names: Peressutti
+      email: devis.peressutti@planet.com
+      affiliation: "Sinergise Solutions, a Planet Labs company"
+      orcid: "https://orcid.org/0000-0002-4660-0576"
+    - given-names: Jia
+      family-names: Yu
+      email: jiayu@wherobots.com
+      affiliation: "Wherobots, Inc."
+      orcid: "https://orcid.org/0000-0003-1340-6475"
+    - given-names: Jed
+      family-names: Sundwall
+      email: jed@radiant.earth
+      affiliation: Radiant Earth
+      orcid: "https://orcid.org/0000-0001-9681-230X"
