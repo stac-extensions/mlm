@@ -186,6 +186,11 @@ replace = """
 ## [v{new_version}](https://github.com/stac-extensions/mlm/tree/v{new_version})
 """
 
+[[tool.bumpversion.files]]
+filename = "CITATION.cff"
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
+
 [tool.ruff]
 exclude = [
     ".git",
