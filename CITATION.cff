@@ -43,7 +43,8 @@ authors: &authors
     email: ryan@wherobots.com
     affiliation: "Wherobots, Inc."
     orcid: "https://orcid.org/0000-0001-7392-1474"
-  - name: Computer Research Institute of Montréal
+  - &crim
+    name: Computer Research Institute of Montréal
     city: Montréal
     region: Québec
     alias: CRIM
@@ -109,6 +110,7 @@ references:
 
   - type: report
     title: Project CCCOT03 – Technical Report
+    abstract: "Project CCCOT03: Proposal for a STAC Extension for Deep Learning Models"
     keywords:
       - dlm
       - Deep Learning
@@ -121,6 +123,9 @@ references:
     date-released: "2020-12-14"
     languages:
       - en
+    doi: "10.13140/RG.2.2.27858.68804"
+    url: "https://www.researchgate.net/publication/349003427"
+    institution: *crim
     authors:
       - given-names: Francis
         family-names: Charette-Migneault
@@ -156,6 +161,35 @@ references:
         country: CA
         website: "https://natural-resources.canada.ca/research-centres-and-labs/canada-centre-for-mapping-and-earth-observation/25735"
 
+  - type: conference
+    notes: Conference reference where the demo paper presenting MLM is published.
+    title: "GeoSearch’24: Proceedings of the 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data"
+    conference:
+      name: "SIGSPATIAL’24: The 32nd ACM International Conference on Advances in Geographic Information Systems"
+      date-start: "2024-10-29"
+      date-end: "2024-11-01"
+      city: Atlanta
+      region: Georgia
+      country: US
+    url: https://dl.acm.org/doi/proceedings/10.1145/3681769
+    isbn: "979-8-4007-1148-0"
+    date-published: "2024-10-29"
+    publisher:
+      name: "Association for Computing Machinery"
+    authors:
+      - given-names: Hao
+        family-names: Li
+      - given-names: Abhishek
+        family-names: Potnis
+      - given-names: Wenwen
+        family-names: Li
+      - given-names: Dalton
+        family-names: Lunga
+      - given-names: Martin
+        family-names: Werner
+      - given-names: Andreas
+        family-names: Züfle
+
 preferred-citation:
   type: conference-paper
   doi: "10.1145/3681769.3698586"
@@ -163,10 +197,12 @@ preferred-citation:
   conference:
     name: 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data
     alias: GeoSearch’24
-  date-released: "2024-10-29"
+  date-published: "2024-10-29"
   year: 2024
-  month: 11
+  month: 10
   pages: 4
+  loc-start: 36
+  loc-end: 39
   location:
     name: Georgia Tech Hotel and Conference Center
     city: Atlanta
