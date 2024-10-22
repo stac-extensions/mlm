@@ -51,8 +51,6 @@ The main objectives of the extension are:
 2) record all necessary bands, parameters, modeling artifact locations, and high-level processing steps to deploy
    an inference service.
 
-<img src="./STAC_MLM.png" width="1000px" alt="STAC_MLM">
-
 Specifically, this extension records the following information to make ML models searchable and reusable:
 1. Sensor band specifications
 2. Model input transforms including resize and normalization
@@ -62,6 +60,10 @@ Specifically, this extension records the following information to make ML models
 
 The MLM specification is biased towards providing metadata fields for supervised machine learning models.
 However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
+
+![STAC_MLM](./docs/static/stac_mlm.png)
+
+> Francis Charette-Migneault, Ryan Avery, Brian Pondi, Joses Omojola, Simone Vaccari, Parham Membari, Devis Peressutti, Jia Yu, and Jed Sundwall. 2024. Machine Learning Model Specification for Cataloging Spatio-Temporal Models (Demo Paper). In 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data (GeoSearch’24), October 29–November 1 2024, Atlanta, GA, USA. ACM, New York, NY, USA, 4 pages. https://doi.org/10.1145/3681769.3698586
 
 See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
 with this extension.
