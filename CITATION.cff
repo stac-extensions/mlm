@@ -17,7 +17,7 @@ identifiers:
     description: "Conference paper presenting the standard."
   - type: url
     value: "https://stac-extensions.github.io/mlm/"
-    description: "Generic URL of the MLM extension versions available for 'stac_extensions' references."
+    description: "Generic URL of the MLM extension schema versions for 'stac_extensions' references."
 contact:
   - given-names: Francis
     family-names: Charette-Migneault
@@ -91,11 +91,21 @@ references:
     - type: url
       value: "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
       description: "Latest extension URL used in 'stac_extensions' references."
+    - type: url
+      value: "https://stac-extensions.github.io/mlm/"
+      description: "Generic URL of the MLM extension schema versions for 'stac_extensions' references."
 
   - type: software-code
     title: "Archive repository of the STAC MLM specification."
     repository-code: "https://github.com/crim-ca/mlm-extension"
     authors: *authors
+    identifiers:
+    - type: url
+      value: "https://crim-ca.github.io/mlm-extension/v1.3.0/schema.json"
+      description: "Archive extension URL used in 'stac_extensions' references."
+    - type: url
+      value: "https://crim-ca.github.io/mlm-extension/"
+      description: "Generic URL of the archived MLM extension schema versions for 'stac_extensions' references."
 
   - type: report
     title: Project CCCOT03 – Technical Report
