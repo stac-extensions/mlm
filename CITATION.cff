@@ -7,7 +7,7 @@ keywords:
   - Machine Learning
   - Model
   - STAC
-repository: "https://github.com/crim-ca/mlm-extension"
+url: "https://github.com/stac-extensions/mlm/blob/main/README.md"
 repository-code: "https://github.com/stac-extensions/mlm"
 license: Apache-2.0
 license-url: https://github.com/stac-extensions/mlm/blob/main/LICENSE
@@ -67,9 +67,9 @@ references:
     title: "A PydanticV2 and PySTAC validation and serialization library for the STAC ML Model Extension"
     keywords:
       - stac_model
-    repository-code: "https://github.com/crim-ca/mlm-extension/tree/main/stac_model"
+    repository-code: "https://github.com/stac-extensions/mlm/tree/main/stac_model"
     repository-artifact: "https://pypi.org/project/stac-model/"
-    url: "https://github.com/crim-ca/mlm-extension/tree/main/stac_model"
+    url: "https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md"
     authors:
       - given-names: Ryan
         family-names: Avery
@@ -91,6 +91,11 @@ references:
     - type: url
       value: "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
       description: "Latest extension URL used in 'stac_extensions' references."
+
+  - type: software-code
+    title: "Archive repository of the STAC MLM specification."
+    repository-code: "https://github.com/crim-ca/mlm-extension"
+    authors: *authors
 
   - type: report
     title: Project CCCOT03 – Technical Report
