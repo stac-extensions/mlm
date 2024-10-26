@@ -63,10 +63,11 @@ However, fields that relate to supervised ML are optional and users can use the 
 
 ![STAC_MLM](./docs/static/stac_mlm.png)
 
-> Francis Charette-Migneault, Ryan Avery, Brian Pondi, Joses Omojola, Simone Vaccari, Parham Membari, Devis Peressutti, Jia Yu, and Jed Sundwall. 2024. Machine Learning Model Specification for Cataloging Spatio-Temporal Models (Demo Paper). In 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data (GeoSearch’24), October 29–November 1 2024, Atlanta, GA, USA. ACM, New York, NY, USA, 4 pages. https://doi.org/10.1145/3681769.3698586
+> Francis Charette-Migneault, Ryan Avery, Brian Pondi, Joses Omojola, Simone Vaccari, Parham Membari, Devis Peressutti, Jia Yu, and Jed Sundwall. 2024. Machine Learning Model Specification for Cataloging Spatio-Temporal Models (Demo Paper). In 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data (GeoSearch’24), October 29–November 1 2024, Atlanta, GA, USA. ACM, New York, NY, USA, 4 pages. <https://doi.org/10.1145/3681769.3698586>
 
 See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
 with this extension.
+
 The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
 never have the Machine Learning Model Extension exclusively in `stac_extensions`.
