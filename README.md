@@ -29,6 +29,10 @@
         <td><a href="https://wherobots.com/">Wherobots</a></td>
     </tr>
     <tr>
+        <td><img src="docs/static/terradue.png" width="200px" alt="Terradue"></td>
+        <td><a href="https://terradue.com/">Terradue</a></td>
+    </tr>
+    <tr>
         <td><img src="docs/static/nrcan.png" width="200px" alt="NRCan"></td>
         <td>
             <a href="https://natural-resources.canada.ca/">Natural Resources Canada</a>
