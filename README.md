@@ -297,10 +297,9 @@ and [Common Band Names][stac-band-names].
 > Therefore, `eo:bands` should either be specified *only* under the Asset containing the `mlm:model` role
 > (see [Model Asset](#model-asset)), or define them *both* under the Asset and Item properties. If the second
 > approach is selected, it is recommended that the `eo:bands` under the Asset contains only the `name` or the
-> `common_name` property, such that all other details about the bands are defined at the Item level.
-> An example of such representation is provided in
+> `common_name` property, such that all other details about the bands are defined and cross-referenced by name
+> with the Item-level band definitions. An example of such representation is provided in
 > [examples/item_eo_bands_summarized.json](examples/item_eo_bands_summarized.json).
-> <br><br>
 > For an example where `eo:bands` are entirely defined in the Asset on their own, please refer to
 > [examples/item_eo_bands.json](examples/item_eo_bands.json) instead.
 > <br><br>
