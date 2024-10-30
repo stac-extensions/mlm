@@ -491,62 +491,67 @@
       "type": "array",
       "items": {
         "allOf": [
-          {"$ref": "#/$defs/ModelInput"},
-          {"$ref": "#/$defs/ModelInputNormTypeStatistics"}
+          {
+            "$ref": "#/$defs/ModelInput"
+          },
+          {
+            "$ref": "#/$defs/ModelInputNormTypeStatistics"
+          }
         ]
       }
     },
     "ModelInput": {
-        "title": "Model Input Object",
-        "type": "object",
-        "required": [
-          "name",
-          "bands",
-          "input"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "bands": {
-            "$ref": "#/$defs/ModelBands"
-          },
-          "input": {
-            "$ref": "#/$defs/InputStructure"
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "norm_by_channel": {
-            "type": "boolean"
-          },
-          "norm_type": {
-            "$ref": "#/$defs/NormalizeType"
-          },
-          "norm_clip": {
-            "$ref": "#/$defs/NormalizeClip"
-          },
-          "resize_type": {
-            "$ref": "#/$defs/ResizeType"
-          },
-          "statistics": {
-            "$ref": "#/$defs/InputStatistics"
-          },
-          "pre_processing_function": {
-            "$ref": "#/$defs/ProcessingExpression"
-          }
+      "title": "Model Input Object",
+      "type": "object",
+      "required": [
+        "name",
+        "bands",
+        "input"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bands": {
+          "$ref": "#/$defs/ModelBands"
+        },
+        "input": {
+          "$ref": "#/$defs/InputStructure"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "norm_by_channel": {
+          "type": "boolean"
+        },
+        "norm_type": {
+          "$ref": "#/$defs/NormalizeType"
+        },
+        "norm_clip": {
+          "$ref": "#/$defs/NormalizeClip"
+        },
+        "resize_type": {
+          "$ref": "#/$defs/ResizeType"
+        },
+        "statistics": {
+          "$ref": "#/$defs/InputStatistics"
+        },
+        "pre_processing_function": {
+          "$ref": "#/$defs/ProcessingExpression"
         }
+      }
     },
     "ModelInputNormTypeStatistics": {
       "description": "Validates the corresponding statistics required for the specified normalization type.",
-      "oneOf": [
-        {"type": "object", "properties":  {"norm_type": {"type": "null"}}},
+      "allOf": [
         {
           "if": {
             "type": "object",
-            "required": ["norm_type"],
+            "required": [
+              "norm_type"
+            ],
             "properties": {
               "norm_type": {
                 "const": "min-max"
@@ -555,7 +560,9 @@
           },
           "then": {
             "type": "object",
-            "required": ["statistics"],
+            "required": [
+              "statistics"
+            ],
             "properties": {
               "statistics": {
                 "allOf": [
@@ -563,7 +570,50 @@
                     "$ref": "#/$defs/InputStatistics"
                   },
                   {
-                    "items": {"required": ["minimum", "maximum"]}
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "minimum",
+                        "maximum"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "type": "object",
+            "required": [
+              "norm_type"
+            ],
+            "properties": {
+              "norm_type": {
+                "const": "z-score"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": [
+              "statistics"
+            ],
+            "properties": {
+              "statistics": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/InputStatistics"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "required": [
+                        "mean",
+                        "stddev"
+                      ]
+                    }
                   }
                 ]
               }

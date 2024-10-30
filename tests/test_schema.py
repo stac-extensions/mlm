@@ -93,7 +93,8 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
 @pytest.mark.parametrize(
     ["test_norm_type", "test_statistics"],
     [
-        ("min-max", [{"mean": 1, "stddev": 2}])
+        ("min-max", [{"mean": 1, "stddev": 2}]),
+        ("z-score", [{"minimum": 1, "maximum": 2}]),
     ],
 )
 def test_mlm_invalid_input_norm_type_statistics_combination(
