@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
-- n/a
+- Add explicit check of `statitics` sub-fields `minimum`, `maximum`, `mean` and `stddev` for corresponding `norm_type`
+  values `min-max` and `z-score` that depend on it. Other `norm_type` values are ignored. Additional `statistics`
+  properties not directly required by the specific `norm_type` are also ignored.
 
 ### Changed
 - n/a

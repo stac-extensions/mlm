@@ -91,27 +91,36 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     indirect=True,
 )
 @pytest.mark.parametrize(
-    ["test_norm_type", "test_statistics"],
+    ["test_norm_type", "test_statistics", "is_valid"],
     [
-        ("min-max", [{"mean": 1, "stddev": 2}]),
-        ("z-score", [{"minimum": 1, "maximum": 2}]),
+        ("min-max", [{"mean": 1, "stddev": 2}], False),
+        ("z-score", [{"minimum": 1, "maximum": 2}], False),
+        ("min-max", [{"mean": 1, "stddev": 2}, {"minimum": 1, "maximum": 2}], False),
+        ("z-score", [{"mean": 1, "stddev": 2}, {"minimum": 1, "maximum": 2}], False),
+        ("min-max", [{"minimum": 1, "maximum": 2}], True),
+        ("z-score", [{"mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra statistics must be ignored
+        ("l2", [{"mean": 1, "stddev": 2}], True),  # statistics "don't" care for this norm-type
     ],
 )
-def test_mlm_invalid_input_norm_type_statistics_combination(
+def test_mlm_input_norm_type_statistics_combination(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
     test_norm_type: str,
     test_statistics: List[Dict[str, Any]],
+    is_valid: bool,
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    with pytest.raises(pystac.errors.STACValidationError):
-        mlm_data["properties"]["mlm:input"][0]["norm_type"] = test_norm_type
-        mlm_data["properties"]["mlm:input"][0]["statistics"] = test_statistics
-        mlm_item = pystac.Item.from_dict(mlm_data)
+    mlm_data["properties"]["mlm:input"][0]["norm_type"] = test_norm_type
+    mlm_data["properties"]["mlm:input"][0]["statistics"] = test_statistics
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    if is_valid:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
+    else:
+        with pytest.raises(pystac.errors.STACValidationError):
+            pystac.validation.validate(mlm_item, validator=mlm_validator)
 
 
 @pytest.mark.parametrize(
