@@ -90,6 +90,34 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     ["item_basic.json"],
     indirect=True,
 )
+@pytest.mark.parametrize(
+    ["test_norm_type", "test_statistics"],
+    [
+        ("min-max", [{"mean": 1, "stddev": 2}])
+    ],
+)
+def test_mlm_invalid_input_norm_type_statistics_combination(
+    mlm_validator: STACValidator,
+    mlm_example: Dict[str, JSON],
+    test_norm_type: str,
+    test_statistics: List[Dict[str, Any]],
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_data["properties"]["mlm:input"][0]["norm_type"] = test_norm_type
+        mlm_data["properties"]["mlm:input"][0]["statistics"] = test_statistics
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
 def test_mlm_other_non_mlm_assets_allowed(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],

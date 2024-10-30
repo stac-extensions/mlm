@@ -490,6 +490,13 @@
     "mlm:input": {
       "type": "array",
       "items": {
+        "allOf": [
+          {"$ref": "#/$defs/ModelInput"},
+          {"$ref": "#/$defs/ModelInputNormTypeStatistics"}
+        ]
+      }
+    },
+    "ModelInput": {
         "title": "Model Input Object",
         "type": "object",
         "required": [
@@ -531,7 +538,39 @@
             "$ref": "#/$defs/ProcessingExpression"
           }
         }
-      }
+    },
+    "ModelInputNormTypeStatistics": {
+      "description": "Validates the corresponding statistics required for the specified normalization type.",
+      "oneOf": [
+        {"type": "object", "properties":  {"norm_type": {"type": "null"}}},
+        {
+          "if": {
+            "type": "object",
+            "required": ["norm_type"],
+            "properties": {
+              "norm_type": {
+                "const": "min-max"
+              }
+            }
+          },
+          "then": {
+            "type": "object",
+            "required": ["statistics"],
+            "properties": {
+              "statistics": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/InputStatistics"
+                  },
+                  {
+                    "items": {"required": ["minimum", "maximum"]}
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
     },
     "mlm:output": {
       "type": "array",
