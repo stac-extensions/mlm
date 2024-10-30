@@ -657,10 +657,12 @@ the users understand the source explicitly, although this is not strictly requir
 
 | Artifact Type      | Description                                                                          |
 |--------------------|--------------------------------------------------------------------------------------|
-| `torch.save`       | A model artifact obtained by [Serialized Pickle Object][pytorch-save] (i.e.: `.pt`). |
-| `torch.jit.script` | A model artifact obtained by [`TorchScript`][pytorch-jit-script].                    |
-| `torch.export`     | A model artifact obtained by [`torch.export`][pytorch-export] (i.e.: `.pt2`).        |
-| `torch.compile`    | A model artifact obtained by [`torch.compile`][pytorch-compile].                     |
+| `torch.save`       | A [serialized python pickle object][pytorch-save] (i.e.: `.pt`) which can represent a model or state_dict. |
+| `torch.jit.save` | A [`TorchScript`][pytorch-jit-script] model artifact obtained with one or more of the graph export options Torchscript Tracing and Torchscript Scripting.                    |
+| `torch.export.save`     | A model artifact storing an ExportedProgram obtained by [`torch.export.export`][pytorch-export] (i.e.: `.pt2`).        |
+|  `TFSavedModel`   | A [SavedModel][tf-save] from Tensorflow or Keras. |
+| `Keras_v3`    |  Keras v3 is the [recommended format][keras-recommended] by the Tensorflow team. See this example to [save and load models][keras-example] and the update to date docs [disambiguating different save methods][keras-methods] in TF and Keras..                    |
+| `h5`    | [Keras and tf.keras model][h5] weights format, which uses HDF5.                     |
 
 [pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
 [pytorch-export]: https://pytorch.org/docs/main/export.html
@@ -668,6 +670,11 @@ the users understand the source explicitly, although this is not strictly requir
 [pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
 [pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
 [pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+[tf-save]: https://www.tensorflow.org/guide/saved_model
+[keras-example]: https://keras.io/guides/serialization_and_saving/
+[keras-recommended]: https://www.tensorflow.org/guide/saved_model#creating_a_savedmodel_from_keras
+[h5]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/
+[keras-methods]: https://keras.io/2.16/api/models/model_saving_apis/model_saving_and_loading/
 
 ### Source Code Asset
 
