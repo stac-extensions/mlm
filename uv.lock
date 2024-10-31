@@ -483,6 +483,15 @@ wheels = [
 ]
 
 [[package]]
+name = "pip"
+version = "24.3.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/b1/b422acd212ad7eedddaf7981eee6e5de085154ff726459cf2da7c5a184c1/pip-24.3.1.tar.gz", hash = "sha256:ebcb60557f2aefabc2e0f918751cd24ea0d56d8ec5445fe1807f1d2109660b99", size = 1931073 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ef/7d/500c9ad20238fcfcb4cb9243eede163594d7020ce87bd9610c9e02771876/pip-24.3.1-py3-none-any.whl", hash = "sha256:3790624780082365f47549d032f3770eeb2b1e8bd1f7b2e02dace1afa361b4ed", size = 1822182 },
+]
+
+[[package]]
 name = "platformdirs"
 version = "4.3.6"
 source = { registry = "https://pypi.org/simple" }
@@ -1174,6 +1183,7 @@ version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "jsonschema" },
+    { name = "pip" },
     { name = "pydantic" },
     { name = "pydantic-core" },
     { name = "pystac" },
@@ -1203,17 +1213,19 @@ dev = [
     { name = "pytest-timeout" },
     { name = "ruff" },
     { name = "safety" },
+    { name = "types-python-dateutil" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "jsonschema", specifier = ">=4.21.1,<5.0.0" },
+    { name = "pip", specifier = ">=24.3.1" },
     { name = "pydantic", specifier = ">=2.6.3,<3.0.0" },
     { name = "pydantic-core", specifier = ">=2,<3" },
     { name = "pystac", specifier = ">=1.9.0,<2.0.0" },
     { name = "rich", specifier = ">=13.7.0,<14.0.0" },
     { name = "shapely", specifier = ">=2,<3" },
-    { name = "typer", extras = ["all"], specifier = ">=0.9.0,<1.0.0" },
+    { name = "typer", specifier = ">=0.9.0,<1.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1237,6 +1249,7 @@ dev = [
     { name = "pytest-timeout", specifier = ">=2.2.0,<3.0.0" },
     { name = "ruff", specifier = ">=0.2.2,<1.0.0" },
     { name = "safety", specifier = ">=2.3.4,<3.0.0" },
+    { name = "types-python-dateutil", specifier = ">=2.9.0.20241003" },
 ]
 
 [[package]]
@@ -1291,6 +1304,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/c5/58/a79003b91ac2c6890fc5d90145c662fd5771c6f11447f116b63300436bc9/typer-0.12.5.tar.gz", hash = "sha256:f592f089bedcc8ec1b974125d64851029c3b1af145f04aca64d69410f0c9b722", size = 98953 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a8/2b/886d13e742e514f704c33c4caa7df0f3b89e5a25ef8db02aa9ca3d9535d5/typer-0.12.5-py3-none-any.whl", hash = "sha256:62fe4e471711b147e3365034133904df3e235698399bc4de2b36c8579298d52b", size = 47288 },
+]
+
+[[package]]
+name = "types-python-dateutil"
+version = "2.9.0.20241003"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/31/f8/f6ee4c803a7beccffee21bb29a71573b39f7037c224843eff53e5308c16e/types-python-dateutil-2.9.0.20241003.tar.gz", hash = "sha256:58cb85449b2a56d6684e41aeefb4c4280631246a0da1a719bdbe6f3fb0317446", size = 9210 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/35/d6/ba5f61958f358028f2e2ba1b8e225b8e263053bd57d3a79e2d2db64c807b/types_python_dateutil-2.9.0.20241003-py3-none-any.whl", hash = "sha256:250e1d8e80e7bbc3a6c99b907762711d1a1cdd00e978ad39cb5940f6f0a87f3d", size = 9693 },
 ]
 
 [[package]]
