@@ -85,8 +85,7 @@
           ],
           "data_type": "uint16"
         },
-        "norm_by_channel": false,
-        "norm_type": null,
+        "scaling": null,
         "resize_type": null
       },
       {

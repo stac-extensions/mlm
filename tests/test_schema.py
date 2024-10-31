@@ -108,7 +108,7 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
          ], True),
     ],
 )
-def test_mlm_input_norm_type_statistics_combination(
+def test_mlm_input_scaling_combination(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
     test_scaling: List[Dict[str, Any]],
