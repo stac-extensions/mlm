@@ -8,18 +8,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
-- Add explicit check of `statitics` sub-fields `minimum`, `maximum`, `mean` and `stddev` for corresponding `norm_type`
-  values `min-max` and `z-score` that depend on it. Other `norm_type` values are ignored. Additional `statistics`
-  properties not directly required by the specific `norm_type` are also ignored.
+- Add explicit check of `scaling` sub-fields `minimum`, `maximum`, `mean`, `stddev`, etc. for corresponding `type`
+  values `min-max` and `z-score` that depend on it. 
+- Allow different `scaling` operations per band/channel/dimension as needed by the model.
+- Allow a `processing:expression` for a band/channel/dimension-specific `scaling` operation, granting more flexibility
+  in the definition of input preparation in contrast to having it applied for the entire input (but still possible).
 
 ### Changed
-- n/a
+- Moved `norm_type` to `scaling` object to better reflect the expected operation, which could be another operation
+  than what is typically known as "normalization" or "standardization" techniques in machine learning.
+- Moved `statistics` to `scaling` object to better reflect their mutual `type` and additional properties dependencies.
 
 ### Deprecated
 - n/a
 
 ### Removed
-- n/a
+- Removed `norm_type` enum values that were ambiguous regarding their expected result.
+  Instead, a `processing:expression` should be employed to explicitly define the calculation they represent.
+- Removed `norm_clip` property. It is now represented under `scaling` objects with a corresponding `type` definition.
+- Removed `norm_by_channel` from `mlm:input` objects. If rescaling (previously normalization in the documentation)
+  is a single value, broadcasting to the relevant bands should be performed implicitly.
+  Otherwise, the amount of `scaling` objects should match the number of bands or channels involved in the input.
 
 ### Fixed
 - n/a
