@@ -91,30 +91,34 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     indirect=True,
 )
 @pytest.mark.parametrize(
-    ["test_norm_type", "test_statistics", "is_valid"],
+    ["test_scaling", "is_valid"],
     [
-        ("min-max", [{"mean": 1, "stddev": 2}], False),
-        ("z-score", [{"minimum": 1, "maximum": 2}], False),
-        ("min-max", [{"mean": 1, "stddev": 2}, {"minimum": 1, "maximum": 2}], False),
-        ("z-score", [{"mean": 1, "stddev": 2}, {"minimum": 1, "maximum": 2}], False),
-        ("min-max", [{"minimum": 1, "maximum": 2}], True),
-        ("z-score", [{"mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra statistics must be ignored
-        ("l2", [{"mean": 1, "stddev": 2}], True),  # statistics "don't" care for this norm-type
+        ([{"type": "unknown", "mean": 1, "stddev": 2}], False),
+        ([{"type": "min-max", "mean": 1, "stddev": 2}], False),
+        ([{"type": "z-score", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "min-max", "mean": 1, "stddev": 2}, {"type": "min-max", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "z-score", "mean": 1, "stddev": 2}, {"type": "z-score", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "min-max", "minimum": 1, "maximum": 2}], True),
+        ([{"type": "z-score", "mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra must be ignored
+        ([{"type": "processing"}], False),
+        ([{"type": "processing", "format": "test", "expression": "test"}], True),
+        ([
+             {"type": "processing", "format": "test", "expression": "test"},
+             {"type": "min-max", "minimum": 1, "maximum": 2}
+         ], True),
     ],
 )
 def test_mlm_input_norm_type_statistics_combination(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
-    test_norm_type: str,
-    test_statistics: List[Dict[str, Any]],
+    test_scaling: List[Dict[str, Any]],
     is_valid: bool,
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    mlm_data["properties"]["mlm:input"][0]["norm_type"] = test_norm_type
-    mlm_data["properties"]["mlm:input"][0]["statistics"] = test_statistics
+    mlm_data["properties"]["mlm:input"][0]["scaling"] = test_scaling
     mlm_item = pystac.Item.from_dict(mlm_data)
     if is_valid:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
