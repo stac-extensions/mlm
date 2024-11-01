@@ -118,7 +118,7 @@ def test_mlm_input_scaling_combination(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    mlm_data["properties"]["mlm:input"][0]["scaling"] = test_scaling
+    mlm_data["properties"]["mlm:input"][0]["scaling"] = test_scaling  # type: ignore
     mlm_item = pystac.Item.from_dict(mlm_data)
     if is_valid:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
