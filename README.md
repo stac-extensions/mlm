@@ -420,16 +420,16 @@ indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 Select one option from:
 
-| `type`<br>([Scaling Enum](#scaling-enum)) | Required Properties                             | Scaling Operation                        |
-|-------------------------------------------|-------------------------------------------------|------------------------------------------|
-| `min-max`                                 | `minimum`, `maximum`                            | $(data - minimum) / (maximum - minimum)$ |
-| `z-score`                                 | `mean`, `stddev`                                | $(data - mean) / stddev$                 |
-| `clip`                                    | `minimum`, `maximum`                            | $\min(\max(data, minimum), maximum)$     |
-| `clip-min`                                | `minimum`                                       | $\max(data, minimum)$                    |
-| `clip-max`                                | `maximum`                                       | $\min(data, maximum)$                    |
-| `offset`                                  | `value`                                         | $data - value$                           |
-| `scale`                                   | `value`                                         | $data / value$                           |
-| `processing`                              | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
+| `type`       | Required Properties                             | Scaling Operation                        |
+|--------------|-------------------------------------------------|------------------------------------------|
+| `min-max`    | `minimum`, `maximum`                            | $(data - minimum) / (maximum - minimum)$ |
+| `z-score`    | `mean`, `stddev`                                | $(data - mean) / stddev$                 |
+| `clip`       | `minimum`, `maximum`                            | $\min(\max(data, minimum), maximum)$     |
+| `clip-min`   | `minimum`                                       | $\max(data, minimum)$                    |
+| `clip-max`   | `maximum`                                       | $\min(data, maximum)$                    |
+| `offset`     | `value`                                         | $data - value$                           |
+| `scale`      | `value`                                         | $data / value$                           |
+| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
 
 When a scaling `type` approach is specified, it is expected that the parameters necessary 
 to perform their calculation are provided for the corresponding input dimension data.
@@ -458,15 +458,13 @@ the [Scaling Object](#scaling-object) of the respective input dimension, as show
 }
 ```
 
-For operations such as L1 or L2 normalization, a [Processing Expression](#processing-expression) should also be employed.
+For operations such as L1 or L2 normalization, [Processing Expression](#processing-expression) should also be employed.
 This is because, depending on the [Model Input](#model-input-object) dimensions and reference data, there is an
 ambiguity regarding "how" and "where" such normalization functions must be applied against the input data. 
 A custom mathematical expression should provide explicitly the data manipulation and normalization strategy.
 
 In situations of very complex `scaling` operations, which cannot be represented by any of the previous definition,
 a `pre_processing_function` should be used instead (see [Model Input Object](#model-input-object)).
-
-[opencv-normalization-flags]: https://docs.opencv.org/4.x/d2/de8/group__core__array.html#gad12cefbcb5291cf958a85b4b67b6149f
 
 #### Resize Enum
 
@@ -486,7 +484,7 @@ See [OpenCV - Interpolation Flags][opencv-interpolation-flags]
 for details about the relevant methods. Equivalent methods from other packages are applicable as well.
 
 If none of the above values applies, `null` (literal, not string) can be used instead.
-If a custom rescaling operation, or a combination of operations (with or without [Normalization](#normalize-enum)),
+If a custom rescaling operation, or a combination of operations (with or without [Scaling](#scaling-object)),
 must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
 
 [opencv-interpolation-flags]: https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121
