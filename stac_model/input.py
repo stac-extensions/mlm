@@ -1,4 +1,5 @@
-from typing import Annotated, Any, List, Literal, Optional, Sequence, TypeAlias, Union
+from collections.abc import Sequence
+from typing import Annotated, Any, Literal, TypeAlias
 from typing_extensions import Self
 
 from pydantic import Field, model_validator
@@ -7,8 +8,8 @@ from stac_model.base import DataType, MLMBaseModel, Number, OmitIfNone, Processi
 
 
 class InputStructure(MLMBaseModel):
-    shape: List[Union[int, float]] = Field(min_items=1)
-    dim_order: List[str] = Field(min_items=1)
+    shape: list[int | float] = Field(min_items=1)
+    dim_order: list[str] = Field(min_items=1)
     data_type: DataType
 
     @model_validator(mode="after")
@@ -19,43 +20,17 @@ class InputStructure(MLMBaseModel):
 
 
 class MLMStatistic(MLMBaseModel):  # FIXME: add 'Statistics' dep from raster extension (cases required to be triggered)
-    minimum: Annotated[Optional[Number], OmitIfNone] = None
-    maximum: Annotated[Optional[Number], OmitIfNone] = None
-    mean: Annotated[Optional[Number], OmitIfNone] = None
-    stddev: Annotated[Optional[Number], OmitIfNone] = None
-    count: Annotated[Optional[int], OmitIfNone] = None
-    valid_percent: Annotated[Optional[Number], OmitIfNone] = None
+    minimum: Annotated[Number | None, OmitIfNone] = None
+    maximum: Annotated[Number | None, OmitIfNone] = None
+    mean: Annotated[Number | None, OmitIfNone] = None
+    stddev: Annotated[Number | None, OmitIfNone] = None
+    count: Annotated[int | None, OmitIfNone] = None
+    valid_percent: Annotated[Number | None, OmitIfNone] = None
 
 
-NormalizeType: TypeAlias = Optional[
-    Literal[
-        "min-max",
-        "z-score",
-        "l1",
-        "l2",
-        "l2sqr",
-        "hamming",
-        "hamming2",
-        "type-mask",
-        "relative",
-        "inf",
-    ]
-]
+NormalizeType: TypeAlias = Literal["min-max", "z-score", "l1", "l2", "l2sqr", "hamming", "hamming2", "type-mask", "relative", "inf"] | None
 
-ResizeType: TypeAlias = Optional[
-    Literal[
-        "crop",
-        "pad",
-        "interpolation-nearest",
-        "interpolation-linear",
-        "interpolation-cubic",
-        "interpolation-area",
-        "interpolation-lanczos4",
-        "interpolation-max",
-        "wrap-fill-outliers",
-        "wrap-inverse-map",
-    ]
-]
+ResizeType: TypeAlias = Literal["crop", "pad", "interpolation-nearest", "interpolation-linear", "interpolation-cubic", "interpolation-area", "interpolation-lanczos4", "interpolation-max", "wrap-fill-outliers", "wrap-inverse-map"] | None
 
 
 class ModelBand(MLMBaseModel):
@@ -66,11 +41,11 @@ class ModelBand(MLMBaseModel):
         )
     )
     # similar to 'ProcessingExpression', but they can be omitted here
-    format: Annotated[Optional[str], OmitIfNone] = Field(
+    format: Annotated[str | None, OmitIfNone] = Field(
         default=None,
         description="",
     )
-    expression: Annotated[Optional[Any], OmitIfNone] = Field(
+    expression: Annotated[Any | None, OmitIfNone] = Field(
         default=None,
         description="",
     )
@@ -88,7 +63,7 @@ class ModelBand(MLMBaseModel):
 class ModelInput(MLMBaseModel):
     name: str
     # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
-    bands: Sequence[Union[str, ModelBand]] = Field(
+    bands: Sequence[str | ModelBand] = Field(
         description=(
             "List of bands that compose the input. "
             "If a string is used, it is implied to correspond to a named-band. "
@@ -107,9 +82,9 @@ class ModelInput(MLMBaseModel):
         ],
     )
     input: InputStructure
-    norm_by_channel: Annotated[Optional[bool], OmitIfNone] = None
-    norm_type: Annotated[Optional[NormalizeType], OmitIfNone] = None
-    norm_clip: Annotated[Optional[List[Union[float, int]]], OmitIfNone] = None
-    resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
-    statistics: Annotated[Optional[List[MLMStatistic]], OmitIfNone] = None
-    pre_processing_function: Optional[ProcessingExpression] = None
+    norm_by_channel: Annotated[bool | None, OmitIfNone] = None
+    norm_type: Annotated[NormalizeType | None, OmitIfNone] = None
+    norm_clip: Annotated[list[float | int] | None, OmitIfNone] = None
+    resize_type: Annotated[ResizeType | None, OmitIfNone] = None
+    statistics: Annotated[list[MLMStatistic] | None, OmitIfNone] = None
+    pre_processing_function: ProcessingExpression | None = None

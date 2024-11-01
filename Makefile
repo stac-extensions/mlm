@@ -77,7 +77,6 @@ check-citation:
 
 .PHONY: check-safety
 check-safety: setup
-	uv check
 	uv run --python $(ACTIVEPYTHON) safety check --full-report
 	uv run --python $(ACTIVEPYTHON) bandit -ll --recursive stac_model tests
 

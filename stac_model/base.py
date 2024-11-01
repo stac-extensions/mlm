@@ -1,18 +1,11 @@
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Dict, List, Literal, TypeAlias, Union
+from typing import Any, Literal, TypeAlias, Union
 
 from pydantic import BaseModel, ConfigDict, model_serializer
 
-Number: TypeAlias = Union[int, float]
-JSON: TypeAlias = Union[
-    Dict[str, "JSON"],
-    List["JSON"],
-    Number,
-    bool,
-    str,
-    None,
-]
+Number: TypeAlias = int | float
+JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | Number | bool | str | None
 
 
 @dataclass
