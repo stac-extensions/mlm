@@ -91,6 +91,8 @@ For more details about the [`stac-model`](./stac_model) Python package, which pr
 using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
 connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 
+## Resources
+
 - Examples:
   - [Item examples](https://huggingface.co/wherobots/mlm-stac) for scene-classification,
       object detection, and semantic segmentation: Shows real world use of the
@@ -99,6 +101,8 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
 - [JSON Schema](https://stac-extensions.github.io/mlm/)
 - [Changelog](./CHANGELOG.md)
+- [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing version 1.3.0 of the extension 
+- [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
 
 ## Item Properties and Collection Fields
 
