@@ -153,7 +153,7 @@ def test_mlm_at_least_one_asset_model(
     else:
         with pytest.raises(pystac.errors.STACValidationError) as exc:
             pystac.validation.validate(mlm_item, validator=mlm_validator)
-        assert exc.value.source[0].schema["$comment"] in [
+        assert exc.value.source[0].schema["$comment"] in [  # type: ignore
             "At least one Asset must provide the model definition indicated by the 'mlm:model' role.",
             "Used to check the artifact type property that is required by a Model Asset annotated by 'mlm:model' role."
         ]
