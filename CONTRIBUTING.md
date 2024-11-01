@@ -2,22 +2,23 @@
 
 ## Project setup
 
-1. If you don't have `Poetry` installed run:
+1. If you don't have `uv` installed run:
 
 ```bash
-make poetry-install
+make setup
 ```
 
-> This installs Poetry as a [standalone application][poetry-install]. <br>
-> For more details, see also the [Poetry Documentation][poetry-docs]. <br>
-> If you prefer, you can simply install it inside your virtual environment.
+> This installs uv as a [standalone application][uv-install]. <br>
+> For more details, see also the [uv documentation][uv-docs]. <br>
 
-2. Initialize project dependencies with poetry and install `pre-commit` hooks:
+2. Initialize project dependencies with uv and install `pre-commit` hooks:
 
 ```bash
 make install-dev
 make pre-commit-install
 ```
+
+This will install project dependencies into the currently active environment. If you would like to use uv's default behavior of managing a project-scoped environment, use uv commands directly to install dependencies. `uv sync` will install dependencies and dev dependencies in `.venv` and update the `uv.lock`.
 
 ## PR submission
 
@@ -85,7 +86,7 @@ git push -u origin your-branch
 ### Building a new version of `stac-model`
 
 - Apply any relevant changes and `CHANGELOG.md` entries in a PR that modifies `stac-model`.
-- Bump the version with `poetry version <version>`.
+- Bump the version with `bumpversion bump <version>`.
   - You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. <br>
     For more details, refer to the [Semantic Versions][semver] standard;
 - Once CI validation succeeded, merge the corresponding PR branch.
@@ -110,6 +111,6 @@ You can also share how the ML Model extension does or does
 not serve your needs with us in the GitHub Discussions or raise
 Issues for bugs.
 
-[poetry-install]: https://github.com/python-poetry/install.python-poetry.org
-[poetry-docs]: https://python-poetry.org/docs/
+[uv-install]: https://docs.astral.sh/uv/getting-started/installation/
+[uv-docs]: https://docs.astral.sh/uv/
 [semver]: https://semver.org/

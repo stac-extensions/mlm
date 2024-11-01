@@ -23,13 +23,3 @@ updates:
     commit-message:
       prefix: ":arrow_up:"
     open-pull-requests-limit: 5
-
-  - package-ecosystem: "docker"
-    directory: "/docker"
-    schedule:
-      interval: "monthly"
-    allow:
-      - dependency-type: "all"
-    commit-message:
-      prefix: ":arrow_up:"
-    open-pull-requests-limit: 5
