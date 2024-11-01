@@ -87,7 +87,7 @@ lint: setup
 
 .PHONY: check-lint
 check-lint: lint
-uv run --python $(ACTIVEPYTHON) ruff check --config=pyproject.toml ./
+	uv run --python $(ACTIVEPYTHON) ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint
 format-lint: setup lint
