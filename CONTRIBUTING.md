@@ -18,7 +18,9 @@ make install-dev
 make pre-commit-install
 ```
 
-This will install project dependencies into the currently active environment. If you would like to use uv's default behavior of managing a project-scoped environment, use uv commands directly to install dependencies. `uv sync` will install dependencies and dev dependencies in `.venv` and update the `uv.lock`.
+This will install project dependencies into the currently active environment. If you would like to 
+use uv's default behavior of managing a project-scoped environment, use uv commands directly to 
+install dependencies. `uv sync` will install dependencies and dev dependencies in `.venv` and update the `uv.lock`.
 
 ## PR submission
 
