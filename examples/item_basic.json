@@ -120,7 +120,8 @@
       "type": "text/html",
       "roles": [
         "mlm:model"
-      ]
+      ],
+      "mlm:artifact_type": "torch.save"
     }
   },
   "links": [

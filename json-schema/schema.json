@@ -63,8 +63,12 @@
             "$ref": "#/$defs/AnyBandsRef"
           },
           {
-            "$comment": "Schema to validate model role requirement.",
+            "$comment": "Schema to validate that at least one Asset defines a model role.",
             "$ref": "#/$defs/AssetModelRoleMinimumOneDefinition"
+          },
+          {
+            "$comment": "Schema to validate that the Asset model properties are mutually exclusive to the model role.",
+            "$ref": "#/$defs/AssetModelRequiredProperties"
           }
         ]
       }
@@ -368,6 +372,15 @@
       "title": "Framework version",
       "type": "string",
       "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
+    "mlm:artifact_type": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "torch.save",
+        "torch.jit.save",
+        "torch.export.save"
+      ]
     },
     "mlm:tasks": {
       "type": "array",
@@ -729,6 +742,57 @@
     "DataType": {
       "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/data_type"
     },
+    "HasArtifactType": {
+      "$comment": "Used to check the artifact type property that is required by a Model Asset annotated by 'mlm:model' role.",
+      "type": "object",
+      "required": [
+        "mlm:artifact_type"
+      ],
+      "properties": {
+        "mlm:artifact_type": {
+          "$ref": "#/$defs/mlm:artifact_type"
+        }
+      }
+    },
+    "AssetModelRole": {
+      "$comment": "Used to check the presence of 'mlm:model' role required by a Model Asset.",
+      "type": "object",
+      "required": [
+        "roles"
+      ],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "contains": {
+            "const": "mlm:model"
+          },
+          "minItems": 1
+        }
+      }
+    },
+    "AssetModelRequiredProperties": {
+      "$comment": "Asset containing the model definition must indicate both the 'mlm:model' role and an artifact type.",
+      "required": [
+        "assets"
+      ],
+      "properties": {
+        "assets": {
+          "additionalProperties": {
+            "if": {
+              "$ref": "#/$defs/AssetModelRole"
+            },
+            "then": {
+              "$ref": "#/$defs/HasArtifactType"
+            },
+            "else": {
+              "not": {
+                "$ref": "#/$defs/HasArtifactType"
+              }
+            }
+          }
+        }
+      }
+    },
     "AssetModelRoleMinimumOneDefinition": {
       "$comment": "At least one Asset must provide the model definition indicated by the 'mlm:model' role.",
       "required": [
@@ -739,15 +803,7 @@
           "properties": {
             "assets": {
               "additionalProperties": {
-                "properties": {
-                  "roles": {
-                    "type": "array",
-                    "items": {
-                      "const": "mlm:model"
-                    },
-                    "minItems": 1
-                  }
-                }
+                "$ref": "#/$defs/AssetModelRole"
               }
             }
           }
@@ -774,19 +830,6 @@
           }
         }
       ]
-    },
-    "AssetModelRole": {
-      "required": [
-        "roles"
-      ],
-      "properties": {
-        "roles": {
-          "contains": {
-            "type": "string",
-            "const": "mlm:model"
-          }
-        }
-      }
     },
     "ModelBands": {
       "description": "List of bands (if any) that compose the input. Band order represents the index position of the bands.",

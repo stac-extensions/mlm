@@ -273,6 +273,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
       "eo:bands": [
         {

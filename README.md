@@ -600,13 +600,13 @@ In order to provide more context, the following roles are also recommended were 
 
 ### Model Asset
 
-| Field Name        | Type                                      | Description                                                                                      |
-|-------------------|-------------------------------------------|--------------------------------------------------------------------------------------------------|
-| title             | string                                    | Description of the model asset.                                                                  |
-| href              | string                                    | URI to the model artifact.                                                                       |
-| type              | string                                    | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
-| roles             | \[string]                                 | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
-| mlm:artifact_type | [Artifact Type Enum](#artifact-type-enum) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
+| Field Name        | Type                            | Description                                                                                      |
+|-------------------|---------------------------------|--------------------------------------------------------------------------------------------------|
+| title             | string                          | Description of the model asset.                                                                  |
+| href              | string                          | URI to the model artifact.                                                                       |
+| type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
+| roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
+| mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
@@ -642,7 +642,7 @@ official. In order to validate the specific framework and artifact type employed
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
 
-#### Artifact Type Enum
+#### Artifact Type
 
 This value can be used to provide additional details about the specific model artifact being described.
 For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions,

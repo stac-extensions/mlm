@@ -497,6 +497,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
       "eo:bands": [
         {
@@ -546,7 +547,6 @@
       "description": "Source code to run the model.",
       "type": "text/x-python",
       "roles": [
-        "mlm:model",
         "code",
         "metadata"
       ]

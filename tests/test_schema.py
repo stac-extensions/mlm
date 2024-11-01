@@ -119,25 +119,44 @@ def test_mlm_other_non_mlm_assets_allowed(
     ["item_basic.json"],
     indirect=True,
 )
+@pytest.mark.parametrize(
+    ["model_asset_extras", "is_valid"],
+    [
+        ({"roles": ["checkpoint"]}, False),
+        ({"roles": ["checkpoint", "mlm:model"]}, False),
+        ({"roles": ["checkpoint"], "mlm:artifact_type": "test"}, False),
+        ({"roles": ["checkpoint", "mlm:model"], "mlm:artifact_type": "test"}, True),
+    ]
+)
 def test_mlm_at_least_one_asset_model(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
+    model_asset_extras: Dict[str, Any],
+    is_valid: bool,
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
 
-    mlm_data["assets"] = {  # needs at least 1 asset with role 'mlm:model'
-        "model": {
-            "type": "application/octet-stream; application=pytorch",
-            "href": "https://example.com/sample/checkpoint.pt",
-            "roles": ["checkpoint"],
-            "title": "Model Weights Checkpoint",
-        }
+    mlm_model = {
+        "type": "application/octet-stream; application=pytorch",
+        "href": "https://example.com/sample/checkpoint.pt",
+        "title": "Model Weights Checkpoint",
     }
-    with pytest.raises(pystac.errors.STACValidationError):
-        mlm_item = pystac.Item.from_dict(mlm_data)
+    mlm_model.update(model_asset_extras)
+    mlm_data["assets"] = {
+        "model": mlm_model
+    }
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    if is_valid:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
+    else:
+        with pytest.raises(pystac.errors.STACValidationError) as exc:
+            pystac.validation.validate(mlm_item, validator=mlm_validator)
+        assert exc.value.source[0].schema["$comment"] in [
+            "At least one Asset must provide the model definition indicated by the 'mlm:model' role.",
+            "Used to check the artifact type property that is required by a Model Asset annotated by 'mlm:model' role."
+        ]
 
 
 def test_model_metadata_to_dict(eurosat_resnet):
