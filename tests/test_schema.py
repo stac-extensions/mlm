@@ -40,7 +40,7 @@ def test_mlm_no_undefined_prefixed_field(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    mlm_data["properties"]["mlm:unknown"] = "random"
+    mlm_data["properties"]["mlm:unknown"] = "random"  # type: ignore
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
