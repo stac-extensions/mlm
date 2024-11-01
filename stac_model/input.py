@@ -28,8 +28,10 @@ class ScalingClipMax(MLMBaseModel):
     maximum: Number
 
 
-class ScalingClip(ScalingClipMin, ScalingClipMax):
+class ScalingClip(MLMBaseModel):
     type: Literal["clip"] = "clip"
+    minimum: Number
+    maximum: Number
 
 
 class ScalingMinMax(MLMBaseModel):
