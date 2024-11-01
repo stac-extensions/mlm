@@ -7,7 +7,7 @@ from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
-from stac_model.input import InputStructure, ScalingObject, ModelInput
+from stac_model.input import InputStructure, ModelInput, ScalingObject
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
