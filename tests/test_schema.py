@@ -145,7 +145,7 @@ def test_mlm_at_least_one_asset_model(
     }
     mlm_model.update(model_asset_extras)
     mlm_data["assets"] = {
-        "model": mlm_model
+        "model": mlm_model  # type: ignore
     }
     mlm_item = pystac.Item.from_dict(mlm_data)
     if is_valid:
