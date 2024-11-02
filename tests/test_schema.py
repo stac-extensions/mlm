@@ -32,6 +32,29 @@ def test_mlm_schema(
     ["item_raster_bands.json"],
     indirect=True,
 )
+def test_mlm_no_undefined_prefixed_field(
+    mlm_validator: STACValidator,
+    mlm_example: Dict[str, JSON],
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    mlm_data["properties"]["mlm:unknown"] = "random"  # type: ignore
+    with pytest.raises(pystac.errors.STACValidationError) as exc:
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+    assert all(
+        field in str(exc.value.source)
+        for field in ["mlm:unknown", "^(?!mlm:)"]
+    )
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_raster_bands.json"],
+    indirect=True,
+)
 def test_mlm_missing_bands_invalid_if_mlm_input_lists_bands(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
