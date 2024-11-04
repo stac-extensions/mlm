@@ -116,7 +116,7 @@ A potential representation of a STAC Asset could be as follows:
 Furthermore, the STAC Item representing the derived product could also include
 a [Link Object](https://github.com/radiantearth/stac-spec/tree/master/item-spec/item-spec.md#link-object)
 referring back to the MLM definition using `rel: derived_from`, as described in
-[MLM Relation Types](README.md#relation-types). Such a link would like something like the following:
+[MLM Relation Types](README.md#relation-types). Such a link would look something like the following:
 
 ```json
 {

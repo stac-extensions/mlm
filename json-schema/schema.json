@@ -314,7 +314,7 @@
       },
       "$comment": "Allow properties not defined by MLM prefix to allow combination with other extensions.",
       "patternProperties": {
-        "^(?!dlm:)": {}
+        "^(?!mlm:)": {}
       },
       "additionalProperties": false
     },
