@@ -29,7 +29,7 @@ _A PydanticV2 and PySTAC validation and serialization library for the STAC ML Mo
 pip install -U stac-model
 ```
 
-or install with `uv`:
+or install with uv:
 
 ```shell
 uv add stac-model

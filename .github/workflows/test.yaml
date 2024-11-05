@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           npm install
-          npm test
           npm list
+          npm test

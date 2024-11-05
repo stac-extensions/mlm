@@ -28,9 +28,31 @@ class MLMStatistic(MLMBaseModel):  # FIXME: add 'Statistics' dep from raster ext
     valid_percent: Annotated[Number | None, OmitIfNone] = None
 
 
-NormalizeType: TypeAlias = Literal["min-max", "z-score", "l1", "l2", "l2sqr", "hamming", "hamming2", "type-mask", "relative", "inf"] | None
+NormalizeType: TypeAlias = Literal[
+        "min-max",
+        "z-score",
+        "l1",
+        "l2",
+        "l2sqr",
+        "hamming",
+        "hamming2",
+        "type-mask",
+        "relative",
+        "inf",
+    ] | None # noqa: E501
 
-ResizeType: TypeAlias = Literal["crop", "pad", "interpolation-nearest", "interpolation-linear", "interpolation-cubic", "interpolation-area", "interpolation-lanczos4", "interpolation-max", "wrap-fill-outliers", "wrap-inverse-map"] | None
+ResizeType: TypeAlias = Literal[
+        "crop",
+        "pad",
+        "interpolation-nearest",
+        "interpolation-linear",
+        "interpolation-cubic",
+        "interpolation-area",
+        "interpolation-lanczos4",
+        "interpolation-max",
+        "wrap-fill-outliers",
+        "wrap-inverse-map",
+    ] | None # noqa: E501
 
 
 class ModelBand(MLMBaseModel):
