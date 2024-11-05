@@ -5,10 +5,11 @@ ACTIVEPYTHON = $(shell which python)
 #* UV
 .PHONY: setup
 setup:
-	@if ! command -v uv &> /dev/null; then \
-		curl -LsSf https://astral.sh/uv/install.sh | sh; \
-	else \
+	@if command -v uv &> /dev/null; then \
 		echo "uv is already installed"; \
+	else \
+		echo "uv not found, installing..."; \
+		curl -LsSf https://astral.sh/uv/install.sh | sh; \
 	fi
 
 .PHONY: publish

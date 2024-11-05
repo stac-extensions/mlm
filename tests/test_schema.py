@@ -34,7 +34,7 @@ def test_mlm_schema(
 )
 def test_mlm_no_undefined_prefixed_field(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
