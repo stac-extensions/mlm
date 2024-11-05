@@ -11,18 +11,6 @@ setup:
 		echo "uv is already installed"; \
 	fi
 
-.PHONY: remove
-remove:
-	@read -p "Are you sure you want to remove uv and all its data? [y/N] " confirm && \
-	if [ "$$confirm" = "y" ]; then \
-		uv cache clean; \
-		rm -r "$$(uv python dir)"; \
-		rm -r "$$(uv tool dir)"; \
-		rm ~/.cargo/bin/uv ~/.cargo/bin/uvx; \
-	else \
-		echo "Operation cancelled."; \
-	fi
-
 .PHONY: publish
 publish:
 	uv publish --build
