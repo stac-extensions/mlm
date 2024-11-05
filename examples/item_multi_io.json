@@ -85,7 +85,7 @@
           ],
           "data_type": "uint16"
         },
-        "scaling": null,
+        "value_scaling": null,
         "resize_type": null
       },
       {

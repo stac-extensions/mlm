@@ -18,58 +18,58 @@ class InputStructure(MLMBaseModel):
         return self
 
 
-class ScalingClipMin(MLMBaseModel):
+class ValueScalingClipMin(MLMBaseModel):
     type: Literal["clip-min"] = "clip-min"
     minimum: Number
 
 
-class ScalingClipMax(MLMBaseModel):
+class ValueScalingClipMax(MLMBaseModel):
     type: Literal["clip-max"] = "clip-max"
     maximum: Number
 
 
-class ScalingClip(MLMBaseModel):
+class ValueScalingClip(MLMBaseModel):
     type: Literal["clip"] = "clip"
     minimum: Number
     maximum: Number
 
 
-class ScalingMinMax(MLMBaseModel):
+class ValueScalingMinMax(MLMBaseModel):
     type: Literal["min-max"] = "min-max"
     minimum: Number
     maximum: Number
 
 
-class ScalingZScore(MLMBaseModel):
+class ValueScalingZScore(MLMBaseModel):
     type: Literal["z-score"] = "z-score"
     mean: Number
     stddev: Number
 
 
-class ScalingOffset(MLMBaseModel):
+class ValueScalingOffset(MLMBaseModel):
     type: Literal["offset"] = "offset"
     value: Number
 
 
-class ScalingScale(MLMBaseModel):
+class ValueScalingScale(MLMBaseModel):
     type: Literal["scale"] = "scale"
     value: Number
 
 
-class ScalingProcessingExpression(ProcessingExpression):
+class ValueScalingProcessingExpression(ProcessingExpression):
     type: Literal["processing"] = "processing"
 
 
-ScalingObject: TypeAlias = Optional[
+ValueScalingObject: TypeAlias = Optional[
     Union[
-        ScalingMinMax,
-        ScalingZScore,
-        ScalingClip,
-        ScalingClipMin,
-        ScalingClipMax,
-        ScalingOffset,
-        ScalingScale,
-        ScalingProcessingExpression,
+        ValueScalingMinMax,
+        ValueScalingZScore,
+        ValueScalingClip,
+        ValueScalingClipMin,
+        ValueScalingClipMax,
+        ValueScalingOffset,
+        ValueScalingScale,
+        ValueScalingProcessingExpression,
     ]
 ]
 
@@ -138,6 +138,6 @@ class ModelInput(MLMBaseModel):
         ],
     )
     input: InputStructure
-    scaling: Annotated[Optional[List[ScalingObject]], OmitIfNone] = None
+    value_scaling: Annotated[Optional[List[ValueScalingObject]], OmitIfNone] = None
     resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
     pre_processing_function: Optional[ProcessingExpression] = None

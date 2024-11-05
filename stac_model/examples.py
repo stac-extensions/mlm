@@ -7,7 +7,7 @@ from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
-from stac_model.input import InputStructure, ModelInput, ScalingObject
+from stac_model.input import InputStructure, ModelInput, ValueScalingObject
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
@@ -63,9 +63,9 @@ def eurosat_resnet() -> ItemMLModelExtension:
         761.30323499,
         1231.58581042,
     ]
-    scaling = [
+    value_scaling = [
         cast(
-            ScalingObject,
+            ValueScalingObject,
             dict(
                 type="z-score",
                 mean=mean,
@@ -79,7 +79,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         bands=band_names,
         input=input_struct,
         resize_type=None,
-        scaling=scaling,
+        value_scaling=value_scaling,
         pre_processing_function=ProcessingExpression(
             format="python",
             expression="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn",

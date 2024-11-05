@@ -516,8 +516,8 @@
           "type": "string",
           "minLength": 1
         },
-        "scaling": {
-          "$ref": "#/$defs/Scaling"
+        "value_scaling": {
+          "$ref": "#/$defs/ValueScaling"
         },
         "resize_type": {
           "$ref": "#/$defs/ResizeType"
@@ -639,7 +639,7 @@
         ]
       }
     },
-    "Scaling": {
+    "ValueScaling": {
       "oneOf": [
         {
           "type": "null"
@@ -648,12 +648,12 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "#/$defs/ScalingObject"
+            "$ref": "#/$defs/ValueScalingObject"
           }
         }
       ]
     },
-    "ScalingObject": {
+    "ValueScalingObject": {
       "oneOf": [
         {
           "type": "object",
@@ -776,11 +776,11 @@
           }
         },
         {
-          "$ref": "#/$defs/ScalingProcessingExpression"
+          "$ref": "#/$defs/ValueScalingProcessingExpression"
         }
       ]
     },
-    "ScalingProcessingExpression": {
+    "ValueScalingProcessingExpression": {
       "allOf": [
         {
           "type": "object",

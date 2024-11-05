@@ -99,7 +99,7 @@
         },
         "norm_by_channel": true,
         "resize_type": null,
-        "scaling": [
+        "value_scaling": [
           {
             "type": "z-score",
             "mean": 1354.40546513,

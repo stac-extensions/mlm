@@ -95,7 +95,7 @@
           ],
           "data_type": "float32"
         },
-        "scaling": null,
+        "value_scaling": null,
         "resize_type": null,
         "pre_processing_function": {
           "format": "python",
