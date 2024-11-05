@@ -5,12 +5,7 @@ ACTIVEPYTHON = $(shell which python)
 #* UV
 .PHONY: setup
 setup:
-	@if command -v uv &> /dev/null; then \
-		echo "uv is already installed"; \
-	else \
-		echo "uv not found, installing..."; \
-		curl -LsSf https://astral.sh/uv/install.sh | sh; \
-	fi
+	curl -LsSf https://astral.sh/uv/install.sh | sh
 
 .PHONY: publish
 publish:
@@ -18,22 +13,22 @@ publish:
 
 #* Installation
 .PHONY: install
-install: setup
+install:
 	uv export --format requirements-txt -o requirements.txt --no-dev
 	uv pip install --python $(ACTIVEPYTHON) -r requirements.txt
 
 .PHONY: install-dev
-install-dev: setup
+install-dev:
 	uv export --format requirements-txt -o requirements-dev.txt
 	uv pip install --python $(ACTIVEPYTHON) -r requirements-dev.txt
 
 .PHONY: pre-commit-install
-pre-commit-install: setup
+pre-commit-install:
 	uv run --python $(ACTIVEPYTHON) pre-commit install
 
 #* Formatters
 .PHONY: codestyle
-codestyle: setup
+codestyle:
 	uv run --python $(ACTIVEPYTHON) ruff format --config=pyproject.toml stac_model tests
 
 .PHONY: format
@@ -41,7 +36,7 @@ format: codestyle
 
 #* Linting
 .PHONY: test
-test: setup
+test:
 	uv run --python $(ACTIVEPYTHON) pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
@@ -51,19 +46,19 @@ check: check-examples check-markdown check-lint check-mypy check-safety check-ci
 check-all: check
 
 .PHONY: mypy
-mypy: setup
+mypy:
 	uv run --python $(ACTIVEPYTHON) mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
 check-mypy: mypy
 
 .PHONY: check-safety
-check-safety: setup
+check-safety:
 	uv run --python $(ACTIVEPYTHON) safety check --full-report
 	uv run --python $(ACTIVEPYTHON) bandit -ll --recursive stac_model tests
 
 .PHONY: lint
-lint: setup
+lint:
 	uv run --python $(ACTIVEPYTHON) ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
@@ -71,7 +66,7 @@ check-lint: lint
 	uv run --python $(ACTIVEPYTHON) ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint
-format-lint: setup lint
+format-lint: lint
 	ruff format --config=pyproject.toml ./
 
 .PHONY: install-npm
@@ -101,7 +96,7 @@ $(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
-update-dev-deps: setup
+update-dev-deps:
 	uv export --only-dev --format requirements-txt -o requirements-only-dev.txt
 	uv pip install --python $(ACTIVEPYTHON) -r requirements-only-dev.txt
 

@@ -44,10 +44,7 @@ def test_mlm_no_undefined_prefixed_field(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert all(
-        field in str(exc.value.source)
-        for field in ["mlm:unknown", "^(?!mlm:)"]
-    )
+    assert all(field in str(exc.value.source) for field in ["mlm:unknown", "^(?!mlm:)"])
 
 
 @pytest.mark.parametrize(
