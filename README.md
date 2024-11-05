@@ -339,7 +339,7 @@ by the model inputs. This highlights the fact that `value_scaling` are not *nece
 to [Band Statistics][stac-1.1-stats] values, although they are often equal in practice due to the applicable
 value-range domains they represent. Also, this allows addressing special scaling cases, using additional properties
 unavailable from [Band Statistics][stac-1.1-stats], such as `value`-specific scaling
-(see [Scaling Object](#scaling-object) for more details).
+(see [Value Scaling Object](#value-scaling-object) for more details).
 
 [stac-1.1-band]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#bands
 [stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#statistics-object
