@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix missing `mlm:artifact_type` property check for a Model Asset definition
   (fixes <https://github.com/stac-extensions/mlm/issues/42>).
   The `mlm:artifact_type` is now mutually and exclusively required by the corresponding Asset with `mlm:model` role.
+- Fix check of disallowed unknown/undefined `mlm:`-prefixed fields
+  (fixes [#41](https://github.com/stac-extensions/mlm/issues/41)).
 
 ## [v1.3.0](https://github.com/stac-extensions/mlm/tree/v1.3.0)
 
