@@ -259,18 +259,15 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 
 ### Model Input Object
 
-| Field Name              | Type                                                    | Description                                                                                                                                                                                                                                                                 |
-|-------------------------|---------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| name                    | string                                                  | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                             |
-| bands                   | \[string \| [Model Band Object](#model-band-object)]    | **REQUIRED** The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array.          |
-| input                   | [Input Structure Object](#input-structure-object)       | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                |
-| description             | string                                                  | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                                                        |
-| norm_by_channel         | boolean                                                 | Whether to normalize each channel by channel-wise statistics or to normalize by dataset statistics. If True, use an array of `statistics` of same dimensionality and order as the `bands` field in this object.                                                             |
-| norm_type               | [Normalize Enum](#normalize-enum) \| null               | Normalization method. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                           |
-| norm_clip               | \[number]                                               | When `norm_type = "clip"`, this array supplies the value for each `bands` item, which is used to divide each band before clipping values between 0 and 1.                                                                                                                   |
-| resize_type             | [Resize Enum](#resize-enum) \| null                     | High-level descriptor of the rescaling method to change image shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                            |
-| statistics              | \[[Statistics Object](#bands-and-statistics)]           | Dataset statistics for the training dataset used to normalize the inputs.                                                                                                                                                                                                   |
-| pre_processing_function | [Processing Expression](#processing-expression) \| null | Custom preprocessing function where normalization and rescaling, and any other significant operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object). |
+| Field Name              | Type                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
+|-------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string                                                   | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                                                                                                                                                                          |
+| bands                   | \[string \| [Model Band Object](#model-band-object)]     | **REQUIRED** The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array.                                                                                                                                                       |
+| input                   | [Input Structure Object](#input-structure-object)        | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                                                                                                                                                             |
+| description             | string                                                   | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                                                                                                                                                                                                     |
+| value_scaling           | \[[Value Scaling Object](#value-scaling-object)] \| null | Method to scale, normalize, or standardize the data inputs values, across dimensions, per corresponding dimension index, or `null` if none applies. These values often correspond to dataset or sensor statistics employed for training the model, but can come from another source as needed by the model definition. Consider using `pre_processing_function` for custom implementations or more complex combinations. |
+| resize_type             | [Resize Enum](#resize-enum) \| null                      | High-level descriptor of the resize method to modify the input dimensions shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                                                                                                             |
+| pre_processing_function | [Processing Expression](#processing-expression) \| null  | Custom preprocessing function where rescaling and resize, and any other significant data preparation operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object).                                                                                                                                    |
 
 Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
 However, setting `null` explicitly when this information is known by the model provider can help users understand
@@ -323,13 +320,26 @@ An input's `bands` definition can either be a plain `string` or a [Model Band Ob
 When a `string` is employed directly, the value should be implicitly mapped to the `name` property of the
 explicit object representation.
 
-One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Statistics][stac-1.1-stats] object
+One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Band Statistics][stac-1.1-stats] object
 (or the corresponding [STAC Raster - Statistics][stac-raster-stats] for STAC 1.0) are not
 defined at the "Band Object" level, but at the [Model Input](#model-input-object) level.
 This is because, in machine learning, it is common to need overall statistics for the dataset used to train the model
 to normalize all bands, rather than normalizing the values over a single product. Furthermore, statistics could be
 applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
-properties of the model.
+properties of the model. 
+
+Another distinction is that, depending on the model, statistics could apply to some inputs that have no reference to
+any `bands` definition. In such case, defining statistics under `bands` would not be possible, or would intrude
+ambiguous definitions.
+
+Finally, contrary to the "`statistics`" property name employed by [Band Statistics][stac-1.1-stats], MLM employs the 
+distinct name `value_scaling`, although similar `minimum`, `maximum`, etc. sub-fields are employed.
+This is done explicitly to disambiguate "informative" band statistics from "applied scaling operations" required
+by the model inputs. This highlights the fact that `value_scaling` are not *necessarily* equal
+to [Band Statistics][stac-1.1-stats] values, although they are often equal in practice due to the applicable
+value-range domains they represent. Also, this allows addressing special scaling cases, using additional properties
+unavailable from [Band Statistics][stac-1.1-stats], such as `value`-specific scaling
+(see [Value Scaling Object](#value-scaling-object) for more details).
 
 [stac-1.1-band]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#bands
 [stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#statistics-object
@@ -410,34 +420,55 @@ Below are some notable common names recommended for use, but others can be emplo
 For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
-#### Normalize Enum
+#### Value Scaling Object
 
 Select one option from:
-- `min-max`
-- `z-score`
-- `l1`
-- `l2`
-- `l2sqr`
-- `hamming`
-- `hamming2`
-- `type-mask`
-- `relative`
-- `inf`
-- `clip`
 
-See [OpenCV - Normalization Flags][opencv-normalization-flags]
-for details about the relevant methods. Equivalent methods from other packages are applicable as well.
+| `type`       | Required Properties                             | Scaling Operation                        |
+|--------------|-------------------------------------------------|------------------------------------------|
+| `min-max`    | `minimum`, `maximum`                            | $(data - minimum) / (maximum - minimum)$ |
+| `z-score`    | `mean`, `stddev`                                | $(data - mean) / stddev$                 |
+| `clip`       | `minimum`, `maximum`                            | $\min(\max(data, minimum), maximum)$     |
+| `clip-min`   | `minimum`                                       | $\max(data, minimum)$                    |
+| `clip-max`   | `maximum`                                       | $\min(data, maximum)$                    |
+| `offset`     | `value`                                         | $data - value$                           |
+| `scale`      | `value`                                         | $data / value$                           |
+| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
 
-When a normalization technique is specified, it is expected that the corresponding [Statistics](#bands-and-statistics)
-parameters necessary to perform it would be provided for the corresponding input.
-For example, the `min-max` normalization would require that at least the `minimum` and `maximum` statistic properties
-are provided, while the `z-score` would require `mean` and `stddev`.
+When a scaling `type` approach is specified, it is expected that the parameters necessary 
+to perform their calculation are provided for the corresponding input dimension data.
 
-If none of the above values applies, `null` (literal, not string) can be used instead.
-If a custom normalization operation, or a combination of operations (with or without [Resize](#resize-enum)),
-must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
+If none of the above values applies for a given dimension, `type: null` (literal `null`, not string) should be
+used instead. If none of the input dimension require scaling, the entire definition can be defined
+as `value_scaling: null` or be omitted entirely.
 
-[opencv-normalization-flags]: https://docs.opencv.org/4.x/d2/de8/group__core__array.html#gad12cefbcb5291cf958a85b4b67b6149f
+When `value_scaling` is specified, the amount of objects defined in the array must match the size of
+the bands/channels/dimensions described by the [Model Input](#model-input-object). However, the `value_scaling` array
+is allowed to contain a single object if the entire input must be rescaled using the same definition across all
+dimensions. In such case, implicit broadcasting of the unique [Value Scaling Object](#value-scaling-object) should be
+performed for all applicable dimensions when running inference with the model.
+
+If a custom scaling operation, or a combination of more complex operations (with or without [Resize](#resize-enum)),
+must be defined instead, a [Processing Expression](#processing-expression) reference can be specified in place of 
+the [Value Scaling Object](#value-scaling-object) of the respective input dimension, as shown below.
+
+```json
+{
+  "value_scaling": [
+    {"type": "min-max", "minimum": 0, "maximum": 255},
+    {"type": "clip", "minimum": 0, "maximum": 255},
+    {"type": "processing", "format": "gdal-calc", "expression": "A * logical_or( A<=177, A>=185 )"}
+  ]
+}
+```
+
+For operations such as L1 or L2 normalization, [Processing Expression](#processing-expression) should also be employed.
+This is because, depending on the [Model Input](#model-input-object) dimensions and reference data, there is an
+ambiguity regarding "how" and "where" such normalization functions must be applied against the input data. 
+A custom mathematical expression should provide explicitly the data manipulation and normalization strategy.
+
+In situations of very complex `value_scaling` operations, which cannot be represented by any of the previous definition,
+a `pre_processing_function` should be used instead (see [Model Input Object](#model-input-object)).
 
 #### Resize Enum
 
@@ -457,7 +488,8 @@ See [OpenCV - Interpolation Flags][opencv-interpolation-flags]
 for details about the relevant methods. Equivalent methods from other packages are applicable as well.
 
 If none of the above values applies, `null` (literal, not string) can be used instead.
-If a custom rescaling operation, or a combination of operations (with or without [Normalization](#normalize-enum)),
+If a custom rescaling operation, or a combination of operations
+(with or without [Value Scaling](#value-scaling-object)),
 must be defined instead, consider using a [Processing Expression](#processing-expression) reference.
 
 [opencv-interpolation-flags]: https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121
@@ -477,7 +509,7 @@ On top of the examples already provided by [Processing Extension - Expression Ob
 the following formats are recommended as alternative scripts and function references.
 
 | Format   | Type   | Description                            | Expression Example                                                                                   |
-|----------| ------ |----------------------------------------|------------------------------------------------------------------------------------------------------|
+|----------|--------|----------------------------------------|------------------------------------------------------------------------------------------------------|
 | `python` | string | A Python entry point reference.        | `my_package.my_module:my_processing_function` or `my_package.my_module:MyClass.my_method`            |
 | `docker` | string | An URI with image and tag to a Docker. | `ghcr.io/NAMESPACE/IMAGE_NAME:latest`                                                                |
 | `uri`    | string | An URI to some binary or script.       | `{"href": "https://raw.githubusercontent.com/ORG/REPO/TAG/package/cli.py", "type": "text/x-python"}` |
@@ -505,7 +537,7 @@ the following formats are recommended as alternative scripts and function refere
 | result                   | [Result Structure Object](#result-structure-object)     | **REQUIRED** The structure that describes the resulting output arrays/tensors from one model head.                                                                              |
 | description              | string                                                  | Additional details about the output such as describing its purpose or expected result that cannot be represented by other properties.                                           |
 | classification:classes   | \[[Class Object](#class-object)]                        | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                          |
-| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization and rescaling, and any other significant operations takes place.                                                             |
+| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization, rescaling, or any other significant operations takes place.                                                                 |
 
 While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
 shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the

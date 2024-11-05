@@ -97,59 +97,70 @@
           ],
           "data_type": "float32"
         },
-        "norm_by_channel": true,
-        "norm_type": "z-score",
         "resize_type": null,
-        "statistics": [
+        "value_scaling": [
           {
+            "type": "z-score",
             "mean": 1354.40546513,
             "stddev": 245.71762908
           },
           {
+            "type": "z-score",
             "mean": 1118.24399958,
             "stddev": 333.00778264
           },
           {
+            "type": "z-score",
             "mean": 1042.92983953,
             "stddev": 395.09249139
           },
           {
+            "type": "z-score",
             "mean": 947.62620298,
             "stddev": 593.75055589
           },
           {
+            "type": "z-score",
             "mean": 1199.47283961,
             "stddev": 566.4170017
           },
           {
+            "type": "z-score",
             "mean": 1999.79090914,
             "stddev": 861.18399006
           },
           {
+            "type": "z-score",
             "mean": 2369.22292565,
             "stddev": 1086.63139075
           },
           {
+            "type": "z-score",
             "mean": 2296.82608323,
             "stddev": 1117.98170791
           },
           {
+            "type": "z-score",
             "mean": 732.08340178,
             "stddev": 404.91978886
           },
           {
+            "type": "z-score",
             "mean": 12.11327804,
             "stddev": 4.77584468
           },
           {
+            "type": "z-score",
             "mean": 1819.01027855,
             "stddev": 1002.58768311
           },
           {
+            "type": "z-score",
             "mean": 1118.92391149,
             "stddev": 761.30323499
           },
           {
+            "type": "z-score",
             "mean": 2594.14080798,
             "stddev": 1231.58581042
           }

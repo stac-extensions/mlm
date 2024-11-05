@@ -113,6 +113,48 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     ["item_basic.json"],
     indirect=True,
 )
+@pytest.mark.parametrize(
+    ["test_scaling", "is_valid"],
+    [
+        ([{"type": "unknown", "mean": 1, "stddev": 2}], False),
+        ([{"type": "min-max", "mean": 1, "stddev": 2}], False),
+        ([{"type": "z-score", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "min-max", "mean": 1, "stddev": 2}, {"type": "min-max", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "z-score", "mean": 1, "stddev": 2}, {"type": "z-score", "minimum": 1, "maximum": 2}], False),
+        ([{"type": "min-max", "minimum": 1, "maximum": 2}], True),
+        ([{"type": "z-score", "mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra must be ignored
+        ([{"type": "processing"}], False),
+        ([{"type": "processing", "format": "test", "expression": "test"}], True),
+        ([
+             {"type": "processing", "format": "test", "expression": "test"},
+             {"type": "min-max", "minimum": 1, "maximum": 2}
+         ], True),
+    ],
+)
+def test_mlm_input_scaling_combination(
+    mlm_validator: STACValidator,
+    mlm_example: Dict[str, JSON],
+    test_scaling: List[Dict[str, Any]],
+    is_valid: bool,
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    mlm_data["properties"]["mlm:input"][0]["value_scaling"] = test_scaling  # type: ignore
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    if is_valid:
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+    else:
+        with pytest.raises(pystac.errors.STACValidationError):
+            pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
 def test_mlm_other_non_mlm_assets_allowed(
     mlm_validator: STACValidator,
     mlm_example: Dict[str, JSON],
