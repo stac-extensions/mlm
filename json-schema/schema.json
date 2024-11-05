@@ -490,46 +490,40 @@
     "mlm:input": {
       "type": "array",
       "items": {
-        "title": "Model Input Object",
-        "type": "object",
-        "required": [
-          "name",
-          "bands",
-          "input"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "bands": {
-            "$ref": "#/$defs/ModelBands"
-          },
-          "input": {
-            "$ref": "#/$defs/InputStructure"
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "norm_by_channel": {
-            "type": "boolean"
-          },
-          "norm_type": {
-            "$ref": "#/$defs/NormalizeType"
-          },
-          "norm_clip": {
-            "$ref": "#/$defs/NormalizeClip"
-          },
-          "resize_type": {
-            "$ref": "#/$defs/ResizeType"
-          },
-          "statistics": {
-            "$ref": "#/$defs/InputStatistics"
-          },
-          "pre_processing_function": {
-            "$ref": "#/$defs/ProcessingExpression"
-          }
+        "$ref": "#/$defs/ModelInput"
+      }
+    },
+    "ModelInput": {
+      "title": "Model Input Object",
+      "type": "object",
+      "required": [
+        "name",
+        "bands",
+        "input"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bands": {
+          "$ref": "#/$defs/ModelBands"
+        },
+        "input": {
+          "$ref": "#/$defs/InputStructure"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value_scaling": {
+          "$ref": "#/$defs/ValueScaling"
+        },
+        "resize_type": {
+          "$ref": "#/$defs/ResizeType"
+        },
+        "pre_processing_function": {
+          "$ref": "#/$defs/ProcessingExpression"
         }
       }
     },
@@ -645,34 +639,164 @@
         ]
       }
     },
-    "NormalizeType": {
+    "ValueScaling": {
       "oneOf": [
         {
-          "type": "string",
-          "enum": [
-            "min-max",
-            "z-score",
-            "l1",
-            "l2",
-            "l2sqr",
-            "hamming",
-            "hamming2",
-            "type-mask",
-            "relative",
-            "inf"
-          ]
+          "type": "null"
         },
         {
-          "type": "null"
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ValueScalingObject"
+          }
         }
       ]
     },
-    "NormalizeClip": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "number"
-      }
+    "ValueScalingObject": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "minimum",
+            "maximum"
+          ],
+          "properties": {
+            "type": {
+              "const": "min-max"
+            },
+            "minimum": {
+              "type": "number"
+            },
+            "maximum": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "mean",
+            "stddev"
+          ],
+          "properties": {
+            "type": {
+              "const": "z-score"
+            },
+            "mean": {
+              "type": "number"
+            },
+            "stddev": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "minimum",
+            "maximum"
+          ],
+          "properties": {
+            "type": {
+              "const": "clip"
+            },
+            "minimum": {
+              "type": "number"
+            },
+            "maximum": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "minimum"
+          ],
+          "properties": {
+            "type": {
+              "const": "clip-min"
+            },
+            "minimum": {
+              "type": "number"
+            },
+            "maximum": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "maximum"
+          ],
+          "properties": {
+            "type": {
+              "const": "clip-max"
+            },
+            "maximum": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "offset"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "value"
+          ],
+          "properties": {
+            "type": {
+              "const": "scale"
+            },
+            "value": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/ValueScalingProcessingExpression"
+        }
+      ]
+    },
+    "ValueScalingProcessingExpression": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "processing"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/ProcessingExpression"
+        }
+      ]
     },
     "ResizeType": {
       "oneOf": [
@@ -707,14 +831,6 @@
           "maxItems": 0
         }
       ]
-    },
-    "InputStatistics": {
-      "$comment": "MLM statistics for the specific input relevant for normalization for ML features.",
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "https://stac-extensions.github.io/raster/v1.1.0/schema.json#/definitions/bands/items/properties/statistics"
-      }
     },
     "ProcessingExpression": {
       "oneOf": [

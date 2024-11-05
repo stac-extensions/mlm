@@ -8,16 +8,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
-- n/a
+- Add explicit check of `value_scaling` sub-fields `minimum`, `maximum`, `mean`, `stddev`, etc. for
+  corresponding `type` values `min-max` and `z-score` that depend on it.
+- Allow different `value_scaling` operations per band/channel/dimension as needed by the model.
+- Allow a `processing:expression` for a band/channel/dimension-specific `value_scaling` operation,
+  granting more flexibility in the definition of input preparation in contrast to having it applied
+  for the entire input (but still possible).
 
 ### Changed
-- n/a
+- Moved `norm_type` to `value_scaling` object to better reflect the expected operation, which could be another
+  operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
+- Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional
+  properties dependencies.
 
 ### Deprecated
 - n/a
 
 ### Removed
-- n/a
+- Removed `norm_type` enum values that were ambiguous regarding their expected result.
+  Instead, a `processing:expression` should be employed to explicitly define the calculation they represent.
+- Removed `norm_clip` property. It is now represented under `value_scaling` objects with a
+  corresponding `type` definition.
+- Removed `norm_by_channel` from `mlm:input` objects. If rescaling (previously normalization in the documentation)
+  is a single value, broadcasting to the relevant bands should be performed implicitly.
+  Otherwise, the amount of `value_scaling` objects should match the number of bands or channels involved in the input.
 
 ### Fixed
 - Fix check of disallowed unknown/undefined `mlm:`-prefixed fields
@@ -52,7 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   when a `mlm:input` references names in `bands` are now properly validated.
 - Fix the examples using `raster:bands` incorrectly defined in STAC Item properties.
   The correct use is for them to be defined under the STAC Asset using the `mlm:model` role.
-- Fix the [EuroSAT ResNet pydantic example](./stac_model/examples.py) that incorrectly referenced some `bands`
+- Fix the [EuroSAT ResNet pydantic example](stac_model/examples.py) that incorrectly referenced some `bands`
   in its `mlm:input` definition without providing any definition of those bands. The `eo:bands` properties have
   been added to the corresponding `model` Asset using
   the [`pystac.extensions.eo`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/eo.py) utilities.
@@ -113,7 +127,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - more [Task Enum](README.md#task-enum) tasks
 - [Model Output Object](README.md#model-output-object)
 - batch_size and hardware summary
-- [`mlm:accelerator`, `mlm:accelerator_constrained`, `mlm:accelerator_summary`](./README.md#accelerator-type-enum)
+- [`mlm:accelerator`, `mlm:accelerator_constrained`, `mlm:accelerator_summary`](README.md#accelerator-type-enum)
   to specify hardware requirements for the model
 - Use common metadata
   [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object)
@@ -128,7 +142,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   STAC Item properties (top-level, not nested) to allow better search support by STAC API.
 - reorganized `dlm:architecture` nested fields to exist at the top level of properties as `mlm:name`, `mlm:summary`
   and so on to provide STAC API search capabilities.
-- replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
+- replaced `normalization:mean`, etc. with [statistics](README.md#bands-and-statistics) from STAC 1.1 common metadata
 - added `pydantic` models for internal schema objects in `stac_model` package and published to PYPI
 - specified [rel_type](README.md#relation-types) to be `derived_from` and
   specify how model item or collection json should be named
@@ -144,7 +158,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - any `dlm`-prefixed field or property
 
 ### Removed
-- Data Object, replaced with [Model Input Object](./README.md#model-input-object) that uses the `name` field from
+- Data Object, replaced with [Model Input Object](README.md#model-input-object) that uses the `name` field from
   the [common metadata band object][stac-bands] which also records `data_type` and `nodata` type
 
 ### Fixed
