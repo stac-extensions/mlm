@@ -342,7 +342,7 @@ properties of the model.
 
 | Field Name | Type   | Description                                                                                                                            |
 |------------|--------|----------------------------------------------------------------------------------------------------------------------------------------|
-| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics).                            |
+| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics) details).                   |
 | format     | string | The type of expression that is specified in the `expression` property.                                                                 |
 | expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given. |
 

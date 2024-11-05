@@ -20,7 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - n/a
 
 ### Fixed
-- n/a
+- Fix check of disallowed unknown/undefined `mlm:`-prefixed fields
+  (fixes [#41](https://github.com/stac-extensions/mlm/issues/41)).
 
 ## [v1.3.0](https://github.com/stac-extensions/mlm/tree/v1.3.0)
 
