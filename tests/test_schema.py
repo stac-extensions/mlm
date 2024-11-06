@@ -48,7 +48,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert all(
         info in str(exc.value.source)
-        for info in ["mlm:unknown", "Unevaluated properties are not allowed"]
+        for info in ["mlm:unknown", "does not match any of the regexes: '^(?!mlm:)'"]
     )
 
     # defined property only allowed at the Asset level
@@ -59,7 +59,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert all(
         field in str(exc.value.source)
-        for field in ["mlm:artifact_type", "Unevaluated properties are not allowed"]
+        for field in ["mlm:artifact_type", "does not match any of the regexes: '^(?!mlm:)'"]
     )
 
 

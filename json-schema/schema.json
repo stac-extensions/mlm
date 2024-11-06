@@ -1,5 +1,5 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://stac-extensions.github.io/mlm/v1.3.0/schema.json",
   "title": "Machine Learning Model STAC Extension Schema",
   "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
@@ -30,38 +30,125 @@
               "properties": {
                 "description": "Schema to validate the MLM fields permitted under Item properties.",
                 "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "required": [
-                      "mlm:name",
-                      "mlm:architecture",
-                      "mlm:tasks",
-                      "mlm:input",
-                      "mlm:output"
-                    ]
-                  },
-                  {
-                    "$ref": "#/$defs/mlmItemFields"
-                  },
-                  {
-                    "patternProperties": {
-                      "^(?!mlm:)": {}
-                    }
-                  }
+                "type": "object",
+                "required": [
+                  "mlm:name",
+                  "mlm:architecture",
+                  "mlm:tasks",
+                  "mlm:input",
+                  "mlm:output"
                 ],
-                "unevaluatedProperties": false
+                "properties": {
+                  "mlm:name": {
+                    "$ref": "#/$defs/mlm:name"
+                  },
+                  "mlm:architecture": {
+                    "$ref": "#/$defs/mlm:architecture"
+                  },
+                  "mlm:tasks": {
+                    "$ref": "#/$defs/mlm:tasks"
+                  },
+                  "mlm:framework": {
+                    "$ref": "#/$defs/mlm:framework"
+                  },
+                  "mlm:framework_version": {
+                    "$ref": "#/$defs/mlm:framework_version"
+                  },
+                  "mlm:memory_size": {
+                    "$ref": "#/$defs/mlm:memory_size"
+                  },
+                  "mlm:total_parameters": {
+                    "$ref": "#/$defs/mlm:total_parameters"
+                  },
+                  "mlm:pretrained": {
+                    "$ref": "#/$defs/mlm:pretrained"
+                  },
+                  "mlm:pretrained_source": {
+                    "$ref": "#/$defs/mlm:pretrained_source"
+                  },
+                  "mlm:batch_size_suggestion": {
+                    "$ref": "#/$defs/mlm:batch_size_suggestion"
+                  },
+                  "mlm:accelerator": {
+                    "$ref": "#/$defs/mlm:accelerator"
+                  },
+                  "mlm:accelerator_constrained": {
+                    "$ref": "#/$defs/mlm:accelerator_constrained"
+                  },
+                  "mlm:accelerator_summary": {
+                    "$ref": "#/$defs/mlm:accelerator_summary"
+                  },
+                  "mlm:accelerator_count": {
+                    "$ref": "#/$defs/mlm:accelerator_count"
+                  },
+                  "mlm:input": {
+                    "$ref": "#/$defs/mlm:input"
+                  },
+                  "mlm:output": {
+                    "$ref": "#/$defs/mlm:output"
+                  },
+                  "mlm:hyperparameters": {
+                    "$ref": "#/$defs/mlm:hyperparameters"
+                  }
+                },
+                "patternProperties": {
+                  "^(?!mlm:)": {}
+                },
+                "additionalProperties": false
               },
               "assets": {
                 "type": "object",
                 "additionalProperties": {
                   "description": "Schema to validate the MLM fields permitted only under Assets properties.",
                   "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
-                  "$ref": "#/$defs/mlmAssetFields",
+                  "properties": {
+                    "mlm:architecture": {
+                      "$ref": "#/$defs/mlm:architecture"
+                    },
+                    "mlm:tasks": {
+                      "$ref": "#/$defs/mlm:tasks"
+                    },
+                    "mlm:framework": {
+                      "$ref": "#/$defs/mlm:framework"
+                    },
+                    "mlm:framework_version": {
+                      "$ref": "#/$defs/mlm:framework_version"
+                    },
+                    "mlm:memory_size": {
+                      "$ref": "#/$defs/mlm:memory_size"
+                    },
+                    "mlm:total_parameters": {
+                      "$ref": "#/$defs/mlm:total_parameters"
+                    },
+                    "mlm:pretrained": {
+                      "$ref": "#/$defs/mlm:pretrained"
+                    },
+                    "mlm:pretrained_source": {
+                      "$ref": "#/$defs/mlm:pretrained_source"
+                    },
+                    "mlm:batch_size_suggestion": {
+                      "$ref": "#/$defs/mlm:batch_size_suggestion"
+                    },
+                    "mlm:accelerator": {
+                      "$ref": "#/$defs/mlm:accelerator"
+                    },
+                    "mlm:accelerator_constrained": {
+                      "$ref": "#/$defs/mlm:accelerator_constrained"
+                    },
+                    "mlm:accelerator_summary": {
+                      "$ref": "#/$defs/mlm:accelerator_summary"
+                    },
+                    "mlm:accelerator_count": {
+                      "$ref": "#/$defs/mlm:accelerator_count"
+                    },
+                    "mlm:artifact_type": {
+                      "$ref": "#/$defs/mlm:artifact_type"
+                    }
+                  },
                   "patternProperties": {
                     "^(?!mlm:)": {}
                   },
-                  "unevaluatedProperties": false
+                  "additionalProperties": false
                 }
               }
             }
