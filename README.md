@@ -138,9 +138,9 @@ The fields in the table below can be used in these parts of STAC documents:
 
 <!-- special heading is done on purpose to correctly render and redirect on GitHub while avoiding linting issues -->
 
-[1]: #_
+[1]: #notes
 
-### _
+### Notes
 <b><sup>[1][1]</sup> Fields allowed only in Item `properties`<b>
 
 <!-- lint disable no-undefined-references -->
