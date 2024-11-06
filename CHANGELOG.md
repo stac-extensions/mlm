@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Use JSON `$schema` version `2019-09` to allow use of `unevaluatedProperties` for stricter validation of MLM fields.
+- Explicitly disallow `mlm:name`, `mlm:input`, `mlm:output` and `mlm:hyperparameters` at the Asset level.
+  These fields describe the model as a whole and should therefore be defined in Item properties.
 - Moved `norm_type` to `value_scaling` object to better reflect the expected operation, which could be another
   operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
 - Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional
