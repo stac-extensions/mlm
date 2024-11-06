@@ -87,7 +87,7 @@ pytest-click = "^1.1.0"
 pytest-pikachu = "^1.0.0"
 coverage = "^7.3.0"
 ruff = "^0.2.2"
-bump-my-version = ">=0.21,<0.27"
+bump-my-version = ">=0.21,<0.29"
 
 [tool.bumpversion]
 # NOTE:
