@@ -53,7 +53,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
 
     # defined property only allowed at the Asset level
     mlm_data = copy.deepcopy(mlm_example)
-    mlm_data["properties"]["mlm:artifact_type"] = "torch.save"
+    mlm_data["properties"]["mlm:artifact_type"] = "torch.save"  # type: ignore
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
@@ -76,13 +76,13 @@ def test_mlm_no_undefined_prefixed_field_asset_properties(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
 
-    assert mlm_data["assets"]["weights"]
+    assert mlm_data["assets"]["weights"]  # type: ignore
     mlm_data["assets"]["weights"]["mlm:unknown"] = "random"  # type: ignore
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert len(exc.value.source) == 1
-    schema_error = exc.value.source[0]
+    assert len(exc.value.source) == 1  # type: ignore
+    schema_error = exc.value.source[0]  # type: ignore
     assert "mlm:unknown" in schema_error.instance
     assert schema_error.schema["description"] in [
         "Fields that apply only within an Asset.",
@@ -91,7 +91,7 @@ def test_mlm_no_undefined_prefixed_field_asset_properties(
 
     # defined property allowed both at the Item at the Asset level
     mlm_data = copy.deepcopy(mlm_example)
-    mlm_data["assets"]["weights"]["mlm:accelerator"] = "cuda"
+    mlm_data["assets"]["weights"]["mlm:accelerator"] = "cuda"  # type: ignore
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)
 
@@ -283,13 +283,13 @@ def test_mlm_asset_artifact_type_checked(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
 
-    mlm_data["assets"]["model"]["mlm:artifact_type"] = 1234
+    mlm_data["assets"]["model"]["mlm:artifact_type"] = 1234  # type: ignore
     mlm_item = pystac.Item.from_dict(mlm_data)
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert "1234 is not of type 'string'" in str(exc.value.source)
 
-    mlm_data["assets"]["model"]["mlm:artifact_type"] = ""
+    mlm_data["assets"]["model"]["mlm:artifact_type"] = ""  # type: ignore
     mlm_item = pystac.Item.from_dict(mlm_data)
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
