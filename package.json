@@ -1,6 +1,6 @@
 {
-  "name": "stac-extensions",
-  "version": "1.0.0",
+  "name": "stac-mlm",
+  "version": "1.3.0",
   "scripts": {
     "test": "npm run check-markdown && npm run check-examples",
     "check-markdown": "remark . -f -r .github/remark.yaml -i .remarkignore",
