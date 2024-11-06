@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for the entire input (but still possible).
 
 ### Changed
+- Use JSON `$schema` version `2019-09` to allow use of `unevaluatedProperties` for stricter validation of MLM fields.
 - Moved `norm_type` to `value_scaling` object to better reflect the expected operation, which could be another
   operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
 - Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional

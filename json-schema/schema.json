@@ -1,5 +1,5 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$schema": "https://json-schema.org/draft/2019-09/schema#",
   "$id": "https://stac-extensions.github.io/mlm/v1.3.0/schema.json",
   "title": "Machine Learning Model STAC Extension Schema",
   "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
@@ -20,7 +20,7 @@
       "then": {
         "allOf": [
           {
-            "$comment": "Schema to validate the MLM fields under Item properties or Assets properties.",
+            "description": "Schema to validate the MLM fields permitted under Item properties or Assets properties.",
             "type": "object",
             "required": [
               "properties",
@@ -28,8 +28,11 @@
             ],
             "properties": {
               "properties": {
+                "description": "Schema to validate the MLM fields permitted under Item properties.",
+                "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
                 "allOf": [
                   {
+                    "type": "object",
                     "required": [
                       "mlm:name",
                       "mlm:architecture",
@@ -39,18 +42,26 @@
                     ]
                   },
                   {
-                    "$ref": "#/$defs/fields"
+                    "$ref": "#/$defs/mlmItemFields"
+                  },
+                  {
+                    "patternProperties": {
+                      "^(?!mlm:)": {}
+                    }
                   }
-                ]
+                ],
+                "unevaluatedProperties": false
               },
               "assets": {
                 "type": "object",
                 "additionalProperties": {
-                  "allOf": [
-                    {
-                      "$ref": "#/$defs/fields"
-                    }
-                  ]
+                  "description": "Schema to validate the MLM fields permitted only under Assets properties.",
+                  "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
+                  "$ref": "#/$defs/mlmAssetFields",
+                  "patternProperties": {
+                    "^(?!mlm:)": {}
+                  },
+                  "unevaluatedProperties": false
                 }
               }
             }
@@ -93,19 +104,19 @@
               "summaries": {
                 "type": "object",
                 "additionalProperties": {
-                  "$ref": "#/$defs/fields"
+                  "$ref": "#/$defs/mlmCollectionFields"
                 }
               },
               "assets": {
                 "type": "object",
                 "additionalProperties": {
-                  "$ref": "#/$defs/fields"
+                  "$ref": "#/$defs/mlmAssetFields"
                 }
               },
               "item_assets": {
                 "type": "object",
                 "additionalProperties": {
-                  "$ref": "#/$defs/fields"
+                  "$ref": "#/$defs/mlmAssetFields"
                 }
               }
             }
@@ -261,12 +272,10 @@
         }
       }
     },
-    "fields": {
+    "mlmSharedFields": {
+      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
       "type": "object",
       "properties": {
-        "mlm:name": {
-          "$ref": "#/$defs/mlm:name"
-        },
         "mlm:architecture": {
           "$ref": "#/$defs/mlm:architecture"
         },
@@ -305,6 +314,30 @@
         },
         "mlm:accelerator_count": {
           "$ref": "#/$defs/mlm:accelerator_count"
+        }
+      }
+    },
+    "mlmCollectionFields": {
+      "$ref": "#/$defs/mlmSharedFields"
+    },
+    "mlmItemFields": {
+      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/mlmItemOnlyFields"
+        },
+        {
+          "$ref": "#/$defs/mlmSharedFields"
+        }
+      ]
+    },
+    "mlmItemOnlyFields": {
+      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
+      "type": "object",
+      "properties": {
+        "mlm:name": {
+          "$ref": "#/$defs/mlm:name"
         },
         "mlm:input": {
           "$ref": "#/$defs/mlm:input"
@@ -315,12 +348,26 @@
         "mlm:hyperparameters": {
           "$ref": "#/$defs/mlm:hyperparameters"
         }
-      },
-      "$comment": "Allow properties not defined by MLM prefix to allow combination with other extensions.",
-      "patternProperties": {
-        "^(?!mlm:)": {}
-      },
-      "additionalProperties": false
+      }
+    },
+    "mlmAssetFields": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/mlmSharedFields"
+        },
+        {
+          "$ref": "#/$defs/mlmAssetOnlyFields"
+        }
+      ]
+    },
+    "mlmAssetOnlyFields": {
+      "description": "MLM fields that apply only within an Asset.",
+      "type": "object",
+      "properties": {
+        "mlm:artifact_type": {
+          "$ref": "#/$defs/mlm:artifact_type"
+        }
+      }
     },
     "mlm:name": {
       "type": "string",
