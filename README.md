@@ -136,13 +136,14 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:output <sup>[\[1\]][1]</sup>          | \[[Model Output Object](#model-output-object)]                | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 | mlm:hyperparameters <sup>[\[1\]][1]</sup> | [Model Hyperparameters Object](#model-hyperparameters-object) | Additional hyperparameters relevant for the model.                                                                                                                                                                                                                                          |
 
-<!-- different headings and intends are done on purpose to correctly render and redirect on GitHub -->
-<!-- lint disable missing-heading -->
-<!-- lint disable heading-increment -->
+<!-- special heading is done on purpose to correctly render and redirect on GitHub while avoiding linting issues -->
 
-[1]: #1-allowed-only-in-item-properties
+[1]: #_
 
-##### <sup>[1]</sup> Allowed Only in Item `properties`
+### _
+<b><sup>[1][1]</sup> Fields allowed only in Item `properties`<b>
+
+<!-- lint disable no-undefined-references -->
 
 > [!NOTE]
 > Unless stated otherwise by <sup>[\[1\]][1]</sup> in the table, fields can be used at either the Item or Asset level.
@@ -156,7 +157,6 @@ The fields in the table below can be used in these parts of STAC documents:
 > did not override it for their respective reference. For some of the fields, further details are provided in following
 > sections to provide more precisions regarding some potentially ambiguous use cases.
 
-<!-- lint enable missing-heading -->
 <!-- lint enable no-undefined-references -->
 
 In addition, fields from the multiple relevant extensions should be defined as applicable. See
