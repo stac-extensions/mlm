@@ -136,7 +136,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:output <sup>[\[1\]][1]</sup>          | \[[Model Output Object](#model-output-object)]                | **REQUIRED** Describes each model output and how to interpret it.                                                                                                                                                                                                                           |
 | mlm:hyperparameters <sup>[\[1\]][1]</sup> | [Model Hyperparameters Object](#model-hyperparameters-object) | Additional hyperparameters relevant for the model.                                                                                                                                                                                                                                          |
 
-[1]: #sup1sup-allowed-only-in-item-properties
+[1]: #1-allowed-only-in-item-properties
 
 ##### <sup>[1]</sup> Allowed Only in Item `properties`
 
