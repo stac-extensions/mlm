@@ -46,4 +46,4 @@ class Runtime(MLMBaseModel):
     accelerator: Optional[AcceleratorType] = Field(default=None)
     accelerator_constrained: bool = Field(default=False)
     accelerator_summary: Annotated[Optional[str], OmitIfNone] = Field(default=None)
-    accelerator_count: Annotated[Optional[int], OmitIfNone] = Field(default=None, minimum=1)
+    accelerator_count: Annotated[Optional[int], OmitIfNone] = Field(default=None, ge=1)
