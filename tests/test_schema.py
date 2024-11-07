@@ -57,7 +57,8 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert exc.value.source[0].validator_value == {"required": ["mlm:artifact_type"]}
+    assert "mlm:artifact_type" in str(exc.value.source[0].validator_value)
+    assert exc.value.source[0].schema["description"] == "Fields that are disallowed under the Item properties."
 
 
 @pytest.mark.parametrize(
