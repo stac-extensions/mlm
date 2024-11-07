@@ -1,12 +1,12 @@
 {
-  "$schema": "https://json-schema.org/draft/2019-09/schema#",
+  "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://stac-extensions.github.io/mlm/v1.3.0/schema.json",
   "title": "Machine Learning Model STAC Extension Schema",
   "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
   "$comment": "Use 'allOf+if/then' for each 'type' to allow implementations to report more specific messages about the exact case in error (if any). Using only a 'oneOf/allOf' with the 'type' caused any incompatible 'type' to be reported first with a minimal and poorly described error by 'pystac'.",
   "allOf": [
     {
-      "$comment": "This is the schema for STAC extension MLM in Items.",
+      "description": "This is the schema for STAC extension MLM in Items.",
       "if": {
         "required": [
           "type"
@@ -28,40 +28,13 @@
             ],
             "properties": {
               "properties": {
-                "description": "Schema to validate the MLM fields permitted under Item properties.",
-                "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
-                "allOf": [
-                  {
-                    "type": "object",
-                    "required": [
-                      "mlm:name",
-                      "mlm:architecture",
-                      "mlm:tasks",
-                      "mlm:input",
-                      "mlm:output"
-                    ]
-                  },
-                  {
-                    "$ref": "#/$defs/mlmItemFields"
-                  },
-                  {
-                    "patternProperties": {
-                      "^(?!mlm:)": {}
-                    }
-                  }
-                ],
-                "unevaluatedProperties": false
+                "$comment": "Schema to validate the MLM fields permitted under Item properties.",
+                "$ref": "#/$defs/mlmItemFields"
               },
               "assets": {
-                "type": "object",
                 "additionalProperties": {
-                  "description": "Schema to validate the MLM fields permitted only under Assets properties.",
-                  "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
-                  "$ref": "#/$defs/mlmAssetFields",
-                  "patternProperties": {
-                    "^(?!mlm:)": {}
-                  },
-                  "unevaluatedProperties": false
+                  "$comment": "Schema to validate the MLM fields permitted under Asset properties.",
+                  "$ref": "#/$defs/mlmAssetFields"
                 }
               }
             }
@@ -85,7 +58,7 @@
       }
     },
     {
-      "$comment": "This is the schema for STAC extension MLM in Collections.",
+      "description": "This is the schema for STAC extension MLM in Collections.",
       "if": {
         "required": [
           "type"
@@ -272,10 +245,13 @@
         }
       }
     },
-    "mlmSharedFields": {
-      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
+    "fields": {
+      "description": "All possible MLM fields regardless of the level they apply (Collection, Item, Asset, Link).",
       "type": "object",
       "properties": {
+        "mlm:name": {
+          "$ref": "#/$defs/mlm:name"
+        },
         "mlm:architecture": {
           "$ref": "#/$defs/mlm:architecture"
         },
@@ -314,30 +290,6 @@
         },
         "mlm:accelerator_count": {
           "$ref": "#/$defs/mlm:accelerator_count"
-        }
-      }
-    },
-    "mlmCollectionFields": {
-      "$ref": "#/$defs/mlmSharedFields"
-    },
-    "mlmItemFields": {
-      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
-      "type": "object",
-      "allOf": [
-        {
-          "$ref": "#/$defs/mlmItemOnlyFields"
-        },
-        {
-          "$ref": "#/$defs/mlmSharedFields"
-        }
-      ]
-    },
-    "mlmItemOnlyFields": {
-      "description": "MLM fields that apply at any level (Collection, Item, Asset, Link).",
-      "type": "object",
-      "properties": {
-        "mlm:name": {
-          "$ref": "#/$defs/mlm:name"
         },
         "mlm:input": {
           "$ref": "#/$defs/mlm:input"
@@ -347,27 +299,109 @@
         },
         "mlm:hyperparameters": {
           "$ref": "#/$defs/mlm:hyperparameters"
-        }
-      }
-    },
-    "mlmAssetFields": {
-      "allOf": [
-        {
-          "$ref": "#/$defs/mlmSharedFields"
         },
-        {
-          "$ref": "#/$defs/mlmAssetOnlyFields"
-        }
-      ]
-    },
-    "mlmAssetOnlyFields": {
-      "description": "MLM fields that apply only within an Asset.",
-      "type": "object",
-      "properties": {
         "mlm:artifact_type": {
           "$ref": "#/$defs/mlm:artifact_type"
         }
-      }
+      },
+      "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
+      "patternProperties": {
+        "^(?!mlm:)": {}
+      },
+      "additionalProperties": false
+    },
+    "mlmCollectionFields": {
+      "description": "Schema to validate the MLM fields permitted under Collection summaries.",
+      "allOf": [
+        {
+          "description": "Fields that are mandatory under the Collection summaries.",
+          "type": "object",
+          "required": []
+        },
+        {
+          "description": "Fields that are disallowed under the Collection summaries.",
+          "not": {
+            "required": [
+              "mlm:input",
+              "mlm:output",
+              "mlm:artifact_type"
+            ]
+          }
+        },
+        {
+          "description": "Field with known definitions that must be validated.",
+          "$ref": "#/$defs/fields"
+        }
+      ]
+    },
+    "mlmItemFields": {
+      "description": "Schema to validate the MLM fields permitted under Item properties.",
+      "allOf": [
+        {
+          "description": "Fields that are mandatory under the Item properties.",
+          "required": [
+            "mlm:name",
+            "mlm:architecture",
+            "mlm:tasks",
+            "mlm:input",
+            "mlm:output"
+          ]
+        },
+        {
+          "description": "Fields that are disallowed under the Item properties.",
+          "$comment": "Particularity of the 'not/required' approach: they must be tested one by one. Otherwise, it validates that they are all (simultaneously) not present.",
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "mlm:artifact_type"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "description": "Field with known definitions that must be validated.",
+          "$ref": "#/$defs/fields"
+        }
+      ]
+    },
+    "mlmAssetFields": {
+      "description": "Schema to validate the MLM fields permitted under Assets properties.",
+      "allOf": [
+        {
+          "description": "Fields that are disallowed under the Asset properties.",
+          "$comment": "Particularity of the 'not/required' approach: they must be tested one by one. Otherwise, it validates that they are all (simultaneously) not present.",
+          "not": {
+            "anyOf": [
+              {
+                "required": [
+                  "mlm:name"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:input"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:output"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:hyperparameters"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "description": "Field with known definitions that must be validated.",
+          "$ref": "#/$defs/fields"
+        }
+      ]
     },
     "mlm:name": {
       "type": "string",

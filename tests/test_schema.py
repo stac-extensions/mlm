@@ -48,7 +48,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert all(
         info in str(exc.value.source)
-        for info in ["mlm:unknown", "Unevaluated properties are not allowed"]
+        for info in ["mlm:unknown", "^(?!mlm:)"]
     )
 
     # defined property only allowed at the Asset level
@@ -57,10 +57,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert all(
-        field in str(exc.value.source)
-        for field in ["mlm:artifact_type", "Unevaluated properties are not allowed"]
-    )
+    assert exc.value.source[0].validator_value == {"required": ["mlm:artifact_type"]}
 
 
 @pytest.mark.parametrize(
@@ -75,7 +72,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
         ("mlm:name", "test-model"),
         ("mlm:input", []),
         ("mlm:output", []),
-        ("mlm:hyperparameters", {}),
+        ("mlm:hyperparameters", {"test": {}}),
     ]
 )
 def test_mlm_no_undefined_prefixed_field_asset_properties(
@@ -98,8 +95,8 @@ def test_mlm_no_undefined_prefixed_field_asset_properties(
     schema_error = exc.value.source[0]  # type: ignore
     assert test_field in schema_error.instance
     assert schema_error.schema["description"] in [
-        "Fields that apply only within an Asset.",
-        "Schema to validate the MLM fields permitted only under Assets properties."
+        "All possible MLM fields regardless of the level they apply (Collection, Item, Asset, Link).",
+        "Fields that are disallowed under the Asset properties."
     ]
 
 
