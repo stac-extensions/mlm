@@ -11,7 +11,7 @@ make setup
 > This installs uv as a [standalone application][uv-install]. <br>
 > For more details, see also the [uv documentation][uv-docs]. <br>
 
-2. Initialize project dependencies with uv and install `pre-commit` hooks:
+2. Initialize project dependencies with `uv` and install `pre-commit` hooks:
 
 ```bash
 make install-dev
@@ -19,7 +19,7 @@ make pre-commit-install
 ```
 
 This will install project dependencies into the currently active environment. If you would like to
-use uv's default behavior of managing a project-scoped environment, use uv commands directly to
+use uv's default behavior of managing a project-scoped environment, use `uv` commands directly to
 install dependencies. `uv sync` will install dependencies and dev dependencies in `.venv` and update the `uv.lock`.
 
 ## PR submission

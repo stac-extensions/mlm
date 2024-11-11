@@ -71,7 +71,6 @@ ValueScalingObject: TypeAlias = Optional[
         ValueScalingScale,
         ValueScalingProcessingExpression,
     ]
-    | None
   ]  # noqa: E501
 
 ResizeType: TypeAlias = (
