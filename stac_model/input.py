@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Annotated, Any, Literal, TypeAlias
+from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
 from typing_extensions import Self
 
 from pydantic import Field, model_validator
@@ -8,8 +8,8 @@ from stac_model.base import DataType, MLMBaseModel, Number, OmitIfNone, Processi
 
 
 class InputStructure(MLMBaseModel):
-    shape: list[int | float] = Field(min_items=1)
-    dim_order: list[str] = Field(min_items=1)
+    shape: list[Union[int, float]] = Field(min_length=1)
+    dim_order: list[str] = Field(min_length=1)
     data_type: DataType
 
     @model_validator(mode="after")
@@ -18,31 +18,61 @@ class InputStructure(MLMBaseModel):
             raise ValueError("Dimension order and shape must be of equal length for corresponding indices.")
         return self
 
-
-class MLMStatistic(MLMBaseModel):  # FIXME: add 'Statistics' dep from raster extension (cases required to be triggered)
-    minimum: Annotated[Number | None, OmitIfNone] = None
-    maximum: Annotated[Number | None, OmitIfNone] = None
-    mean: Annotated[Number | None, OmitIfNone] = None
-    stddev: Annotated[Number | None, OmitIfNone] = None
-    count: Annotated[int | None, OmitIfNone] = None
-    valid_percent: Annotated[Number | None, OmitIfNone] = None
+class ValueScalingClipMin(MLMBaseModel):
+    type: Literal["clip-min"] = "clip-min"
+    minimum: Number
 
 
-NormalizeType: TypeAlias = (
-    Literal[
-        "min-max",
-        "z-score",
-        "l1",
-        "l2",
-        "l2sqr",
-        "hamming",
-        "hamming2",
-        "type-mask",
-        "relative",
-        "inf",
+class ValueScalingClipMax(MLMBaseModel):
+    type: Literal["clip-max"] = "clip-max"
+    maximum: Number
+
+
+class ValueScalingClip(MLMBaseModel):
+    type: Literal["clip"] = "clip"
+    minimum: Number
+    maximum: Number
+
+
+class ValueScalingMinMax(MLMBaseModel):
+    type: Literal["min-max"] = "min-max"
+    minimum: Number
+    maximum: Number
+
+
+class ValueScalingZScore(MLMBaseModel):
+    type: Literal["z-score"] = "z-score"
+    mean: Number
+    stddev: Number
+
+
+class ValueScalingOffset(MLMBaseModel):
+    type: Literal["offset"] = "offset"
+    value: Number
+
+
+class ValueScalingScale(MLMBaseModel):
+    type: Literal["scale"] = "scale"
+    value: Number
+
+
+class ValueScalingProcessingExpression(ProcessingExpression):
+    type: Literal["processing"] = "processing"
+
+
+ValueScalingObject: TypeAlias = Optional[
+    Union[
+        ValueScalingMinMax,
+        ValueScalingZScore,
+        ValueScalingClip,
+        ValueScalingClipMin,
+        ValueScalingClipMax,
+        ValueScalingOffset,
+        ValueScalingScale,
+        ValueScalingProcessingExpression,
     ]
     | None
-)  # noqa: E501
+  ]  # noqa: E501
 
 ResizeType: TypeAlias = (
     Literal[
@@ -110,9 +140,6 @@ class ModelInput(MLMBaseModel):
         ],
     )
     input: InputStructure
-    norm_by_channel: Annotated[bool | None, OmitIfNone] = None
-    norm_type: Annotated[NormalizeType | None, OmitIfNone] = None
-    norm_clip: Annotated[list[float | int] | None, OmitIfNone] = None
-    resize_type: Annotated[ResizeType | None, OmitIfNone] = None
-    statistics: Annotated[list[MLMStatistic] | None, OmitIfNone] = None
-    pre_processing_function: ProcessingExpression | None = None
+    value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
+    resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
+    pre_processing_function: Optional[ProcessingExpression] = None

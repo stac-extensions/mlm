@@ -184,6 +184,11 @@ filename = "CITATION.cff"
 search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
 replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
 
+[[tool.bumpversion.files]]
+filename = "package.json"
+search = "\"version\": \"{current_version}\""
+replace = "\"version\": \"{new_version}\""
+
 [tool.ruff]
 ignore = ["UP007", "E501"]
 exclude = [
