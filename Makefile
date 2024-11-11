@@ -5,7 +5,7 @@ ACTIVEPYTHON = $(shell which python)
 #* UV
 .PHONY: setup
 setup:
-	curl -LsSf https://astral.sh/uv/install.sh | sh
+	which uv >/dev/null || (curl -LsSf https://astral.sh/uv/install.sh | sh)
 
 .PHONY: publish
 publish:
@@ -13,22 +13,22 @@ publish:
 
 #* Installation
 .PHONY: install
-install:
+install: setup
 	uv export --format requirements-txt -o requirements.txt --no-dev
 	uv pip install --python $(ACTIVEPYTHON) -r requirements.txt
 
 .PHONY: install-dev
-install-dev:
+install-dev: setup
 	uv export --format requirements-txt -o requirements-dev.txt
 	uv pip install --python $(ACTIVEPYTHON) -r requirements-dev.txt
 
 .PHONY: pre-commit-install
-pre-commit-install:
+pre-commit-install: setup
 	uv run --python $(ACTIVEPYTHON) pre-commit install
 
 #* Formatters
 .PHONY: codestyle
-codestyle:
+codestyle: setup
 	uv run --python $(ACTIVEPYTHON) ruff format --config=pyproject.toml stac_model tests
 
 .PHONY: format
@@ -36,7 +36,7 @@ format: codestyle
 
 #* Linting
 .PHONY: test
-test:
+test: setup
 	uv run --python $(ACTIVEPYTHON) pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
@@ -46,19 +46,19 @@ check: check-examples check-markdown check-lint check-mypy check-safety check-ci
 check-all: check
 
 .PHONY: mypy
-mypy:
+mypy: setup
 	uv run --python $(ACTIVEPYTHON) mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
 check-mypy: mypy
 
 .PHONY: check-safety
-check-safety:
+check-safety: setup
 	uv run --python $(ACTIVEPYTHON) safety check --full-report
 	uv run --python $(ACTIVEPYTHON) bandit -ll --recursive stac_model tests
 
 .PHONY: lint
-lint:
+lint: setup
 	uv run --python $(ACTIVEPYTHON) ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
@@ -96,7 +96,7 @@ $(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
-update-dev-deps:
+update-dev-deps: setup
 	uv export --only-dev --format requirements-txt -o requirements-only-dev.txt
 	uv pip install --python $(ACTIVEPYTHON) -r requirements-only-dev.txt
 
