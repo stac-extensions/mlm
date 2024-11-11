@@ -595,6 +595,21 @@ names for nesting the Assets in order to improve their quick identification, alt
 left up to user preference. However, the MLM Asset definitions **MUST** include the
 appropriate [MLM Asset Roles](#mlm-asset-roles) to ensure their discovery.
 
+A valid STAC MLM Item definition requires at least one Asset with the `mlm:model` role, as well as,
+an accompanying `mlm:artifact_type` property that describes how to employ it.
+An Asset described with this role is considered the "*main*" [Model Asset](#model-asset) being described by
+the STAC Item definition. Typically, there will be only one asset containing the `mlm:model` role.
+However, multiple `mlm:model` are permitted to provide alternate interfaces of the same model
+(e.g.: using different frameworks or compilations), but those assets should have exactly the same model interfaces
+(i.e.: identical `mlm:input`, `mlm:output`, etc.). In such case, the `mlm:artifact_type` property should be used to
+distinguish them.
+
+Additional definitions such as the [Source Code Asset](#source-code-asset) and the [Container Asset](#container-asset)
+are considered "*side-car*" Assets that help understand how to employ the model, such as through the reference training
+script that produced the model or a preconfigured inference runtime environment. These additional Assets are optional,
+but it is *STRONGLY RECOMMENDED* to provide them in order to help correct adoption and use of the described model
+by users.
+
 [stac-asset]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object
 
 ### MLM Asset Roles
@@ -617,8 +632,8 @@ In order to provide more context, the following roles are also recommended were 
 | mlm:training-runtime (*)  | `runtime`               | Describes an Asset that provides runtime reference to perform model training.            |
 | mlm:checkpoint (*)        | `weights`, `checkpoint` | Describes an Asset that provides a model checkpoint with embedded model configurations.  |
 | mlm:weights               | `weights`, `checkpoint` | Describes an Asset that provides a model weights (typically some Tensor representation). |
-| mlm:model                 | `model`                 | Required role for [Model Asset](#model-asset).                                           |
-| mlm:source_code           | `code`                  | Required role for [Model Asset](#source-code-asset).                                     |
+| mlm:model                 | `model`                 | **REQUIRED** Role for [Model Asset](#model-asset).                                       |
+| mlm:source_code           | `code`                  | **RECOMMENDED** Role for [Source Code Asset](#source-code-asset).                        |
 
 <!-- lint disable no-undefined-references -->
 
@@ -642,7 +657,7 @@ In order to provide more context, the following roles are also recommended were 
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
-In each case, the `mlm:model` should be applied as well to indicate that this asset represents the model.
+In each case, the `mlm:model` **MUST** be applied as well to indicate that this asset represents the model.
 
 It is also recommended to make use of the
 [file](https://github.com/stac-extensions/file?tab=readme-ov-file#asset--link-object-fields)
