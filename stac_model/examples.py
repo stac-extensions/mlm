@@ -70,7 +70,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
                 type="z-score",
                 mean=mean,
                 stddev=stddev,
-            )
+            ),
         )
         for mean, stddev in zip(stats_mean, stats_stddev, strict=False)
     ]

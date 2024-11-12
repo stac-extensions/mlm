@@ -122,10 +122,13 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
         ([{"type": "z-score", "mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra must be ignored
         ([{"type": "processing"}], False),
         ([{"type": "processing", "format": "test", "expression": "test"}], True),
-        ([
-             {"type": "processing", "format": "test", "expression": "test"},
-             {"type": "min-max", "minimum": 1, "maximum": 2}
-         ], True),
+        (
+            [
+                {"type": "processing", "format": "test", "expression": "test"},
+                {"type": "min-max", "minimum": 1, "maximum": 2},
+            ],
+            True,
+        ),
     ],
 )
 def test_mlm_input_scaling_combination(

@@ -18,6 +18,7 @@ class InputStructure(MLMBaseModel):
             raise ValueError("Dimension order and shape must be of equal length for corresponding indices.")
         return self
 
+
 class ValueScalingClipMin(MLMBaseModel):
     type: Literal["clip-min"] = "clip-min"
     minimum: Number
@@ -71,7 +72,7 @@ ValueScalingObject: TypeAlias = Optional[
         ValueScalingScale,
         ValueScalingProcessingExpression,
     ]
-  ]  # noqa: E501
+]
 
 ResizeType: TypeAlias = (
     Literal[
@@ -87,7 +88,7 @@ ResizeType: TypeAlias = (
         "wrap-inverse-map",
     ]
     | None
-)  # noqa: E501
+)
 
 
 class ModelBand(MLMBaseModel):
