@@ -2,14 +2,14 @@
 
 ## Project setup
 
-1. If you don't have uv installed run:
+1. If you don't have `uv` installed run:
 
 ```bash
 make setup
 ```
 
-> This installs uv as a [standalone application][uv-install]. <br>
-> For more details, see also the [uv documentation][uv-docs]. <br>
+> This installs `uv` as a [standalone application][uv-install]. <br>
+> For more details, see also the [`uv` documentation][uv-docs]. <br>
 
 2. Initialize project dependencies with `uv` and install `pre-commit` hooks:
 

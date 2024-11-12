@@ -74,7 +74,7 @@ ValueScalingObject: TypeAlias = Optional[
     ]
 ]
 
-ResizeType: TypeAlias = (
+ResizeType: TypeAlias = Optional[
     Literal[
         "crop",
         "pad",
@@ -87,8 +87,7 @@ ResizeType: TypeAlias = (
         "wrap-fill-outliers",
         "wrap-inverse-map",
     ]
-    | None
-)
+]
 
 
 class ModelBand(MLMBaseModel):
@@ -99,11 +98,11 @@ class ModelBand(MLMBaseModel):
         )
     )
     # similar to 'ProcessingExpression', but they can be omitted here
-    format: Annotated[str | None, OmitIfNone] = Field(
+    format: Annotated[Optional[str], OmitIfNone] = Field(
         default=None,
         description="",
     )
-    expression: Annotated[Any | None, OmitIfNone] = Field(
+    expression: Annotated[Optional[Any], OmitIfNone] = Field(
         default=None,
         description="",
     )
