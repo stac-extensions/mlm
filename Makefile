@@ -1,17 +1,23 @@
 #* Variables
 SHELL ?= /usr/bin/env bash
-PYTHON_PATH = $(shell which python)
-PYTHON_ROOT := $(dir $(PYTHON_PATH))
+
 # use the directory rather than the python binary to allow auto-discovery, which is more cross-platform compatible
-UV_PYTHON_PATH ?= $(UV_PYTHON_ROOT)
+PYTHON_PATH := $(shell which python)
+PYTHON_ROOT := $(shell dirname $(dir $(PYTHON_PATH)))
+UV_PYTHON_ROOT ?= $(PYTHON_ROOT)
+
 # to actually reuse an existing virtual/conda environment, the 'UV_PROJECT_ENVIRONMENT' variable must be set to it
 # use this command:
 #	UV_PROJECT_ENVIRONMENT=/path/to/env make [target]
 # consider exporting this variable in '/path/to/env/etc/conda/activate.d/env.sh' to enable it by default when
 # activating a conda environment, and reset it in '/path/to/env/etc/conda/deactivate.d/env.sh'
-UV_PROJECT_ENVIRONMENT ?= .venv
+UV_PROJECT_ENVIRONMENT ?=
 # make sure every uv command employs the specified environment path
-UV_COMMAND ?= UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" uv
+ifeq (${UV_PROJECT_ENVIRONMENT},)
+  UV_COMMAND := uv
+else
+  UV_COMMAND := UV_PROJECT_ENVIRONMENT="${UV_PROJECT_ENVIRONMENT}" uv
+endif
 
 #* UV
 .PHONY: setup
