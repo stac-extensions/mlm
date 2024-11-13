@@ -167,7 +167,7 @@ class SummariesMLModelExtension(SummariesExtension):
 
     def _check_mlm_property(self, prop: str) -> FieldInfo:
         try:
-            return MLModelProperties.model_fields[prop]  # type: ignore
+            return MLModelProperties.model_fields[prop]
         except KeyError as err:
             raise AttributeError(f"Name '{prop}' is not a valid MLM property.") from err
 
