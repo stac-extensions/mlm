@@ -1,6 +1,6 @@
 import copy
 import os
-from typing import Any, Dict, List, cast
+from typing import Any, cast
 
 import pystac
 import pytest
@@ -23,9 +23,9 @@ from conftest import get_all_stac_item_examples
 )
 def test_mlm_schema(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
-    mlm_item = pystac.Item.from_dict(cast(Dict[str, Any], mlm_example))
+    mlm_item = pystac.Item.from_dict(cast(dict[str, Any], mlm_example))
     validated = pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert len(validated) >= len(mlm_item.stac_extensions)  # extra STAC core schemas
     assert SCHEMA_URI in validated
@@ -83,7 +83,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
 )
 def test_mlm_no_undefined_prefixed_field_asset_properties(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
     test_field: str,
     test_value: Any,
 ) -> None:
@@ -113,7 +113,7 @@ def test_mlm_no_undefined_prefixed_field_asset_properties(
 )
 def test_mlm_allowed_field_asset_properties_override(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     # defined property allowed both at the Item at the Asset level
     mlm_data = copy.deepcopy(mlm_example)
@@ -129,7 +129,7 @@ def test_mlm_allowed_field_asset_properties_override(
 )
 def test_mlm_missing_bands_invalid_if_mlm_input_lists_bands(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_item = pystac.Item.from_dict(mlm_example)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
@@ -148,7 +148,7 @@ def test_mlm_missing_bands_invalid_if_mlm_input_lists_bands(
 )
 def test_mlm_eo_bands_invalid_only_in_item_properties(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_item = pystac.Item.from_dict(mlm_example)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
@@ -167,7 +167,7 @@ def test_mlm_eo_bands_invalid_only_in_item_properties(
 )
 def test_mlm_no_input_allowed_but_explicit_empty_array_required(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_data["properties"]["mlm:input"] = []
@@ -197,16 +197,19 @@ def test_mlm_no_input_allowed_but_explicit_empty_array_required(
         ([{"type": "z-score", "mean": 1, "stddev": 2, "minimum": 1, "maximum": 2}], True),  # extra must be ignored
         ([{"type": "processing"}], False),
         ([{"type": "processing", "format": "test", "expression": "test"}], True),
-        ([
-             {"type": "processing", "format": "test", "expression": "test"},
-             {"type": "min-max", "minimum": 1, "maximum": 2}
-         ], True),
+        (
+            [
+                {"type": "processing", "format": "test", "expression": "test"},
+                {"type": "min-max", "minimum": 1, "maximum": 2},
+            ],
+            True,
+        ),
     ],
 )
 def test_mlm_input_scaling_combination(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
-    test_scaling: List[Dict[str, Any]],
+    mlm_example: dict[str, JSON],
+    test_scaling: list[dict[str, Any]],
     is_valid: bool,
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
@@ -229,7 +232,7 @@ def test_mlm_input_scaling_combination(
 )
 def test_mlm_other_non_mlm_assets_allowed(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
@@ -267,8 +270,8 @@ def test_mlm_other_non_mlm_assets_allowed(
 )
 def test_mlm_at_least_one_asset_model(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
-    model_asset_extras: Dict[str, Any],
+    mlm_example: dict[str, JSON],
+    model_asset_extras: dict[str, Any],
     is_valid: bool,
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
@@ -304,7 +307,7 @@ def test_mlm_at_least_one_asset_model(
 )
 def test_mlm_asset_artifact_type_checked(
     mlm_validator: STACValidator,
-    mlm_example: Dict[str, JSON],
+    mlm_example: dict[str, JSON],
 ) -> None:
     mlm_data = copy.deepcopy(mlm_example)
     mlm_item = pystac.Item.from_dict(mlm_data)
@@ -346,7 +349,7 @@ def test_collection_include_all_items(mlm_example):
     """
     This is only for self-validation, to make sure all examples are contained in the example STAC collection.
     """
-    col_links: List[Dict[str, str]] = mlm_example["links"]
+    col_links: list[dict[str, str]] = mlm_example["links"]
     col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
     all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
     assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."

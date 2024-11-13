@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Dict, List, Optional, Set, Union, cast
+from typing import Annotated, Any, cast
 
 from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
@@ -7,8 +7,8 @@ from stac_model.base import DataType, MLMBaseModel, ModelTask, OmitIfNone, Proce
 
 
 class ModelResult(MLMBaseModel):
-    shape: List[Union[int, float]] = Field(..., min_length=1)
-    dim_order: List[str] = Field(..., min_length=1)
+    shape: list[int | float] = Field(..., min_length=1)
+    dim_order: list[str] = Field(..., min_length=1)
     data_type: DataType
 
 
@@ -32,15 +32,15 @@ class ModelResult(MLMBaseModel):
 
 class MLMClassification(MLMBaseModel, Classification):
     @model_serializer()
-    def model_dump(self, *_: Any, **__: Any) -> Dict[str, Any]:
+    def model_dump(self, *_: Any, **__: Any) -> dict[str, Any]:
         return self.to_dict()  # type: ignore[call-arg]
 
     def __init__(
         self,
         value: int,
-        description: Optional[str] = None,
-        name: Optional[str] = None,
-        color_hint: Optional[str] = None,
+        description: str | None = None,
+        name: str | None = None,
+        color_hint: str | None = None,
     ) -> None:
         Classification.__init__(self, {})
         if not name and not description:
@@ -78,7 +78,7 @@ class MLMClassification(MLMBaseModel, Classification):
 
 class ModelOutput(MLMBaseModel):
     name: str
-    tasks: Set[ModelTask]
+    tasks: set[ModelTask]
     result: ModelResult
 
     # NOTE:
@@ -86,11 +86,11 @@ class ModelOutput(MLMBaseModel):
     #   it is more important to keep the order in this case,
     #   which we would lose with 'Set'.
     #   We also get some unhashable errors with 'Set', although 'MLMClassification' implements '__hash__'.
-    classes: Annotated[List[MLMClassification], OmitIfNone] = Field(
+    classes: Annotated[list[MLMClassification], OmitIfNone] = Field(
         alias="classification:classes",
         validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
     )
-    post_processing_function: Optional[ProcessingExpression] = None
+    post_processing_function: ProcessingExpression | None = None
 
     model_config = ConfigDict(
         populate_by_name=True,
