@@ -16,14 +16,14 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install poetry
-      run: make poetry-install
+    - name: Install uv
+      run: make setup
 
     - name: Set up cache
       uses: actions/cache@v4.0.2
       with:
         path: .venv
-        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('poetry.lock') }}
+        key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('uv.lock') }}
     - name: Install dependencies
       run: make install-dev
 

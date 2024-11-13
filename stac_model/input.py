@@ -1,4 +1,5 @@
-from typing import Annotated, Any, List, Literal, Optional, Sequence, TypeAlias, Union
+from collections.abc import Sequence
+from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
 from typing_extensions import Self
 
 from pydantic import Field, model_validator
@@ -7,8 +8,8 @@ from stac_model.base import DataType, MLMBaseModel, Number, OmitIfNone, Processi
 
 
 class InputStructure(MLMBaseModel):
-    shape: List[Union[int, float]] = Field(min_length=1)
-    dim_order: List[str] = Field(min_length=1)
+    shape: list[Union[int, float]] = Field(min_length=1)
+    dim_order: list[str] = Field(min_length=1)
     data_type: DataType
 
     @model_validator(mode="after")
@@ -119,7 +120,7 @@ class ModelBand(MLMBaseModel):
 class ModelInput(MLMBaseModel):
     name: str
     # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
-    bands: Sequence[Union[str, ModelBand]] = Field(
+    bands: Sequence[str | ModelBand] = Field(
         description=(
             "List of bands that compose the input. "
             "If a string is used, it is implied to correspond to a named-band. "
@@ -138,6 +139,6 @@ class ModelInput(MLMBaseModel):
         ],
     )
     input: InputStructure
-    value_scaling: Annotated[Optional[List[ValueScalingObject]], OmitIfNone] = None
+    value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
     resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
     pre_processing_function: Optional[ProcessingExpression] = None
