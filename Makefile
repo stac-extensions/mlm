@@ -1,6 +1,17 @@
 #* Variables
 SHELL ?= /usr/bin/env bash
-ACTIVEPYTHON = $(shell which python)
+PYTHON_PATH = $(shell which python)
+PYTHON_ROOT := $(dir $(PYTHON_PATH))
+# use the directory rather than the python binary to allow auto-discovery, which is more cross-platform compatible
+UV_PYTHON_PATH ?= $(UV_PYTHON_ROOT)
+# to actually reuse an existing virtual/conda environment, the 'UV_PROJECT_ENVIRONMENT' variable must be set to it
+# use this command:
+#	UV_PROJECT_ENVIRONMENT=/path/to/env make [target]
+# consider exporting this variable in '/path/to/env/etc/conda/activate.d/env.sh' to enable it by default when
+# activating a conda environment, and reset it in '/path/to/env/etc/conda/deactivate.d/env.sh'
+UV_PROJECT_ENVIRONMENT ?= .venv
+# make sure every uv command employs the specified environment path
+UV_COMMAND ?= UV_PROJECT_ENVIRONMENT="$(UV_PROJECT_ENVIRONMENT)" uv
 
 #* UV
 .PHONY: setup
@@ -9,27 +20,27 @@ setup:
 
 .PHONY: publish
 publish:
-	uv publish --build
+	$(UV_COMMAND) publish --build
 
 #* Installation
 .PHONY: install
 install: setup
-	uv export --format requirements-txt -o requirements.txt --no-dev
-	uv pip install --python $(ACTIVEPYTHON) -r requirements.txt
+	$(UV_COMMAND) export --format requirements-txt -o requirements.txt --no-dev
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements.txt
 
 .PHONY: install-dev
 install-dev: setup
-	uv export --format requirements-txt -o requirements-dev.txt
-	uv pip install --python $(ACTIVEPYTHON) -r requirements-dev.txt
+	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
-	uv run --python $(ACTIVEPYTHON) pre-commit install
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pre-commit install
 
 #* Formatters
 .PHONY: codestyle
 codestyle: setup
-	uv run --python $(ACTIVEPYTHON) ruff format --config=pyproject.toml stac_model tests
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff format --config=pyproject.toml stac_model tests
 
 .PHONY: format
 format: codestyle
@@ -37,7 +48,7 @@ format: codestyle
 #* Linting
 .PHONY: test
 test: setup
-	uv run --python $(ACTIVEPYTHON) pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
 check: check-examples check-markdown check-lint check-mypy check-safety check-citation
@@ -47,23 +58,23 @@ check-all: check
 
 .PHONY: mypy
 mypy: setup
-	uv run --python $(ACTIVEPYTHON) mypy --config-file pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
 check-mypy: mypy
 
 .PHONY: check-safety
 check-safety: setup
-	uv run --python $(ACTIVEPYTHON) safety check --full-report
-	uv run --python $(ACTIVEPYTHON) bandit -ll --recursive stac_model tests
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" safety check --full-report
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" bandit -ll --recursive stac_model tests
 
 .PHONY: lint
 lint: setup
-	uv run --python $(ACTIVEPYTHON) ruff check --fix --config=pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
 check-lint: lint
-	uv run --python $(ACTIVEPYTHON) ruff check --config=pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint
 format-lint: lint
@@ -97,8 +108,8 @@ lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps: setup
-	uv export --only-dev --format requirements-txt -o requirements-only-dev.txt
-	uv pip install --python $(ACTIVEPYTHON) -r requirements-only-dev.txt
+	$(UV_COMMAND) export --only-dev --format requirements-txt -o requirements-only-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-only-dev.txt
 
 #* Cleaning
 .PHONY: pycache-remove
