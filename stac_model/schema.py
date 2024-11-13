@@ -1,13 +1,10 @@
 import json
+from collections.abc import Iterable
 from typing import (
     Annotated,
     Any,
     Generic,
-    Iterable,
-    List,
     Literal,
-    Optional,
-    Set,
     TypeVar,
     Union,
     cast,
@@ -48,13 +45,13 @@ def mlm_prefix_adder(field_name: str) -> str:
 class MLModelProperties(Runtime):
     name: str = Field(min_length=1)
     architecture: str = Field(min_length=1)
-    tasks: Set[ModelTask]
-    input: List[ModelInput]
-    output: List[ModelOutput]
+    tasks: set[ModelTask]
+    input: list[ModelInput]
+    output: list[ModelOutput]
 
     total_parameters: int
-    pretrained: Annotated[Optional[bool], OmitIfNone] = Field(default=True)
-    pretrained_source: Annotated[Optional[str], OmitIfNone] = None
+    pretrained: Annotated[bool | None, OmitIfNone] = Field(default=True)
+    pretrained_source: Annotated[str | None, OmitIfNone] = None
 
     model_config = ConfigDict(alias_generator=mlm_prefix_adder, populate_by_name=True, extra="ignore")
 
@@ -80,7 +77,7 @@ class MLModelExtension(
 
     def apply(
         self,
-        properties: Union[MLModelProperties, dict[str, Any]],
+        properties: MLModelProperties | dict[str, Any],
     ) -> None:
         """
         Applies Machine Learning Model Extension properties to the extended :mod:`~pystac` object.
@@ -97,18 +94,15 @@ class MLModelExtension(
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Asset, add_if_missing: bool = False) -> "AssetMLModelExtension":
-        ...
+    def ext(cls, obj: pystac.Asset, add_if_missing: bool = False) -> "AssetMLModelExtension": ...
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Item, add_if_missing: bool = False) -> "ItemMLModelExtension":
-        ...
+    def ext(cls, obj: pystac.Item, add_if_missing: bool = False) -> "ItemMLModelExtension": ...
 
     @overload
     @classmethod
-    def ext(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "CollectionMLModelExtension":
-        ...
+    def ext(cls, obj: pystac.Collection, add_if_missing: bool = False) -> "CollectionMLModelExtension": ...
 
     # @overload
     # @classmethod
@@ -118,7 +112,7 @@ class MLModelExtension(
     @classmethod
     def ext(
         cls,
-        obj: Union[pystac.Collection, pystac.Item, pystac.Asset],  # item_assets.AssetDefinition
+        obj: pystac.Collection | pystac.Item | pystac.Asset,  # item_assets.AssetDefinition
         add_if_missing: bool = False,
     ) -> Union[
         "CollectionMLModelExtension",
@@ -186,7 +180,7 @@ class SummariesMLModelExtension(SummariesExtension):
         for value in summaries:
             validator.validate_assignment(model, prop, value)
 
-    def get_mlm_property(self, prop: str) -> Optional[list[Any]]:
+    def get_mlm_property(self, prop: str) -> list[Any] | None:
         self._check_mlm_property(prop)
         return self.summaries.get_list(prop)
 
@@ -251,7 +245,7 @@ class AssetMLModelExtension(MLModelExtension[pystac.Asset]):
     properties: dict[str, Any]
     """The :class:`~pystac.Asset` fields, including extension properties."""
 
-    additional_read_properties: Optional[Iterable[dict[str, Any]]] = None
+    additional_read_properties: Iterable[dict[str, Any]] | None = None
     """If present, this will be a list containing 1 dictionary representing the
     properties of the owning :class:`~pystac.Item`."""
 

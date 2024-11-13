@@ -1,7 +1,7 @@
 import glob
 import json
 import os
-from typing import TYPE_CHECKING, Any, Dict, List, cast
+from typing import TYPE_CHECKING, Any, cast
 
 import pystac
 import pytest
@@ -18,7 +18,7 @@ EXAMPLES_DIR = os.path.abspath(os.path.join(TEST_DIR, "../examples"))
 JSON_SCHEMA_DIR = os.path.abspath(os.path.join(TEST_DIR, "../json-schema"))
 
 
-def get_all_stac_item_examples() -> List[str]:
+def get_all_stac_item_examples() -> list[str]:
     all_json = glob.glob("**/*.json", root_dir=EXAMPLES_DIR, recursive=True)
     all_geojson = glob.glob("**/*.geojson", root_dir=EXAMPLES_DIR, recursive=True)
     all_stac_items = [
@@ -39,7 +39,7 @@ def mlm_schema() -> JSON:
 @pytest.fixture(scope="session")
 def mlm_validator(
     request: "SubRequest",
-    mlm_schema: Dict[str, Any],
+    mlm_schema: dict[str, Any],
 ) -> pystac.validation.stac_validator.JsonSchemaSTACValidator:
     """
     Update the :class:`pystac.validation.RegisteredValidator` with the local MLM JSON schema definition.
@@ -58,10 +58,10 @@ def mlm_validator(
 
 
 @pytest.fixture
-def mlm_example(request: "SubRequest") -> Dict[str, JSON]:
+def mlm_example(request: "SubRequest") -> dict[str, JSON]:
     with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
         data = json.load(example_file)
-    return cast(Dict[str, JSON], data)
+    return cast(dict[str, JSON], data)
 
 
 @pytest.fixture(name="eurosat_resnet")

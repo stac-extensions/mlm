@@ -8,11 +8,10 @@
 [![PyPI Release][bp3]][bp2]
 [![Repository][bscm1]][bp4]
 [![Releases][bscm2]][bp5]
-[![Docs][bdoc1]][bdoc2]
 
 [![Contributions Welcome][bp8]][bp9]
 
-[![Poetry][bp11]][bp12]
+[![uv][bp11]][bp12]
 [![Pre-commit][bp15]][bp16]
 [![Semantic versions][blic3]][bp5]
 [![Pipelines][bscm6]][bscm7]
@@ -30,10 +29,10 @@ _A PydanticV2 and PySTAC validation and serialization library for the STAC ML Mo
 pip install -U stac-model
 ```
 
-or install with `Poetry`:
+or install with uv:
 
 ```shell
-poetry add stac-model
+uv add stac-model
 ```
 Then you can run
 
@@ -73,8 +72,8 @@ See [LICENSE][blic2] for more details.
 [bp7]: https://kutt.it/7fYqQl
 [bp8]: https://img.shields.io/static/v1.svg?label=Contributions&message=Welcome&color=0059b3&style=for-the-badge
 [bp9]: https://github.com/stac-extensions/mlm/blob/main/CONTRIBUTING.md
-[bp11]: https://img.shields.io/endpoint?url=https://python-poetry.org/badge/v0.json&style=for-the-badge
-[bp12]: https://python-poetry.org/
+[bp11]: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json&style=for-the-badge
+[bp12]: https://docs.astral.sh/uv/
 
 [bp15]: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white&style=for-the-badge
 [bp16]: https://github.com/stac-extensions/mlm/blob/main/.pre-commit-config.yaml
@@ -95,6 +94,3 @@ See [LICENSE][blic2] for more details.
 [hub6]: https://docs.github.com/en/code-security/dependabot
 [hub8]: https://github.com/stac-extensions/mlm/blob/main/.github/release-drafter.yml
 [hub9]: https://github.com/stac-extensions/mlm/blob/main/.github/.stale.yml
-
-[bdoc1]: https://img.shields.io/badge/docs-github%20pages-0a507a?style=for-the-badge
-[bdoc2]: https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md
