@@ -599,7 +599,7 @@ A valid STAC MLM Item definition requires at least one Asset with the `mlm:model
 an accompanying `mlm:artifact_type` property that describes how to employ it.
 An Asset described with this role is considered the "*main*" [Model Asset](#model-asset) being described by
 the STAC Item definition. Typically, there will be only one asset containing the `mlm:model` role.
-However, multiple `mlm:model` roles are permitted to provide alternate interfaces of the same model
+However, multiple Assets employing the `mlm:model` role are permitted to provide alternate interfaces of the same model
 (e.g.: using different frameworks or compilations), but those assets should have exactly the same model interfaces
 (i.e.: identical `mlm:input`, `mlm:output`, etc.). In such case, the `mlm:artifact_type` property should be used to
 distinguish them.
