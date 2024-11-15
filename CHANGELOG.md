@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
+- Add better descriptions about required and recommended *MLM Asset Roles* and their implications
+  (fixes [#54](https://github.com/stac-extensions/mlm/issues/54)).
 - Add explicit check of `value_scaling` sub-fields `minimum`, `maximum`, `mean`, `stddev`, etc. for
   corresponding `type` values `min-max` and `z-score` that depend on it.
 - Allow different `value_scaling` operations per band/channel/dimension as needed by the model.
