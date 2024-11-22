@@ -7,8 +7,8 @@ from stac_model.base import DataType, MLMBaseModel, ModelTask, OmitIfNone, Proce
 
 
 class ModelResult(MLMBaseModel):
-    shape: list[int | float] = Field(..., min_items=1)
-    dim_order: list[str] = Field(..., min_items=1)
+    shape: list[int | float] = Field(..., min_length=1)
+    dim_order: list[str] = Field(..., min_length=1)
     data_type: DataType
 
 

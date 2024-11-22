@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for the entire input (but still possible).
 
 ### Changed
+- Explicitly disallow `mlm:name`, `mlm:input`, `mlm:output` and `mlm:hyperparameters` at the Asset level.
+  These fields describe the model as a whole and should therefore be defined in Item properties.
 - Moved `norm_type` to `value_scaling` object to better reflect the expected operation, which could be another
   operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
 - Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional
@@ -36,6 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Otherwise, the amount of `value_scaling` objects should match the number of bands or channels involved in the input.
 
 ### Fixed
+- Fix missing `mlm:artifact_type` property check for a Model Asset definition
+  (fixes <https://github.com/stac-extensions/mlm/issues/42>).
+  The `mlm:artifact_type` is now mutually and exclusively required by the corresponding Asset with `mlm:model` role.
 - Fix check of disallowed unknown/undefined `mlm:`-prefixed fields
   (fixes [#41](https://github.com/stac-extensions/mlm/issues/41)).
 

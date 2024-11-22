@@ -227,6 +227,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "raster:bands": [
         {
           "name": "B02 - blue",
