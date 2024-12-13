@@ -302,6 +302,9 @@
         },
         "mlm:artifact_type": {
           "$ref": "#/$defs/mlm:artifact_type"
+        },
+        "mlm:compile_method": {
+          "$ref": "#/$defs/mlm:compile_method"
         }
       },
       "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
@@ -324,7 +327,8 @@
             "required": [
               "mlm:input",
               "mlm:output",
-              "mlm:artifact_type"
+              "mlm:artifact_type",
+              "mlm:compile_method"
             ]
           }
         },
@@ -354,7 +358,8 @@
             "anyOf": [
               {
                 "required": [
-                  "mlm:artifact_type"
+                  "mlm:artifact_type",
+                  "mlm:compile_method"
                 ]
               }
             ]
@@ -460,7 +465,18 @@
       "examples": [
         "torch.save",
         "torch.jit.save",
-        "torch.export.save"
+        "torch.export.save",
+        "tf.keras.Model.save",
+        "tf.keras.Model.save_weights",
+        "tf.saved_model.export(format='tf_saved_model')"
+      ]
+    },
+    "mlm:compile_method": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "aot",
+        "jit"
       ]
     },
     "mlm:tasks": {

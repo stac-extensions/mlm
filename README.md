@@ -667,8 +667,8 @@ In order to provide more context, the following roles are also recommended were 
 | href              | string                          | URI to the model artifact.                                                                       |
 | type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
 | roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
-| mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
-| mlm:compile_method | string | Describes the method used to compile the ML model at either save time or runtime prior to inference. These options are mutually exclusive `["aot", "jit"]`. |
+| mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework. This is **REQUIRED** if the `mlm:model` role is specified.           |
+| mlm:compile_method | string | Describes the method used to compile the ML model at either save time or runtime prior to inference. These options are mutually exclusive `["aot", "jit", null]`. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
@@ -710,8 +710,9 @@ The `mlm:artifact_type` field can be used to clarify how the model was saved whi
 what runtime contexts it should be used. For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model 
 definitions, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] 
 (`.pt2`) approach. Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type) can be 
-insufficient in this case to detect which strategy should be used to employ the model definition. See the [the best practices 
-document](./best-practices#framework-specific-artifact-types) on suggested fields for framework specific artifact types.
+insufficient in this case to detect which strategy should be used to employ the model definition. 
+See the [the best practices document](./best-practices#framework-specific-artifact-types) on suggested
+ fields for framework specific artifact types.
 
 
 ### Source Code Asset
