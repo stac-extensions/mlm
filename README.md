@@ -706,7 +706,12 @@ official. In order to validate the specific framework and artifact type employed
 
 #### Framework Specific Artifact Types
 
-The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to load it or in what runtime contexts it should be used. For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach. Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type) can be insufficient in this case to detect which strategy should be used to employ the model definition. See the [the best practices document](./best-practices#framework-specific-artifact-types) on suggested fields for framework specific artifact types.
+The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to load it or in 
+what runtime contexts it should be used. For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model 
+definitions, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] 
+(`.pt2`) approach. Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type) can be 
+insufficient in this case to detect which strategy should be used to employ the model definition. See the [the best practices 
+document](./best-practices#framework-specific-artifact-types) on suggested fields for framework specific artifact types.
 
 
 ### Source Code Asset
