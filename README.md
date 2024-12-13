@@ -74,7 +74,7 @@ However, fields that relate to supervised ML are optional and users can use the 
 <!-- lint enable -->
 
 See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
-with this extension.
+with this extension as well as suggested values for specific ML framework.
 
 The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
@@ -668,6 +668,7 @@ In order to provide more context, the following roles are also recommended were 
 | type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
 | roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
 | mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
+| mlm:compile_method | string | Describes the method used to compile the ML model at either save time or runtime prior to inference. These options are mutually exclusive `["aot", "jit"]`. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
@@ -703,42 +704,10 @@ official. In order to validate the specific framework and artifact type employed
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
 
-#### Artifact Type
+#### Framework Specific Artifact Types
 
-This value can be used to provide additional details about the specific model artifact being described.
-For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions,
-such as Pickle (`.pt`), [TorchScript][pytorch-jit-script],
-or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach.
-Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type)
-can be insufficient in this case to detect which strategy should be used to employ the model definition.
+The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to load it or in what runtime contexts it should be used. For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach. Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type) can be insufficient in this case to detect which strategy should be used to employ the model definition. See the [the best practices document](./best-practices#framework-specific-artifact-types) on suggested fields for framework specific artifact types.
 
-Following are some proposed *Artifact Type* values for corresponding approaches, but other names are
-permitted as well. Note that the names are selected using the framework-specific definitions to help
-the users understand the source explicitly, although this is not strictly required either.
-
-| Artifact Type                                    | Description                                                                                                                                                                                                                                                                                                                                 |
-|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `torch.save`                                     | A [serialized python pickle object][pytorch-save] (i.e.: `.pt`) which can represent a model or state_dict.                                                                                                                                                                                                                                  |
-| `torch.jit.save`                                 | A [`TorchScript`][pytorch-jit-script] model artifact obtained with one or more of the graph export options Torchscript Tracing and Torchscript Scripting.                                                                                                                                                                                   |
-| `torch.export.save`                              | A model artifact storing an [ExportedProgram][exported-program] obtained by [`torch.export.export`][pytorch-export] (i.e.: `.pt2`).                                                                                                                                                                                                         |
-| `tf.keras.Model.save`                            | Saves a [.keras model file][keras-model], a unified zip archive format containing the architecture, weights, optimizer, losses, and metrics.                                                                                                                                                                                                |
-| `tf.keras.Model.save_weights`                    | A [.weights.h5][keras-save-weights] file containing only model weights for use by Tensorflow or Keras.                                                                                                                                                                                                                                      |
-| `tf.keras.Model.export(format='tf_saved_model')` | TF Saved Model is the [recommended format][tf-keras-recommended] by the Tensorflow team for whole model saving/loading for inference. See this example to [save and load models][keras-example] and the docs for [different save methods][keras-methods] in TF and Keras. Also available from `keras.Model.export(format='tf_saved_model')` |
-
-
-
-[exported-program]: https://pytorch.org/docs/main/export.html#serialization
-[pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
-[pytorch-export]: https://pytorch.org/docs/main/export.html
-[pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
-[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
-[pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
-[pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
-[keras-save-weights]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/#save_weights-method
-[keras-example]: https://keras.io/guides/serialization_and_saving/
-[tf-keras-recommended]: https://www.tensorflow.org/guide/saved_model#creating_a_savedmodel_from_keras
-[keras-methods]: https://keras.io/2.16/api/models/model_saving_apis/
-[keras-model]: https://keras.io/api/models/model_saving_apis/model_saving_and_loading/
 
 ### Source Code Asset
 

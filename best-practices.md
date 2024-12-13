@@ -282,3 +282,31 @@ training process to find the "best model". This field could also be used to indi
 educational purposes only.
 
 [stac-ext-version]: https://github.com/stac-extensions/version
+
+## Framework Specific Artifact Types
+
+The following are some proposed *Artifact Type* values for the Model Asset's [`mlm:artifact_type` field](./README.md#model-asset). Other names are
+permitted, as these values are not validated by the schema. Note that the names are selected using the framework-specific definitions to help the users understand how the model artifact was created, although these exact names are not strictly required either.
+
+| Artifact Type                                    | Description                                                                                                                                                                                                                                                                                                                                 |
+|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `torch.save`                                     | A [serialized python pickle object][pytorch-save] (i.e.: `.pt`) which can represent a model or state_dict.                                                                                                                                                                                                                                  |
+| `torch.jit.save`                                 | A [`TorchScript`][pytorch-jit-script] model artifact obtained with one or more of the graph export options Torchscript Tracing and Torchscript Scripting.                                                                                                                                                                                   |
+| `torch.export.save`                              | A model artifact storing an [ExportedProgram][exported-program] obtained by [`torch.export.export`][pytorch-export] (i.e.: `.pt2`).                                                                                                                                                                                                         |
+| `tf.keras.Model.save`                            | Saves a [.keras model file][keras-model], a unified zip archive format containing the architecture, weights, optimizer, losses, and metrics.                                                                                                                                                                                                |
+| `tf.keras.Model.save_weights`                    | A [.weights.h5][keras-save-weights] file containing only model weights for use by Tensorflow or Keras.                                                                                                                                                                                                                                      |
+| `tf.keras.Model.export(format='tf_saved_model')` | TF Saved Model is the [recommended format][tf-keras-recommended] by the Tensorflow team for whole model saving/loading for inference. See this example to [save and load models][keras-example] and the docs for [different save methods][keras-methods] in TF and Keras. Also available from `keras.Model.export(format='tf_saved_model')` |
+
+
+[exported-program]: https://pytorch.org/docs/main/export.html#serialization
+[pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
+[pytorch-export]: https://pytorch.org/docs/main/export.html
+[pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
+[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
+[pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
+[pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+[keras-save-weights]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/#save_weights-method
+[keras-example]: https://keras.io/guides/serialization_and_saving/
+[tf-keras-recommended]: https://www.tensorflow.org/guide/saved_model#creating_a_savedmodel_from_keras
+[keras-methods]: https://keras.io/2.16/api/models/model_saving_apis/
+[keras-model]: https://keras.io/api/models/model_saving_apis/model_saving_and_loading/
