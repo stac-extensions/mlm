@@ -22,12 +22,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python
-      uses: actions/setup-python@v5.2.0
+      uses: actions/setup-python@v5.3.0
       with:
         python-version: "3.10"
-    - name: Install poetry
-      run: make poetry-install
+    - name: Install uv
+      run: make setup
     - name: Publish stac-model to PyPI
       run: |
-       poetry build
-       poetry publish --username __token__ --password ${{ secrets.PYPI_SECRET }}
+       uv build
+       uv publish --username __token__ --password ${{ secrets.PYPI_SECRET }}

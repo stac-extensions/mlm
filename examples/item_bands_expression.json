@@ -86,7 +86,7 @@
         "input": {
           "shape": [
             -1,
-            13,
+            4,
             64,
             64
           ],
@@ -110,7 +110,7 @@
         "result": {
           "shape": [
             -1,
-            10
+            2
           ],
           "dim_order": [
             "batch",
@@ -150,6 +150,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "$comment": "Following 'eo:bands' is required to fulfil schema validation of 'eo' extension.",
       "eo:bands": [
         {

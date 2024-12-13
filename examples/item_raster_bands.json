@@ -95,7 +95,7 @@
           ],
           "data_type": "float32"
         },
-        "norm_type": null,
+        "value_scaling": null,
         "resize_type": null,
         "pre_processing_function": {
           "format": "python",
@@ -216,6 +216,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "raster:bands": [
         {
           "name": "B01",

@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, Literal, Union
 
 from pydantic import AliasChoices, Field
 
@@ -33,17 +33,17 @@ AcceleratorType = Union[AcceleratorName, AcceleratorEnum]
 
 
 class Runtime(MLMBaseModel):
-    framework: Annotated[Optional[str], OmitIfNone] = Field(default=None)
-    framework_version: Annotated[Optional[str], OmitIfNone] = Field(default=None)
-    file_size: Annotated[Optional[int], OmitIfNone] = Field(
+    framework: Annotated[str | None, OmitIfNone] = Field(default=None)
+    framework_version: Annotated[str | None, OmitIfNone] = Field(default=None)
+    file_size: Annotated[int | None, OmitIfNone] = Field(
         alias="file:size",
         validation_alias=AliasChoices("file_size", "file:size"),
         default=None,
     )
-    memory_size: Annotated[Optional[int], OmitIfNone] = Field(default=None)
-    batch_size_suggestion: Annotated[Optional[int], OmitIfNone] = Field(default=None)
+    memory_size: Annotated[int | None, OmitIfNone] = Field(default=None)
+    batch_size_suggestion: Annotated[int | None, OmitIfNone] = Field(default=None)
 
-    accelerator: Optional[AcceleratorType] = Field(default=None)
+    accelerator: AcceleratorType | None = Field(default=None)
     accelerator_constrained: bool = Field(default=False)
-    accelerator_summary: Annotated[Optional[str], OmitIfNone] = Field(default=None)
-    accelerator_count: Annotated[Optional[int], OmitIfNone] = Field(default=None, minimum=1)
+    accelerator_summary: Annotated[str | None, OmitIfNone] = Field(default=None)
+    accelerator_count: Annotated[int | None, OmitIfNone] = Field(default=None, ge=1)

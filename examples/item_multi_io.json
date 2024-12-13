@@ -85,8 +85,7 @@
           ],
           "data_type": "uint16"
         },
-        "norm_by_channel": false,
-        "norm_type": null,
+        "value_scaling": null,
         "resize_type": null
       },
       {
@@ -228,6 +227,7 @@
         "mlm:model",
         "mlm:weights"
       ],
+      "mlm:artifact_type": "torch.save",
       "raster:bands": [
         {
           "name": "B02 - blue",
