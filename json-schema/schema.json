@@ -356,12 +356,8 @@
           "$comment": "Particularity of the 'not/required' approach: they must be tested one by one. Otherwise, it validates that they are all (simultaneously) not present.",
           "not": {
             "anyOf": [
-              {
-                "required": [
-                  "mlm:artifact_type",
-                  "mlm:compile_method"
-                ]
-              }
+              {"required": ["mlm:artifact_type"]},
+              {"required": ["mlm:compile_method"]}
             ]
           }
         },
