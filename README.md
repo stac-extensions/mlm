@@ -667,7 +667,7 @@ In order to provide more context, the following roles are also recommended were 
 | href              | string                          | URI to the model artifact.                                                                       |
 | type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
 | roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
-| mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework. This is **REQUIRED** if the `mlm:model` role is specified.           |
+| mlm:artifact_type | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact. Typically related to a particular ML framework. This is **REQUIRED** if the `mlm:model` role is specified.           |
 | mlm:compile_method | string | Describes the method used to compile the ML model at either save time or runtime prior to inference. These options are mutually exclusive `["aot", "jit", null]`. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
@@ -701,19 +701,11 @@ is used for the artifact described by the media-type. However, users need to rem
 official. In order to validate the specific framework and artifact type employed by the model, the MLM properties
 `mlm:framework` (see [MLM Fields](#item-properties-and-collection-fields)) and
 `mlm:artifact_type` (see [Model Asset](#model-asset)) should be employed instead to perform this validation if needed.
+See the [the best practices document](./best-practices.md#framework-specific-artifact-types) on suggested
+fields for framework specific artifact types.
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
-
-#### Framework Specific Artifact Types
-
-The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to load it or in 
-what runtime contexts it should be used. For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model 
-definitions, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] 
-(`.pt2`) approach. Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type) can be 
-insufficient in this case to detect which strategy should be used to employ the model definition. 
-See the [the best practices document](./best-practices#framework-specific-artifact-types) on suggested
- fields for framework specific artifact types.
-
+[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
 
 ### Source Code Asset
 

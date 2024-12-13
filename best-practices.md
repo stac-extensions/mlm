@@ -285,8 +285,19 @@ educational purposes only.
 
 ## Framework Specific Artifact Types
 
-The following are some proposed *Artifact Type* values for the Model Asset's [`mlm:artifact_type` field](./README.md#model-asset). Other names are
-permitted, as these values are not validated by the schema. Note that the names are selected using the framework-specific definitions to help the users understand how the model artifact was created, although these exact names are not strictly required either.
+The `mlm:artifact_type` field can be used to clarify how the model was saved which
+can help users understand how to load it or in what runtime contexts it should be used. For example, PyTorch offers 
+[various strategies][pytorch-frameworks] for providing model definitions, such as Pickle (`.pt`),
+ [TorchScript][pytorch-jit-script], or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] 
+(`.pt2`) approach. Since they all refer to the same ML framework, the 
+[Model Artifact Media-Type](./README.md#model-artifact-media-type) can be insufficient in this case to detect which 
+strategy should be used to employ the model definition. 
+
+The following are some proposed *Artifact Type* values for the Model Asset's 
+[`mlm:artifact_type` field](./README.md#model-asset). Other names are
+permitted, as these values are not validated by the schema. Note that the names are selected using the 
+framework-specific definitions to help the users understand how the model artifact was created, although these exact
+names are not strictly required either.
 
 | Artifact Type                                    | Description                                                                                                                                                                                                                                                                                                                                 |
 |--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -297,12 +308,10 @@ permitted, as these values are not validated by the schema. Note that the names 
 | `tf.keras.Model.save_weights`                    | A [.weights.h5][keras-save-weights] file containing only model weights for use by Tensorflow or Keras.                                                                                                                                                                                                                                      |
 | `tf.keras.Model.export(format='tf_saved_model')` | TF Saved Model is the [recommended format][tf-keras-recommended] by the Tensorflow team for whole model saving/loading for inference. See this example to [save and load models][keras-example] and the docs for [different save methods][keras-methods] in TF and Keras. Also available from `keras.Model.export(format='tf_saved_model')` |
 
-
 [exported-program]: https://pytorch.org/docs/main/export.html#serialization
-[pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
+[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
 [pytorch-export]: https://pytorch.org/docs/main/export.html
 [pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
-[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
 [pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
 [pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
 [keras-save-weights]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/#save_weights-method
