@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow a `processing:expression` for a band/channel/dimension-specific `value_scaling` operation,
   granting more flexibility in the definition of input preparation in contrast to having it applied
   for the entire input (but still possible).
-- mlm:compile_method with options 'aot' for Ahead of Time Compilation, 'jit' for Just-In Time Compilation
+- Add optional `mlm:compile_method` field at the Asset level with options `aot` for Ahead of Time Compilation, `jit` for Just-In Time Compilation.
 
 ### Changed
 - Explicitly disallow `mlm:name`, `mlm:input`, `mlm:output` and `mlm:hyperparameters` at the Asset level.
@@ -25,8 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
 - Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional
   properties dependencies.
-- moved mlm:artifact_type field value descriptions that are framework specific to best-practices section.
-- expanded suggested mlm:artifact_type values to include Tensorflow/Keras
+- moved `mlm:artifact_type` field value descriptions that are framework specific to best-practices section.
+- expanded suggested `mlm:artifact_type` values to include Tensorflow/Keras.
 
 ### Deprecated
 - n/a
