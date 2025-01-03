@@ -8,15 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v1.4.0](https://github.com/stac-extensions/mlm/tree/v1.4.0)
 
 ### Added
-- Add better descriptions about required and recommended *MLM Asset Roles* and their implications
-  (fixes [#54](https://github.com/stac-extensions/mlm/issues/54)).
+- Add better descriptions about required and recommended *MLM Asset Roles* and
+  their implications (fixes
+  [#54](https://github.com/stac-extensions/mlm/issues/54)).
 - Add explicit check of `value_scaling` sub-fields `minimum`, `maximum`, `mean`, `stddev`, etc. for
   corresponding `type` values `min-max` and `z-score` that depend on it.
 - Allow different `value_scaling` operations per band/channel/dimension as needed by the model.
 - Allow a `processing:expression` for a band/channel/dimension-specific `value_scaling` operation,
   granting more flexibility in the definition of input preparation in contrast to having it applied
   for the entire input (but still possible).
-- Add optional `mlm:compile_method` field at the Asset level with options `aot` for Ahead of Time Compilation, `jit` for Just-In Time Compilation.
+- Add optional `mlm:compile_method` field at the Asset level with options `aot`
+  for Ahead of Time Compilation, `jit` for Just-In Time Compilation.
 
 ### Changed
 - Explicitly disallow `mlm:name`, `mlm:input`, `mlm:output` and `mlm:hyperparameters` at the Asset level.
@@ -143,7 +145,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object)
   to refer to model asset and source code.
 - use `classification:classes` in Model Output
-- add `scene-classification` to the Enum Tasks to allow disambiguation between pixel-wise and patch-based classification
+- add `scene-classification` to the Enum Tasks to allow disambiguation between
+  pixel-wise and patch-based classification
 
 ### Changed
 - `disk_size` replaced by `file:size` (see [Best Practices - File Extension](best-practices.md#file-extension))
