@@ -3,18 +3,20 @@
 This document makes a number of recommendations for creating real world ML Model Extensions.
 None of them are required to meet the core specification, but following these practices will improve the documentation
 of your model and make life easier for client tooling and users. They come about from practical experience of
-implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their 
+implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their
 models or creating tools to work with STAC.
 
-- [Using STAC Common Metadata Fields for the ML Model Extension](#using-stac-common-metadata-fields-for-the-ml-model-extension)
-- [Recommended Extensions to Compose with the ML Model Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
-  - [Processing Extension](#processing-extension)
-  - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
-  - [Classification Extension](#classification-extension)
-  - [Scientific Extension](#scientific-extension)
-  - [File Extension](#file-extension)
-  - [Example Extension](#example-extension)
-  - [Version Extension](#version-extension)
+- [ML Model Extension Best Practices](#ml-model-extension-best-practices)
+  - [Using STAC Common Metadata Fields for the ML Model Extension](#using-stac-common-metadata-fields-for-the-ml-model-extension)
+  - [Recommended Extensions to Compose with the ML Model Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
+    - [Processing Extension](#processing-extension)
+    - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
+    - [Classification Extension](#classification-extension)
+    - [Scientific Extension](#scientific-extension)
+    - [File Extension](#file-extension)
+    - [Example Extension](#example-extension)
+    - [Version Extension](#version-extension)
+  - [Framework Specific Artifact Types](#framework-specific-artifact-types)
 
 ## Using STAC Common Metadata Fields for the ML Model Extension
 
@@ -68,8 +70,8 @@ information regarding these references, see the [ML-AOI and Label Extensions](#m
 
 ### Processing Extension
 
-It is recommended to use at least the `processing:lineage` and `processing:level` fields from 
-the [Processing Extension](https://github.com/stac-extensions/processing) to make it clear 
+It is recommended to use at least the `processing:lineage` and `processing:level` fields from
+the [Processing Extension](https://github.com/stac-extensions/processing) to make it clear
 how [Model Input Objects](./README.md#model-input-object) are processed by the data provider prior to an
 inference preprocessing pipeline. This can help users locate the correct version of the dataset used during model
 inference or help them reproduce the data processing pipeline.
@@ -99,7 +101,7 @@ Furthermore, the [`processing:expression`](https://github.com/stac-extensions/pr
 should be specified with a reference to the STAC Item employing the MLM extension to provide full context of the source
 of the derived product.
 
-A potential representation of a STAC Asset could be as follows: 
+A potential representation of a STAC Asset could be as follows:
 ```json
 {
   "model-output": {
@@ -186,7 +188,7 @@ leading to a new MLM STAC Item definition (see also [STAC Version Extension](#ve
 
 ### Classification Extension
 
-Since it is expected that a model will provide some kind of classification values as output, the 
+Since it is expected that a model will provide some kind of classification values as output, the
 [Classification Extension](https://github.com/stac-extensions/classification) can be leveraged inside
 MLM definition to indicate which class values can be contained in the resulting output from the model prediction.
 
@@ -201,7 +203,7 @@ For more details, see the [Model Output Object](README.md#model-output-object) d
 
 ### Scientific Extension
 
-Provided that most models derive from previous scientific work, it is strongly recommended to employ the 
+Provided that most models derive from previous scientific work, it is strongly recommended to employ the
 [Scientific Extension][stac-ext-sci] to provide references corresponding to the
 original source of the model (`sci:doi`, `sci:citation`). This can help users find more information about the model,
 its underlying architecture, or ways to improve it by piecing together the related work (`sci:publications`) that
@@ -282,3 +284,40 @@ training process to find the "best model". This field could also be used to indi
 educational purposes only.
 
 [stac-ext-version]: https://github.com/stac-extensions/version
+
+## Framework Specific Artifact Types
+
+The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to
+load it or in which runtime contexts it should be used. Applying this artifact type definition should restrict
+explicitly its use to a specific runtime. For example, PyTorch offers [various strategies][pytorch-frameworks] for
+exporting models, such as Pickle (`.pt`), [TorchScript][pytorch-jit-script], and
+[PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`). Since each approach is associated with the same
+ML framework, the [Model Artifact Media-Type](./README.md#model-artifact-media-type) can be insufficient in this case
+to detect which strategy should be used to deploy the model artifact.
+
+The following are some proposed *Artifact Type* values for the Model Asset's
+[`mlm:artifact_type` field](./README.md#model-asset). Other names are
+permitted, as these values are not validated by the schema. Note that the names are selected using the
+framework-specific definitions to help the users understand how the model artifact was created, although these exact
+names are not strictly required either.
+
+| Artifact Type                                    | Description                                                                                                                                                                                                                                                                                                                                 |
+|--------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `torch.save`                                     | A [serialized python pickle object][pytorch-save] (i.e.: `.pt`) which can represent a model or state_dict.                                                                                                                                                                                                                                  |
+| `torch.jit.save`                                 | A [`TorchScript`][pytorch-jit-script] model artifact obtained with one or more of the graph export options Torchscript Tracing and Torchscript Scripting.                                                                                                                                                                                   |
+| `torch.export.save`                              | A model artifact storing an [ExportedProgram][exported-program] obtained by [`torch.export.export`][pytorch-export] (i.e.: `.pt2`).                                                                                                                                                                                                         |
+| `tf.keras.Model.save`                            | Saves a [.keras model file][keras-model], a unified zip archive format containing the architecture, weights, optimizer, losses, and metrics.                                                                                                                                                                                                |
+| `tf.keras.Model.save_weights`                    | A [.weights.h5][keras-save-weights] file containing only model weights for use by Tensorflow or Keras.                                                                                                                                                                                                                                      |
+| `tf.keras.Model.export` | [TF Saved Model][tf-saved-model] is the [recommended format][tf-keras-recommended] by the Tensorflow team for whole model saving/loading for inference. See the docs for [different save methods][keras-methods] in TF and Keras. |
+
+[exported-program]: https://pytorch.org/docs/main/export.html#serialization
+[pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
+[pytorch-export]: https://pytorch.org/docs/main/export.html
+[pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
+[pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
+[pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+[keras-save-weights]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/#save_weights-method
+[tf-saved-model]: https://keras.io/api/models/model_saving_apis/export/
+[tf-keras-recommended]: https://www.tensorflow.org/guide/saved_model#creating_a_savedmodel_from_keras
+[keras-methods]: https://keras.io/2.16/api/models/model_saving_apis/
+[keras-model]: https://keras.io/api/models/model_saving_apis/model_saving_and_loading/

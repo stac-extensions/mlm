@@ -74,7 +74,7 @@ However, fields that relate to supervised ML are optional and users can use the 
 <!-- lint enable -->
 
 See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
-with this extension.
+with this extension as well as suggested values for specific ML framework.
 
 The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
@@ -101,7 +101,7 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
   - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
 - [JSON Schema](https://stac-extensions.github.io/mlm/)
 - [Changelog](./CHANGELOG.md)
-- [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing version 1.3.0 of the extension 
+- [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing version 1.3.0 of the extension
 - [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
 
 ## Item Properties and Collection Fields
@@ -340,13 +340,13 @@ defined at the "Band Object" level, but at the [Model Input](#model-input-object
 This is because, in machine learning, it is common to need overall statistics for the dataset used to train the model
 to normalize all bands, rather than normalizing the values over a single product. Furthermore, statistics could be
 applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
-properties of the model. 
+properties of the model.
 
 Another distinction is that, depending on the model, statistics could apply to some inputs that have no reference to
 any `bands` definition. In such case, defining statistics under `bands` would not be possible, or would intrude
 ambiguous definitions.
 
-Finally, contrary to the "`statistics`" property name employed by [Band Statistics][stac-1.1-stats], MLM employs the 
+Finally, contrary to the "`statistics`" property name employed by [Band Statistics][stac-1.1-stats], MLM employs the
 distinct name `value_scaling`, although similar `minimum`, `maximum`, etc. sub-fields are employed.
 This is done explicitly to disambiguate "informative" band statistics from "applied scaling operations" required
 by the model inputs. This highlights the fact that `value_scaling` are not *necessarily* equal
@@ -449,7 +449,7 @@ Select one option from:
 | `scale`      | `value`                                         | $data / value$                           |
 | `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
 
-When a scaling `type` approach is specified, it is expected that the parameters necessary 
+When a scaling `type` approach is specified, it is expected that the parameters necessary
 to perform their calculation are provided for the corresponding input dimension data.
 
 If none of the above values applies for a given dimension, `type: null` (literal `null`, not string) should be
@@ -463,7 +463,7 @@ dimensions. In such case, implicit broadcasting of the unique [Value Scaling Obj
 performed for all applicable dimensions when running inference with the model.
 
 If a custom scaling operation, or a combination of more complex operations (with or without [Resize](#resize-enum)),
-must be defined instead, a [Processing Expression](#processing-expression) reference can be specified in place of 
+must be defined instead, a [Processing Expression](#processing-expression) reference can be specified in place of
 the [Value Scaling Object](#value-scaling-object) of the respective input dimension, as shown below.
 
 ```json
@@ -478,7 +478,7 @@ the [Value Scaling Object](#value-scaling-object) of the respective input dimens
 
 For operations such as L1 or L2 normalization, [Processing Expression](#processing-expression) should also be employed.
 This is because, depending on the [Model Input](#model-input-object) dimensions and reference data, there is an
-ambiguity regarding "how" and "where" such normalization functions must be applied against the input data. 
+ambiguity regarding "how" and "where" such normalization functions must be applied against the input data.
 A custom mathematical expression should provide explicitly the data manipulation and normalization strategy.
 
 In situations of very complex `value_scaling` operations, which cannot be represented by any of the previous definition,
@@ -667,7 +667,8 @@ In order to provide more context, the following roles are also recommended were 
 | href              | string                          | URI to the model artifact.                                                                       |
 | type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
 | roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
-| mlm:artifact_type | [Artifact Type](#artifact-type) | Specifies the kind of model artifact. Typically related to a particular ML framework.            |
+| mlm:artifact_type | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified.           |
+| mlm:compile_method | [Compile Method](#compile-method) \| null | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
@@ -700,35 +701,18 @@ is used for the artifact described by the media-type. However, users need to rem
 official. In order to validate the specific framework and artifact type employed by the model, the MLM properties
 `mlm:framework` (see [MLM Fields](#item-properties-and-collection-fields)) and
 `mlm:artifact_type` (see [Model Asset](#model-asset)) should be employed instead to perform this validation if needed.
+See the [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) on
+ suggested fields for framework specific artifact types.
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
-
-#### Artifact Type
-
-This value can be used to provide additional details about the specific model artifact being described.
-For example, PyTorch offers [various strategies][pytorch-frameworks] for providing model definitions,
-such as Pickle (`.pt`), [TorchScript][pytorch-jit-script],
-or [PyTorch Ahead-of-Time Compilation][pytorch-aot-inductor] (`.pt2`) approach.
-Since they all refer to the same ML framework, the [Model Artifact Media-Type](#model-artifact-media-type)
-can be insufficient in this case to detect which strategy should be used to employ the model definition.
-
-Following are some proposed *Artifact Type* values for corresponding approaches, but other names are
-permitted as well. Note that the names are selected using the framework-specific definitions to help
-the users understand the source explicitly, although this is not strictly required either.
-
-| Artifact Type      | Description                                                                          |
-|--------------------|--------------------------------------------------------------------------------------|
-| `torch.save`       | A model artifact obtained by [Serialized Pickle Object][pytorch-save] (i.e.: `.pt`). |
-| `torch.jit.script` | A model artifact obtained by [`TorchScript`][pytorch-jit-script].                    |
-| `torch.export`     | A model artifact obtained by [`torch.export`][pytorch-export] (i.e.: `.pt2`).        |
-| `torch.compile`    | A model artifact obtained by [`torch.compile`][pytorch-compile].                     |
-
-[pytorch-compile]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
-[pytorch-export]: https://pytorch.org/docs/main/export.html
-[pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
 [pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
-[pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
-[pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+
+#### Compile Method
+
+| Compile Method | Description                                                                                                                                                                                                                                                                                                                                                                               |
+|-:-:------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| aot            | [Ahead-of-Time Compilation](https://en.wikipedia.org/wiki/Ahead-of-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation prior to executing the model. This compiled model may be more portable by having fewer runtime dependencies and optimized for specific hardware.                                  |
+| jit            | [Just-in-Time Compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation while executing the model. JIT provides more flexibility in the optimization approaches that can be applied to a model compared to AOT, but sacrifices portability and performance. |
 
 ### Source Code Asset
 
