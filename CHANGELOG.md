@@ -5,22 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
+## [v1.4.0](https://github.com/stac-extensions/mlm/tree/v1.4.0)
 
 ### Added
-- n/a
+- Add better descriptions about required and recommended *MLM Asset Roles* and
+  their implications (fixes
+  [#54](https://github.com/stac-extensions/mlm/issues/54)).
+- Add explicit check of `value_scaling` sub-fields `minimum`, `maximum`, `mean`, `stddev`, etc. for
+  corresponding `type` values `min-max` and `z-score` that depend on it.
+- Allow different `value_scaling` operations per band/channel/dimension as needed by the model.
+- Allow a `processing:expression` for a band/channel/dimension-specific `value_scaling` operation,
+  granting more flexibility in the definition of input preparation in contrast to having it applied
+  for the entire input (but still possible).
+- Add optional `mlm:compile_method` field at the Asset level with options `aot`
+  for Ahead of Time Compilation, `jit` for Just-In Time Compilation.
 
 ### Changed
-- n/a
+- Explicitly disallow `mlm:name`, `mlm:input`, `mlm:output` and `mlm:hyperparameters` at the Asset level.
+  These fields describe the model as a whole and should therefore be defined in Item properties.
+- Moved `norm_type` to `value_scaling` object to better reflect the expected operation, which could be another
+  operation than what is typically known as "normalization" or "standardization" techniques in machine learning.
+- Moved `statistics` to `value_scaling` object to better reflect their mutual `type` and additional
+  properties dependencies.
+- moved `mlm:artifact_type` field value descriptions that are framework specific to best-practices section.
+- expanded suggested `mlm:artifact_type` values to include Tensorflow/Keras.
 
 ### Deprecated
 - n/a
 
 ### Removed
-- n/a
+- Removed `norm_type` enum values that were ambiguous regarding their expected result.
+  Instead, a `processing:expression` should be employed to explicitly define the calculation they represent.
+- Removed `norm_clip` property. It is now represented under `value_scaling` objects with a
+  corresponding `type` definition.
+- Removed `norm_by_channel` from `mlm:input` objects. If rescaling (previously normalization in the documentation)
+  is a single value, broadcasting to the relevant bands should be performed implicitly.
+  Otherwise, the amount of `value_scaling` objects should match the number of bands or channels involved in the input.
 
 ### Fixed
-- n/a
+- Fix missing `mlm:artifact_type` property check for a Model Asset definition
+  (fixes <https://github.com/stac-extensions/mlm/issues/42>).
+  The `mlm:artifact_type` is now mutually and exclusively required by the corresponding Asset with `mlm:model` role.
+- Fix check of disallowed unknown/undefined `mlm:`-prefixed fields
+  (fixes [#41](https://github.com/stac-extensions/mlm/issues/41)).
 
 ## [v1.3.0](https://github.com/stac-extensions/mlm/tree/v1.3.0)
 
@@ -118,7 +145,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [Asset Object](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#asset-object)
   to refer to model asset and source code.
 - use `classification:classes` in Model Output
-- add `scene-classification` to the Enum Tasks to allow disambiguation between pixel-wise and patch-based classification
+- add `scene-classification` to the Enum Tasks to allow disambiguation between
+  pixel-wise and patch-based classification
 
 ### Changed
 - `disk_size` replaced by `file:size` (see [Best Practices - File Extension](best-practices.md#file-extension))

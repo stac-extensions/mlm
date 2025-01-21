@@ -7,7 +7,7 @@ from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
 from stac_model.base import ProcessingExpression
-from stac_model.input import InputStructure, MLMStatistic, ModelInput
+from stac_model.input import InputStructure, ModelInput, ValueScalingObject
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
@@ -63,21 +63,23 @@ def eurosat_resnet() -> ItemMLModelExtension:
         761.30323499,
         1231.58581042,
     ]
-    stats = [
-        MLMStatistic(
-            mean=mean,
-            stddev=stddev,
+    value_scaling = [
+        cast(
+            ValueScalingObject,
+            dict(
+                type="z-score",
+                mean=mean,
+                stddev=stddev,
+            ),
         )
-        for mean, stddev in zip(stats_mean, stats_stddev)
+        for mean, stddev in zip(stats_mean, stats_stddev, strict=False)
     ]
     model_input = ModelInput(
         name="13 Band Sentinel-2 Batch",
         bands=band_names,
         input=input_struct,
-        norm_by_channel=True,
-        norm_type="z-score",
         resize_type=None,
-        statistics=stats,
+        value_scaling=value_scaling,
         pre_processing_function=ProcessingExpression(
             format="python",
             expression="torchgeo.datamodules.eurosat.EuroSATDataModule.collate_fn",
@@ -128,6 +130,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
                 "mlm:weights",
                 "data",
             ],
+            extra_fields={"mlm:artifact_type": "torch.save"}
         ),
         "source_code": pystac.Asset(
             title="Model implementation.",
