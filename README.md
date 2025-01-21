@@ -668,7 +668,7 @@ In order to provide more context, the following roles are also recommended were 
 | type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
 | roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
 | mlm:artifact_type | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified.           |
-| mlm:compile_method | [Compile Method](#compile-method) | null | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference. |
+| mlm:compile_method | [Compile Method](#compile-method) \| null | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
