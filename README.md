@@ -141,7 +141,7 @@ The fields in the table below can be used in these parts of STAC documents:
 [1]: #notes
 
 ### Notes
-<b><sup>[1][1]</sup> Fields allowed only in Item `properties`<b>
+<b><sup>[1][1]</sup> Fields allowed only in Item `properties`</b>
 
 <!-- lint disable no-undefined-references -->
 
