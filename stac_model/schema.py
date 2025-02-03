@@ -34,7 +34,7 @@ T = TypeVar(
 )
 
 SchemaName = Literal["mlm"]
-SCHEMA_URI: str = "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
+SCHEMA_URI: str = "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
 PREFIX = f"{get_args(SchemaName)[0]}:"
 
 
