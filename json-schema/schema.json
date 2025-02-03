@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://stac-extensions.github.io/mlm/v1.3.0/schema.json",
+  "$id": "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
   "title": "Machine Learning Model STAC Extension Schema",
   "description": "This object represents the metadata for a Machine Learning Model (MLM) used in STAC documents.",
   "$comment": "Use 'allOf+if/then' for each 'type' to allow implementations to report more specific messages about the exact case in error (if any). Using only a 'oneOf/allOf' with the 'type' caused any incompatible 'type' to be reported first with a minimal and poorly described error by 'pystac'.",
@@ -111,7 +111,7 @@
         "stac_extensions": {
           "type": "array",
           "contains": {
-            "const": "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
+            "const": "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
           }
         }
       }

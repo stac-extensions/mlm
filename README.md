@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA/badge)](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://stac-extensions.github.io/mlm/v1.3.0/schema.json](https://stac-extensions.github.io/mlm/v1.3.0/schema.json)
+- **Identifier:** [https://stac-extensions.github.io/mlm/v1.4.0/schema.json](https://stac-extensions.github.io/mlm/v1.4.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Pilot
