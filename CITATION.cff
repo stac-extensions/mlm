@@ -90,7 +90,7 @@ references:
     authors: *authors
     identifiers:
     - type: url
-      value: "https://stac-extensions.github.io/mlm/v1.3.0/schema.json"
+      value: "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
       description: "Latest extension URL used in 'stac_extensions' references."
     - type: url
       value: "https://stac-extensions.github.io/mlm/"
