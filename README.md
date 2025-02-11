@@ -6,7 +6,7 @@
 - **Identifier:** [https://stac-extensions.github.io/mlm/v1.4.0/schema.json](https://stac-extensions.github.io/mlm/v1.4.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
-- **Extension Maturity Classification:** Pilot
+- **Extension Maturity Classification:** Candidate
 - **Owner:**
   - [@fmigneault](https://github.com/fmigneault)
   - [@rbavery](https://github.com/rbavery)
