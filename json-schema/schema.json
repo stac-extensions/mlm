@@ -436,6 +436,7 @@
             "rgee",
             "spatialRF",
             "JAX",
+            "Flax",
             "MXNet",
             "Caffe",
             "PyMC",
@@ -468,6 +469,7 @@
         "tf.keras.Model.export",
         "safetensors.torch.save_file",
         "safetensors.tensorflow.save_file",
+        "safetensors.flax.save_file",
         "safetensors.paddle.save_file"
       ]
     },

@@ -238,6 +238,7 @@ to use common names when applicable. Below are a few notable entries.
 - [`rgee`](https://github.com/r-spatial/rgee)
 - [`spatialRF`](https://github.com/BlasBenito/spatialRF)
 - [`JAX`](https://github.com/jax-ml/jax)
+- [`Flax`](https://github.com/google/flax)
 - [`MXNet`](https://github.com/apache/mxnet)
 - [`Caffe`](https://github.com/BVLC/caffe)
 - [`PyMC`](https://github.com/pymc-devs/pymc)
