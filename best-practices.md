@@ -325,4 +325,4 @@ names are not strictly required either.
 [hf-st]: https://github.com/huggingface/safetensors
 [hf-st-support]: https://huggingface.co/docs/safetensors/index#featured-projects
 [hf-st-torch]: https://huggingface.co/docs/safetensors/api/torch#safetensors.torch.save_file
-[mlm-framework]: CHANGELOG.md#item-properties-and-collection-fields
+[mlm-framework]: README.md#item-properties-and-collection-fields
