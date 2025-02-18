@@ -464,7 +464,10 @@
         "torch.export.save",
         "tf.keras.Model.save",
         "tf.keras.Model.save_weights",
-        "tf.saved_model.export(format='tf_saved_model')"
+        "tf.keras.Model.export",
+        "safetensors.torch.save_file",
+        "safetensors.tensorflow.save_file",
+        "safetensors.paddle.save_file"
       ]
     },
     "mlm:compile_method": {

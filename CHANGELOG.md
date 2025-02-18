@@ -8,7 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
-- n/a
+- Add [`huggingface/safetensors`](https://github.com/huggingface/safetensors)
+  recommendations for ``mlm:artifact_type`` and corresponding ``mlm:framework`` values
+  (fixes [#68](https://github.com/stac-extensions/mlm/issues/68)).
 
 ### Changed
 - n/a
