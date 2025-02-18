@@ -439,7 +439,8 @@
             "MXNet",
             "Caffe",
             "PyMC",
-            "Weka"
+            "Weka",
+            "Paddle"
           ]
         },
         {
