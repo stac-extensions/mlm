@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add [`huggingface/safetensors`](https://github.com/huggingface/safetensors)
   recommendations for ``mlm:artifact_type`` and corresponding ``mlm:framework`` values
   (fixes [#68](https://github.com/stac-extensions/mlm/issues/68)).
+- Add [`Paddle`](https://github.com/PaddlePaddle/Paddle) to the list of `mlm:framework`
+  (fixes [#69](https://github.com/stac-extensions/mlm/issues/69)).
 
 ### Changed
 - n/a

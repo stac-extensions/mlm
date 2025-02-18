@@ -229,19 +229,20 @@ This should correspond to the common library name of a well-established ML frame
 No "Enum" are *enforced* to allow easy addition of newer frameworks, but it is **STRONGLY** recommended
 to use common names when applicable. Below are a few notable entries.
 
-- `PyTorch`
-- `TensorFlow`
-- `scikit-learn`
-- `Hugging Face`
-- `Keras`
-- `ONNX`
-- `rgee`
-- `spatialRF`
-- `JAX`
-- `MXNet`
-- `Caffe`
-- `PyMC`
-- `Weka`
+- [`PyTorch`](https://github.com/pytorch/pytorch)
+- [`TensorFlow`](https://github.com/tensorflow/tensorflow)
+- [`scikit-learn`](https://github.com/scikit-learn/scikit-learn)
+- [`Hugging Face`](https://github.com/huggingface/)
+- [`Keras`](https://github.com/keras-team/keras)
+- [`ONNX`](https://github.com/onnx/onnx)
+- [`rgee`](https://github.com/r-spatial/rgee)
+- [`spatialRF`](https://github.com/BlasBenito/spatialRF)
+- [`JAX`](https://github.com/jax-ml/jax)
+- [`MXNet`](https://github.com/apache/mxnet)
+- [`Caffe`](https://github.com/BVLC/caffe)
+- [`PyMC`](https://github.com/pymc-devs/pymc)
+- [`Weka`](https://ml.cms.waikato.ac.nz/weka/)
+- [`Paddle`](https://github.com/PaddlePaddle/Paddle)
 
 ### Accelerator Type Enum
 
