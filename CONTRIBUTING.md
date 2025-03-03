@@ -88,13 +88,13 @@ git push -u origin your-branch
 ### Building a new version of `stac-model`
 
 - Apply any relevant changes and `CHANGELOG.md` entries in a PR that modifies `stac-model`.
-- Bump the version with `bumpversion bump <version>`.
+- Bump the version with `bump-my-version bump --verbose <version-level> --config-file stac-model.bump.toml`.
   - You can pass the new version explicitly, or a rule such as `major`, `minor`, or `patch`. <br>
     For more details, refer to the [Semantic Versions][semver] standard;
 - Once CI validation succeeded, merge the corresponding PR branch.
-- Checkout to `main` branch that contais the freshly created merge commit.
+- Checkout to `main` branch that contains the freshly created merge commit.
 - Push the tag `stac-model-v{MAJOR}.{MINOR}.{PATCH}`. The CI should auto-publish it to PyPI.
-- Create a `GitHub release`
+- Create a `GitHub release` (if not automatically drafted by the CI).
 
 <!-- lint disable no-undefined-references -->
 
