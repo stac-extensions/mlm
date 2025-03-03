@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (fixes [#69](https://github.com/stac-extensions/mlm/issues/69)).
 
 ### Changed
-- n/a
+- Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
 
 ### Deprecated
 - n/a
