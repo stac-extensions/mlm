@@ -161,7 +161,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - more [Task Enum](README.md#task-enum) tasks
 - [Model Output Object](README.md#model-output-object)
-- batch_size and hardware summary
+- `batch_size` and hardware summary
 - [`mlm:accelerator`, `mlm:accelerator_constrained`, `mlm:accelerator_summary`](./README.md#accelerator-type-enum)
   to specify hardware requirements for the model
 - Use common metadata
@@ -180,7 +180,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and so on to provide STAC API search capabilities.
 - replaced `normalization:mean`, etc. with [statistics](./README.md#bands-and-statistics) from STAC 1.1 common metadata
 - added `pydantic` models for internal schema objects in `stac_model` package and published to PYPI
-- specified [rel_type](README.md#relation-types) to be `derived_from` and
+- specified [`rel_type`](README.md#relation-types) to be `derived_from` and
   specify how model item or collection json should be named
 - replaced all Enum Tasks names to use hyphens instead of spaces
 - replaced `dlm:task` by `mlm:tasks` using an array of value instead of a single one, allowing models to represent
