@@ -22,7 +22,7 @@ dependencies = [
     "pystac<2.0.0,>=1.9.0",
     "shapely<3,>=2",
     "jsonschema<5.0.0,>=4.21.1",
-    "pip>=24.3.1",
+    "pip>=25.0.0",
 ]
 name = "stac-model"
 version = "0.2.0"
