@@ -94,10 +94,6 @@ install-npm:
 check-markdown: install-npm
 	npm run check-markdown
 
-.PHONY: format-markdown
-format-markdown: install-npm
-	npm run format-markdown
-
 .PHONY: check-examples
 check-examples: install-npm
 	npm run check-examples
