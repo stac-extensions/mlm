@@ -6,7 +6,7 @@
 - **Identifier:** [https://stac-extensions.github.io/mlm/v1.4.0/schema.json](https://stac-extensions.github.io/mlm/v1.4.0/schema.json)
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
-- **Extension Maturity Classification:** Candidate
+- **Extension Maturity Classification:** Pilot
 - **Owner:**
   - [@fmigneault](https://github.com/fmigneault)
   - [@rbavery](https://github.com/rbavery)
@@ -103,6 +103,8 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 - [Changelog](./CHANGELOG.md)
 - [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing version 1.3.0 of the extension
 - [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
+- [MLM Form Filler](https://mlm-form.vercel.app/) a two page app to fill out and validate MLM STAC Item metadata. 
+Check out the [github repo](https://github.com/wherobots/mlm-form) if you have questions, issues, or want to contribute.
 
 ## Item Properties and Collection Fields
 
@@ -121,7 +123,7 @@ The fields in the table below can be used in these parts of STAC documents:
 | mlm:name <sup>[\[1\]][1]</sup>            | string                                                        | **REQUIRED** A name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                           |
 | mlm:architecture                          | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 |
 | mlm:tasks                                 | \[[Task Enum](#task-enum)]                                    | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
-| mlm:framework                             | string                                                        | Framework used to train the model (ex: PyTorch, TensorFlow). Typically, this will align with the applied `mlm:artifact_type` of the [Model Asset](#model-asset).                                                                                                                            |
+| mlm:framework                             | string                                                        | Framework used to train the model (ex: PyTorch, TensorFlow).                                                                                                                                                                                                                                |
 | mlm:framework_version                     | string                                                        | The `framework` library version. Some models require a specific version of the machine learning `framework` to run.                                                                                                                                                                         |
 | mlm:memory_size                           | integer                                                       | The in-memory size of the model on the accelerator during inference (bytes).                                                                                                                                                                                                                |
 | mlm:total_parameters                      | integer                                                       | Total number of model parameters, including trainable and non-trainable parameters.                                                                                                                                                                                                         |
@@ -141,7 +143,7 @@ The fields in the table below can be used in these parts of STAC documents:
 [1]: #notes
 
 ### Notes
-<b><sup>[1][1]</sup> Fields allowed only in Item `properties`</b>
+<b><sup>[1][1]</sup> Fields allowed only in Item `properties`<b>
 
 <!-- lint disable no-undefined-references -->
 
@@ -229,21 +231,19 @@ This should correspond to the common library name of a well-established ML frame
 No "Enum" are *enforced* to allow easy addition of newer frameworks, but it is **STRONGLY** recommended
 to use common names when applicable. Below are a few notable entries.
 
-- [`PyTorch`](https://github.com/pytorch/pytorch)
-- [`TensorFlow`](https://github.com/tensorflow/tensorflow)
-- [`scikit-learn`](https://github.com/scikit-learn/scikit-learn)
-- [`Hugging Face`](https://github.com/huggingface/)
-- [`Keras`](https://github.com/keras-team/keras)
-- [`ONNX`](https://github.com/onnx/onnx)
-- [`rgee`](https://github.com/r-spatial/rgee)
-- [`spatialRF`](https://github.com/BlasBenito/spatialRF)
-- [`JAX`](https://github.com/jax-ml/jax)
-- [`Flax`](https://github.com/google/flax)
-- [`MXNet`](https://github.com/apache/mxnet)
-- [`Caffe`](https://github.com/BVLC/caffe)
-- [`PyMC`](https://github.com/pymc-devs/pymc)
-- [`Weka`](https://ml.cms.waikato.ac.nz/weka/)
-- [`Paddle`](https://github.com/PaddlePaddle/Paddle)
+- `PyTorch`
+- `TensorFlow`
+- `scikit-learn`
+- `Hugging Face`
+- `Keras`
+- `ONNX`
+- `rgee`
+- `spatialRF`
+- `JAX`
+- `MXNet`
+- `Caffe`
+- `PyMC`
+- `Weka`
 
 ### Accelerator Type Enum
 
@@ -663,14 +663,14 @@ In order to provide more context, the following roles are also recommended were 
 
 ### Model Asset
 
-| Field Name         | Type                                                                   | Description                                                                                                                                                                                                                                                                                                               |
-|--------------------|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| title              | string                                                                 | Description of the model asset.                                                                                                                                                                                                                                                                                           |
-| href               | string                                                                 | URI to the model artifact.                                                                                                                                                                                                                                                                                                |
-| type               | string                                                                 | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).                                                                                                                                                                                                                              |
-| roles              | \[string]                                                              | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable.                                                                                                                                                                                                                          |
-| mlm:artifact_type  | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified. |
-| mlm:compile_method | [Compile Method](#compile-method) \| null                              | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference.                                                                                                                                                                                                  |
+| Field Name        | Type                            | Description                                                                                      |
+|-------------------|---------------------------------|--------------------------------------------------------------------------------------------------|
+| title             | string                          | Description of the model asset.                                                                  |
+| href              | string                          | URI to the model artifact.                                                                       |
+| type              | string                          | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).     |
+| roles             | \[string]                       | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable. |
+| mlm:artifact_type | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified.           |
+| mlm:compile_method | [Compile Method](#compile-method) \| null | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference. |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
 model definition and `mlm:compiled` for models that can be loaded directly without an intermediate model definition.
@@ -712,7 +712,7 @@ See the [Best Practices - Framework Specific Artifact Types](./best-practices.md
 #### Compile Method
 
 | Compile Method | Description                                                                                                                                                                                                                                                                                                                                                                               |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|-:-:------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | aot            | [Ahead-of-Time Compilation](https://en.wikipedia.org/wiki/Ahead-of-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation prior to executing the model. This compiled model may be more portable by having fewer runtime dependencies and optimized for specific hardware.                                  |
 | jit            | [Just-in-Time Compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation while executing the model. JIT provides more flexibility in the optimization approaches that can be applied to a model compared to AOT, but sacrifices portability and performance. |
 
