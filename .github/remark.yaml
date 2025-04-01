@@ -1,3 +1,11 @@
+settings:
+  listItemIndent: '1'
+  emphasis: '*'
+  spacedTable: false
+  paddedTable: true
+  stringify:
+    entities: false
+    escape: false
 plugins:
 # Check links
   - validate-links
@@ -14,8 +22,11 @@ plugins:
   - remark-lint-no-consecutive-blank-lines
   - - remark-lint-maximum-line-length
     - 120
+  - remark-lint-no-literal-urls
 # GFM - autolink literals, footnotes, strikethrough, tables, tasklist
   - remark-gfm
+# Math Expression
+  - remark-math
 # Code
   - remark-lint-fenced-code-flag
   - remark-lint-fenced-code-marker
@@ -33,14 +44,17 @@ plugins:
   - - remark-lint-no-shortcut-reference-link
     - false
 # Lists
-  - remark-lint-list-item-bullet-indent
+  - - remark-lint-list-item-bullet-indent
+    - 'one'
   - remark-lint-ordered-list-marker-style
   - remark-lint-ordered-list-marker-value
   - remark-lint-checkbox-character-style
   - - remark-lint-unordered-list-marker-style
     - '-'
+  - - remark-lint-list-item-content-indent
+    - 1
   - - remark-lint-list-item-indent
-    - space
+    - 'space'
 # Tables
   - remark-lint-table-pipes
-  - remark-lint-no-literal-urls
+  - remark-lint-table-cell-padding

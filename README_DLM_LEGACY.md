@@ -1,4 +1,4 @@
-# Deep Learning Model (DLM) Extension 
+# Deep Learning Model (DLM) Extension
 
 <!-- lint disable no-undefined-references -->
 

@@ -35,6 +35,7 @@ it is left to the good judgement of users to provide adequate values. Note that 
 choose to apply it for contexts outside the *recommended* extent for the same reason.
 
 [EuroSAT-github]: https://github.com/phelber/EuroSAT
+
 [EuroSAT-paper]: https://www.researchgate.net/publication/319463676
 
 As another example, let us consider a model which is trained on imagery from all over the world
@@ -102,6 +103,7 @@ should be specified with a reference to the STAC Item employing the MLM extensio
 of the derived product.
 
 A potential representation of a STAC Asset could be as follows:
+
 ```json
 {
   "model-output": {
@@ -302,7 +304,7 @@ framework-specific definitions to help the users understand how the model artifa
 names are not strictly required either.
 
 | Artifact Type                      | Description                                                                                                                                                                                                                                                                                                                                   |
-|------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `torch.save`                       | A [serialized python pickle object][pytorch-save] (i.e.: `.pt`) which can represent a model or state_dict.                                                                                                                                                                                                                                    |
 | `torch.jit.save`                   | A [`TorchScript`][pytorch-jit-script] model artifact obtained with one or more of the graph export options TorchScript Tracing and Scripting.                                                                                                                                                                                                 |
 | `torch.export.save`                | A model artifact storing an [ExportedProgram][exported-program] obtained by [`torch.export.export`][pytorch-export] (i.e.: `.pt2`).                                                                                                                                                                                                           |
@@ -312,17 +314,31 @@ names are not strictly required either.
 | `safetensors.{framework}.{method}` | Model weights saved as [HuggingFace SafeTensors][hf-st], where `{framework}` matches the [`mlm:framework`][mlm-framework] of a [*supported framework*][hf-st-support] and `{method}` matches the applicable method from SafeTensors. For example, a PyTorch model saved this way would indicate [`safetensors.torch.save_file`][hf-st-torch]. |
 
 [exported-program]: https://pytorch.org/docs/main/export.html#serialization
+
 [pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
+
 [pytorch-export]: https://pytorch.org/docs/main/export.html
+
 [pytorch-frameworks]: https://pytorch.org/docs/main/export.html#existing-frameworks
+
 [pytorch-jit-script]: https://pytorch.org/docs/stable/jit.html
+
 [pytorch-save]: https://pytorch.org/tutorials/beginner/saving_loading_models.html
+
 [keras-save-weights]: https://keras.io/api/models/model_saving_apis/weights_saving_and_loading/#save_weights-method
+
 [tf-saved-model]: https://keras.io/api/models/model_saving_apis/export/
+
 [tf-keras-recommended]: https://www.tensorflow.org/guide/saved_model#creating_a_savedmodel_from_keras
+
 [keras-methods]: https://keras.io/2.16/api/models/model_saving_apis/
+
 [keras-model]: https://keras.io/api/models/model_saving_apis/model_saving_and_loading/
+
 [hf-st]: https://github.com/huggingface/safetensors
+
 [hf-st-support]: https://huggingface.co/docs/safetensors/index#featured-projects
+
 [hf-st-torch]: https://huggingface.co/docs/safetensors/api/torch#safetensors.torch.save_file
+
 [mlm-framework]: README.md#item-properties-and-collection-fields
