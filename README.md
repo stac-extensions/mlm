@@ -442,23 +442,23 @@ Below are some notable common names recommended for use, but others can be emplo
 - `score`
 - `confidence`
 
-For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should
+For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 #### Value Scaling Object
 
 Select one option from:
 
-| `type`       | Required Properties                             | Scaling Operation                        |
-|--------------|-------------------------------------------------|------------------------------------------|
-| `min-max`    | `minimum`, `maximum`                            | $(data - minimum) / (maximum - minimum)$ |
-| `z-score`    | `mean`, `stddev`                                | $(data - mean) / stddev$                 |
-| `clip`       | `minimum`, `maximum`                            | $\min(\max(data, minimum), maximum)$     |
-| `clip-min`   | `minimum`                                       | $\max(data, minimum)$                    |
-| `clip-max`   | `maximum`                                       | $\min(data, maximum)$                    |
-| `offset`     | `value`                                         | $data - value$                           |
-| `scale`      | `value`                                         | $data / value$                           |
-| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
+| `type`       | Required Properties                             | Scaling Operation                          |
+| ------------ | ----------------------------------------------- | ------------------------------------------ |
+| `min-max`    | `minimum`, `maximum`                            | $`(data - minimum) / (maximum - minimum)`$ |
+| `z-score`    | `mean`, `stddev`                                | $`(data - mean) / stddev`$                 |
+| `clip`       | `minimum`, `maximum`                            | $`\min(\max(data, minimum), maximum)`$     |
+| `clip-min`   | `minimum`                                       | $`\max(data, minimum)`$                    |
+| `clip-max`   | `maximum`                                       | $`\min(data, maximum)`$                    |
+| `offset`     | `value`                                         | $`data - value`$                           |
+| `scale`      | `value`                                         | $`data / value`$                           |
+| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*     |
 
 When a scaling `type` approach is specified, it is expected that the parameters necessary
 to perform their calculation are provided for the corresponding input dimension data.
@@ -573,11 +573,11 @@ as for `regression`, `image-captioning`, `super-resolution` and some `generative
 
 #### Result Structure Object
 
-| Field Name | Type                                   | Description                                                                                                                                                                                                                    |
-|------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | \[integer]                             | **REQUIRED** Shape of the n-dimensional result array (e.g.: $B \times H \times W$ or $B \times C$), possibly including a batch size dimension. The dimensions must either be greater than 0 or -1 to indicate a variable size. |
-| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name for the result array.                                                                                                                                                     |
-| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                          |
+| Field Name | Type                                   | Description                                                                                                                                                                                                                        |
+| ---------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shape      | \[integer]                             | **REQUIRED** Shape of the n-dimensional result array (e.g.: $`B \times H \times W`$ or $`B \times C`$), possibly including a batch size dimension. The dimensions must either be greater than 0 or -1 to indicate a variable size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name for the result array.                                                                                                                                                         |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                              |
 
 #### Class Object
 
