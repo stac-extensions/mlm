@@ -163,18 +163,23 @@ replace = """
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
 ### Added
+
 - n/a
 
 ### Changed
+
 - n/a
 
 ### Deprecated
+
 - n/a
 
 ### Removed
+
 - n/a
 
 ### Fixed
+
 - n/a
 
 ## [v{new_version}](https://github.com/stac-extensions/mlm/tree/v{new_version})

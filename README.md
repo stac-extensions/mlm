@@ -3,7 +3,7 @@
 [![hackmd-github-sync-badge](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA/badge)](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA?both)
 
 - **Title:** Machine Learning Model Extension
-- **Identifier:** [https://stac-extensions.github.io/mlm/v1.4.0/schema.json](https://stac-extensions.github.io/mlm/v1.4.0/schema.json)
+- **Identifier:** <https://stac-extensions.github.io/mlm/v1.4.0/schema.json>
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
 - **Extension Maturity Classification:** Candidate
@@ -56,6 +56,7 @@ The main objectives of the extension are:
    an inference service.
 
 Specifically, this extension records the following information to make ML models searchable and reusable:
+
 1. Sensor band specifications
 2. Model input transforms including resize and normalization
 3. Model output shape, data type, and its semantic interpretation
@@ -117,7 +118,7 @@ The fields in the table below can be used in these parts of STAC documents:
 [item-assets]: https://github.com/stac-extensions/item-assets
 
 | Field Name                                | Type                                                          | Description                                                                                                                                                                                                                                                                                 |
-|-------------------------------------------|---------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------------------------- | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | mlm:name <sup>[\[1\]][1]</sup>            | string                                                        | **REQUIRED** A name for the model. This can include, but must be distinct, from simply naming the model architecture. If there is a publication or other published work related to the model, use the official name of the model.                                                           |
 | mlm:architecture                          | [Model Architecture](#model-architecture) string              | **REQUIRED** A generic and well established architecture name of the model.                                                                                                                                                                                                                 |
 | mlm:tasks                                 | \[[Task Enum](#task-enum)]                                    | **REQUIRED** Specifies the Machine Learning tasks for which the model can be used for. If multi-tasks outputs are provided by distinct model heads, specify all available tasks under the main properties and specify respective tasks in each [Model Output Object](#model-output-object). |
@@ -141,6 +142,7 @@ The fields in the table below can be used in these parts of STAC documents:
 [1]: #notes
 
 ### Notes
+
 <b><sup>[1][1]</sup> Fields allowed only in Item `properties`</b>
 
 <!-- lint disable no-undefined-references -->
@@ -168,6 +170,7 @@ in STAC Collections and the corresponding spatial and temporal fields in Items, 
 [Best Practices - Using STAC Common Metadata Fields for the ML Model Extension][stac-mlm-meta].
 
 [stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension
+
 [stac-extent]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object
 
 ### Model Architecture
@@ -191,7 +194,7 @@ definitions listed in [Papers With Code](https://paperswithcode.com/sota). The n
 should be normalized to lowercase and use hyphens instead of spaces.
 
 | Task Name               | Corresponding `label:tasks` | Description                                                                                                              |
-|-------------------------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------|
+| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                                        |
 | `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                                      |
 | `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.                       |
@@ -276,7 +279,7 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 ### Model Input Object
 
 | Field Name              | Type                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
-|-------------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ----------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | name                    | string                                                   | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                                                                                                                                                                          |
 | bands                   | \[string \| [Model Band Object](#model-band-object)]     | **REQUIRED** The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array.                                                                                                                                                       |
 | input                   | [Input Structure Object](#input-structure-object)        | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                                                                                                                                                             |
@@ -358,16 +361,21 @@ unavailable from [Band Statistics][stac-1.1-stats], such as `value`-specific sca
 (see [Value Scaling Object](#value-scaling-object) for more details).
 
 [stac-1.1-band]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#bands
+
 [stac-1.1-stats]: https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#statistics-object
+
 [stac-eo-band]: https://github.com/stac-extensions/eo/tree/v1.1.0#band-object
+
 [stac-raster-band]: https://github.com/stac-extensions/raster/tree/v1.1.0#raster-band-object
+
 [stac-raster-stats]: https://github.com/stac-extensions/raster/tree/v1.1.0#statistics-object
+
 [stac-band-names]: https://github.com/stac-extensions/eo#common-band-names
 
 #### Model Band Object
 
 | Field Name | Type   | Description                                                                                                                            |
-|------------|--------|----------------------------------------------------------------------------------------------------------------------------------------|
+| ---------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics) details).                   |
 | format     | string | The type of expression that is specified in the `expression` property.                                                                 |
 | expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given. |
@@ -400,15 +408,16 @@ and can use [Data Types from STAC 1.1 Core][stac-1.1-data-types] for later versi
 Both definitions should define equivalent values.
 
 [raster-data-types]: https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types
+
 [stac-1.1-data-types]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#data-types
 
 #### Input Structure Object
 
-| Field Name | Type                                   | Description                                                                                                                                                                                                               |
-|------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | \[integer]                             | **REQUIRED** Shape of the input n-dimensional array (e.g.: $B \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size. |
-| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                     |
-| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.   |
+| Field Name | Type                                   | Description                                                                                                                                                                                                                 |
+| ---------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shape      | \[integer]                             | **REQUIRED** Shape of the input n-dimensional array (e.g.: $`B \times C \times H \times W`$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                       |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.     |
 
 A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
 However, this value is not strictly reserved for the `b` dimension.
@@ -433,23 +442,23 @@ Below are some notable common names recommended for use, but others can be emplo
 - `score`
 - `confidence`
 
-For example, a tensor of multiple RBG images represented as $B \times C \times H \times W$ should
+For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 #### Value Scaling Object
 
 Select one option from:
 
-| `type`       | Required Properties                             | Scaling Operation                        |
-|--------------|-------------------------------------------------|------------------------------------------|
-| `min-max`    | `minimum`, `maximum`                            | $(data - minimum) / (maximum - minimum)$ |
-| `z-score`    | `mean`, `stddev`                                | $(data - mean) / stddev$                 |
-| `clip`       | `minimum`, `maximum`                            | $\min(\max(data, minimum), maximum)$     |
-| `clip-min`   | `minimum`                                       | $\max(data, minimum)$                    |
-| `clip-max`   | `maximum`                                       | $\min(data, maximum)$                    |
-| `offset`     | `value`                                         | $data - value$                           |
-| `scale`      | `value`                                         | $data / value$                           |
-| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*   |
+| `type`       | Required Properties                             | Scaling Operation                          |
+| ------------ | ----------------------------------------------- | ------------------------------------------ |
+| `min-max`    | `minimum`, `maximum`                            | $`(data - minimum) / (maximum - minimum)`$ |
+| `z-score`    | `mean`, `stddev`                                | $`(data - mean) / stddev`$                 |
+| `clip`       | `minimum`, `maximum`                            | $`\min(\max(data, minimum), maximum)`$     |
+| `clip-min`   | `minimum`                                       | $`\max(data, minimum)`$                    |
+| `clip-max`   | `maximum`                                       | $`\min(data, maximum)`$                    |
+| `offset`     | `value`                                         | $`data - value`$                           |
+| `scale`      | `value`                                         | $`data / value`$                           |
+| `processing` | [Processing Expression](#processing-expression) | *according to `processing:expression`*     |
 
 When a scaling `type` approach is specified, it is expected that the parameters necessary
 to perform their calculation are provided for the corresponding input dimension data.
@@ -489,6 +498,7 @@ a `pre_processing_function` should be used instead (see [Model Input Object](#mo
 #### Resize Enum
 
 Select one option from:
+
 - `crop`
 - `pad`
 - `interpolation-nearest`
@@ -516,16 +526,16 @@ Taking inspiration from [Processing Extension - Expression Object][stac-proc-exp
 at the very least a `format` and the applicable `expression` for it to perform pre/post-processing operations on MLM
 inputs/outputs.
 
-| Field Name | Type   | Description |
-| ---------- | ------ | ----------- |
-| format     | string | **REQUIRED** The type of the expression that is specified in the `expression` property. |
+| Field Name | Type   | Description                                                                                                                                                     |
+| ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| format     | string | **REQUIRED** The type of the expression that is specified in the `expression` property.                                                                         |
 | expression | \*     | **REQUIRED** An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given, e.g. string or object. |
 
 On top of the examples already provided by [Processing Extension - Expression Object][stac-proc-expr],
 the following formats are recommended as alternative scripts and function references.
 
 | Format   | Type   | Description                            | Expression Example                                                                                   |
-|----------|--------|----------------------------------------|------------------------------------------------------------------------------------------------------|
+| -------- | ------ | -------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `python` | string | A Python entry point reference.        | `my_package.my_module:my_processing_function` or `my_package.my_module:MyClass.my_method`            |
 | `docker` | string | An URI with image and tag to a Docker. | `ghcr.io/NAMESPACE/IMAGE_NAME:latest`                                                                |
 | `uri`    | string | An URI to some binary or script.       | `{"href": "https://raw.githubusercontent.com/ORG/REPO/TAG/package/cli.py", "type": "text/x-python"}` |
@@ -547,7 +557,7 @@ the following formats are recommended as alternative scripts and function refere
 ### Model Output Object
 
 | Field Name               | Type                                                    | Description                                                                                                                                                                     |
-|--------------------------|---------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | name                     | string                                                  | **REQUIRED** Name of the output variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"CLASSIFICATION"`) can be used instead. |
 | tasks                    | \[[Task Enum](#task-enum)]                              | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.  |
 | result                   | [Result Structure Object](#result-structure-object)     | **REQUIRED** The structure that describes the resulting output arrays/tensors from one model head.                                                                              |
@@ -563,11 +573,11 @@ as for `regression`, `image-captioning`, `super-resolution` and some `generative
 
 #### Result Structure Object
 
-| Field Name | Type                                   | Description                                                                                                                                                                                                                    |
-|------------|----------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | \[integer]                             | **REQUIRED** Shape of the n-dimensional result array (e.g.: $B \times H \times W$ or $B \times C$), possibly including a batch size dimension. The dimensions must either be greater than 0 or -1 to indicate a variable size. |
-| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name for the result array.                                                                                                                                                     |
-| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                          |
+| Field Name | Type                                   | Description                                                                                                                                                                                                                        |
+| ---------- | -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shape      | \[integer]                             | **REQUIRED** Shape of the n-dimensional result array (e.g.: $`B \times H \times W`$ or $`B \times C`$), possibly including a batch size dimension. The dimensions must either be greater than 0 or -1 to indicate a variable size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name for the result array.                                                                                                                                                         |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model outputs, this should be the data type of the result of the model inference  without extra post processing.                                              |
 
 #### Class Object
 
@@ -599,7 +609,7 @@ Following is an example of what the hyperparameters definition could look like:
 ## Assets Objects
 
 | Field Name      | Type                       | Description                                                                               |
-|-----------------|----------------------------|-------------------------------------------------------------------------------------------|
+| --------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
 | mlm:model       | [Asset Object][stac-asset] | **REQUIRED** Asset object containing the model definition.                                |
 | mlm:source_code | [Asset Object][stac-asset] | **RECOMMENDED** Source code description. Can describe a Git repository, ZIP archive, etc. |
 | mlm:container   | [Asset Object][stac-asset] | **RECOMMENDED** Information to run the model in a container with URI to the container.    |
@@ -642,19 +652,19 @@ the [Model Asset](#model-asset).
 
 In order to provide more context, the following roles are also recommended were applicable:
 
-| Asset Role                | Additional Roles        | Description                                                                              |
-|---------------------------|-------------------------|------------------------------------------------------------------------------------------|
-| mlm:inference-runtime (*) | `runtime`               | Describes an Asset that provides runtime reference to perform model inference.           |
-| mlm:training-runtime (*)  | `runtime`               | Describes an Asset that provides runtime reference to perform model training.            |
-| mlm:checkpoint (*)        | `weights`, `checkpoint` | Describes an Asset that provides a model checkpoint with embedded model configurations.  |
-| mlm:weights               | `weights`, `checkpoint` | Describes an Asset that provides a model weights (typically some Tensor representation). |
-| mlm:model                 | `model`                 | **REQUIRED** Role for [Model Asset](#model-asset).                                       |
-| mlm:source_code           | `code`                  | **RECOMMENDED** Role for [Source Code Asset](#source-code-asset).                        |
+| Asset Role                 | Additional Roles        | Description                                                                              |
+| -------------------------- | ----------------------- | ---------------------------------------------------------------------------------------- |
+| mlm:inference-runtime (\*) | `runtime`               | Describes an Asset that provides runtime reference to perform model inference.           |
+| mlm:training-runtime (\*)  | `runtime`               | Describes an Asset that provides runtime reference to perform model training.            |
+| mlm:checkpoint (\*)        | `weights`, `checkpoint` | Describes an Asset that provides a model checkpoint with embedded model configurations.  |
+| mlm:weights                | `weights`, `checkpoint` | Describes an Asset that provides a model weights (typically some Tensor representation). |
+| mlm:model                  | `model`                 | **REQUIRED** Role for [Model Asset](#model-asset).                                       |
+| mlm:source_code            | `code`                  | **RECOMMENDED** Role for [Source Code Asset](#source-code-asset).                        |
 
 <!-- lint disable no-undefined-references -->
 
 > [!NOTE]
-> (*) These roles are offered as direct conversions from the previous extension
+> (\*) These roles are offered as direct conversions from the previous extension
 > that provided [ML-Model Asset Roles][ml-model-asset-roles] to provide easier upgrade to the MLM extension.
 
 <!-- lint enable no-undefined-references -->
@@ -664,7 +674,7 @@ In order to provide more context, the following roles are also recommended were 
 ### Model Asset
 
 | Field Name         | Type                                                                   | Description                                                                                                                                                                                                                                                                                                               |
-|--------------------|------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | title              | string                                                                 | Description of the model asset.                                                                                                                                                                                                                                                                                           |
 | href               | string                                                                 | URI to the model artifact.                                                                                                                                                                                                                                                                                                |
 | type               | string                                                                 | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).                                                                                                                                                                                                                              |
@@ -707,19 +717,20 @@ See the [Best Practices - Framework Specific Artifact Types](./best-practices.md
  suggested fields for framework specific artifact types.
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
+
 [pytorch-aot-inductor]: https://pytorch.org/docs/main/torch.compiler_aot_inductor.html
 
 #### Compile Method
 
 | Compile Method | Description                                                                                                                                                                                                                                                                                                                                                                               |
-|----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | aot            | [Ahead-of-Time Compilation](https://en.wikipedia.org/wiki/Ahead-of-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation prior to executing the model. This compiled model may be more portable by having fewer runtime dependencies and optimized for specific hardware.                                  |
 | jit            | [Just-in-Time Compilation](https://en.wikipedia.org/wiki/Just-in-time_compilation). Converts a higher level code description of a model and a model's learned weights to a lower level representation while executing the model. JIT provides more flexibility in the optimization approaches that can be applied to a model compared to AOT, but sacrifices portability and performance. |
 
 ### Source Code Asset
 
 | Field Name     | Type      | Description                                                                   |
-|----------------|-----------|-------------------------------------------------------------------------------|
+| -------------- | --------- | ----------------------------------------------------------------------------- |
 | title          | string    | Title of the source code.                                                     |
 | href           | string    | URI to the code repository, a ZIP archive, or an individual code/script file. |
 | type           | string    | Media-type of the URI.                                                        |
@@ -749,17 +760,18 @@ since the source code asset might also refer to more detailed metadata than this
 
 ### Container Asset
 
-| Field Name  | Type      | Description                                                                       |
-|-------------|-----------|-----------------------------------------------------------------------------------|
-| title       | string    | Description of the container.                                                     |
-| href        | string    | URI of the published container, including the container registry, image and tag.  |
-| type        | string    | Media-type of the container, typically `application/vnd.oci.image.index.v1+json`. |
-| roles       | \[string] | Specify `["runtime"]` and any other custom roles.                                 |
+| Field Name | Type      | Description                                                                       |
+| ---------- | --------- | --------------------------------------------------------------------------------- |
+| title      | string    | Description of the container.                                                     |
+| href       | string    | URI of the published container, including the container registry, image and tag.  |
+| type       | string    | Media-type of the container, typically `application/vnd.oci.image.index.v1+json`. |
+| roles      | \[string] | Specify `["runtime"]` and any other custom roles.                                 |
 
 If you're unsure how to containerize your model, we suggest starting from the latest official container image for
 your framework that works with your model and pinning the container version.
 
 Examples:
+
 - [Pytorch Dockerhub](https://hub.docker.com/r/pytorch/pytorch/tags)
 - [Pytorch Docker Run Example](https://github.com/pytorch/pytorch?tab=readme-ov-file#docker-image)
 - [Tensorflow Dockerhub](https://hub.docker.com/r/tensorflow/tensorflow/tags?page=8&ordering=last_updated)
@@ -776,6 +788,7 @@ RUN pip install my_package
 ```
 
 You can also use other base images. Pytorch and Tensorflow offer docker images for serving models for inference.
+
 - [Torchserve](https://pytorch.org/serve/)
 - [TFServing](https://github.com/tensorflow/serving)
 
@@ -786,7 +799,7 @@ The following types should be used as applicable `rel` types in the
 of STAC Items describing Band Assets that result from the inference of a model described by the MLM extension.
 
 | Type         | Description                                              |
-|--------------|----------------------------------------------------------|
+| ------------ | -------------------------------------------------------- |
 | derived_from | This link points to a STAC Collection or Item using MLM. |
 
 It is recommended that the link using `derived_from` referring to another STAC definition using the MLM extension
@@ -805,6 +818,7 @@ For contributions, please follow the
 for running tests are copied here for convenience.
 
 [stac-spec-code-conduct]: https://github.com/radiantearth/stac-spec/blob/master/CODE_OF_CONDUCT.md
+
 [stac-spec-contrib-guide]: https://github.com/radiantearth/stac-spec/blob/master/CONTRIBUTING.md
 
 ### Running tests
@@ -820,6 +834,7 @@ npm install
 ```
 
 Then to check Markdown formatting and test the examples against the JSON schema, you can run:
+
 ```bash
 npm test
 ```
@@ -827,6 +842,7 @@ npm test
 This will spit out the same texts that you see online, and you can then go and fix your markdown or examples.
 
 If the tests reveal formatting problems with the examples, you can fix them with:
+
 ```bash
 npm run format-examples
 ```
