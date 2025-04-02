@@ -408,15 +408,16 @@ and can use [Data Types from STAC 1.1 Core][stac-1.1-data-types] for later versi
 Both definitions should define equivalent values.
 
 [raster-data-types]: https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types
+
 [stac-1.1-data-types]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#data-types
 
 #### Input Structure Object
 
-| Field Name | Type                                   | Description                                                                                                                                                                                                               |
-|------------|----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| shape      | \[integer]                             | **REQUIRED** Shape of the input n-dimensional array (e.g.: $B \times C \times H \times W$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size. |
-| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                     |
-| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.   |
+| Field Name | Type                                   | Description                                                                                                                                                                                                                 |
+| ---------- | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| shape      | \[integer]                             | **REQUIRED** Shape of the input n-dimensional array (e.g.: $`B \times C \times H \times W`$), including the batch size dimension. Each dimension must either be greater than 0 or -1 to indicate a variable dimension size. |
+| dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                       |
+| data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.     |
 
 A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
 However, this value is not strictly reserved for the `b` dimension.
