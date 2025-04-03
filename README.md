@@ -444,6 +444,7 @@ Below are some notable common names recommended for use, but others can be emplo
 - `class`
 - `score`
 - `confidence`
+- `embedding`
 
 For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.

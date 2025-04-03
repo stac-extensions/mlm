@@ -747,7 +747,8 @@
           "token",
           "class",
           "score",
-          "confidence"
+          "confidence",
+          "embedding"
         ]
       }
     },

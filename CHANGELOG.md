@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `embedding` as suggested dimension name
+  (relates to [#77](https://github.com/stac-extensions/mlm/discussions/77)).
 - Add [`huggingface/safetensors`](https://github.com/huggingface/safetensors)
   recommendations for `mlm:artifact_type` and corresponding `mlm:framework` values
   (fixes [#68](https://github.com/stac-extensions/mlm/issues/68)).
