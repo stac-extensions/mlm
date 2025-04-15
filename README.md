@@ -94,19 +94,31 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 
 ## Resources
 
-- Examples:
-  - [Item examples](https://huggingface.co/wherobots/mlm-stac) for scene-classification,
-      object detection, and semantic segmentation: Shows real world use of the
-      extension for describing models run on
-      [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/)
-  - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection
-- [JSON Schema](https://stac-extensions.github.io/mlm/)
-- [Changelog](./CHANGELOG.md)
-- [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing version 1.3.0 of the extension
-- [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
-- [MLM Form Filler](https://mlm-form.vercel.app/) a two page app to fill out and validate MLM STAC Item metadata. <br>
-  Check out the [wherobots/mlm-form](https://github.com/wherobots/mlm-form) repository if you have questions, issues,
-  or want to contribute.
+- **Packages**:
+  - [`stac-model`](./stac_model): Model implementations using [`Pydantic`](https://docs.pydantic.dev/latest/).
+    See the [STAC Model](./README_STAC_MODEL.md) document for installation and example details.
+  - [`pystac.extensions.mlm`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/mlm.py): 
+    Official [`pystac`](https://github.com/stac-utils/pystac) extension integration (avaiable starting
+    with [`pystac v1.13.0`](https://github.com/stac-utils/pystac/blob/main/CHANGELOG.md#v1130---2025-04-15)).
+- **Examples**:
+  - [Local Examples](./examples): Demonstrates different combinations of STAC extensions used along MLM.
+  - [Item examples](https://huggingface.co/wherobots/mlm-stac): Demonstrates `scene-classification`,
+      `object-detection`, and `semantic-segmentation` tasks with real world use of the
+      MLM extension for describing models run on
+      [WherobotsAI Raster Inference](https://wherobots.com/wherobotsai-for-raster-inference/).
+  - [Collection example](examples/collection.json): Shows the basic usage of the extension in a STAC Collection.
+- **Documentation**:
+  - [JSON Schema](https://stac-extensions.github.io/mlm/)
+  - [Changelog](./CHANGELOG.md)
+  - [Best Practices](./best-practices.md): Recommended combinations of MLM with
+    other [STAC Extensions](https://stac-extensions.github.io/) for efficient integration into the STAC ecosystem.
+  - [Open access paper](https://dl.acm.org/doi/10.1145/3681769.3698586) describing
+    version [`1.3.0`](https://github.com/stac-extensions/mlm/blob/main/CHANGELOG.md#v130) of the extension.
+  - [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
+- **Tools**:
+  - [MLM Form Filler](https://mlm-form.vercel.app/) a two page app to fill out and validate MLM STAC Item metadata. <br>
+    Check out the [wherobots/mlm-form](https://github.com/wherobots/mlm-form) repository if you have questions, issues,
+    or want to contribute.
 
 ## Item Properties and Collection Fields
 
