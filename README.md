@@ -98,8 +98,8 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
   - [`stac-model`](./stac_model): Model implementations using [`Pydantic`](https://docs.pydantic.dev/latest/).
     See the [STAC Model](./README_STAC_MODEL.md) document for installation and example details.
   - [`pystac.extensions.mlm`](https://github.com/stac-utils/pystac/blob/main/pystac/extensions/mlm.py): 
-    Official [`pystac`](https://github.com/stac-utils/pystac) extension integration
-    (avaiable starting with [`pystac v1.13.0`](https://github.com/stac-utils/pystac/blob/main/CHANGELOG.md#v1130)).
+    Official [`pystac`](https://github.com/stac-utils/pystac) extension integration (avaiable starting
+    with [`pystac v1.13.0`](https://github.com/stac-utils/pystac/blob/main/CHANGELOG.md#v1130---2025-04-15)).
 - **Examples**:
   - [Local Examples](./examples): Demonstrates different combinations of STAC extensions used along MLM.
   - [Item examples](https://huggingface.co/wherobots/mlm-stac): Demonstrates `scene-classification`,
