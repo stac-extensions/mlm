@@ -74,4 +74,4 @@ Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset
 | `ml-model:training-image`                       | *n/a*          | Deemed redundant with `mlm:training-runtime` Asset Role.                                                                                                                                                     |
 | `ml-model:train-data` <br> `ml-model:test-data` | `derived_from` | Use one or more `derived_from` links (as many as needed with regard to data involved during the model creation. Linked data should employ `ml-aoi` as appropriate (see [ML-AOI Best Practices][mlm-ml-aoi]). |
 
-[mlm-ml-aoi]: ./../../README.md#ml-aoi-and-label-extensions
+[mlm-ml-aoi]: ./../../best-practices.md#ml-aoi-and-label-extensions
