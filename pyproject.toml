@@ -54,6 +54,7 @@ classifiers = [
 
 [tool.uv]
 dev-dependencies = [
+    "setuptools>=78.1.1",
     "mypy<2.0.0,>=1.0.0",
     "mypy-extensions<1.0.0,>=0.4.3",
     "pre-commit<3.0.0,>=2.21.0",
@@ -72,7 +73,7 @@ dev-dependencies = [
     "pytest-pikachu<2.0.0,>=1.0.0",
     "coverage<8.0.0,>=7.3.0",
     "ruff<1.0.0,>=0.2.2",
-    "bump-my-version<0.27,>=0.21",
+    "bump-my-version>=0.21",
     "types-python-dateutil>=2.9.0.20241003",
 ]
 
