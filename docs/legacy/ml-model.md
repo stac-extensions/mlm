@@ -10,8 +10,8 @@
 
 ## Migration Table
 
-Following are the corresponding fields between the legacy DLM and the current MLM extension, which can be used to
-completely migrate to the newer MLM extension providing enhanced feature and interconnectivity with other STAC
+Following are the corresponding fields between the legacy ML-Model and the current MLM extension, which can be used
+to completely migrate to the newer MLM extension providing enhanced features and interconnectivity with other STAC
 extensions (see also [Best Practices][mlm-bp]).
 
 <!-- lint disable no-undefined-references -->
