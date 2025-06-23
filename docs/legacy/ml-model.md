@@ -18,7 +18,7 @@ extensions (see also [Best Practices][mlm-bp]).
 
 > [!NOTE]
 > Only the limited set of `ml-model` fields are listed below for migration guidelines.
-> See the full [MLM Specification](/../README.md) for all additional fields provided to further describe models.
+> See the full [MLM Specification](./../../README.md) for all additional fields provided to further describe models.
 
 <!-- lint enable no-undefined-references -->
 
@@ -32,9 +32,9 @@ extensions (see also [Best Practices][mlm-bp]).
 | `ml-model:architecture`                                        | `mlm:architecture`                                                                                                                                                 | Direct mapping.                                                                                                                                                                                                                                                                                                                                       |
 | `ml-model:training-processor-type` <br> `ml-model:training-os` | `mlm:framework` <br> `mlm:framework_version` <br> `mlm:accelerator` <br> `mlm:accelerator_constrained` <br> `mlm:accelerator_summary` <br> `mlm:accelerator_count` | More fields are provided to describe the subtleties of compute hardware and ML frameworks that can be intricated between them. If compute hardware imposes OS dependencies, they are typically reflected through the framework version and/or the specific accelerator. Further subtleties are permitted with [complex accelerator values][acc-type]. |
 
-[acc-type]: /../README.md#accelerator-type-enum
+[acc-type]: ./../../README.md#accelerator-type-enum
 
-[mlm-bp]: /../best-practices.md
+[mlm-bp]: ./../../best-practices.md
 
 ### Asset Objects
 
@@ -43,13 +43,13 @@ extensions (see also [Best Practices][mlm-bp]).
 All [ML-Model Asset Roles](https://github.com/stac-extensions/ml-model/blob/main/README.md#roles) 
 are available with a prefix change with the same sematic meaning.
 
-Further roles are also proposed in [MLM Asset Roles](/../README.md#mlm-asset-roles).
+Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset-roles).
 
 | ML-Model Field               | MLM Field               | Migration Details                                                                                                                      |
 | ---------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `ml-model:inference-runtime` | `mlm:inference-runtime` | Prefix change.                                                                                                                         |
 | `ml-model:training-runtime`  | `mlm:training-runtime`  | Prefix change.                                                                                                                         |
-| `ml-model:checkpoint`        | `mlm:checkpoint`        | Prefix change. Recommended addition of further `mlm` properties for [Model Asset](/../README.md#model-asset) to describe the artifact. |
+| `ml-model:checkpoint`        | `mlm:checkpoint`        | Prefix change. Recommended addition of further `mlm` properties for [Model Asset](./../../README.md#model-asset) to describe the artifact. |
 
 <!-- lint disable no-undefined-references -->
 
@@ -58,7 +58,7 @@ Further roles are also proposed in [MLM Asset Roles](/../README.md#mlm-asset-rol
 > are strictly provided as [Docker Compose][docker-compose-file] definitions. While this is still permitted,
 > the MLM extension offers alternatives using any relevant definition for the model, as long as it is properly
 > identified by its applicable media-type. Additional recommendations and Asset property fields are provided
-> under [MLM Assets Objects](/../README.md#assets-objects) for specific cases.
+> under [MLM Assets Objects](./../../README.md#assets-objects) for specific cases.
 
 <!-- lint enable no-undefined-references -->
 
@@ -74,4 +74,4 @@ Further roles are also proposed in [MLM Asset Roles](/../README.md#mlm-asset-rol
 | `ml-model:training-image`                       | *n/a*          | Deemed redundant with `mlm:training-runtime` Asset Role.                                                                                                                                                     |
 | `ml-model:train-data` <br> `ml-model:test-data` | `derived_from` | Use one or more `derived_from` links (as many as needed with regard to data involved during the model creation. Linked data should employ `ml-aoi` as appropriate (see [ML-AOI Best Practices][mlm-ml-aoi]). |
 
-[mlm-ml-aoi]: /../README.md#ml-aoi-and-label-extensions
+[mlm-ml-aoi]: ./../../README.md#ml-aoi-and-label-extensions
