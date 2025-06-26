@@ -21,7 +21,8 @@
   The [ML-Model][ml-model] extension does not support this and requires the JSON to be written manually
   by interpreting the JSON Schema or existing examples.
 - The [MLM][mlm-spec] extension is easier to maintain and enhance in a fast moving ML ecosystem thanks to it's use
-  of [pydantic][pydantic] models, while still being compatible with [pystac][pystac] for extension and STAc core validation.
+  of [pydantic][pydantic] models, while still being compatible with [pystac][pystac] for extension and STAc core
+  validation.
 
 ## Migration Tables
 
