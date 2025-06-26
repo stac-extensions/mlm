@@ -10,19 +10,30 @@
 
 ## Notable Differences
 
-- The [MLM][mlm-spec] Extension covers more details at both the [Item](#item-properties) and [Asset](#asset-objects)
+- The [MLM][mlm-spec] extension covers more details at both the [Item](#item-properties) and [Asset](#asset-objects)
   levels, making it easier to describe and use model metadata.
-- The [MLM][mlm-spec] extension covers Runtime requirements within the [Container Asset](./../../README.md#container-asset),
-  while the [ML-Model][ml-model] extension records [similar information][ml-model-runtimes] in
-  the `ml-model:inference-runtime` or `ml-model:training-runtime` [Asset Roles](#roles).
-- The [MLM][mlm-spec] extension has a corresponding Python library, [`stac-model`](https://pypi.org/project/stac-model/)
-  which can be used to create and validate MLM metadata.
+
+- The [MLM][mlm-spec] extension covers runtime requirements using distinct [Asset Roles](#roles)
+  ([Model][mlm-asset-model], [Container][mlm-asset-container] and [Source Code][mlm-asset-code]) which allows
+  for more flexibility in describing how and which operations are performed by a given model.
+  This is in contrast to the [ML-Model][ml-model] extension that records [similar information][ml-model-runtimes]
+  in `ml-model:inference-runtime` or `ml-model:training-runtime` __*all at once*__, which leads to runtime ambiguities
+  and limited reusability.
+
+- The [MLM][mlm-spec] extension provides additional fields to better describe the model properties, such as
+  the [Model Inputs][mlm-inputs] to describe the input features, bands, data transforms, or any
+  other relevant data sources and preparation steps required by the model, the [Model Outputs][mlm-outputs] to describe
+  the output predictions, regression values, classes or other relevant information about what the model produces, and
+  the [Model Hyperparameters][mlm-hyperparam] to better describe training configuration
+  that lead to the model definition. All of these fields are __*undefined*__ in the [ML-Model][ml-model] extension.
+
+- The [MLM][mlm-spec] extension has a corresponding Python library [`stac-model`][mlm-stac-model],
+  which can be used to create and validate MLM metadata using [pydantic][pydantic].
   An example of the library in action is [provided in examples](./../../stac_model/examples.py).
-  The [ML-Model][ml-model] extension does not support this and requires the JSON to be written manually
-  by interpreting the JSON Schema or existing examples.
-- The [MLM][mlm-spec] extension is easier to maintain and enhance in a fast moving ML ecosystem thanks to it's use
-  of [pydantic][pydantic] models, while still being compatible with [pystac][pystac] for extension and STAc core
-  validation.
+  The extension also provides [pystac MLM][pystac-mlm] for easier integration with the STAC ecosystem.
+  The [MLM Form Filler][mlm-form] is also available to help users create valid MLM metadata in a no-code fashion.
+  In contrast, [ML-Model][ml-model] extension does not provide any support for Python integration and requires the JSON
+  to be written manually.
 
 ## Migration Tables
 
@@ -84,6 +95,22 @@ Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset
 
 [mlm-acc-type]: ./../../README.md#accelerator-type-enum
 
+[mlm-asset-model]: ./../../README.md#model-asset
+
+[mlm-asset-container]: ./../../README.md#container-asset
+
+[mlm-asset-code]: ./../../README.md#source-code-asset
+
+[mlm-inputs]: ./../../README.md#model-input-object
+
+[mlm-outputs]: ./../../README.md#model-output-object
+
+[mlm-hyperparam]: ./../../README.md#model-hyperparameters-object
+
+[mlm-stac-model]: https://pypi.org/project/stac-model/
+
+[mlm-form]: https://mlm-form.vercel.app/
+
 [mlm-spec]: ./../../README.md
 
 [mlm-bp]: ./../../best-practices.md
@@ -96,6 +123,6 @@ Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset
 
 [pydantic]: https://docs.pydantic.dev/latest/
 
-[pystac]: https://pystac.readthedocs.io/en/latest/
+[pystac-mlm]: https://github.com/stac-utils/pystac/blob/main/pystac/extensions/mlm.py
 
 [docker-compose-file]: https://github.com/compose-spec/compose-spec/blob/master/spec.md#compose-file

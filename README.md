@@ -117,7 +117,7 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
     version [`1.3.0`](https://github.com/stac-extensions/mlm/blob/main/CHANGELOG.md#v130) of the extension.
   - [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
 - **Tools**:
-  - [MLM Form Filler](https://mlm-form.vercel.app/) a two page app to fill out and validate MLM STAC Item metadata. <br>
+  - [MLM Form Filler](https://mlm-form.vercel.app/) a two-page app to fill out and validate MLM STAC Item metadata. <br>
     Check out the [wherobots/mlm-form](https://github.com/wherobots/mlm-form) repository if you have questions, issues,
     or want to contribute.
 
