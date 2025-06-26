@@ -8,7 +8,22 @@
 
 <!-- lint enable no-undefined-references -->
 
-## Migration Table
+## Notable Differences
+
+- The [MLM][mlm-spec] Extension covers more details at both the [Item](#item-properties) and [Asset](#asset-objects)
+  levels, making it easier to describe and use model metadata.
+- The [MLM][mlm-spec] extension covers Runtime requirements within the [Container Asset](./../../README.md#container-asset),
+  while the [ML-Model][ml-model] extension records [similar information][ml-model-runtimes] in
+  the `ml-model:inference-runtime` or `ml-model:training-runtime` [Asset Roles](#roles).
+- The [MLM][mlm-spec] extension has a corresponding Python library, [`stac-model`](https://pypi.org/project/stac-model/)
+  which can be used to create and validate MLM metadata.
+  An example of the library in action is [provided in examples](./../../stac_model/examples.py).
+  The [ML-Model][ml-model] extension does not support this and requires the JSON to be written manually
+  by interpreting the JSON Schema or existing examples.
+- The [MLM][mlm-spec] extension is easier to maintain and enhance in a fast moving ML ecosystem thanks to it's use
+  of [pydantic][pydantic] models, while still being compatible with [pystac][pystac] for extension and STAc core validation.
+
+## Migration Tables
 
 Following are the corresponding fields between the legacy [ML-Model][ml-model] and the current [MLM][mlm-spec]
 extension, which can be used to completely migrate to the newer *Machine Leaning Model* extension providing
@@ -16,7 +31,7 @@ enhanced features and interconnectivity with other STAC extensions (see also [Be
 
 <!-- lint disable no-undefined-references -->
 
-> [!NOTE]
+> [!IMPORTANT]
 > Only the limited set of [`ml-model`][ml-model] fields are listed below for migration guidelines.
 > See the full [MLM Specification](./../../README.md) for all additional fields provided to further describe models.
 
@@ -49,7 +64,7 @@ Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset
 
 <!-- lint disable no-undefined-references -->
 
-> [!NOTE]
+> [!TIP]
 > In the context of [ML-Model][ml-model], Assets providing [Inference/Training Runtimes][ml-model-runtimes]
 > are strictly provided as [Docker Compose][docker-compose-file] definitions. While this is still permitted,
 > the MLM extension offers alternatives using any relevant definition for the model, as long as it is properly
@@ -77,5 +92,9 @@ Further roles are also proposed in [MLM Asset Roles](./../../README.md#mlm-asset
 [ml-model]: https://github.com/stac-extensions/ml-model
 
 [ml-model-runtimes]: https://github.com/stac-extensions/ml-model/blob/main/README.md#inferencetraining-runtimes
+
+[pydantic]: https://docs.pydantic.dev/latest/
+
+[pystac]: https://pystac.readthedocs.io/en/latest/
 
 [docker-compose-file]: https://github.com/compose-spec/compose-spec/blob/master/spec.md#compose-file
