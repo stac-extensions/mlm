@@ -2,8 +2,8 @@
 
 <!-- lint disable no-undefined-references -->
 
-> [!NOTE]
-> This is legacy documentation references of [Deep Learning Model extension](https://github.com/crim-ca/dlm-extension)
+> [!WARNING]
+> This is legacy documentation reference of [Deep Learning Model extension](https://github.com/crim-ca/dlm-extension)
 > preceding the current Machine Learning Model (MLM) extension.
 
 <!-- lint enable no-undefined-references -->

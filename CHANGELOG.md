@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
+  from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
+  (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).
+- Move [DLM Legacy](./docs/legacy/dlm.md) document.
 - Add `embedding` as suggested dimension name
   (relates to [#77](https://github.com/stac-extensions/mlm/discussions/77)).
 - Add [`huggingface/safetensors`](https://github.com/huggingface/safetensors)

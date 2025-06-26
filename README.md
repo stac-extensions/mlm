@@ -82,11 +82,12 @@ reusability and avoid metadata duplication whenever possible. A properly defined
 never have the Machine Learning Model Extension exclusively in `stac_extensions`.
 
 For details about the earlier (legacy) version of the MLM Extension, formerly known as
-the *Deep Learning Model Extension* (DLM), please refer to the [DLM LEGACY](README_DLM_LEGACY.md) document.
+the *Deep Learning Model Extension* (DLM), please refer to the [DLM LEGACY](./docs/legacy/dlm.md) document.
 DLM was renamed to the current MLM Extension and refactored to form a cohesive definition across all machine
 learning approaches, regardless of whether the approach constitutes a deep neural network or other statistical approach.
 It also combines multiple definitions from the predecessor [ML-Model](https://github.com/stac-extensions/ml-model)
-extension to synthesize common use cases into a single reference for Machine Learning Models.
+extension to synthesize common use cases into a single reference for "*Machine Learning Models*". For migration
+details from `ml-model` to `mlm`, please refer to the [ML-Model Legacy](./docs/legacy/ml-model.md) document.
 
 For more details about the [`stac-model`](./stac_model) Python package, which provides definitions of the MLM extension
 using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
@@ -116,7 +117,7 @@ connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
     version [`1.3.0`](https://github.com/stac-extensions/mlm/blob/main/CHANGELOG.md#v130) of the extension.
   - [SigSpatial 2024 GeoSearch Workshop presentation](/docs/static/sigspatial_2024_mlm.pdf)
 - **Tools**:
-  - [MLM Form Filler](https://mlm-form.vercel.app/) a two page app to fill out and validate MLM STAC Item metadata. <br>
+  - [MLM Form Filler](https://mlm-form.vercel.app/) a two-page app to fill out and validate MLM STAC Item metadata. <br>
     Check out the [wherobots/mlm-form](https://github.com/wherobots/mlm-form) repository if you have questions, issues,
     or want to contribute.
 
