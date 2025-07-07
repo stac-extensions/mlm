@@ -1,0 +1,160 @@
+{
+  "$comment": "Demonstrate the use of MLM and EO for bands description, with EO bands directly in the Model Asset.",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
+    "https://stac-extensions.github.io/datacube/v2.3.0/schema.json",
+    "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json",
+    "https://stac-extensions.github.io/scientific/v1.0.0/schema.json"
+  ],
+  "type": "Feature",
+  "id": "UNet_ClimateDiffuse_Regression",
+  "collection": "ml-model-examples",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.882190080512502,
+          37.13739173208318
+        ],
+        [
+          -7.882190080512502,
+          58.21798141355221
+        ],
+        [
+          27.911651652899923,
+          58.21798141355221
+        ],
+        [
+          27.911651652899923,
+          37.13739173208318
+        ],
+        [
+          -7.882190080512502,
+          37.13739173208318
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -7.882190080512502,
+    37.13739173208318,
+    27.911651652899923,
+    58.21798141355221
+  ],
+  "properties": {
+    "description": "UNet model for regression tasks of climate indices of SSP2-4.5 scenario using CMIP6 dataset.",
+    "datetime": null,
+    "start_datetime": "1900-01-01T00:00:00Z",
+    "end_datetime": "2100-12-31T23:59:59Z",
+    "mlm:name": "UNet ClimateDiffuse Regression",
+    "mlm:tasks": [
+      "regression"
+    ],
+    "mlm:architecture": "U-Net",
+    "mlm:framework": "torchgeo",
+    "mlm:framework_version": "0.8.0.dev0",
+    "mlm:accelerator": "cuda",
+    "mlm:accelerator_constrained": false,
+    "mlm:accelerator_summary": "Unknown",
+    "mlm:input": [
+      {
+        "name": "Climate Variables employed by the model for regression.",
+        "variables": [
+          "air_temperature",
+          "soil_moisture_content",
+          "surface_temperature",
+          "surface_air_pressure"
+        ],
+        "input": {
+          "shape": [
+            -1,
+            4,
+            256,
+            256
+          ],
+          "dim_order": [
+            "batch",
+            "variables",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        },
+        "norm_by_channel": false,
+        "resize_type": null
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "forecast",
+        "tasks": [
+          "regression"
+        ],
+        "result": {
+          "shape": [
+            -1,
+            256,
+            256
+          ],
+          "dim_order": [
+            "precipitation_flux",
+            "class"
+          ],
+          "data_type": "float32"
+        }
+      }
+    ]
+  },
+  "$comment": "Following 'cube:variables' is required to fulfil schema validation. Each 'name' refers to variables used in 'mlm:input' and 'mlm:output'.",
+  "cube:variables": [
+  ],
+  "sci:publications": [
+    {
+      "doi": "10.48550/arXiv.2404.17752",
+      "citation": "Robbie A. Watt, Laura A. Mansfield, Generative Diffusion-based Downscaling for Climate"
+    }
+  ],
+  "assets": {
+    "weights": {
+      "href": "https://huggingface.co/torchgeo/resnet18_sentinel2_all_moco/resolve/main/resnet18_sentinel2_all_moco-59bfdff9.pth",
+      "title": "Pytorch weights checkpoint",
+      "description": "A Resnet-18 classification model trained on normalized Sentinel-2 imagery with Eurosat landcover labels with torchgeo",
+      "type": "application/octet-stream; application=pytorch",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ],
+      "mlm:artifact_type": "torch.save"
+    },
+    "source_code": {
+      "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/src/Network.py",
+      "title": "Model implementation.",
+      "description": "Source code to run the model.",
+      "type": "text/x-python",
+      "roles": [
+        "mlm:source_code",
+        "code",
+        "metadata"
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "./item_datacube_variables.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "via",
+      "href": "https://github.com/robbiewatt1/ClimateDiffuse",
+      "type": "text/html"
+    }
+  ]
+}

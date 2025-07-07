@@ -43,8 +43,12 @@
             "$ref": "#/$defs/stac_extensions_mlm"
           },
           {
-            "$comment": "Schema to validate cross-references of bands between MLM inputs and any 'bands'-compliant section describing them using another STAC definition.",
+            "$comment": "Schema to validate cross-references of bands between MLM inputs and any compliant section describing them using another STAC definition.",
             "$ref": "#/$defs/AnyBandsRef"
+          },
+          {
+            "$comment": "Schema to validate cross-references of variables between MLM inputs and any compliant section describing them using another STAC definition.",
+            "$ref": "#/$defs/AnyVariablesRef"
           },
           {
             "$comment": "Schema to validate that at least one Asset defines a model role.",
@@ -112,6 +116,70 @@
           "type": "array",
           "contains": {
             "const": "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
+          }
+        }
+      }
+    },
+    "stac_extensions_datacube_variables": {
+      "$comment": "STAC extension reference to [https://github.com/stac-extensions/datacube]. V2 and above is required to reference 'cube:variables'.",
+      "type": "object",
+      "required": [
+        "stac_extensions"
+      ],
+      "properties": {
+        "stac_extensions": {
+          "type": "array",
+          "contains": {
+            "type": "string",
+            "pattern": "https://stac-extensions\\.github\\.io/datacube/v2(\\.[0-9]+){2}/schema\\.json"
+          }
+        }
+      }
+    },
+    "stac_extensions_datacube_variables_item": {
+      "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Item field named 'properties' containing 'cube:variables' as described in [https://github.com/stac-extensions/datacube#fields].",
+      "properties": {
+        "properties": {
+          "required": [
+            "eo:bands"
+          ],
+          "properties": {
+            "eo:bands": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "stac_extensions_datacube_variables_asset": {
+      "required": [
+        "assets"
+      ],
+      "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Asset containing 'cube:variables' as described in [https://github.com/stac-extensions/datacube#fields].",
+      "properties": {
+        "assets": {
+          "additionalProperties": {
+            "if": {
+              "$ref": "#/$defs/AssetModelRole"
+            },
+            "then": {
+              "required": [
+                "eo:bands"
+              ],
+              "properties": {
+                "eo:bands": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -602,7 +670,10 @@
     "mlm:input": {
       "type": "array",
       "items": {
-        "$ref": "#/$defs/ModelInput"
+        "allOf": [
+          {"$ref": "#/$defs/ModelInput"},
+          {"$ref": "#/$defs/ModelInputBandsVariables" }
+        ]
       }
     },
     "ModelInput": {
@@ -610,7 +681,6 @@
       "type": "object",
       "required": [
         "name",
-        "bands",
         "input"
       ],
       "properties": {
@@ -619,7 +689,10 @@
           "minLength": 1
         },
         "bands": {
-          "$ref": "#/$defs/ModelBands"
+          "$ref": "#/$defs/ModelBandsVariables"
+        },
+        "variables": {
+          "$ref": "#/$defs/ModelBandsVariables"
         },
         "input": {
           "$ref": "#/$defs/InputStructure"
@@ -638,6 +711,13 @@
           "$ref": "#/$defs/ProcessingExpression"
         }
       }
+    },
+    "ModelInputBandsVariables": {
+      "$comment": "Inputs can be described by either 'bands', 'variables' or both simultaneously to represent different kinds of data. Whichever one is employed, at least one must be provided, including at least an empty array when none applies.",
+      "anyOf": [
+        {"required": ["bands"]},
+        {"required": ["variables"]}
+      ]
     },
     "mlm:output": {
       "type": "array",
@@ -740,6 +820,10 @@
         "examples": [
           "batch",
           "channel",
+          "bands",
+          "variables",
+          "temperature",
+          "pressure",
           "time",
           "height",
           "width",
@@ -1047,19 +1131,19 @@
         }
       ]
     },
-    "ModelBands": {
-      "description": "List of bands (if any) that compose the input. Band order represents the index position of the bands.",
+    "ModelBandsVariables": {
+      "description": "List of bands or variables (if any) that compose the input. Band and/or variable order represents the index position within the input. If both bands and variables are provided, their other should be distinguished using corresponding names in 'dim_order'.",
       "$comment": "No 'minItems' here to support model inputs not using any band (other data source).",
       "type": "array",
       "items": {
         "oneOf": [
           {
-            "description": "Implied named-band with the name directly provided.",
+            "description": "Implied name of the band or variable with the name directly provided with no further properties.",
             "type": "string",
             "minLength": 1
           },
           {
-            "description": "Explicit named-band with optional derived expression to obtain it.",
+            "description": "Explicitly named band or variable with optional derived expression to obtain it.",
             "type": "object",
             "required": [
               "name"
@@ -1106,7 +1190,7 @@
             "properties": {
               "mlm:input": {
                 "type": "array",
-                "$comment": "Below 'minItems' ensures that band check does not fail for explicitly empty 'mlm:inputs'.",
+                "$comment": "Below 'minItems' ensures that band check does not fail for explicitly empty 'mlm:input'.",
                 "minItems": 1,
                 "items": {
                   "type": "object",
@@ -1189,7 +1273,69 @@
         ]
       },
       "else": {
-        "$comment": "Case where no 'bands' (empty list) are referenced in the MLM input. Because models can use a mixture of inputs with/without bands, we cannot enforce eo/raster/stac bands references to be omitted. If bands are provided in the 'mlm:model', it will simply be an odd case if none are used in any 'mlm:input' bands'."
+        "$comment": "Case where no 'bands' (empty list) are referenced in the MLM input. Because models can use a mixture of inputs with/without bands, we cannot enforce eo/raster/stac bands references to be omitted. If bands are provided in the 'mlm:model', it will simply be an odd case if none are used in any 'mlm:input' bands."
+      }
+    },
+    "AnyVariablesRef": {
+      "$comment": "This definition ensures that, if at least 1 named MLM input 'variables' is provided, at least 1 of the supported references from STAC datacube is provided as well. Otherwise, 'variables' must be explicitly empty.",
+      "if": {
+        "type": "object",
+        "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Item field named 'properties'.",
+        "properties": {
+          "properties": {
+            "type": "object",
+            "required": [
+              "mlm:input"
+            ],
+            "$comment": "This is the JSON-object 'properties' definition for the MLM input with variables listing referring to at least one variable name.",
+            "properties": {
+              "mlm:input": {
+                "type": "array",
+                "$comment": "Below 'minItems' ensures that band check does not fail for explicitly empty 'mlm:input'.",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "variables"
+                  ],
+                  "$comment": "This is the 'Model Input Object' properties.",
+                  "properties": {
+                    "variables": {
+                      "type": "array",
+                      "minItems": 1
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "$comment": "Need at least one 'variables' definition, but multiple are allowed (although for now, only 'datacube' is defined).",
+        "anyOf": [
+          {
+            "$comment": "Variables described by raster extension.",
+            "allOf": [
+              {
+                "$ref": "#/$defs/stac_extensions_datacube_variables"
+              },
+              {
+                "anyOf": [
+                  {
+                    "$ref": "#/$defs/stac_extensions_datacube_variables_item"
+                  },
+                  {
+                    "$ref": "#/$defs/stac_extensions_datacube_variables_asset"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "else": {
+        "$comment": "Case where no 'variables' (empty list) are referenced in the MLM input. Because models can use a mixture of inputs with/without variables, we cannot enforce their references to be omitted. If variables are provided in the 'mlm:model', it will simply be an odd case if none are used in any 'mlm:input' variables."
       }
     }
   }
