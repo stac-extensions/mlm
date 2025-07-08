@@ -87,6 +87,7 @@ class TaskEnum(str, Enum):
     GENERATIVE = "generative"
     IMAGE_CAPTIONING = "image-captioning"
     SUPER_RESOLUTION = "super-resolution"
+    DOWNSCALING = "downscaling"
 
 
 ModelTaskNames: TypeAlias = Literal[
@@ -103,6 +104,7 @@ ModelTaskNames: TypeAlias = Literal[
     "generative",
     "image-captioning",
     "super-resolution",
+    "downscaling",
 ]
 
 

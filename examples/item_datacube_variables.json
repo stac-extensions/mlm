@@ -1,5 +1,5 @@
 {
-  "$comment": "Demonstrate the use of MLM and EO for bands description, with EO bands directly in the Model Asset.",
+  "$comment": "Demonstrate the use of MLM and DataCube variables description.",
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
@@ -8,85 +8,60 @@
     "https://stac-extensions.github.io/scientific/v1.0.0/schema.json"
   ],
   "type": "Feature",
-  "id": "UNet_ClimateDiffuse_ERA5_Regression",
+  "id": "UNet_ClimateDiffuse_ERA5_Downscaling",
   "collection": "ml-model-examples",
+  "bbox": [233.6, 54.2, 297.5, 22.6],
   "geometry": {
     "type": "Polygon",
-    "coordinates": [
-      [
-        [
-          -7.882190080512502,
-          37.13739173208318
-        ],
-        [
-          -7.882190080512502,
-          58.21798141355221
-        ],
-        [
-          27.911651652899923,
-          58.21798141355221
-        ],
-        [
-          27.911651652899923,
-          37.13739173208318
-        ],
-        [
-          -7.882190080512502,
-          37.13739173208318
-        ]
-      ]
-    ]
+    "coordinates": [[[233.6, 54.2], [297.5, 54.2], [297.5, 22.6], [233.6, 22.6], [233.6, 54.2]]]
   },
-  "bbox": [
-    -7.882190080512502,
-    37.13739173208318,
-    27.911651652899923,
-    58.21798141355221
-  ],
   "properties": {
-    "description": "UNet model for regression tasks of climate indices of ERA5 dataset.",
+    "description": "UNet model for coarse-to-fine downscaling as regression task of climate indices of ERA5 dataset.",
     "datetime": null,
     "start_datetime": "1940-01-01T00:00:00Z",
     "end_datetime": "2100-12-31T23:59:59Z",
-    "mlm:name": "UNet ClimateDiffuse ERA5 Regression",
+    "mlm:name": "UNet ClimateDiffuse ERA5 Downscaling",
     "mlm:tasks": [
-      "regression"
+      "regression",
+      "downscaling"
     ],
     "mlm:architecture": "U-Net",
     "mlm:framework": "pytorch",
-    "mlm:framework_version": "0.8.0.dev0",
+    "mlm:framework_version": "2.1.2+cu118",
     "mlm:accelerator": "cuda",
     "mlm:accelerator_constrained": false,
-    "mlm:accelerator_summary": "Unknown",
     "mlm:input": [
       {
-        "name": "Climate Variables employed by the model for regression.",
+        "name": "Coarse climate variables employed by the model downscaling regression. This model takes 2 'constant/spatial' variables and 3 'spatio-temporal' variables provided by ERA5 datacube.",
         "variables": [
-          "VAR_2T",
-          "VAR_10U",
-          "VAR_10V"
+          "land_sea_mask",
+          "geopotential",
+          "temperature_2m",
+          "10m_u_component_of_wind",
+          "10m_v_component_of_wind"
         ],
         "input": {
           "shape": [
             -1,
-            4,
-            256,
+            5,
+            128,
             256
           ],
           "dim_order": [
-            "batch",
+            "time",
             "variables",
-            "height",
-            "width"
+            "lat",
+            "lon"
           ],
           "data_type": "float32"
         },
         "norm_by_channel": false,
         "resize_type": null,
         "pre_processing_function": {
+          "description": "Script that performs the relevant normalization and concatenation of variables for model input.",
           "format": "uri",
           "expression": {
-            "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/download_ERA5/preprocessing_concat_year.py",
+            "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/src/DatasetUS.py",
             "type": "text/x-python"
           }
         }
@@ -94,27 +69,113 @@
     ],
     "mlm:output": [
       {
-        "name": "forecast",
+        "name": "Fine climate variables predicted by the model. Only the 3 'spatio-temporal' variables are predicted.",
         "tasks": [
-          "regression"
+          "regression",
+          "downscaling"
+        ],
+        "variables": [
+          "temperature_2m",
+          "10m_u_component_of_wind",
+          "10m_v_component_of_wind"
         ],
         "result": {
           "shape": [
             -1,
-            256,
+            3,
+            128,
             256
           ],
           "dim_order": [
-            "precipitation_flux",
-            "class"
+            "time",
+            "variables",
+            "lat",
+            "lon"
           ],
           "data_type": "float32"
         }
       }
     ]
   },
-  "$comment": "Following 'cube:variables' is required to fulfil schema validation. Each 'name' refers to variables used in 'mlm:input' and 'mlm:output'.",
+  "cube:dimensions": [
+    {
+      "name": "time",
+      "type": "temporal",
+      "extent": [
+        "1940-01-01T00:00:00Z",
+        "2100-12-31T23:59:59Z"
+      ],
+      "step": "P1H"
+    },
+    {
+      "name": "lat",
+      "type": "spatial",
+      "extent": [
+        54.2,
+        22.6
+      ],
+      "axis": "y"
+    },
+    {
+      "name": "lon",
+      "type": "spatial",
+      "extent": [
+        233.6,
+        297.5
+      ],
+      "axis": "x"
+    }
+  ],
   "cube:variables": [
+    {
+      "name": "land_sea_mask",
+      "shortname": "lsm",
+      "description": "Proportion of land-sea, where 1 indicates land and 0 indicates sea.",
+      "type": "data",
+      "data_type": "float32",
+      "extent": [0, 1],
+      "dimensions": ["lat", "lon"],
+      "definition": "https://codes.ecmwf.int/grib/param-db/172"
+    },
+    {
+      "name": "geopotential",
+      "shortname": "z",
+      "description": "This parameter is the geopotential, which is the potential energy per unit mass at a point in the atmosphere, expressed in metres squared per second squared (m² s⁻²). It is a measure of the height of a point in the atmosphere relative to sea level.",
+      "type": "data",
+      "data_type": "float32",
+      "unit": "m² s-2",
+      "dimensions": ["lat", "lon"],
+      "definition": "https://codes.ecmwf.int/grib/param-db/129"
+    },
+    {
+      "name": "2m_temperature",
+      "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
+      "type": "data",
+      "data_type": "float32",
+      "unit": "K",
+      "dimensions": ["time", "lat", "lon"],
+      "definition": "https://codes.ecmwf.int/grib/param-db/167"
+    },
+    {
+      "name": "10m_u_component_of_wind",
+      "shortname": "10u",
+      "description": "This parameter is the eastward component of the 10m wind. It is the horizontal speed of air moving towards the east, at a height of ten metres above the surface of the Earth, in metres per second.",
+      "type": "data",
+      "data_type": "float32",
+      "unit": "m s-1",
+      "dimensions": ["time", "lat", "lon"],
+      "definition": "https://codes.ecmwf.int/grib/param-db/165"
+    },
+    {
+      "name": "10m_v_component_of_wind",
+      "shortname": "10v",
+      "description": "This parameter is the northward component of the 10m wind. It is the horizontal speed of air moving towards the north, at a height of ten metres above the surface of the Earth, in metres per second.",
+      "type": "data",
+      "data_type": "float32",
+      "unit": "m s-1",
+      "dimensions": ["time", "lat", "lon"],
+      "definition": "https://codes.ecmwf.int/grib/param-db/166"
+    }
   ],
   "sci:publications": [
     {
@@ -123,7 +184,7 @@
     }
   ],
   "assets": {
-    "weights-unet": {
+    "weights": {
       "href": "https://github.com/robbiewatt1/ClimateDiffuse/raw/refs/heads/main/Model_chpt/unet.pt",
       "title": "U-Net Pytorch weights checkpoint",
       "type": "application/octet-stream; application=pytorch",
@@ -134,28 +195,39 @@
       "mlm:artifact_type": "torch.save",
       "file:size": 389657415
     },
-    "weights-diffusion": {
-      "href": "https://github.com/robbiewatt1/ClimateDiffuse/raw/refs/heads/main/Model_chpt/diffusion.pt",
-      "title": "Diffusion Pytorch weights checkpoint",
-      "type": "application/octet-stream; application=pytorch",
-      "roles": [
-        "mlm:model",
-        "mlm:weights"
-      ],
-      "mlm:artifact_type": "torch.save",
-      "file:size": 389695738
-    },
-    "source_code": {
+    "model": {
       "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/src/Network.py",
       "title": "Model implementation.",
-      "description": "Source code to run the model.",
+      "description": "Source code to define the U-Net model.",
       "type": "text/x-python",
       "roles": [
         "mlm:source_code",
         "code",
         "metadata"
       ]
+    },
+    "train-script": {
+      "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/src/TrainUnet.py",
+      "title": "Training script.",
+      "description": "Script to run training of the model.",
+      "type": "text/x-python",
+      "roles": [
+        "mlm:training",
+        "code",
+        "metadata"
+      ]
     }
+  },
+  "inference-script": {
+    "href": "https://raw.githubusercontent.com/robbiewatt1/ClimateDiffuse/refs/heads/main/src/Inference.py",
+    "title": "Inference script.",
+    "description": "Script to run inference with the model.",
+    "type": "text/x-python",
+    "roles": [
+      "mlm:inference",
+      "code",
+      "metadata"
+    ]
   },
   "links": [
     {
@@ -176,6 +248,11 @@
     {
       "rel": "cite-as",
       "href": "https://doi.org/10.48550/arXiv.2404.17752",
+      "type": "text/html"
+    },
+    {
+      "rel": "code",
+      "href": "https://github.com/robbiewatt1/ClimateDiffuse",
       "type": "text/html"
     }
   ]

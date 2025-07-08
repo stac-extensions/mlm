@@ -567,7 +567,8 @@
           "similarity-search",
           "generative",
           "image-captioning",
-          "super-resolution"
+          "super-resolution",
+          "downscaling"
         ]
       }
     },
@@ -722,34 +723,46 @@
     "mlm:output": {
       "type": "array",
       "items": {
-        "title": "Model Output Object",
-        "type": "object",
-        "required": [
-          "name",
-          "tasks",
-          "result"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "tasks": {
-            "$ref": "#/$defs/mlm:tasks"
-          },
-          "result": {
-            "$ref": "#/$defs/ResultStructure"
-          },
-          "description": {
-            "type": "string",
-            "minLength": 1
-          },
-          "classification:classes": {
-            "$ref": "#/$defs/ClassificationClasses"
-          },
-          "post_processing_function": {
-            "$ref": "#/$defs/ProcessingExpression"
-          }
+        "$comment": "Contrary to inputs, 'bands' and 'variables' are not requires by outputs for backward compatibility. However, they can be supplied if applicable.",
+        "allOf": [
+          {"$ref": "#/$defs/ModelOutput"}
+        ]
+      }
+    },
+    "ModelOutput": {
+      "title": "Model Output Object",
+      "type": "object",
+      "required": [
+        "name",
+        "tasks",
+        "result"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tasks": {
+          "$ref": "#/$defs/mlm:tasks"
+        },
+        "result": {
+          "$ref": "#/$defs/ResultStructure"
+        },
+        "bands": {
+          "$ref": "#/$defs/ModelBandsVariables"
+        },
+        "variables": {
+          "$ref": "#/$defs/ModelBandsVariables"
+        },
+        "classification:classes": {
+          "$ref": "#/$defs/ClassificationClasses"
+        },
+        "post_processing_function": {
+          "$ref": "#/$defs/ProcessingExpression"
         }
       }
     },

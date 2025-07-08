@@ -210,7 +210,7 @@ definitions listed in [Papers With Code](https://paperswithcode.com/sota). The n
 should be normalized to lowercase and use hyphens instead of spaces.
 
 | Task Name               | Corresponding `label:tasks` | Description                                                                                                              |
-| ----------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+|-------------------------| --------------------------- |--------------------------------------------------------------------------------------------------------------------------|
 | `regression`            | `regression`                | Generic regression that estimates a numeric and continuous value.                                                        |
 | `classification`        | `classification`            | Generic classification task that assigns class labels to an output.                                                      |
 | `scene-classification`  | *n/a*                       | Specific classification task where the model assigns a single class label to an entire scene/area.                       |
@@ -224,13 +224,14 @@ should be normalized to lowercase and use hyphens instead of spaces.
 | `generative`            | *n/a*                       | Generic task that encompasses all synthetic data generation techniques.                                                  |
 | `image-captioning`      | *n/a*                       | Specific task of describing the content of an image in words.                                                            |
 | `super-resolution`      | *n/a*                       | Specific task that increases the quality and resolution of an image by increasing its high-frequency details.            |
+| `downscaling`           | *n/a*                       | Specific task reduces the coarser data variables at larger scale to a smaller and finer scale of higher resolution.      |
 
 If the task falls within the category of supervised machine learning and uses labels during training,
 this should align with the `label:tasks` values defined in [STAC Label Extension][stac-ext-label-props] for relevant
 STAC Collections and Items published with the model described by this extension.
 
 It is to be noted that multiple "*generic*" tasks names (`classification`, `detection`, etc.) are defined to allow
-correspondance with `label:tasks`, but these can lead to some ambiguity depending on context. For example, a model
+correspondence with `label:tasks`, but these can lead to some ambiguity depending on context. For example, a model
 that supports `classification` could mean that the model can predict patch-based classes over an entire scene
 (i.e.: `scene-classification` for a single prediction over an entire area of interest as a whole),
 or that it can predict pixel-wise "classifications", such as land-cover labels for
