@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `variables` properties to [Model Input Object](README.md#model-input-object)
+  to allow specifying the relevant data variables used by the model,
+  with cross-references to the [datacube](https://github.com/stac-extensions/datacube) extension
+  (relates to [#90](https://github.com/stac-extensions/mlm/issues/90)).
+- Add `bands` and `variables` properties to [Model Output Object](README.md#model-output-object)
+  to allow specifying the relevant bands or variables produced by the model if any applies.
+- Add `downscaling` to [Tasks](./README.md#task-enum) as common operation for climate variable models.
 - Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
   from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
   (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).
@@ -25,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Refactor the JSON schema `mlm:output` property to employ a `ModelOutput` object definition
+  rather than directly provided properties nested under the array.
+- Refactor the JSON schema to allow the omission of `bands` under `mlm:input` if the `variables` property is provided.
 - Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
 
 ### Deprecated

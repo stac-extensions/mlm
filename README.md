@@ -295,19 +295,51 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 
 ### Model Input Object
 
-| Field Name              | Type                                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
-| ----------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name                    | string                                                   | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                                                                                                                                                                          |
-| bands                   | \[string \| [Model Band Object](#model-band-object)]     | **REQUIRED** The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of bands available in a STAC Item's [Band Object](#bands-and-statistics). If no band applies for one input, use an empty array.                                                                                                                                                       |
-| input                   | [Input Structure Object](#input-structure-object)        | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                                                                                                                                                             |
-| description             | string                                                   | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                                                                                                                                                                                                     |
-| value_scaling           | \[[Value Scaling Object](#value-scaling-object)] \| null | Method to scale, normalize, or standardize the data inputs values, across dimensions, per corresponding dimension index, or `null` if none applies. These values often correspond to dataset or sensor statistics employed for training the model, but can come from another source as needed by the model definition. Consider using `pre_processing_function` for custom implementations or more complex combinations. |
-| resize_type             | [Resize Enum](#resize-enum) \| null                      | High-level descriptor of the resize method to modify the input dimensions shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                                                                                                             |
-| pre_processing_function | [Processing Expression](#processing-expression) \| null  | Custom preprocessing function where rescaling and resize, and any other significant data preparation operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object).                                                                                                                                    |
+| Field Name              | Type                                                                 | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
+|-------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                    | string                                                               | **REQUIRED** Name of the input variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"RGB Time Series"`) can be used instead.                                                                                                                                                                                                                                          |
+| description             | string                                                               | Additional details about the input such as describing its purpose or expected source that cannot be represented by other properties.                                                                                                                                                                                                                                                                                     |
+| bands                   | \[string \| [Model Band Object](#model-band-or-variable-object)]     | **REQUIRED**\* <sup>[\[1\]][note-inputs]</sup> The raster band references used to train, fine-tune or perform inference with the model, which may be all or a subset of [Band Object](#bands-and-statistics). If none applies for the input, use an empty array.                                                                                                                                                         |
+| variables               | \[string \| [Model Variable Object](#model-band-or-variable-object)] | **REQUIRED**\* <sup>[\[1\]][note-inputs]</sup> The data variable references used to train, fine-tune or perform inference with the model, which may be all or a subset of [Data Variables](#data-variables). If none applies for the input, use an empty array.                                                                                                                                                          |
+| input                   | [Input Structure Object](#input-structure-object)                    | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                                                                                                                                                             |
+| value_scaling           | \[[Value Scaling Object](#value-scaling-object)] \| null             | Method to scale, normalize, or standardize the data inputs values, across dimensions, per corresponding dimension index, or `null` if none applies. These values often correspond to dataset or sensor statistics employed for training the model, but can come from another source as needed by the model definition. Consider using `pre_processing_function` for custom implementations or more complex combinations. |
+| resize_type             | [Resize Enum](#resize-enum) \| null                                  | High-level descriptor of the resize method to modify the input dimensions shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                                                                                                             |
+| pre_processing_function | [Processing Expression](#processing-expression) \| null              | Custom preprocessing function where rescaling and resize, and any other significant data preparation operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object).                                                                                                                                    |
 
-Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
-However, setting `null` explicitly when this information is known by the model provider can help users understand
-what is the expected behavior of the model. It is therefore recommended to provide `null` explicitly when applicable.
+<!-- lint disable no-undefined-references -->
+
+> [!TIP]
+> Fields that accept the `null` value can be considered `null` when omitted entirely for parsing purposes.
+> However, setting `null` explicitly when this information is known by the model provider can help users understand
+> what is the expected behavior of the model. It is therefore recommended to provide `null` explicitly when applicable.
+
+<!-- lint enable no-undefined-references -->
+
+[note-inputs]: #bands-and-variables
+
+#### Bands and Variables
+
+<!-- lint disable no-undefined-references -->
+
+> [!IMPORTANT]
+> Either one of the `bands` or `variables` field is required for each [Model Input Object](#model-input-object).
+> If one is provided, the other can be omitted entirely. However, both can also be used simultaneously if that is
+> relevant for better clarity of the model definition. In such case, distinct names should be employed to distinguish
+> between the two references.
+> If none apply to the input being described, it is recommended to set both of them explicitly to an empty array (`[]`).
+
+> [!IMPORTANT]
+> The order of elements within `bands` and `variables` fields is important, 
+> notably when the [Input Structure Object](#input-structure-object) references `"bands"` and/or `"variables"`
+> as dimensions of stacked bands/variables within its [Dimension Order](#dimension-order) property.
+
+> [!NOTE]
+> For convenience, each item in `bands` and `variables` can be defined directly as a single `string` value or using an
+> explicit [Model Band or Variable Object](#model-band-or-variable-object) with a `name` property. In each case, the
+> implicit or explicit `name` should map to a corresponding [Band Object](#bands-and-statistics)
+> or [Data Variable](#data-variables) as applicable, with further metadata describing them.
+
+<!-- lint enable no-undefined-references -->
 
 #### Bands and Statistics
 
@@ -389,13 +421,40 @@ unavailable from [Band Statistics][stac-1.1-stats], such as `value`-specific sca
 
 [stac-band-names]: https://github.com/stac-extensions/eo#common-band-names
 
-#### Model Band Object
+#### Data Variables
 
-| Field Name | Type   | Description                                                                                                                            |
-| ---------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------- |
-| name       | string | **REQUIRED** Name of the band referring to an extended band definition (see [Bands](#bands-and-statistics) details).                   |
-| format     | string | The type of expression that is specified in the `expression` property.                                                                 |
-| expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given. |
+Defining a `variables` array in [Model Input Object](#model-input-object) allows to reference extended data variables
+definitions that better describe the structure of the data the model expects as input. Similarly, `variables` applied
+in [Model Output Object](#model-output-object) describes specific variables produced by a model output.
+
+The variable `name` referenced in the [Model Variable Object](#model-band-or-variable-object) should directly
+reference to a corresponding key of the [`cube:variables`][datacube-fields] mapping.
+The [Variable Object][datacube-variable-object] under each [`cube:variables`][datacube-fields] key should conform
+to the STAC [datacube][datacube] extension.
+
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
+> Because each [Variable Object][datacube-variable-object] **requires** a ``dimensions`` property, the corresponding
+> [`cube:dimensions`][datacube-fields] mapping should also be provided in the STAC Item definition containing the
+> MLM metadata.
+
+<!-- lint enable no-undefined-references -->
+
+An example of `variables` applied to a model definition
+is provided in [examples/item_datacube_variables.json](examples/item_datacube_variables.json).
+
+[datacube]: https://github.com/stac-extensions/datacube
+[datacube-fields]: https://github.com/stac-extensions/datacube?tab=readme-ov-file#fields
+[datacube-variable-object]: https://github.com/stac-extensions/datacube?tab=readme-ov-file#variable-object
+
+#### Model Band or Variable Object
+
+| Field Name | Type   | Description                                                                                                                                                      |
+| ---------- | ------ |------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name       | string | **REQUIRED** Name of the band or variable referring to an extended definition (see [Bands](#bands-and-statistics) and [Data Variable](#data-variables) details). |
+| format     | string | The type of expression that is specified in the `expression` property.                                                                                           |
+| expression | \*     | An expression compliant with the `format` specified. The expression can be applied to any data type and depends on the `format` given.                           |
 
 <!-- lint disable no-undefined-references -->
 
@@ -407,24 +466,48 @@ unavailable from [Band Statistics][stac-1.1-stats], such as `value`-specific sca
 
 The `format` and `expression` properties can serve multiple purpose.
 
-1. Applying a band-specific pre-processing step,
-   in contrast to [`pre_processing_function`](#model-input-object) applied over all bands.
-   For example, reshaping a band to align its dimensions with other bands before stacking them.
+1. Applying a pre-processing step to a specific *input* band or variable,
+   in contrast to [`pre_processing_function`](#model-input-object) applied over all bands and variables.
+   For example, reshaping a band to align its dimensions with other bands before stacking them,
+   or realigning a data variable over a common spatio-temporal grid. 
 
-2. Defining a derived-band operation or a calculation that produces a virtual band from other band references.
-   For example, computing an indice that applies an arithmetic combination of other bands.
+2. Applying a post-processing step to a specific *output* band or variable,
+   in contrast to [`post_processing_function`](#model-output-object) applied over all bands and variables.
+   For example, applying an inverse normalization operation to rescale outputs to physical properties.
 
-For a concrete example, see [examples/item_bands_expression.json](examples/item_bands_expression.json).
+3. Defining a derived-data operation or manipulation that produces a virtual band or prepares variable references.
+   For example, computing an index that applies an arithmetic combination of multiple bands (e.g.: NDVI), or decoupling
+   a specific sub-axis of an auxiliary data variable.
+
+4. Referring to a custom script or function that performs more complex data preparation 
+  or that requires a dedicated runtime environment and software dependencies.
+
+<!-- lint disable no-undefined-references -->
+
+> [!HINT]
+> For examples using expressions referring to custom Python scripts, Docker images or file URIs,
+> see [stac-extensions/processing#31](https://github.com/stac-extensions/processing/issues/31)
+> and [stac-extensions/mlm#28](https://github.com/stac-extensions/mlm/issues/28).
+> 
+> For concrete examples in the context of MLM, see:
+> - [examples/item_bands_expression.json](examples/item_bands_expression.json)
+> - [examples/item_datacube_variables.json](examples/item_datacube_variables.json)
+
+<!-- lint enable no-undefined-references -->
 
 #### Data Type Enum
 
-When describing the `data_type` provided by a [Band](#bands-and-statistics), whether for defining
-the [Input Structure](#input-structure-object) or the [Result Structure](#result-structure-object),
-the [Data Types from the STAC Raster extension][raster-data-types] should be used if using STAC 1.0 or earlier,
+When describing the `data_type` provided by a [Band](#bands-and-statistics) or [Variable](#data-variables), 
+whether for defining the [Input Structure](#input-structure-object) or the [Result Structure](#result-structure-object),
+the [Data Types from the STAC Raster extension][raster-data-types] 
+and [Data Types from the STAC DataCube Extension][datacube-data-types]
+should be used respectively if using STAC 1.0 or earlier,
 and can use [Data Types from STAC 1.1 Core][stac-1.1-data-types] for later versions.
-Both definitions should define equivalent values.
+All definitions should define equivalent and interchangeable `data_type` values.
 
 [raster-data-types]: https://github.com/stac-extensions/raster?tab=readme-ov-file#data-types
+
+[datacube-data-types]: https://github.com/stac-extensions/datacube?tab=readme-ov-file#variable-object
 
 [stac-1.1-data-types]: https://github.com/radiantearth/stac-spec/blob/bands/item-spec/common-metadata.md#data-types
 
@@ -448,12 +531,19 @@ that could need to resolve the dimension ordering for reshaping requirements acc
 
 Below are some notable common names recommended for use, but others can be employed as needed.
 
-- `batch`
-- `channel`
-- `time`
-- `height`
-- `width`
-- `depth`
+- `batch` (`B`)
+- `channel` (`C`)
+- `bands` (referring to multiple [Band Object](#model-band-or-variable-object) definitions)
+- `variables` (referring to multiple [Variable Object](#model-band-or-variable-object) definitions)
+- `temperature` (`T`)
+- `pressure` (`P`)
+- `time` (`t`)
+- `latitude` (`lat`)
+- `longitude` (`lon`)
+- `altitude` (`alt`)
+- `height` (`h`)
+- `width` (`w`)
+- `depth` (`D`)
 - `token`
 - `class`
 - `score`
@@ -574,20 +664,33 @@ the following formats are recommended as alternative scripts and function refere
 
 ### Model Output Object
 
-| Field Name               | Type                                                    | Description                                                                                                                                                                     |
-| ------------------------ | ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name                     | string                                                  | **REQUIRED** Name of the output variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"CLASSIFICATION"`) can be used instead. |
-| tasks                    | \[[Task Enum](#task-enum)]                              | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.  |
-| result                   | [Result Structure Object](#result-structure-object)     | **REQUIRED** The structure that describes the resulting output arrays/tensors from one model head.                                                                              |
-| description              | string                                                  | Additional details about the output such as describing its purpose or expected result that cannot be represented by other properties.                                           |
-| classification:classes   | \[[Class Object](#class-object)]                        | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                          |
-| post_processing_function | [Processing Expression](#processing-expression) \| null | Custom postprocessing function where normalization, rescaling, or any other significant operations takes place.                                                                 |
+| Field Name               | Type                                                                 | Description                                                                                                                                                                                            |
+|--------------------------|----------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| name                     | string                                                               | **REQUIRED** Name of the output variable defined by the model. If no explicit name is defined by the model, an informative name (e.g.: `"CLASSIFICATION"`) can be used instead.                        |
+| description              | string                                                               | Additional details about the output such as describing its purpose or expected result that cannot be represented by other properties.                                                                  |
+| tasks                    | \[[Task Enum](#task-enum)]                                           | **REQUIRED** Specifies the Machine Learning tasks for which the output can be used for. This can be a subset of `mlm:tasks` defined under the Item `properties` as applicable.                         |
+| result                   | [Result Structure Object](#result-structure-object)                  | **REQUIRED** The structure that describes the resulting output arrays/tensors from one model head.                                                                                                     |
+| bands                    | \[string \| [Model Band Object](#model-band-or-variable-object)]     | If applicable, raster band references produced by the model, which may be all or a subset of [Band Object](#bands-and-statistics). Can be omitted or set explicitly to an empty array if none applies. |
+| variables                | \[string \| [Model Variable Object](#model-band-or-variable-object)] | If applicable, data variable references produced by the model, which may be all or a subset of [Data Variables](#data-variables). Can be omitted or set explicitly to an empty array if none applies.  |
+| classification:classes   | \[[Class Object](#class-object)]                                     | A list of class objects adhering to the [Classification Extension](https://github.com/stac-extensions/classification).                                                                                 |
+| post_processing_function | [Processing Expression](#processing-expression) \| null              | Custom postprocessing function where normalization, rescaling, or any other significant operations takes place.                                                                                        |
 
-While only `tasks` is a required field, all fields are recommended for tasks that produce a fixed
-shape tensor and have output classes. Outputs that have variable dimensions, can define the `result` with the
-appropriate dimension value `-1` in the `shape` field. When the model does not produce specific classes, such
-as for `regression`, `image-captioning`, `super-resolution` and some `generative` tasks, to name a few, the
-`classification:classes` can be omitted.
+While only `tasks` and `result` are required, all fields are recommended for tasks that produce a fixed
+shape tensor and have output classes. Outputs that have variable dimension sizes can define the `result` with the
+appropriate dimension value `-1` in the `shape` field, such as when a model automatically handles predictions over 
+of multiple samples in variable batch size. If the batch is fixed, the `shape` should include that value explicitly.
+
+When the model does not produce specific classes, such as for `regression`, `image-captioning`, `super-resolution`
+and some `generative` tasks, to name a few, the `classification:classes` can be omitted.
+
+<!-- lint disable no-undefined-references -->
+
+> [!IMPORTANT]
+> The order of elements within `bands` and `variables` fields is important, 
+> notably when the [Result Structure Object](#result-structure-object) references `"bands"` and/or `"variables"`
+> as dimensions of stacked bands/variables within its [Dimension Order](#dimension-order) property.
+
+<!-- lint enable no-undefined-references -->
 
 #### Result Structure Object
 

@@ -6,19 +6,19 @@ of your model and make life easier for client tooling and users. They come about
 implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their
 models or creating tools to work with STAC.
 
-- [ML Model Extension Best Practices](#ml-model-extension-best-practices)
-  - [Using STAC Common Metadata Fields for the ML Model Extension](#using-stac-common-metadata-fields-for-the-ml-model-extension)
-  - [Recommended Extensions to Compose with the ML Model Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
-    - [Processing Extension](#processing-extension)
-    - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
-    - [Classification Extension](#classification-extension)
-    - [Scientific Extension](#scientific-extension)
-    - [File Extension](#file-extension)
-    - [Example Extension](#example-extension)
-    - [Version Extension](#version-extension)
-  - [Framework Specific Artifact Types](#framework-specific-artifact-types)
+- [Using STAC Common Metadata Fields for the MLM Extension](#using-stac-common-metadata-fields-for-the-mlm-extension)
+- [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
+  - [STAC Bands, EO, Raster and DataCube Extensions](#stac-bands-eo-raster-and-datacube-extensions)
+  - [Processing Extension](#processing-extension)
+  - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
+  - [Classification Extension](#classification-extension)
+  - [Scientific Extension](#scientific-extension)
+  - [File Extension](#file-extension)
+  - [Example Extension](#example-extension)
+  - [Version Extension](#version-extension)
+- [Framework Specific Artifact Types](#framework-specific-artifact-types)
 
-## Using STAC Common Metadata Fields for the ML Model Extension
+## Using STAC Common Metadata Fields for the MLM Extension
 
 It is recommended to use the `start_datetime` and `end_datetime`, `geometry`, and `bbox` in a STAC Item,
 and the corresponding
@@ -67,7 +67,26 @@ If specific datasets with training/validation/test splits are known to support t
 the model, it is recommended that they are included as reference to the STAC Item/Collection using MLM. For more
 information regarding these references, see the [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) details.
 
-## Recommended Extensions to Compose with the ML Model Extension
+## Recommended Extensions to Compose with the MLM Extension
+
+### STAC Bands, EO, Raster and DataCube Extensions
+
+When a model takes as input or produces as output raster bands, spatio-temporal data variables or leverages 
+Earth Observation data, it is **STRONGLY RECOMMENDED** to use a corresponding STAC Core or Extension specification
+to describe them. This ensures that common metadata fields can be used both for search and retrieval of available
+data provided by catalogues, as well as for models using or producing them.
+
+Relevant extensions include:
+
+- [STAC Common Metadata Bands][]
+
+For further details on how to use thse extensions in the context of the Machine Learning Model extension,
+please refer to the corresponding sections:
+
+- [Model Input Object](./README.md#model-input-object)
+- [Model Output Object](./README.md#model-output-object)
+- [Bands and Statistics](./README.md#bands-and-statistics)
+- [Data Variables](./README.md#data-variables)
 
 ### Processing Extension
 
