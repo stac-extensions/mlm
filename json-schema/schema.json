@@ -136,22 +136,24 @@
         }
       }
     },
+    "stac_extensions_datacube_variables_field": {
+      "type": "object",
+      "required": [
+        "cube:variables"
+      ],
+      "properties": {
+        "cube:variables": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": true
+        }
+      }
+    },
     "stac_extensions_datacube_variables_item": {
       "$comment": "This is the JSON-object 'properties' definition, which describes the STAC-Item field named 'properties' containing 'cube:variables' as described in [https://github.com/stac-extensions/datacube#fields].",
       "properties": {
         "properties": {
-          "required": [
-            "cube:variables"
-          ],
-          "properties": {
-            "cube:variables": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "type": "object"
-              }
-            }
-          }
+          "$ref": "#/$defs/stac_extensions_datacube_variables_field"
         }
       }
     },
@@ -167,18 +169,7 @@
               "$ref": "#/$defs/AssetModelRole"
             },
             "then": {
-              "required": [
-                "cube:variables"
-              ],
-              "properties": {
-                "cube:variables": {
-                  "type": "array",
-                  "minItems": 1,
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
+              "$ref": "#/$defs/stac_extensions_datacube_variables_field"
             }
           }
         }

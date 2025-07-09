@@ -95,86 +95,86 @@
           "data_type": "float32"
         }
       }
+    ],
+    "cube:dimensions": {
+      "time": {
+        "type": "temporal",
+        "extent": [
+          "1940-01-01T00:00:00Z",
+          "2100-12-31T23:59:59Z"
+        ],
+        "step": "P1H"
+      },
+      "lat": {
+        "type": "spatial",
+        "extent": [
+          54.2,
+          22.6
+        ],
+        "axis": "y"
+      },
+      "lon": {
+        "type": "spatial",
+        "extent": [
+          233.6,
+          297.5
+        ],
+        "axis": "x"
+      }
+    },
+    "cube:variables": {
+      "land_sea_mask": {
+        "shortname": "lsm",
+        "description": "Proportion of land-sea, where 1 indicates land and 0 indicates sea.",
+        "type": "data",
+        "data_type": "float32",
+        "extent": [0, 1],
+        "dimensions": ["lat", "lon"],
+        "definition": "https://codes.ecmwf.int/grib/param-db/172"
+      },
+      "geopotential": {
+        "shortname": "z",
+        "description": "This parameter is the geopotential, which is the potential energy per unit mass at a point in the atmosphere, expressed in metres squared per second squared (m² s⁻²). It is a measure of the height of a point in the atmosphere relative to sea level.",
+        "type": "data",
+        "data_type": "float32",
+        "unit": "m² s-2",
+        "dimensions": ["lat", "lon"],
+        "definition": "https://codes.ecmwf.int/grib/param-db/129"
+      },
+      "2m_temperature": {
+        "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
+        "type": "data",
+        "data_type": "float32",
+        "unit": "K",
+        "dimensions": ["time", "lat", "lon"],
+        "definition": "https://codes.ecmwf.int/grib/param-db/167"
+      },
+      "10m_u_component_of_wind": {
+        "shortname": "10u",
+        "description": "This parameter is the eastward component of the 10m wind. It is the horizontal speed of air moving towards the east, at a height of ten metres above the surface of the Earth, in metres per second.",
+        "type": "data",
+        "data_type": "float32",
+        "unit": "m s-1",
+        "dimensions": ["time", "lat", "lon"],
+        "definition": "https://codes.ecmwf.int/grib/param-db/165"
+      },
+      "10m_v_component_of_wind": {
+        "shortname": "10v",
+        "description": "This parameter is the northward component of the 10m wind. It is the horizontal speed of air moving towards the north, at a height of ten metres above the surface of the Earth, in metres per second.",
+        "type": "data",
+        "data_type": "float32",
+        "unit": "m s-1",
+        "dimensions": ["time", "lat", "lon"],
+        "definition": "https://codes.ecmwf.int/grib/param-db/166"
+      }
+    },
+    "sci:publications": [
+      {
+        "doi": "10.48550/arXiv.2404.17752",
+        "citation": "Robbie A. Watt, Laura A. Mansfield, Generative Diffusion-based Downscaling for Climate"
+      }
     ]
   },
-  "cube:dimensions": {
-    "time": {
-      "type": "temporal",
-      "extent": [
-        "1940-01-01T00:00:00Z",
-        "2100-12-31T23:59:59Z"
-      ],
-      "step": "P1H"
-    },
-    "lat": {
-      "type": "spatial",
-      "extent": [
-        54.2,
-        22.6
-      ],
-      "axis": "y"
-    },
-    "lon": {
-      "type": "spatial",
-      "extent": [
-        233.6,
-        297.5
-      ],
-      "axis": "x"
-    }
-  },
-  "cube:variables": {
-    "land_sea_mask": {
-      "shortname": "lsm",
-      "description": "Proportion of land-sea, where 1 indicates land and 0 indicates sea.",
-      "type": "data",
-      "data_type": "float32",
-      "extent": [0, 1],
-      "dimensions": ["lat", "lon"],
-      "definition": "https://codes.ecmwf.int/grib/param-db/172"
-    },
-    "geopotential": {
-      "shortname": "z",
-      "description": "This parameter is the geopotential, which is the potential energy per unit mass at a point in the atmosphere, expressed in metres squared per second squared (m² s⁻²). It is a measure of the height of a point in the atmosphere relative to sea level.",
-      "type": "data",
-      "data_type": "float32",
-      "unit": "m² s-2",
-      "dimensions": ["lat", "lon"],
-      "definition": "https://codes.ecmwf.int/grib/param-db/129"
-    },
-    "2m_temperature": {
-      "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
-      "type": "data",
-      "data_type": "float32",
-      "unit": "K",
-      "dimensions": ["time", "lat", "lon"],
-      "definition": "https://codes.ecmwf.int/grib/param-db/167"
-    },
-    "10m_u_component_of_wind": {
-      "shortname": "10u",
-      "description": "This parameter is the eastward component of the 10m wind. It is the horizontal speed of air moving towards the east, at a height of ten metres above the surface of the Earth, in metres per second.",
-      "type": "data",
-      "data_type": "float32",
-      "unit": "m s-1",
-      "dimensions": ["time", "lat", "lon"],
-      "definition": "https://codes.ecmwf.int/grib/param-db/165"
-    },
-    "10m_v_component_of_wind": {
-      "shortname": "10v",
-      "description": "This parameter is the northward component of the 10m wind. It is the horizontal speed of air moving towards the north, at a height of ten metres above the surface of the Earth, in metres per second.",
-      "type": "data",
-      "data_type": "float32",
-      "unit": "m s-1",
-      "dimensions": ["time", "lat", "lon"],
-      "definition": "https://codes.ecmwf.int/grib/param-db/166"
-    }
-  },
-  "sci:publications": [
-    {
-      "doi": "10.48550/arXiv.2404.17752",
-      "citation": "Robbie A. Watt, Laura A. Mansfield, Generative Diffusion-based Downscaling for Climate"
-    }
-  ],
   "assets": {
     "weights": {
       "href": "https://github.com/robbiewatt1/ClimateDiffuse/raw/refs/heads/main/Model_chpt/unet.pt",
