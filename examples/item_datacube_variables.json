@@ -10,10 +10,38 @@
   "type": "Feature",
   "id": "UNet_ClimateDiffuse_ERA5_Downscaling",
   "collection": "ml-model-examples",
-  "bbox": [233.6, 54.2, 297.5, 22.6],
+  "bbox": [
+    233.6,
+    54.2,
+    297.5,
+    22.6
+  ],
   "geometry": {
     "type": "Polygon",
-    "coordinates": [[[233.6, 54.2], [297.5, 54.2], [297.5, 22.6], [233.6, 22.6], [233.6, 54.2]]]
+    "coordinates": [
+      [
+        [
+          233.6,
+          54.2
+        ],
+        [
+          297.5,
+          54.2
+        ],
+        [
+          297.5,
+          22.6
+        ],
+        [
+          233.6,
+          22.6
+        ],
+        [
+          233.6,
+          54.2
+        ]
+      ]
+    ]
   },
   "properties": {
     "description": "UNet model for coarse-to-fine downscaling as regression task of climate indices of ERA5 dataset.",
@@ -128,8 +156,14 @@
         "description": "Proportion of land-sea, where 1 indicates land and 0 indicates sea.",
         "type": "data",
         "data_type": "float32",
-        "extent": [0, 1],
-        "dimensions": ["lat", "lon"],
+        "extent": [
+          0,
+          1
+        ],
+        "dimensions": [
+          "lat",
+          "lon"
+        ],
         "definition": "https://codes.ecmwf.int/grib/param-db/172"
       },
       "geopotential": {
@@ -138,7 +172,10 @@
         "type": "data",
         "data_type": "float32",
         "unit": "m² s-2",
-        "dimensions": ["lat", "lon"],
+        "dimensions": [
+          "lat",
+          "lon"
+        ],
         "definition": "https://codes.ecmwf.int/grib/param-db/129"
       },
       "2m_temperature": {
@@ -146,7 +183,11 @@
         "type": "data",
         "data_type": "float32",
         "unit": "K",
-        "dimensions": ["time", "lat", "lon"],
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
         "definition": "https://codes.ecmwf.int/grib/param-db/167"
       },
       "10m_u_component_of_wind": {
@@ -155,7 +196,11 @@
         "type": "data",
         "data_type": "float32",
         "unit": "m s-1",
-        "dimensions": ["time", "lat", "lon"],
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
         "definition": "https://codes.ecmwf.int/grib/param-db/165"
       },
       "10m_v_component_of_wind": {
@@ -164,7 +209,11 @@
         "type": "data",
         "data_type": "float32",
         "unit": "m s-1",
-        "dimensions": ["time", "lat", "lon"],
+        "dimensions": [
+          "time",
+          "lat",
+          "lon"
+        ],
         "definition": "https://codes.ecmwf.int/grib/param-db/166"
       }
     },
