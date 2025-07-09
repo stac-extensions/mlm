@@ -178,14 +178,14 @@ The fields in the table below can be used in these parts of STAC documents:
 <!-- lint enable no-undefined-references -->
 
 In addition, fields from the multiple relevant extensions should be defined as applicable. See
-[Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-ml-model-extension)
+[Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-mlm-extension)
 for more details.
 
 For the [Extent Object][stac-extent]
 in STAC Collections and the corresponding spatial and temporal fields in Items, please refer to section
 [Best Practices - Using STAC Common Metadata Fields for the ML Model Extension][stac-mlm-meta].
 
-[stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension
+[stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-mlm-extension
 
 [stac-extent]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object
 
@@ -304,7 +304,7 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 | input                   | [Input Structure Object](#input-structure-object)                    | **REQUIRED** The N-dimensional array definition that describes the shape, dimension ordering, and data type.                                                                                                                                                                                                                                                                                                             |
 | value_scaling           | \[[Value Scaling Object](#value-scaling-object)] \| null             | Method to scale, normalize, or standardize the data inputs values, across dimensions, per corresponding dimension index, or `null` if none applies. These values often correspond to dataset or sensor statistics employed for training the model, but can come from another source as needed by the model definition. Consider using `pre_processing_function` for custom implementations or more complex combinations. |
 | resize_type             | [Resize Enum](#resize-enum) \| null                                  | High-level descriptor of the resize method to modify the input dimensions shape. Select an appropriate option or `null` when none applies. Consider using `pre_processing_function` for custom implementations or more complex combinations.                                                                                                                                                                             |
-| pre_processing_function | [Processing Expression](#processing-expression) \| null              | Custom preprocessing function where rescaling and resize, and any other significant data preparation operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-object).                                                                                                                                    |
+| pre_processing_function | [Processing Expression](#processing-expression) \| null              | Custom preprocessing function where rescaling and resize, and any other significant data preparation operations takes place. The `pre_processing_function` should be applied over all available `bands`. For respective band operations, see [Model Band Object](#model-band-or-variable-object).                                                                                                                        |
 
 <!-- lint disable no-undefined-references -->
 
@@ -384,7 +384,7 @@ and [Common Band Names][stac-band-names].
 
 Only bands used as input to the model should be included in the MLM `bands` field.
 To avoid duplicating the information, MLM only uses the `name` of whichever "Band Object" is defined in the STAC Item.
-An input's `bands` definition can either be a plain `string` or a [Model Band Object](#model-band-object).
+An input's `bands` definition can either be a plain `string` or a [Model Band Object](#model-band-or-variable-object).
 When a `string` is employed directly, the value should be implicitly mapped to the `name` property of the
 explicit object representation.
 
