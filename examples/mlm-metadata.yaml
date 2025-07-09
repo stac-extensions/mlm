@@ -1,0 +1,39 @@
+name: Unet
+architecture: Unet
+artifact_type: torch.export.save
+framework: torch
+framework_version: 2.7.0
+accelerator: cuda
+total_parameters: 1234567
+tasks: [semantic-segmentation]
+input:
+  - name: Imagery
+    bands: [red, blue, green]
+    input:
+      shape: [-1, 3, 512, 512]
+      dim_order: [batch, channel, height, width]
+      data_type: float32
+      res: 0.1
+    pre_processing_function:
+      format: pt2-exported-program
+      expression: transforms
+output:
+  - name: segmentation-output
+    tasks: ["semantic-segmentation"]
+    result:
+      shape: [-1, 6, 512, 512]
+      dim_order: [batch, classes, height, width]
+      data_type: float32
+    classification:classes:
+      - value: 0
+        name: Class 0
+      - value: 1
+        name: Class 1
+      - value: 2
+        name: Class 2
+      - value: 3
+        name: Class 3
+      - value: 4
+        name: Class 4
+      - value: 5
+        name: Class 5
