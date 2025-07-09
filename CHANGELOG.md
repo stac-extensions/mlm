@@ -47,7 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- Fix missing ``encoding="utf-8"`` parameters in `open` calls leading to failing parsing of example JSON STAC Item
+  when they contain non-ASCII characters.
 
 ## [v1.4.0](https://github.com/stac-extensions/mlm/tree/v1.4.0)
 
