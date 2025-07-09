@@ -9,6 +9,9 @@ ifneq ($(findstring $(PYTHON_PATH),bin/python),)
 else
 	PYTHON_ROOT := $(shell dirname $(PYTHON_PATH))
 endif
+ifeq ($(patsubst %/bin,,$(lastword $(PYTHON_ROOT))),)
+  PYTHON_ROOT := $(dir $(PYTHON_ROOT))
+endif
 UV_PYTHON_ROOT ?= $(PYTHON_ROOT)
 
 # to actually reuse an existing virtual/conda environment, the 'UV_PROJECT_ENVIRONMENT' variable must be set to it
