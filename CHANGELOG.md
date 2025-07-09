@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Refactor the JSON schema to check for `bands` and `variables` references within both `mlm:input` and `mlm:output`.
+  If either location detects that either `bands` or `variables` is provided, their corresponding sets of extensions
+  providing relevant descriptions are verified.
 - Refactor the JSON schema `mlm:output` property to employ a `ModelOutput` object definition
   rather than directly provided properties nested under the array.
 - Refactor the JSON schema to allow the omission of `bands` under `mlm:input` if the `variables` property is provided.
