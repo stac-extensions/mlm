@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Any, cast
 
 import pystac
 import pytest
+import yaml
 
 from stac_model.base import JSON
 from stac_model.examples import eurosat_resnet as make_eurosat_resnet
@@ -60,7 +61,12 @@ def mlm_validator(
 @pytest.fixture
 def mlm_example(request: "SubRequest") -> dict[str, JSON]:
     with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
-        data = json.load(example_file)
+        if request.param.endswith(".json"):
+            data = json.load(example_file)
+        elif request.param.endswith(".yaml"):
+            data = yaml.safe_load(example_file)
+        else:
+            raise ValueError(f"Unsupported file format for example: {request.param}")
     return cast(dict[str, JSON], data)
 
 

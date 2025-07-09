@@ -8,7 +8,7 @@ from jsonschema.exceptions import ValidationError
 from pystac.validation.stac_validator import STACValidator
 
 from stac_model.base import JSON
-from stac_model.schema import SCHEMA_URI
+from stac_model.schema import SCHEMA_URI, MLModelProperties
 
 from conftest import get_all_stac_item_examples
 
@@ -353,3 +353,12 @@ def test_collection_include_all_items(mlm_example):
     col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
     all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
     assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["mlm-metadata.yaml"],
+    indirect=True,
+)
+def test_mlm_metadata_only_yaml_validation(mlm_example):
+    MLModelProperties.model_validate(mlm_example)
