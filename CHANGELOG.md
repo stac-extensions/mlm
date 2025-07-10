@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `ModelDataVariable` to `stac_model`. 
+- Add `ModelDataVariable` to `stac_model` for corresponding `mlm:input` and `mlm:output` definitions as the JSON schema.
 - Add `variables` properties to [Model Input Object](README.md#model-input-object)
   to allow specifying the relevant data variables used by the model,
   with cross-references to the [datacube](https://github.com/stac-extensions/datacube) extension
@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
  
 - Update `stac-model==0.4.0` to provide corresponding additions for `variables` reference.
+- Refactor `ModelInput` and `ModelOutput` objects to use a new `ModelBandsOrVariablesReferences` definition
+  combining the `ModelBand` and `ModelDataVariable` lists.
 - Moved `ModelBand` from `stac_model.input` to `stac_model.base` since it is now required
   by both `ModelInput` and `ModelOutput` objects.
 - Refactor the JSON schema to check for `bands` and `variables` references within both `mlm:input` and `mlm:output`.
