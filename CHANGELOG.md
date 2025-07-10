@@ -50,6 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix `stac_model.output.ModelOutput` enforcing the need to specify `classification:classes` or `classes`.
+  The property can now be omitted if the model does not need to indicate that it produces a classification output.
 - Fix missing ``encoding="utf-8"`` parameters in `open` calls leading to failing parsing of example JSON STAC Item
   when they contain non-ASCII characters.
 

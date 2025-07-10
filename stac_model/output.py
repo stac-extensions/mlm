@@ -86,9 +86,10 @@ class ModelOutput(MLMBaseModel):
     #   it is more important to keep the order in this case,
     #   which we would lose with 'Set'.
     #   We also get some unhashable errors with 'Set', although 'MLMClassification' implements '__hash__'.
-    classes: Annotated[list[MLMClassification], OmitIfNone] = Field(
+    classes: Annotated[list[MLMClassification] | None, OmitIfNone] = Field(
         alias="classification:classes",
         validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
+        default=None,
     )
     post_processing_function: ProcessingExpression | None = None
 
