@@ -18,7 +18,7 @@ def make_struct(model_class: ModelClass, refs: Sized) -> dict[str, Any]:
         struct_field = "input"
         struct_xargs = {}
     else:
-        struct_class = ModelResult
+        struct_class = ModelResult  # type: ignore[assignment]
         struct_field = "result"
         struct_xargs = {"tasks": ["classification"]}
     struct = struct_class(
@@ -121,7 +121,7 @@ class Omitted:
 
 @pytest.mark.parametrize(
     ["model_class", "bands", "variables", "expected_bands", "expected_variables"],
-    [
+    [  # type: ignore
         (model_cls, *args)
         for model_cls, args in itertools.product(
             [ModelInput, ModelOutput],
@@ -142,7 +142,13 @@ class Omitted:
         )
     ],
 )
-def test_model_bands_or_variables_defaults(model_class, bands, variables, expected_bands, expected_variables) -> None:
+def test_model_bands_or_variables_defaults(
+    model_class: ModelClass,
+    bands: Any,
+    variables: Any,
+    expected_bands: Any,
+    expected_variables: Any,
+) -> None:
     mlm_xargs = {}
     if bands is not Omitted:
         mlm_xargs["bands"] = bands
