@@ -197,7 +197,7 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "E501"]
+ignore = ["UP007", "UP015", "E501"]
 exclude = [
     ".git",
     "__pycache__",

@@ -1,5 +1,6 @@
 import itertools
-from typing import Any, Sized, Type
+from collections.abc import Sized
+from typing import Any
 
 import pydantic
 import pytest
@@ -8,7 +9,7 @@ from stac_model.base import ModelBand, ModelDataVariable
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import ModelOutput, ModelResult
 
-ModelClass = Type[ModelInput | ModelOutput]
+ModelClass = type[ModelInput | ModelOutput]
 
 
 def make_struct(model_class: ModelClass, refs: Sized) -> dict[str, Any]:
