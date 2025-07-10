@@ -3,7 +3,14 @@ from typing import Annotated, Any, cast
 from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
 
-from stac_model.base import DataType, MLMBaseModel, ModelTask, OmitIfNone, ProcessingExpression
+from stac_model.base import (
+    DataType,
+    MLMBaseModel,
+    ModelBandsOrVariablesReferences,
+    ModelTask,
+    OmitIfNone,
+    ProcessingExpression,
+)
 
 
 class ModelResult(MLMBaseModel):
@@ -76,7 +83,7 @@ class MLMClassification(MLMBaseModel, Classification):
 #     nodata: Optional[bool] = False
 
 
-class ModelOutput(MLMBaseModel):
+class ModelOutput(ModelBandsOrVariablesReferences):
     name: str
     tasks: set[ModelTask]
     result: ModelResult

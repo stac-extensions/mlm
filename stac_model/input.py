@@ -1,10 +1,16 @@
-from collections.abc import Sequence
-from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
+from typing import Annotated, Literal, Optional, TypeAlias, Union
 from typing_extensions import Self
 
 from pydantic import Field, model_validator
 
-from stac_model.base import DataType, MLMBaseModel, Number, OmitIfNone, ProcessingExpression
+from stac_model.base import (
+    DataType,
+    ModelBandsOrVariablesReferences,
+    MLMBaseModel,
+    Number,
+    OmitIfNone,
+    ProcessingExpression,
+)
 
 
 class InputStructure(MLMBaseModel):
@@ -90,54 +96,8 @@ ResizeType: TypeAlias = Optional[
 ]
 
 
-class ModelBand(MLMBaseModel):
-    name: str = Field(
-        description=(
-            "Name of the band to use for the input, "
-            "referring to the name of an entry in a 'bands' definition from another STAC extension."
-        )
-    )
-    # similar to 'ProcessingExpression', but they can be omitted here
-    format: Annotated[Optional[str], OmitIfNone] = Field(
-        default=None,
-        description="",
-    )
-    expression: Annotated[Optional[Any], OmitIfNone] = Field(
-        default=None,
-        description="",
-    )
-
-    @model_validator(mode="after")
-    def validate_expression(self) -> Self:
-        if (  # mutually dependant
-            (self.format is not None or self.expression is not None)
-            and (self.format is None or self.expression is None)
-        ):
-            raise ValueError("Model band 'format' and 'expression' are mutually dependant.")
-        return self
-
-
-class ModelInput(MLMBaseModel):
+class ModelInput(ModelBandsOrVariablesReferences):
     name: str
-    # order is critical here (same index as dim shape), allow duplicate if the model needs it somehow
-    bands: Sequence[str | ModelBand] = Field(
-        description=(
-            "List of bands that compose the input. "
-            "If a string is used, it is implied to correspond to a named-band. "
-            "If no band is needed for the input, use an empty array."
-        ),
-        examples=[
-            [
-                "B01",
-                {"name": "B02"},
-                {
-                    "name": "NDVI",
-                    "format": "rio-calc",
-                    "expression": "(B08 - B04) / (B08 + B04)",
-                },
-            ],
-        ],
-    )
     input: InputStructure
     value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
     resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
