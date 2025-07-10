@@ -661,12 +661,7 @@
     },
     "mlm:input": {
       "type": "array",
-      "items": {
-        "allOf": [
-          {"$ref": "#/$defs/ModelInput"},
-          {"$ref": "#/$defs/ModelInputBandsVariables" }
-        ]
-      }
+      "items": {"$ref": "#/$defs/ModelInput"}
     },
     "ModelInput": {
       "title": "Model Input Object",
@@ -704,21 +699,9 @@
         }
       }
     },
-    "ModelInputBandsVariables": {
-      "$comment": "Inputs can be described by either 'bands', 'variables' or both simultaneously to represent different kinds of data. Whichever one is employed, at least one must be provided, including at least an empty array when none applies.",
-      "anyOf": [
-        {"required": ["bands"]},
-        {"required": ["variables"]}
-      ]
-    },
     "mlm:output": {
       "type": "array",
-      "items": {
-        "$comment": "Contrary to inputs, 'bands' and 'variables' are not requires by outputs for backward compatibility. However, they can be supplied if applicable.",
-        "allOf": [
-          {"$ref": "#/$defs/ModelOutput"}
-        ]
-      }
+      "items": {"$ref": "#/$defs/ModelOutput"}
     },
     "ModelOutput": {
       "title": "Model Output Object",
