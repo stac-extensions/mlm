@@ -5,8 +5,8 @@ from pydantic import Field, model_validator
 
 from stac_model.base import (
     DataType,
-    ModelBandsOrVariablesReferences,
     MLMBaseModel,
+    ModelBandsOrVariablesReferences,
     Number,
     OmitIfNone,
     ProcessingExpression,

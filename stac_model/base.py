@@ -1,6 +1,8 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Annotated, Literal, Optional, Self, Sequence, TypeAlias, Union
+from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
+from typing_extensions import Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
@@ -116,6 +118,7 @@ class ProcessingExpression(MLMBaseModel):
     """
     Expression used to perform a pre-processing or post-processing step on the input or output model data.
     """
+
     # FIXME: should use 'pystac' reference, but 'processing' extension is not implemented yet!
     format: str = Field(
         description="The type of the expression that is specified in the 'expression' property.",
@@ -149,7 +152,7 @@ class ModelCrossReferenceObject(MLMBaseModel):
             "This represents the processing operation to be applied on the data before or after the model. "
             "Contrary to pre/post-processing expressions, this expression is applied only to the specific "
             "item it refers to."
-        )
+        ),
     )
 
     @model_validator(mode="after")

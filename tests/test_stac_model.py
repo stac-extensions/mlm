@@ -43,7 +43,7 @@ def make_struct(model_class: ModelClass, refs: Sized) -> dict[str, Any]:
                 {"name": "NDVI", "format": "rio-calc", "expression": "(B08 - B04) / (B08 + B04)"},
             ],
         ],
-    )
+    ),
 )
 def test_model_band(model_class: ModelClass, bands: list[ModelBand]) -> None:
     struct = make_struct(model_class, bands)
@@ -64,7 +64,7 @@ def test_model_band(model_class: ModelClass, bands: list[ModelBand]) -> None:
             [{"name": "test", "expression": "missing-format"}],
             [{"name": "test", "format": "missing-expression"}],
         ],
-    )
+    ),
 )
 def test_model_band_format_expression_dependency(model_class: ModelClass, bands: list[ModelBand]) -> None:
     with pytest.raises(pydantic.ValidationError):
@@ -139,7 +139,7 @@ class Omitted:
                 )
             ],
         )
-    ]
+    ],
 )
 def test_model_bands_or_variables_defaults(model_class, bands, variables, expected_bands, expected_variables) -> None:
     mlm_xargs = {}
