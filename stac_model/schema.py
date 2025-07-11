@@ -13,6 +13,7 @@ from typing import (
 )
 
 import pystac
+import torch.nn as nn
 from pydantic import ConfigDict, Field
 from pydantic.fields import FieldInfo
 from pystac.extensions.base import (
@@ -154,6 +155,12 @@ class MLModelExtension(
         """Returns the extended summaries object for the given collection."""
         cls.ensure_has_extension(obj, add_if_missing)
         return SummariesMLModelExtension(obj)
+
+    @classmethod
+    def from_torch(cls, model: nn.Module, **kwargs) -> "ItemMLModelExtension":
+        from stac_model.utils import from_torch
+
+        return from_torch(model, **kwargs)
 
 
 class SummariesMLModelExtension(SummariesExtension):
