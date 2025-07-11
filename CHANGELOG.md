@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add torch export and packaging utilities for combining a model, transforms, and MLM schema compliant metadata into a single `.pt2` archive.
 - Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
   from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
   (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).

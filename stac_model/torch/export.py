@@ -11,16 +11,14 @@ import yaml
 from torch.export.dynamic_shapes import Dim
 from torch.export.pt2_archive._package import package_pt2
 
-import stac_model.torch.export as export
-
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
 def package_model_and_transforms(
     output_file: str,
-    model_program: export.export.ExportedProgram,
-    transforms_program: export.export.ExportedProgram | None = None,
+    model_program: torch.export.ExportedProgram,
+    transforms_program: torch.export.ExportedProgram | None = None,
     metadata_path: str | None = None,
     aoti_compile_and_package: bool = False,
 ) -> None:
@@ -60,7 +58,7 @@ def package_model_and_transforms(
             tempfile.TemporaryDirectory() as transforms_tmpdir,
         ):
             # Package and extract transforms from pt2 archive
-            model_path = export._inductor.aoti_compile_and_package(
+            model_path = torch._inductor.aoti_compile_and_package(
                 model_program, package_path=os.path.join(archive_tmpdir, "model.pt2")
             )
 
@@ -77,7 +75,7 @@ def package_model_and_transforms(
 
             if transforms_program is not None:
                 # Package and extract transforms from pt2 archive
-                transforms_path = export._inductor.aoti_compile_and_package(
+                transforms_path = torch._inductor.aoti_compile_and_package(
                     transforms_program,
                     package_path=os.path.join(archive_tmpdir, "transforms.pt2"),
                 )
@@ -100,13 +98,13 @@ def package_model_and_transforms(
             )
 
 
-@export.no_grad()
+@torch.no_grad()
 def export_model_and_transforms(
     model: torch.nn.Module,
     transforms: torch.nn.Module,
     input_shape: Sequence[int],
-    device: export.device,
-) -> tuple[export.export.ExportedProgram, export.export.ExportedProgram]:
+    device: torch.device,
+) -> tuple[torch.export.ExportedProgram, torch.export.ExportedProgram]:
     """Exports a model and its transforms to programs.
 
     Args:
@@ -135,16 +133,16 @@ def export_model_and_transforms(
     transforms_arg = next(iter(inspect.signature(transforms.forward).parameters))
 
     # Export model and transforms
-    model_program = export.export.export(
+    model_program = torch.export.export(
         mod=model, args=(example_inputs,), dynamic_shapes={model_arg: dims}
     )
-    transforms_program = export.export.export(
+    transforms_program = torch.export.export(
         mod=transforms, args=(example_inputs,), dynamic_shapes={transforms_arg: dims}
     )
     return model_program, transforms_program
 
 
-def _create_example_input_from_shape(input_shape: Sequence[int]) -> export.Tensor:
+def _create_example_input_from_shape(input_shape: Sequence[int]) -> torch.Tensor:
     """Creates an example input tensor based on the provided input shape.
 
     Args:
@@ -183,4 +181,4 @@ def _create_example_input_from_shape(input_shape: Sequence[int]) -> export.Tenso
     else:
         shape.append(input_shape[3])
 
-    return export.randn(*shape, requires_grad=False)
+    return torch.randn(*shape, requires_grad=False)
