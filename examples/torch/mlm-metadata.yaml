@@ -13,7 +13,6 @@ input:
       shape: [-1, 3, 512, 512]
       dim_order: [batch, channel, height, width]
       data_type: float32
-      res: 0.1
     pre_processing_function:
       format: pt2-exported-program
       expression: transforms
