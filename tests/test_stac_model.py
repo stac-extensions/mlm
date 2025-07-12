@@ -81,7 +81,7 @@ def test_model_io_processing_expression_variants(processing_expression):
     model_output = ModelOutput(
         name="test",
         classes=[],
-        tasks=["classification"],
+        tasks={"classification"},
         result=ModelResult(
             shape=[-1, 2, 64, 64],
             dim_order=["batch", "channel", "height", "width"],
