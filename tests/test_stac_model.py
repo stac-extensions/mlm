@@ -2,6 +2,7 @@ import pydantic
 import pytest
 
 from stac_model.input import InputStructure, ModelBand, ModelInput
+from stac_model.output import ModelOutput, ModelResult
 
 
 @pytest.mark.parametrize(
@@ -50,3 +51,43 @@ def test_model_band_format_expression_dependency(bands: list[ModelBand]) -> None
                 data_type="float32",
             ),
         )
+
+
+@pytest.mark.parametrize(
+    "processing_expression",
+    [
+        None,
+        {"format": "test", "expression": "test"},
+        [
+            {"format": "test", "expression": "test1"},
+            {"format": "test", "expression": "test2"},
+        ]
+    ],
+)
+def test_model_io_processing_expression_variants(processing_expression):
+    model_input = ModelInput(
+        name="test",
+        bands=[],
+        input=InputStructure(
+            shape=[-1, 3, 64, 64],
+            dim_order=["batch", "channel", "height", "width"],
+            data_type="float32",
+        ),
+        pre_processing_function=processing_expression,
+    )
+    model_json = model_input.model_dump()
+    assert model_json["pre_processing_function"] == processing_expression
+
+    model_output = ModelOutput(
+        name="test",
+        classes=[],
+        tasks=["classification"],
+        result=ModelResult(
+            shape=[-1, 2, 64, 64],
+            dim_order=["batch", "channel", "height", "width"],
+            data_type="float32",
+        ),
+        post_processing_function=processing_expression,
+    )
+    model_json = model_output.model_dump()
+    assert model_json["post_processing_function"] == processing_expression
