@@ -141,4 +141,4 @@ class ModelInput(MLMBaseModel):
     input: InputStructure
     value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
     resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
-    pre_processing_function: Optional[ProcessingExpression] = None
+    pre_processing_function: Optional[ProcessingExpression | list[ProcessingExpression]] = None

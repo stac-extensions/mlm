@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `pre_processing_function` and `post_processing_function` support as JSON array 
+  of [Processing Expression](README.md#processing-expression) definitions respectively
+  for the [Model Input Object](README.md#model-input-object) and [Model Output Object](README.md#model-output-object)
+  (fixes [#93](https://github.com/stac-extensions/mlm/issues/93)).
 - Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
   from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
   (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).
