@@ -14,8 +14,11 @@ input:
       dim_order: [batch, channel, height, width]
       data_type: float32
     pre_processing_function:
-      format: pt2-exported-program
-      expression: transforms
+      format: torch.export.load
+      expression:
+        id: export-transform
+        name: transforms
+        href: "path/to/archive.pt2"
 output:
   - name: segmentation-output
     tasks: ["semantic-segmentation"]

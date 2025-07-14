@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from stac_model.schema import MLModelProperties
@@ -5,7 +7,7 @@ from stac_model.schema import MLModelProperties
 
 @pytest.mark.parametrize(
     "mlm_example",
-    ["mlm-metadata.yaml"],
+    [os.path.join("torch", "mlm-metadata.yaml")],
     indirect=True,
 )
 def test_mlm_metadata_only_yaml_validation(mlm_example):
