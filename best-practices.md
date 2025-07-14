@@ -1,24 +1,23 @@
-# ML Model Extension Best Practices
+# Machine Learning Model Extension Best Practices
 
-This document makes a number of recommendations for creating real world ML Model Extensions.
+This document makes a number of recommendations for creating real world Machine Learning Model extensions.
 None of them are required to meet the core specification, but following these practices will improve the documentation
 of your model and make life easier for client tooling and users. They come about from practical experience of
 implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their
 models or creating tools to work with STAC.
 
-- [ML Model Extension Best Practices](#ml-model-extension-best-practices)
-  - [Using STAC Common Metadata Fields for the ML Model Extension](#using-stac-common-metadata-fields-for-the-ml-model-extension)
-  - [Recommended Extensions to Compose with the ML Model Extension](#recommended-extensions-to-compose-with-the-ml-model-extension)
-    - [Processing Extension](#processing-extension)
-    - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
-    - [Classification Extension](#classification-extension)
-    - [Scientific Extension](#scientific-extension)
-    - [File Extension](#file-extension)
-    - [Example Extension](#example-extension)
-    - [Version Extension](#version-extension)
-  - [Framework Specific Artifact Types](#framework-specific-artifact-types)
+- [Using STAC Common Metadata Fields for the MLM Extension](#using-stac-common-metadata-fields-for-the-mlm-extension)
+- [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-mlm-extension)
+  - [Processing Extension](#processing-extension)
+  - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
+  - [Classification Extension](#classification-extension)
+  - [Scientific Extension](#scientific-extension)
+  - [File Extension](#file-extension)
+  - [Example Extension](#example-extension)
+  - [Version Extension](#version-extension)
+- [Framework Specific Artifact Types](#framework-specific-artifact-types)
 
-## Using STAC Common Metadata Fields for the ML Model Extension
+## Using STAC Common Metadata Fields for the MLM Extension
 
 It is recommended to use the `start_datetime` and `end_datetime`, `geometry`, and `bbox` in a STAC Item,
 and the corresponding
@@ -67,7 +66,7 @@ If specific datasets with training/validation/test splits are known to support t
 the model, it is recommended that they are included as reference to the STAC Item/Collection using MLM. For more
 information regarding these references, see the [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) details.
 
-## Recommended Extensions to Compose with the ML Model Extension
+## Recommended Extensions to Compose with the MLM Extension
 
 ### Processing Extension
 
