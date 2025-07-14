@@ -1,6 +1,6 @@
-# ML Model Extension Best Practices
+# Machine Learning Model Extension Best Practices
 
-This document makes a number of recommendations for creating real world ML Model Extensions.
+This document makes a number of recommendations for creating real world Machine Learning Model extensions.
 None of them are required to meet the core specification, but following these practices will improve the documentation
 of your model and make life easier for client tooling and users. They come about from practical experience of
 implementors and introduce a bit more 'constraint' for those who are creating STAC objects representing their
