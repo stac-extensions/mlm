@@ -9,8 +9,8 @@ from torch.export.pt2_archive._package import load_pt2
 from torchgeo.models import Unet_Weights, unet
 
 from stac_model.torch.export import (
-    export_model_and_transforms,
-    package_model_and_transforms,
+    export,
+    package,
 )
 
 
@@ -22,13 +22,13 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> N
     weights = Unet_Weights.SENTINEL2_3CLASS_FTW
     transforms = torch.nn.Sequential(*[T.Resize((256, 256)), T.Normalize(mean=[0.0], std=[3000.0])])
     model = unet(weights=weights)
-    model_program, transforms_program = export_model_and_transforms(
+    model_program, transforms_program = export(
         model=model,
         transforms=transforms,
         input_shape=input_shape,
         device=device,
     )
-    package_model_and_transforms(
+    package(
         output_file=archive_path,
         model_program=model_program,
         transforms_program=transforms_program,

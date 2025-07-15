@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
-def package_model_and_transforms(
+def package(
     output_file: str,
     model_program: torch.export.ExportedProgram,
     transforms_program: torch.export.ExportedProgram | None = None,
@@ -99,7 +99,7 @@ def package_model_and_transforms(
 
 
 @torch.no_grad()
-def export_model_and_transforms(
+def export(
     model: torch.nn.Module,
     transforms: torch.nn.Module,
     input_shape: Sequence[int],
