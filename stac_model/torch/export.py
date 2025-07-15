@@ -125,8 +125,8 @@ def export_model_and_transforms(
     # Construct example inputs and dims
     example_inputs = _create_example_input_from_shape(input_shape).to(device)
     dims = tuple(Dim.AUTO if dim == -1 else dim for dim in input_shape)
-    logger.debug(msg=f"Exporting with dims: {dims}")  # noqa: G004
-    logger.debug(f"Example input shape: {example_inputs.shape}")  # noqa: G004
+    logger.debug("Exporting with dims: {}", dims)
+    logger.debug("Example input shape: {}", example_inputs.shape)
 
     # Extract argument names for the model and transforms forward methods
     model_arg = next(iter(inspect.signature(model.forward).parameters))
