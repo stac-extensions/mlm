@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `examples/torch/mlm-metadata.yaml` example that provides a minimal metadata example for a PyTorch model which can be validated using the MLM Schema without the need to be fully compliant with the STAC Specification.
+- Add `examples/torch/mlm-metadata.yaml` example that provides a minimal metadata example for
+  a PyTorch model which can be validated using the MLM Schema without the need to be fully
+  compliant with the STAC Specification.
 - Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
   from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
   (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).
