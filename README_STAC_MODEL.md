@@ -49,6 +49,22 @@ stac-model
 
 This will make [this example item](./examples/item_basic.json) for an example model.
 
+## Validating Model Metadata
+
+An alternative use of `stac_model` it to validate config files containing model metadata using the `MLModelProperties` schema.
+
+Given a YAML or JSON file with the structure in [examples/torch/mlm-metadata.yaml](./examples/torch/mlm-metadata.yaml), the model metadata can be validated as follows:
+
+```python
+import yaml
+from stac_model.schema import MLModelProperties
+
+with open("examples/mlm-metadata.yaml", "r") as f:
+    metadata = yaml.safe_load(f)
+
+MLModelProperties.model_validate(metadata["properties"])  
+```
+
 ## 📈 Releases
 
 You can see the list of available releases on the [GitHub Releases][github-releases] page.
