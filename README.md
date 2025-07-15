@@ -178,14 +178,14 @@ The fields in the table below can be used in these parts of STAC documents:
 <!-- lint enable no-undefined-references -->
 
 In addition, fields from the multiple relevant extensions should be defined as applicable. See
-[Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-ml-model-extension)
+[Best Practices - Recommended Extensions to Compose with the ML Model Extension](best-practices.md#recommended-extensions-to-compose-with-the-mlm-extension)
 for more details.
 
 For the [Extent Object][stac-extent]
 in STAC Collections and the corresponding spatial and temporal fields in Items, please refer to section
 [Best Practices - Using STAC Common Metadata Fields for the ML Model Extension][stac-mlm-meta].
 
-[stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-ml-model-extension
+[stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-mlm-extension
 
 [stac-extent]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object
 
