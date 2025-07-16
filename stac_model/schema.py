@@ -44,12 +44,12 @@ def mlm_prefix_adder(field_name: str) -> str:
 
 class MLModelProperties(Runtime):
     name: str = Field(min_length=1)
-    architecture: str = Field(min_length=1)
+    architecture: Annotated[str | None, OmitIfNone] = Field(min_length=1)
     tasks: set[ModelTask]
     input: list[ModelInput]
     output: list[ModelOutput]
 
-    total_parameters: int
+    total_parameters: Annotated[int | None, OmitIfNone] = Field(default=None, ge=0)
     pretrained: Annotated[bool | None, OmitIfNone] = Field(default=True)
     pretrained_source: Annotated[str | None, OmitIfNone] = None
 
