@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Make `total_parameters` optional in `stac-model` and enforce greater than 0 to match with JSON-schema
+  (applied in [#101](https://github.com/stac-extensions/mlm/pull/101).
 - Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
 
 ### Deprecated

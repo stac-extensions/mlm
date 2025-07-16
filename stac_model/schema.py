@@ -50,7 +50,7 @@ class MLModelProperties(Runtime):
     input: list[ModelInput]
     output: list[ModelOutput]
 
-    total_parameters: int
+    total_parameters: Annotated[int | None, OmitIfNone] = Field(default=None, ge=0)
     pretrained: Annotated[bool | None, OmitIfNone] = Field(default=True)
     pretrained_source: Annotated[str | None, OmitIfNone] = None
 
