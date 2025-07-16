@@ -1,7 +1,9 @@
-from typing import Optional, cast
+from typing import Any, Optional, cast
 
+import pystac
+import torch
 import torch.nn as nn
-from pystac import Asset, Item, Link
+from pystac import Asset, Collection, Item, Link
 from pystac.extensions.eo import Band, EOExtension
 
 from stac_model.base import TaskEnum
@@ -9,6 +11,46 @@ from stac_model.input import InputStructure, ModelInput
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
+
+def normalize_dtype(torch_dtype: torch.dtype) -> str:
+    """
+    Convert a PyTorch dtype (e.g., torch.float32) to a standardized string 
+    used in metadata or schemas (e.g., 'float32').
+    Raise a ValueError if the dtype is not supported.
+    """
+    dtype_mapping = {
+        torch.uint8: "uint8",
+        torch.int8: "int8",
+        torch.int16: "int16",
+        torch.int32: "int32",
+        torch.int64: "int64",
+        torch.float16: "float16",
+        torch.float32: "float32",
+        torch.float64: "float64",
+        torch.cfloat: "cfloat32",
+        torch.cdouble: "cfloat64",
+    }
+    if torch_dtype not in dtype_mapping:
+        raise ValueError(f"Unsupported dtype: {torch_dtype}. Supported dtypes are: {list(dtype_mapping.keys())}")
+    return dtype_mapping[torch_dtype]
+
+def get_input_dtype(state_dict: dict) -> str:
+    """
+    Get the data type (dtype) of the input from the first convolutional layer's weights.
+    """
+    for key, tensor in state_dict.items():
+        if "encoder._conv_stem.weight" in key:
+            return normalize_dtype(tensor.dtype)
+    raise ValueError("Could not determine input dtype from model weights.")
+
+def get_output_dtype(state_dict: dict) -> str:
+    """
+    Get the data type (dtype) of the output from the segmentation head's last conv layer.
+    """
+    for key, tensor in reversed(state_dict.items()):
+        if "segmentation_head.0.weight" in key:
+            return normalize_dtype(tensor.dtype)
+    raise ValueError("Could not determine output dtype from model weights.")
 
 def get_input_channels(state_dict: dict) -> int:
     """
@@ -34,18 +76,27 @@ def from_torch(
     model: nn.Module,
     *,
     weights: Optional[object] = None,
-    item_id: str = "torch-model",
-    bbox: Optional[list[float]] = None,
-    geometry: Optional[dict] = None,
+    item_id: str = None,
+    collection_id: str | Collection | None = None,
+    bbox: list[float] | None,
+    geometry: dict[str, Any] | None,
     links: Optional[list[dict]] = None,
-    datetime_range: tuple[str, str] = (
-        "2015-06-23T00:00:00Z",  # Sentinel-2A launch date (first Sentinel-2 data available)
-        "2024-08-27T23:59:59Z",  # Dataset publication date Fields of The World (FTW)
-    ),
+    datetime_range: tuple[str, str] = None,
+    task: TaskEnum = None,
 ) -> ItemMLModelExtension:
+    
+    if datetime_range is None:
+        raise ValueError("datetime_range must be provided as a tuple of (start, end) strings for a valid STAC item.")
+    
+    if item_id is None:
+        raise ValueError("item_id must be provided as string for a valid STAC item.")
+    
+    if collection_id is None:
+        raise ValueError("collection_id must be provided as string or Collection for a valid STAC item.")
+    
+    
     total_params = sum(p.numel() for p in model.parameters())
     arch = f"{model.__class__.__module__}.{model.__class__.__name__}"
-    task = {TaskEnum.CLASSIFICATION}
 
     # Extra metadata only found in weights of torchgeo models
     has_meta = weights is not None and hasattr(weights, "meta")
@@ -60,11 +111,13 @@ def from_torch(
 
     input_shape = [1, in_chans, 224, 224]
     output_shape = [1, num_classes]
+    input_data_type = get_input_dtype(state_dict)
+    output_data_type = get_output_dtype(state_dict)
 
     input_struct = InputStructure(
         shape=input_shape,
         dim_order=["batch", "channel", "height", "width"],
-        data_type="float32",
+        data_type=input_data_type,
     )
 
     if has_meta and "bands" in weights.meta:
@@ -95,14 +148,20 @@ def from_torch(
         result=ModelResult(
             shape=output_shape,
             dim_order=["batch", "classes"],
-            data_type="float32",
+            data_type=output_data_type,
         ),
         classes=classes,
         post_processing_function=None,
     )
 
+    if has_meta:
+        meta = weights.meta
+        url = weights.url
+
     mlm_props = MLModelProperties(
-        name=item_id,
+        name=(
+            f"{meta.get('model', 'Model')} ({meta.get('encoder', '')})"
+        ),
         architecture=arch,
         tasks=task,
         input=[model_input],
@@ -112,23 +171,6 @@ def from_torch(
         pretrained_source=None,
     )
 
-    bbox = bbox or [-7.88, 37.13, 27.91, 58.21]
-    geometry = geometry or {
-        "type": "Polygon",
-        "coordinates": [
-            [
-                [-7.88, 37.13],
-                [-7.88, 58.21],
-                [27.91, 58.21],
-                [27.91, 37.13],
-                [-7.88, 37.13],
-            ]
-        ],
-    }
-
-    if has_meta:
-        meta = weights.meta
-        url = weights.url
     assets = {}
 
     # Model weights asset
@@ -181,6 +223,7 @@ def from_torch(
 
     item = Item(
         id=item_id,
+        collection=collection_id,
         geometry=geometry,
         bbox=bbox,
         datetime=None,

@@ -7,7 +7,7 @@ from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 from torchgeo.models import Unet_Weights, unet
 
-from stac_model.base import ProcessingExpression
+from stac_model.base import ProcessingExpression, TaskEnum
 from stac_model.input import InputStructure, ModelInput, ValueScalingObject
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
@@ -250,5 +250,52 @@ def unet_mlm() -> ItemMLModelExtension:
     """
     weights = Unet_Weights.SENTINEL2_2CLASS_NC_FTW
     model = unet(weights=weights)
-    item_ext = MLModelExtension.from_torch(model, weights=weights)
+    item_id = "pytorch_geo_unet"
+    collection_id = "ml-model-examples"
+    bbox = [-7.88, 37.13, 27.91, 58.21]
+    geometry = {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [-7.88, 37.13],
+                [-7.88, 58.21],
+                [27.91, 58.21],
+                [27.91, 37.13],
+                [-7.88, 37.13],
+            ]
+        ],
+    }
+    datetime_range: tuple[str, str] = (
+        "2015-06-23T00:00:00Z",  # Sentinel-2A launch date (first Sentinel-2 data available)
+        "2024-08-27T23:59:59Z",  # Dataset publication date Fields of The World (FTW)
+    )
+
+    task = {TaskEnum.SEMANTIC_SEGMENTATION}
+    
+    item_ext = MLModelExtension.from_torch(model, weights=weights, item_id=item_id, collection_id=collection_id, bbox=bbox, geometry=geometry, datetime_range=datetime_range , task=task)
+
+    # Add additional metadata regarding the exemples to have a valid STAC Item
+    # Create collection and set links
+    item = item_ext.item
+
+    start_datetime_str = "1900-01-01"
+    end_datetime_str = "9999-01-01"
+    start_datetime = parse_dt(start_datetime_str).isoformat() + "Z"
+    end_datetime = parse_dt(end_datetime_str).isoformat() + "Z"
+
+    col = pystac.Collection(
+        id=collection_id,
+        title="Machine Learning Model examples",
+        description="Collection of items contained in the Machine Learning Model examples.",
+        extent=pystac.Extent(
+            temporal=pystac.TemporalExtent([[start_datetime, end_datetime]]),
+            spatial=pystac.SpatialExtent([bbox]),
+        ),
+    )
+    col.set_self_href("./examples/collection.json")
+    col.add_item(item)
+    item.set_self_href(f"./examples/{item_id}.json")
+
+    # Update the wrapped item in the extension to reflect changes
+    item_ext.item = item
     return item_ext
