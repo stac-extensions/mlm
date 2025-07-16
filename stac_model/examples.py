@@ -131,7 +131,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
                 "mlm:weights",
                 "data",
             ],
-            extra_fields={"mlm:artifact_type": "torch.save"}
+            extra_fields={"mlm:artifact_type": "torch.save"},
         ),
         "source_code": pystac.Asset(
             title="Model implementation.",
@@ -271,30 +271,24 @@ def unet_mlm() -> ItemMLModelExtension:
     )
 
     task = {TaskEnum.SEMANTIC_SEGMENTATION}
-    
-    item_ext = MLModelExtension.from_torch(model, weights=weights, item_id=item_id, collection_id=collection_id, bbox=bbox, geometry=geometry, datetime_range=datetime_range , task=task)
+
+    item_ext = MLModelExtension.from_torch(
+        model,
+        weights=weights,
+        item_id=item_id,
+        collection_id=collection_id,
+        bbox=bbox,
+        geometry=geometry,
+        datetime_range=datetime_range,
+        task=task,
+    )
 
     # Add additional metadata regarding the exemples to have a valid STAC Item
-    # Create collection and set links
+    # set links
     item = item_ext.item
 
-    start_datetime_str = "1900-01-01"
-    end_datetime_str = "9999-01-01"
-    start_datetime = parse_dt(start_datetime_str).isoformat() + "Z"
-    end_datetime = parse_dt(end_datetime_str).isoformat() + "Z"
-
-    col = pystac.Collection(
-        id=collection_id,
-        title="Machine Learning Model examples",
-        description="Collection of items contained in the Machine Learning Model examples.",
-        extent=pystac.Extent(
-            temporal=pystac.TemporalExtent([[start_datetime, end_datetime]]),
-            spatial=pystac.SpatialExtent([bbox]),
-        ),
-    )
-    col.set_self_href("./examples/collection.json")
-    col.add_item(item)
-    item.set_self_href(f"./examples/{item_id}.json")
+    item.set_self_href(f"./examples/item_{item_id}.json")
+    item.add_link(pystac.Link(rel="collection", target="./collection.json", media_type="application/json"))
 
     # Update the wrapped item in the extension to reflect changes
     item_ext.item = item

@@ -1,6 +1,5 @@
 from typing import Any, Optional, cast
 
-import pystac
 import torch
 import torch.nn as nn
 from pystac import Asset, Collection, Item, Link
@@ -14,7 +13,7 @@ from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelPro
 
 def normalize_dtype(torch_dtype: torch.dtype) -> str:
     """
-    Convert a PyTorch dtype (e.g., torch.float32) to a standardized string 
+    Convert a PyTorch dtype (e.g., torch.float32) to a standardized string
     used in metadata or schemas (e.g., 'float32').
     Raise a ValueError if the dtype is not supported.
     """
@@ -34,6 +33,7 @@ def normalize_dtype(torch_dtype: torch.dtype) -> str:
         raise ValueError(f"Unsupported dtype: {torch_dtype}. Supported dtypes are: {list(dtype_mapping.keys())}")
     return dtype_mapping[torch_dtype]
 
+
 def get_input_dtype(state_dict: dict) -> str:
     """
     Get the data type (dtype) of the input from the first convolutional layer's weights.
@@ -43,6 +43,7 @@ def get_input_dtype(state_dict: dict) -> str:
             return normalize_dtype(tensor.dtype)
     raise ValueError("Could not determine input dtype from model weights.")
 
+
 def get_output_dtype(state_dict: dict) -> str:
     """
     Get the data type (dtype) of the output from the segmentation head's last conv layer.
@@ -51,6 +52,7 @@ def get_output_dtype(state_dict: dict) -> str:
         if "segmentation_head.0.weight" in key:
             return normalize_dtype(tensor.dtype)
     raise ValueError("Could not determine output dtype from model weights.")
+
 
 def get_input_channels(state_dict: dict) -> int:
     """
@@ -84,19 +86,19 @@ def from_torch(
     datetime_range: tuple[str, str] = None,
     task: TaskEnum = None,
 ) -> ItemMLModelExtension:
-    
     if datetime_range is None:
         raise ValueError("datetime_range must be provided as a tuple of (start, end) strings for a valid STAC item.")
-    
+
     if item_id is None:
         raise ValueError("item_id must be provided as string for a valid STAC item.")
-    
+
     if collection_id is None:
         raise ValueError("collection_id must be provided as string or Collection for a valid STAC item.")
-    
-    
+
     total_params = sum(p.numel() for p in model.parameters())
-    arch = f"{model.__class__.__module__}.{model.__class__.__name__}"
+    module = model.__class__.__module__
+    class_name = model.__class__.__name__
+    arch = f"{module}.{class_name}"
 
     # Extra metadata only found in weights of torchgeo models
     has_meta = weights is not None and hasattr(weights, "meta")
@@ -159,10 +161,9 @@ def from_torch(
         url = weights.url
 
     mlm_props = MLModelProperties(
-        name=(
-            f"{meta.get('model', 'Model')} ({meta.get('encoder', '')})"
-        ),
+        name=(f"{meta.get('model', 'Model')}_{meta.get('encoder', '')}"),
         architecture=arch,
+        framework=module,
         tasks=task,
         input=[model_input],
         output=[model_output],
@@ -175,10 +176,7 @@ def from_torch(
 
     # Model weights asset
     assets["model"] = Asset(
-        title=(
-            f"{meta.get('model', 'Model')} ({meta.get('encoder', '')}) weights "
-            f"trained on {meta.get('dataset', 'dataset')} dataset"
-        ),
+        title=(f"{meta.get('model', 'Model')}_{meta.get('encoder', '')}"),
         description=(
             f"A {meta.get('model', 'Model')} segmentation model with {meta.get('encoder', '')} encoder "
             f"trained on {meta.get('dataset', 'dataset')} imagery with {meta.get('num_classes', '?')}-class labels. "
@@ -191,6 +189,7 @@ def from_torch(
             "mlm:weights",
             "data",
         ],
+        extra_fields={"mlm:artifact_type": "torch.save"},
     )
 
     # Publication asset
