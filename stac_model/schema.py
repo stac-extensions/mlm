@@ -44,7 +44,7 @@ def mlm_prefix_adder(field_name: str) -> str:
 
 class MLModelProperties(Runtime):
     name: str = Field(min_length=1)
-    architecture: Annotated[str | None, OmitIfNone] = Field(min_length=1)
+    architecture: str = Field(min_length=1)
     tasks: set[ModelTask]
     input: list[ModelInput]
     output: list[ModelOutput]

@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the corresponding `mlm:artifact_type` SafeTensors backend in the JSON schema examples.
 - Add [`Paddle`](https://github.com/PaddlePaddle/Paddle) to the list of `mlm:framework`
   (fixes [#69](https://github.com/stac-extensions/mlm/issues/69)).
+- Make `total_parameters` optional in `stac-model` and enforce greater than 0. Added in [PR 101](https://github.com/stac-extensions/mlm/pull/101).
 
 ### Changed
 
