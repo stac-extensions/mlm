@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `ModelDataVariable` to `stac_model` for corresponding `mlm:input` and `mlm:output` definitions as the JSON schema.
+- Add `variables` properties to [Model Input Object](README.md#model-input-object)
+  to allow specifying the relevant data variables used by the model,
+  with cross-references to the [datacube](https://github.com/stac-extensions/datacube) extension
+  (relates to [#90](https://github.com/stac-extensions/mlm/issues/90)).
+- Add `bands` and `variables` properties to [Model Output Object](README.md#model-output-object)
+  to allow specifying the relevant bands or variables produced by the model if any applies.
+- Add `downscaling` to [Tasks](./README.md#task-enum) as common operation for climate variable models.
 - Add [ML-Model Legacy](./docs/legacy/ml-model.md) document providing migration guidance
   from the deprecated [ML-Model](https://github.com/stac-extensions/ml-model) extension
   (relates to [stac-extensions/ml-model#16](https://github.com/stac-extensions/ml-model/pull/16)).
@@ -25,6 +33,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update `stac-model==0.4.0` to provide corresponding additions for `variables` reference.
+- Refactor `ModelInput` and `ModelOutput` objects to use a new `ModelBandsOrVariablesReferences` definition
+  combining the `ModelBand` and `ModelDataVariable` lists.
+- Moved `ModelBand` from `stac_model.input` to `stac_model.base` since it is now required
+  by both `ModelInput` and `ModelOutput` objects.
+- Refactor the JSON schema to check for `bands` and `variables` references within both `mlm:input` and `mlm:output`.
+  If either location detects that either `bands` or `variables` is provided, their corresponding sets of extensions
+  providing relevant descriptions are verified.
+- Refactor the JSON schema `mlm:output` property to employ a `ModelOutput` object definition
+  rather than directly provided properties nested under the array.
+- Refactor the JSON schema to allow the omission of `bands` under `mlm:input` if the `variables` property is provided.
 - Make `total_parameters` optional in `stac-model` and enforce greater than 0 to match with JSON-schema
   (applied in [#101](https://github.com/stac-extensions/mlm/pull/101).
 - Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
@@ -39,7 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- Fix `stac_model.output.ModelOutput` enforcing the need to specify `classification:classes` or `classes`.
+  The property can now be omitted if the model does not need to indicate that it produces a classification output.
+- Fix missing ``encoding="utf-8"`` parameters in `open` calls leading to failing parsing of example JSON STAC Item
+  when they contain non-ASCII characters.
 
 ## [v1.4.0](https://github.com/stac-extensions/mlm/tree/v1.4.0)
 

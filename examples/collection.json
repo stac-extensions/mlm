@@ -57,6 +57,10 @@
       "rel": "item"
     },
     {
+      "href": "item_datacube_variables.json",
+      "rel": "item"
+    },
+    {
       "href": "item_eo_bands.json",
       "rel": "item"
     },
