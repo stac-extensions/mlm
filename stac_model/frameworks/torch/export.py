@@ -2,12 +2,12 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any, Optional, Protocol, Union, cast
 
-import torch
-import torch.nn as nn
 from pystac import Asset, Collection, Item, Link, utils
 from pystac.extensions.eo import Band, EOExtension
 from shapely import geometry as geom
 
+import torch
+import torch.nn as nn
 from stac_model.base import DataType, ModelTask
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import MLMClassification, ModelOutput, ModelResult

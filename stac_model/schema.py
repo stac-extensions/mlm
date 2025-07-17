@@ -158,7 +158,7 @@ class MLModelExtension(
 
     @classmethod
     def from_torch(cls, model: nn.Module, **kwargs: Any) -> "ItemMLModelExtension":
-        from stac_model.utils import from_torch
+        from stac_model.frameworks.torch import from_torch
 
         return from_torch(model, **kwargs)
 
