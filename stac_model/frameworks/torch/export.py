@@ -190,6 +190,7 @@ def from_torch(
         meta = weights.meta
         url = weights.url
 
+    pretrained = weights is not None
     mlm_props = MLModelProperties(
         name=(f"{meta.get('model', 'Model')}_{meta.get('encoder', '')}"),
         architecture=arch,
@@ -198,7 +199,7 @@ def from_torch(
         input=[model_input],
         output=[model_output],
         total_parameters=total_params,
-        pretrained=True,
+        pretrained=pretrained,
         pretrained_source=None,
     )
 

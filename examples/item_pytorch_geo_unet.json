@@ -52,7 +52,6 @@
     ],
     "mlm:input": [
       {
-        "name": "model_input",
         "bands": [
           "B4",
           "B3",
@@ -63,6 +62,8 @@
           "B2",
           "B8A"
         ],
+        "variables": [],
+        "name": "model_input",
         "input": {
           "shape": [
             1,
@@ -83,6 +84,8 @@
     ],
     "mlm:output": [
       {
+        "bands": [],
+        "variables": [],
         "name": "model_output",
         "tasks": [
           "semantic-segmentation"
