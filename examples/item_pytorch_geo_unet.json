@@ -1,0 +1,193 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+  ],
+  "id": "pytorch_geo_unet",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.88,
+          37.13
+        ],
+        [
+          -7.88,
+          58.21
+        ],
+        [
+          27.91,
+          58.21
+        ],
+        [
+          27.91,
+          37.13
+        ],
+        [
+          -7.88,
+          37.13
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -7.88,
+    37.13,
+    27.91,
+    58.21
+  ],
+  "properties": {
+    "start_datetime": "2015-06-23T00:00:00Z",
+    "end_datetime": "2024-08-27T23:59:59Z",
+    "description": "An Item with Machine Learning Model Extension metadata for a PyTorch model.",
+    "mlm:framework": "segmentation_models_pytorch.decoders.unet.model",
+    "mlm:accelerator_constrained": false,
+    "mlm:name": "U-Net_efficientnet-b3",
+    "mlm:architecture": "segmentation_models_pytorch.decoders.unet.model.Unet",
+    "mlm:tasks": [
+      "semantic-segmentation"
+    ],
+    "mlm:input": [
+      {
+        "name": "model_input",
+        "bands": [
+          "B4",
+          "B3",
+          "B2",
+          "B8A",
+          "B4",
+          "B3",
+          "B2",
+          "B8A"
+        ],
+        "input": {
+          "shape": [
+            1,
+            8,
+            224,
+            224
+          ],
+          "dim_order": [
+            "batch",
+            "channel",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        },
+        "pre_processing_function": null
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "model_output",
+        "tasks": [
+          "semantic-segmentation"
+        ],
+        "result": {
+          "shape": [
+            1,
+            2
+          ],
+          "dim_order": [
+            "batch",
+            "classes"
+          ],
+          "data_type": "float32"
+        },
+        "classification:classes": [
+          {
+            "value": 0,
+            "name": "class_0",
+            "description": "Auto-generated class 0"
+          },
+          {
+            "value": 1,
+            "name": "class_1",
+            "description": "Auto-generated class 1"
+          }
+        ],
+        "post_processing_function": null
+      }
+    ],
+    "mlm:total_parameters": 13160978,
+    "mlm:pretrained": true,
+    "datetime": null
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "./item_pytorch_geo_unet.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "model": {
+      "href": "https://huggingface.co/torchgeo/ftw/resolve/d2fdab6ea9d9cd38b491292cc9a5c8642533cef5/noncommercial/2-class/sentinel2_unet_effb3-bf010a31.pth",
+      "type": "application/octet-stream; application=pytorch",
+      "title": "U-Net_efficientnet-b3",
+      "description": "A U-Net segmentation model with efficientnet-b3 encoder trained on FTW imagery with 2-class labels. Weights are non-commercial.",
+      "mlm:artifact_type": "torch.save",
+      "eo:bands": [
+        {
+          "name": "B4"
+        },
+        {
+          "name": "B3"
+        },
+        {
+          "name": "B2"
+        },
+        {
+          "name": "B8A"
+        },
+        {
+          "name": "B4"
+        },
+        {
+          "name": "B3"
+        },
+        {
+          "name": "B2"
+        },
+        {
+          "name": "B8A"
+        }
+      ],
+      "roles": [
+        "mlm:model",
+        "mlm:weights",
+        "data"
+      ]
+    },
+    "publication": {
+      "href": "https://arxiv.org/abs/2409.16252",
+      "type": "text/html",
+      "title": "FTW publication",
+      "description": "Paper describing the FTW dataset and model benchmarks.",
+      "roles": [
+        "publication",
+        "paper"
+      ]
+    },
+    "source_code": {
+      "href": "https://github.com/fieldsoftheworld/ftw-baselines",
+      "type": "text/html",
+      "title": "FTW Baselines repository",
+      "description": "GitHub repo with baseline code for FTW dataset models.",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "collection": "ml-model-examples"
+}

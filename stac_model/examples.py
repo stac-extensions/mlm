@@ -286,10 +286,21 @@ def unet_mlm() -> ItemMLModelExtension:
     # Add additional metadata regarding the exemples to have a valid STAC Item
     # set links
     item = item_ext.item
+    item_name = f"item_{item_id}.json"
+    item_self_href = f"./{item_name}"
 
-    item.set_self_href(f"./examples/item_{item_id}.json")
-    item.add_link(pystac.Link(rel="collection", target="./collection.json", media_type="application/json"))
+    link = pystac.Link(
+        rel="self",
+        target=item_self_href,
+        media_type="application/json"
+    )
+    link._target_href = item_self_href
+    item.add_link(link)
+    item.add_link(pystac.Link(
+        rel="collection",
+        target="./collection.json",
+        media_type="application/json"
+    ))
 
-    # Update the wrapped item in the extension to reflect changes
     item_ext.item = item
     return item_ext
