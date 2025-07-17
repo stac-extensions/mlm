@@ -32,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (fixes [#69](https://github.com/stac-extensions/mlm/issues/69)).
 
 ### Changed
- 
+
 - Update `stac-model==0.4.0` to provide corresponding additions for `variables` reference.
 - Refactor `ModelInput` and `ModelOutput` objects to use a new `ModelBandsOrVariablesReferences` definition
   combining the `ModelBand` and `ModelDataVariable` lists.
@@ -44,6 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor the JSON schema `mlm:output` property to employ a `ModelOutput` object definition
   rather than directly provided properties nested under the array.
 - Refactor the JSON schema to allow the omission of `bands` under `mlm:input` if the `variables` property is provided.
+- Make `total_parameters` optional in `stac-model` and enforce greater than 0 to match with JSON-schema
+  (applied in [#101](https://github.com/stac-extensions/mlm/pull/101).
 - Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
 
 ### Deprecated

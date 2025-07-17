@@ -44,4 +44,3 @@ replace = """
 name = "stac-model"
 version = "{new_version}"
 """
-
