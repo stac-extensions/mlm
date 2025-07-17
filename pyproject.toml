@@ -125,6 +125,38 @@ search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
 replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
 
 [[tool.bumpversion.files]]
+glob = "**/*.yml"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
+glob = "**/*.yaml"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
 glob = "**/*.md"
 glob_exclude = [
   ".git/**",
@@ -198,7 +230,7 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "E501"]
+ignore = ["UP007", "UP015", "E501"]
 exclude = [
     ".git",
     "__pycache__",
@@ -329,7 +361,7 @@ exclude_also = [
   "def main",
   "if __name__ == .__main__.:"
 ]
-fail_under = 50
+fail_under = 80
 show_missing = true
 
 [tool.coverage.paths]

@@ -32,7 +32,7 @@ def get_all_stac_item_examples() -> list[str]:
 
 @pytest.fixture(scope="session")
 def mlm_schema() -> JSON:
-    with open(os.path.join(JSON_SCHEMA_DIR, "schema.json")) as schema_file:
+    with open(os.path.join(JSON_SCHEMA_DIR, "schema.json"), mode="r", encoding="utf-8") as schema_file:
         data = json.load(schema_file)
     return cast(JSON, data)
 
@@ -60,7 +60,7 @@ def mlm_validator(
 
 @pytest.fixture
 def mlm_example(request: "SubRequest") -> dict[str, JSON]:
-    with open(os.path.join(EXAMPLES_DIR, request.param)) as example_file:
+    with open(os.path.join(EXAMPLES_DIR, request.param), mode="r", encoding="utf-8") as example_file:
         if request.param.endswith(".json"):
             data = json.load(example_file)
         elif request.param.endswith(".yaml"):

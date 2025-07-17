@@ -3,7 +3,14 @@ from typing import Annotated, Any, cast
 from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
 
-from stac_model.base import DataType, MLMBaseModel, ModelTask, OmitIfNone, ProcessingExpression
+from stac_model.base import (
+    DataType,
+    MLMBaseModel,
+    ModelBandsOrVariablesReferences,
+    ModelTask,
+    OmitIfNone,
+    ProcessingExpression,
+)
 
 
 class ModelResult(MLMBaseModel):
@@ -76,7 +83,7 @@ class MLMClassification(MLMBaseModel, Classification):
 #     nodata: Optional[bool] = False
 
 
-class ModelOutput(MLMBaseModel):
+class ModelOutput(ModelBandsOrVariablesReferences):
     name: str
     tasks: set[ModelTask]
     result: ModelResult
@@ -86,9 +93,10 @@ class ModelOutput(MLMBaseModel):
     #   it is more important to keep the order in this case,
     #   which we would lose with 'Set'.
     #   We also get some unhashable errors with 'Set', although 'MLMClassification' implements '__hash__'.
-    classes: Annotated[list[MLMClassification], OmitIfNone] = Field(
+    classes: Annotated[list[MLMClassification] | None, OmitIfNone] = Field(
         alias="classification:classes",
         validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
+        default=None,
     )
     post_processing_function: ProcessingExpression | None = None
 
