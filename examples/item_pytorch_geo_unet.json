@@ -40,9 +40,9 @@
     58.21
   ],
   "properties": {
+    "description": "STAC item generated using unet_mlm() in stac_model/examples.py example.",
     "start_datetime": "2015-06-23T00:00:00Z",
     "end_datetime": "2024-08-27T23:59:59Z",
-    "description": "An Item with Machine Learning Model Extension metadata for a PyTorch model.",
     "mlm:framework": "segmentation_models_pytorch.decoders.unet.model",
     "mlm:accelerator_constrained": false,
     "mlm:name": "U-Net_efficientnet-b3",

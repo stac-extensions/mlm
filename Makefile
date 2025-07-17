@@ -79,7 +79,7 @@ lint: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
-check-lint: lint
+check-lint: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint

@@ -272,19 +272,23 @@ def unet_mlm() -> ItemMLModelExtension:
 
     task = {TaskEnum.SEMANTIC_SEGMENTATION}
 
+    properties = {
+        "description": "STAC item generated using unet_mlm() in stac_model/examples.py example.",
+    }
+
     item_ext = MLModelExtension.from_torch(
         model,
+        task=task,
         weights=weights,
         item_id=item_id,
-        collection_id=collection_id,
+        collection=collection_id,
         bbox=bbox,
         geometry=geometry,
         datetime_range=datetime_range,
-        task=task,
+        stac_properties=properties,
     )
 
     # Add additional metadata regarding the exemples to have a valid STAC Item
-    # set links
     item = item_ext.item
     item_name = f"item_{item_id}.json"
     item_self_href = f"./{item_name}"

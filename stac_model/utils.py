@@ -1,9 +1,12 @@
-from typing import Any, Optional, cast
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any, Optional, Protocol, Union, cast
 
 import torch
 import torch.nn as nn
-from pystac import Asset, Collection, Item, Link
+from pystac import Asset, Collection, Item, Link, utils
 from pystac.extensions.eo import Band, EOExtension
+from shapely import geometry as geom
 
 from stac_model.base import DataType, ModelTask
 from stac_model.input import InputStructure, ModelInput
@@ -11,27 +14,25 @@ from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
 
+class WeightsWithMeta(Protocol):
+    """
+    Protocol for objects following the structure of torchvision.models._api.Weights.
+
+    This is used to type hint weights objects that mimic the TorchVision Weights API,
+    including torchgeo models with metadata like `meta`, `url`, and `transforms`.
+
+    See: https://github.com/pytorch/vision/blob/main/torchvision/models/_api.py
+    """
+    url: str
+    transforms: Callable[..., Any]
+    meta: dict[str, Any]
+
+
 def normalize_dtype(torch_dtype: torch.dtype) -> DataType:
     """
-    Convert a PyTorch dtype (e.g., torch.float32) to a standardized string
-    used in metadata or schemas (e.g., 'float32').
-    Raise a ValueError if the dtype is not supported.
+    Convert a PyTorch dtype (e.g., torch.float32) to a standardized DataType.
     """
-    dtype_mapping = {
-        torch.uint8: "uint8",
-        torch.int8: "int8",
-        torch.int16: "int16",
-        torch.int32: "int32",
-        torch.int64: "int64",
-        torch.float16: "float16",
-        torch.float32: "float32",
-        torch.float64: "float64",
-        torch.cfloat: "cfloat32",
-        torch.cdouble: "cfloat64",
-    }
-    if torch_dtype not in dtype_mapping:
-        raise ValueError(f"Unsupported dtype: {torch_dtype}. Supported dtypes are: {list(dtype_mapping.keys())}")
-    return dtype_mapping[torch_dtype]
+    return cast(DataType, str(torch_dtype).rsplit(".", 1)[-1])
 
 
 def get_input_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
@@ -76,24 +77,52 @@ def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
 
 def from_torch(
     model: nn.Module,
+    task: set[ModelTask],
     *,
-    weights: Optional[object] = None,
-    item_id: str = None,
-    collection_id: str | Collection | None = None,
+    # STAC Item parameters
+    item_id: str,
+    collection: str | Collection,
     bbox: list[float] | None,
     geometry: dict[str, Any] | None,
-    links: Optional[list[dict]] = None,
-    datetime_range: tuple[str, str] = None,
-    task: set[ModelTask] = None,
+    links: Optional[list[dict[str, Any]]] = None,
+    datetime: Optional[datetime] = None,
+    datetime_range: Optional[tuple[Union[str, datetime], Union[str, datetime]]] = None,
+    stac_extensions: Optional[list[str]] = None,
+    stac_properties: Optional[dict[str, Any]] = None, 
+    # torch parameters
+    weights: Optional[WeightsWithMeta] = None,
 ) -> ItemMLModelExtension:
-    if datetime_range is None:
-        raise ValueError("datetime_range must be provided as a tuple of (start, end) strings for a valid STAC item.")
+    
+    if bbox is None and geometry is None:
+        raise ValueError("Either bbox or geometry must be provided for a valid STAC item.")
+    
+    if bbox is None:
+        assert geometry is not None
+        bbox = utils.geometry_to_bbox(geometry)
+
+    if geometry is None:
+        geometry = geom.box(*bbox).__geo_interface__
+
+    properties = {
+        "description": "An Item with Machine Learning Model Extension metadata for a PyTorch model.",
+
+    }
+    if datetime_range:
+        properties.update({
+            "start_datetime": str(datetime_range[0]),
+            "end_datetime": str(datetime_range[1]),
+        })
+    
+    if not datetime and not datetime_range:
+        raise ValueError("datetime or datetime range must be provided for a valid STAC item.")
 
     if item_id is None:
         raise ValueError("item_id must be provided as string for a valid STAC item.")
 
-    if collection_id is None:
-        raise ValueError("collection_id must be provided as string or Collection for a valid STAC item.")
+    collection_id = collection.id if isinstance(collection, Collection) else collection
+
+    if stac_properties:
+        properties.update(stac_properties)
 
     total_params = sum(p.numel() for p in model.parameters())
     module = model.__class__.__module__
@@ -102,9 +131,10 @@ def from_torch(
 
     # Extra metadata only found in weights of torchgeo models
     has_meta = weights is not None and hasattr(weights, "meta")
+    weights = cast(WeightsWithMeta, weights) if has_meta else None
     state_dict = model.state_dict()
 
-    if has_meta:
+    if weights:
         in_chans = weights.meta.get("in_chans", get_input_channels(state_dict))
         num_classes = weights.meta.get("num_classes", get_output_channels(state_dict))
     else:
@@ -122,7 +152,7 @@ def from_torch(
         data_type=input_data_type,
     )
 
-    if has_meta and "bands" in weights.meta:
+    if weights and "bands" in weights.meta:
         bands = weights.meta["bands"]
     else:
         bands = [f"band_{i}" for i in range(input_shape[1])]
@@ -156,7 +186,7 @@ def from_torch(
         post_processing_function=None,
     )
 
-    if has_meta:
+    if weights:
         meta = weights.meta
         url = weights.url
 
@@ -192,7 +222,10 @@ def from_torch(
         extra_fields={"mlm:artifact_type": "torch.save"},
     )
 
-    # Publication asset
+    # Publication TODO https://github.com/stac-extensions/scientific?tab=readme-ov-file#relation-types
+    # stac link rel=cite as <cite> <cite>
+    # pystac link avec rel cite as <cite>
+
     publication_url = meta.get("publication")
     if publication_url:
         assets["publication"] = Asset(
@@ -225,13 +258,9 @@ def from_torch(
         collection=collection_id,
         geometry=geometry,
         bbox=bbox,
-        datetime=None,
-        properties={
-            "start_datetime": datetime_range[0],
-            "end_datetime": datetime_range[1],
-            "description": "An Item with Machine Learning Model Extension metadata for a PyTorch model.",
-        },
-        stac_extensions=[MLModelExtension.get_schema_uri()],
+        datetime=datetime,
+        properties=properties,
+        stac_extensions=[MLModelExtension.get_schema_uri()]  + (stac_extensions or []),
         assets=assets,
     )
 

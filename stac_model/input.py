@@ -1,6 +1,5 @@
 from collections.abc import Sequence
-from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
-from typing_extensions import Self
+from typing import Annotated, Any, Literal, Optional, Self, TypeAlias, Union
 
 from pydantic import Field, model_validator
 

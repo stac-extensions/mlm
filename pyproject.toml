@@ -278,7 +278,7 @@ extra-standard-library = ["typing_extensions"]
 [tool.mypy]
 # https://github.com/python/mypy
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = "3.10"
+python_version = "3.11"
 pretty = true
 show_traceback = true
 color_output = true
@@ -301,6 +301,8 @@ warn_return_any = true
 warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
+
+#  TODO add ignore venv
 
 plugins = [
   "pydantic.mypy"
