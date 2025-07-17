@@ -35,44 +35,49 @@ def normalize_dtype(torch_dtype: torch.dtype) -> DataType:
     return cast(DataType, str(torch_dtype).rsplit(".", 1)[-1])
 
 
+def find_tensor_by_key(state_dict: dict[str, torch.Tensor], key_substring: str, reverse: bool = False) -> torch.Tensor:
+    items = reversed(state_dict.items()) if reverse else state_dict.items()
+    for key, tensor in items:
+        if key_substring in key:
+            return tensor
+    raise ValueError(f"Could not find tensor with key containing '{key_substring}'")
+
+
+def get_input_hw(state_dict: dict[str, torch.Tensor]) -> tuple[int, int]:
+    tensor = find_tensor_by_key(state_dict, "encoder._conv_stem.weight")
+    return tensor.shape[2], tensor.shape[3]
+
+
 def get_input_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
     """
     Get the data type (dtype) of the input from the first convolutional layer's weights.
     """
-    for key, tensor in state_dict.items():
-        if "encoder._conv_stem.weight" in key:
-            return normalize_dtype(tensor.dtype)
-    raise ValueError("Could not determine input dtype from model weights.")
+    tensor = find_tensor_by_key(state_dict, "encoder._conv_stem.weight")
+    return normalize_dtype(tensor.dtype)
 
 
 def get_output_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
     """
     Get the data type (dtype) of the output from the segmentation head's last conv layer.
     """
-    for key, tensor in reversed(state_dict.items()):
-        if "segmentation_head.0.weight" in key:
-            return normalize_dtype(tensor.dtype)
-    raise ValueError("Could not determine output dtype from model weights.")
+    tensor = find_tensor_by_key(state_dict, "segmentation_head.0.weight", reverse=True)
+    return normalize_dtype(tensor.dtype)
 
 
 def get_input_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     Get number of input channels from the first convolutional layer's weights.
-    """
-    for key, tensor in state_dict.items():
-        if "encoder._conv_stem.weight" in key:
-            return tensor.shape[1]
-    raise ValueError("Could not determine input channels from model weights.")
+    """    
+    tensor = find_tensor_by_key(state_dict, "encoder._conv_stem.weight")
+    return tensor.shape[1]
 
 
 def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     Get number of output channels from the segmentation head's last conv layer.
     """
-    for key, tensor in reversed(state_dict.items()):
-        if "segmentation_head.0.weight" in key:
-            return tensor.shape[0]
-    raise ValueError("Could not determine output channels from model weights.")
+    tensor = find_tensor_by_key(state_dict, "segmentation_head.0.weight", reverse=True)
+    return tensor.shape[0]
 
 
 def from_torch(
@@ -141,7 +146,8 @@ def from_torch(
         in_chans = get_input_channels(state_dict)
         num_classes = get_output_channels(state_dict)
 
-    input_shape = [1, in_chans, 224, 224]
+    h, w = get_input_hw(state_dict)
+    input_shape = [1, in_chans, h, w]
     output_shape = [1, num_classes]
     input_data_type = get_input_dtype(state_dict)
     output_data_type = get_output_dtype(state_dict)
