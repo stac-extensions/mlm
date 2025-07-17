@@ -5,13 +5,13 @@ import torch.nn as nn
 from pystac import Asset, Collection, Item, Link
 from pystac.extensions.eo import Band, EOExtension
 
-from stac_model.base import TaskEnum
+from stac_model.base import DataType, ModelTask
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
 
 
-def normalize_dtype(torch_dtype: torch.dtype) -> str:
+def normalize_dtype(torch_dtype: torch.dtype) -> DataType:
     """
     Convert a PyTorch dtype (e.g., torch.float32) to a standardized string
     used in metadata or schemas (e.g., 'float32').
@@ -34,7 +34,7 @@ def normalize_dtype(torch_dtype: torch.dtype) -> str:
     return dtype_mapping[torch_dtype]
 
 
-def get_input_dtype(state_dict: dict) -> str:
+def get_input_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
     """
     Get the data type (dtype) of the input from the first convolutional layer's weights.
     """
@@ -44,7 +44,7 @@ def get_input_dtype(state_dict: dict) -> str:
     raise ValueError("Could not determine input dtype from model weights.")
 
 
-def get_output_dtype(state_dict: dict) -> str:
+def get_output_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
     """
     Get the data type (dtype) of the output from the segmentation head's last conv layer.
     """
@@ -54,7 +54,7 @@ def get_output_dtype(state_dict: dict) -> str:
     raise ValueError("Could not determine output dtype from model weights.")
 
 
-def get_input_channels(state_dict: dict) -> int:
+def get_input_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     Get number of input channels from the first convolutional layer's weights.
     """
@@ -64,7 +64,7 @@ def get_input_channels(state_dict: dict) -> int:
     raise ValueError("Could not determine input channels from model weights.")
 
 
-def get_output_channels(state_dict: dict) -> int:
+def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     Get number of output channels from the segmentation head's last conv layer.
     """
@@ -84,7 +84,7 @@ def from_torch(
     geometry: dict[str, Any] | None,
     links: Optional[list[dict]] = None,
     datetime_range: tuple[str, str] = None,
-    task: TaskEnum = None,
+    task: set[ModelTask] = None,
 ) -> ItemMLModelExtension:
     if datetime_range is None:
         raise ValueError("datetime_range must be provided as a tuple of (start, end) strings for a valid STAC item.")
