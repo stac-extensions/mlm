@@ -16,3 +16,7 @@ env/
 node_modules/
 docs/_build/
 docs/build/
+
+# potentially conflicting dev installs
+stac-mlm/
+mlm/

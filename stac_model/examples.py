@@ -130,7 +130,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
                 "mlm:weights",
                 "data",
             ],
-            extra_fields={"mlm:artifact_type": "torch.save"}
+            extra_fields={"mlm:artifact_type": "torch.save"},
         ),
         "source_code": pystac.Asset(
             title="Model implementation.",

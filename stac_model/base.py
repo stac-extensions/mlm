@@ -1,8 +1,10 @@
+from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Literal, TypeAlias, Union
+from typing import Annotated, Any, Literal, Optional, TypeAlias, Union
+from typing_extensions import Self
 
-from pydantic import BaseModel, ConfigDict, model_serializer
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 Number: TypeAlias = int | float
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | Number | bool | str | None
@@ -41,8 +43,9 @@ class MLMBaseModel(BaseModel):
             for key, field in self.model_fields.items()
             if any(isinstance(m, _OmitIfNone) for m in field.metadata)
         }
+        fields = getattr(self, "model_fields", self.__fields__)  # noqa
         values = {
-            self.__fields__[key].alias or key: val  # use the alias if specified
+            fields[key].alias or key: val  # use the alias if specified
             for key, val in self
             if key not in omit_if_none_fields or val is not None
         }
@@ -87,6 +90,7 @@ class TaskEnum(str, Enum):
     GENERATIVE = "generative"
     IMAGE_CAPTIONING = "image-captioning"
     SUPER_RESOLUTION = "super-resolution"
+    DOWNSCALING = "downscaling"
 
 
 ModelTaskNames: TypeAlias = Literal[
@@ -103,6 +107,7 @@ ModelTaskNames: TypeAlias = Literal[
     "generative",
     "image-captioning",
     "super-resolution",
+    "downscaling",
 ]
 
 
@@ -110,6 +115,112 @@ ModelTask = Union[ModelTaskNames, TaskEnum]
 
 
 class ProcessingExpression(MLMBaseModel):
+    """
+    Expression used to perform a pre-processing or post-processing step on the input or output model data.
+    """
+
     # FIXME: should use 'pystac' reference, but 'processing' extension is not implemented yet!
-    format: str
-    expression: Any
+    format: str = Field(
+        description="The type of the expression that is specified in the 'expression' property.",
+    )
+    expression: Any = Field(
+        description=(
+            "An expression compliant with the 'format' specified. "
+            "The expression can be any data type and depends on the format given. "
+            "This represents the processing operation to be applied on the entire data before or after the model."
+        )
+    )
+
+
+class ModelCrossReferenceObject(MLMBaseModel):
+    name: str = Field(
+        description=(
+            "Name of the reference to use for the input or output. "
+            "The name must refer to an entry of a relevant STAC extension providing further definition details."
+        )
+    )
+    # similar to 'ProcessingExpression', but they can be omitted here
+    format: Annotated[Optional[str], OmitIfNone] = Field(
+        default=None,
+        description="The type of the expression that is specified in the 'expression' property.",
+    )
+    expression: Annotated[Optional[Any], OmitIfNone] = Field(
+        default=None,
+        description=(
+            "An expression compliant with the 'format' specified. "
+            "The expression can be any data type and depends on the format given. "
+            "This represents the processing operation to be applied on the data before or after the model. "
+            "Contrary to pre/post-processing expressions, this expression is applied only to the specific "
+            "item it refers to."
+        ),
+    )
+
+    @model_validator(mode="after")
+    def validate_expression(self) -> Self:
+        if (  # mutually dependant
+            (self.format is not None or self.expression is not None)
+            and (self.format is None or self.expression is None)
+        ):
+            raise ValueError("Model band 'format' and 'expression' are mutually dependant.")
+        return self
+
+
+class ModelBand(ModelCrossReferenceObject):
+    """
+    Definition of a band reference in the model input or output.
+    """
+
+
+class ModelDataVariable(ModelCrossReferenceObject):
+    """
+    Definition of a data variable in the model input or output.
+    """
+
+
+class ModelBandsOrVariablesReferences(MLMBaseModel):
+    bands: Annotated[Sequence[str | ModelBand] | None, OmitIfNone] = Field(
+        description=(
+            "List of bands that compose the data. "
+            "If a string is used, it is implied to correspond to a named band. "
+            "If no band is needed for the data, use an empty array, or omit the property entirely. "
+            "If provided, order is critical to match the stacking method as aggregated 'bands' dimension "
+            "in 'dim_order' and 'shape' lists."
+        ),
+        # default omission is interpreted the same as if empty list was provided, but populate it explicitly
+        # if the user wishes to omit the property entirely, they can use `None` explicitly
+        default=[],
+        examples=[
+            [
+                "B01",
+                {"name": "B02"},
+                {
+                    "name": "NDVI",
+                    "format": "rio-calc",
+                    "expression": "(B08 - B04) / (B08 + B04)",
+                },
+            ],
+        ],
+    )
+    variables: Annotated[Sequence[str | ModelDataVariable] | None, OmitIfNone] = Field(
+        description=(
+            "List of variables that compose the data. "
+            "If a string is used, it is implied to correspond to a named variable. "
+            "If no variable is needed for the data, use an empty array, or omit the property entirely. "
+            "If provided, order is critical to match the stacking method as aggregated 'variables' dimension "
+            "in 'dim_order' and 'shape' lists."
+        ),
+        # default omission is interpreted the same as if empty list was provided, but populate it explicitly
+        # if the user wishes to omit the property entirely, they can use `None` explicitly
+        default=[],
+        examples=[
+            [
+                "10m_u_component_of_wind",
+                {"name": "10m_v_component_of_wind"},
+                {
+                    "name": "temperature_2m_celsius",
+                    "format": "rio-calc",
+                    "expression": "temperature_2m + 273.15",
+                },
+            ],
+        ],
+    )

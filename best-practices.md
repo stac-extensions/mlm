@@ -8,6 +8,7 @@ models or creating tools to work with STAC.
 
 - [Using STAC Common Metadata Fields for the MLM Extension](#using-stac-common-metadata-fields-for-the-mlm-extension)
 - [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-mlm-extension)
+  - [STAC Bands, EO, Raster and DataCube Extensions](#stac-bands-eo-raster-and-datacube-extensions)
   - [Processing Extension](#processing-extension)
   - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
   - [Classification Extension](#classification-extension)
@@ -67,6 +68,28 @@ the model, it is recommended that they are included as reference to the STAC Ite
 information regarding these references, see the [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) details.
 
 ## Recommended Extensions to Compose with the MLM Extension
+
+### STAC Bands, EO, Raster and DataCube Extensions
+
+When a model takes as input or produces as output raster bands, spatio-temporal data variables or leverages 
+Earth Observation data, it is **STRONGLY RECOMMENDED** to use a corresponding STAC Core or STAC Extension specification
+to describe them. This ensures that common metadata fields can be used both for search and retrieval of available
+data provided by catalogues, as well as for models using or producing them.
+
+Relevant core fields or extensions include:
+
+- [STAC Common Metadata Bands](https://github.com/radiantearth/stac-spec/blob/v1.1.0/commons/common-metadata.md#bands)
+- [STAC EO Extension](https://github.com/stac-extensions/eo)
+- [STAC Raster Extension](https://github.com/stac-extensions/raster)
+- [STAC DataCube Extension](https://github.com/stac-extensions/datacube)
+
+For further details on how to use these extensions and their implications in the context of
+the Machine Learning Model extension, please refer to the corresponding sections:
+
+- [Model Input Object](./README.md#model-input-object)
+- [Model Output Object](./README.md#model-output-object)
+- [Bands and Statistics](./README.md#bands-and-statistics)
+- [Data Variables](./README.md#data-variables)
 
 ### Processing Extension
 
