@@ -122,6 +122,12 @@
   },
   "links": [
     {
+      "rel": "cite-as",
+      "href": "https://arxiv.org/abs/2409.16252",
+      "type": "text/html",
+      "title": "Publication for the model"
+    },
+    {
       "rel": "self",
       "href": "./item_pytorch_geo_unet.json",
       "type": "application/json"
@@ -137,7 +143,7 @@
       "href": "https://huggingface.co/torchgeo/ftw/resolve/d2fdab6ea9d9cd38b491292cc9a5c8642533cef5/noncommercial/2-class/sentinel2_unet_effb3-bf010a31.pth",
       "type": "application/octet-stream; application=pytorch",
       "title": "U-Net_efficientnet-b3",
-      "description": "A U-Net segmentation model with efficientnet-b3 encoder trained on FTW imagery with 2-class labels. Weights are non-commercial.",
+      "description": "A U-Net segmentation model with efficientnet-b3 encoder Weights are non-commercial.",
       "mlm:artifact_type": "torch.save",
       "eo:bands": [
         {
@@ -171,24 +177,14 @@
         "data"
       ]
     },
-    "publication": {
-      "href": "https://arxiv.org/abs/2409.16252",
-      "type": "text/html",
-      "title": "FTW publication",
-      "description": "Paper describing the FTW dataset and model benchmarks.",
-      "roles": [
-        "publication",
-        "paper"
-      ]
-    },
     "source_code": {
-      "href": "https://github.com/fieldsoftheworld/ftw-baselines",
+      "href": "https://github.com/qubvel-org/segmentation_models.pytorch",
       "type": "text/html",
-      "title": "FTW Baselines repository",
-      "description": "GitHub repo with baseline code for FTW dataset models.",
+      "title": "Source code for U-Net_efficientnet-b3",
+      "description": "GitHub repo of the pytorch model",
+      "mlm:entrypoint": "segmentation_models_pytorch.decoders.unet.model.Unet",
       "roles": [
-        "mlm:source_code",
-        "code"
+        "mlm:source_code"
       ]
     }
   },

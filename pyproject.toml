@@ -302,8 +302,6 @@ warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-#  TODO add ignore venv
-
 plugins = [
   "pydantic.mypy"
 ]

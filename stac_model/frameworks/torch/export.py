@@ -158,10 +158,7 @@ def from_torch(
         data_type=input_data_type,
     )
 
-    if weights and "bands" in weights.meta:
-        bands = weights.meta["bands"]
-    else:
-        bands = [f"band_{i}" for i in range(input_shape[1])]
+    bands = weights.meta["bands"] if weights and "bands" in weights.meta else None
 
     model_input = ModelInput(
         name="model_input",
@@ -192,13 +189,16 @@ def from_torch(
         post_processing_function=None,
     )
 
-    if weights:
-        meta = weights.meta
-        url = weights.url
-
+    # If weights are provided with metadata, extract metadata from them
+    meta, url = (weights.meta, weights.url) if weights else ({}, None)
+    raw_model = meta.get('model', 'Model')
+    model_encoder = meta.get('encoder', 'Encoder')
+    model_name = f"{raw_model}_{model_encoder}"
+    license = meta.get('license', 'license')
+    publication_url = meta.get("publication", None)
     pretrained = weights is not None
     mlm_props = MLModelProperties(
-        name=(f"{meta.get('model', 'Model')}_{meta.get('encoder', '')}"),
+        name=model_name,
         architecture=arch,
         framework=module,
         tasks=task,
@@ -211,53 +211,48 @@ def from_torch(
 
     assets = {}
 
-    # Model weights asset
-    assets["model"] = Asset(
-        title=(f"{meta.get('model', 'Model')}_{meta.get('encoder', '')}"),
-        description=(
-            f"A {meta.get('model', 'Model')} segmentation model with {meta.get('encoder', '')} encoder "
-            f"trained on {meta.get('dataset', 'dataset')} imagery with {meta.get('num_classes', '?')}-class labels. "
-            f"Weights are {meta.get('license', 'licensed')}."
-        ),
-        href=url,
-        media_type="application/octet-stream; application=pytorch",
-        roles=[
-            "mlm:model",
-            "mlm:weights",
-            "data",
-        ],
-        extra_fields={"mlm:artifact_type": "torch.save"},
-    )
-
-    # Publication TODO https://github.com/stac-extensions/scientific?tab=readme-ov-file#relation-types
-    # stac link rel=cite as <cite> <cite>
-    # pystac link avec rel cite as <cite>
-
-    publication_url = meta.get("publication")
-    if publication_url:
-        assets["publication"] = Asset(
-            title=f"{meta.get('dataset', 'Dataset')} publication",
-            description=f"Paper describing the {meta.get('dataset', 'dataset')} dataset and model benchmarks.",
-            href=publication_url,
-            media_type="text/html",
+    # Model asset
+    if url:
+        assets["model"] = Asset(
+            title=model_name,
+            description=(
+                f"A {raw_model} segmentation model with {model_encoder} encoder "
+                f"Weights are {license}."
+            ),
+            href=url,
+            media_type="application/octet-stream; application=pytorch",
             roles=[
-                "publication",
-                "paper",
+                "mlm:model",
+                "mlm:weights",
+                "data",
             ],
+            extra_fields={"mlm:artifact_type": "torch.save"},
         )
 
+    links = links or []
+
+    if publication_url:
+        title = "Publication for the model"
+        links.append(
+            {
+                "rel": "cite-as",
+                "target": publication_url,
+                "media_type": "text/html",
+                "title": title,
+            }
+        )
     # Source code asset
-    repo_url = meta.get("repo")
-    if repo_url:
+    if url and "segmentation" in arch:
+        # Define more href depending of model architecture 
         assets["source_code"] = Asset(
-            title=f"{meta.get('dataset', 'Dataset')} Baselines repository",
-            description=f"GitHub repo with baseline code for {meta.get('dataset', 'dataset')} dataset models.",
-            href=repo_url,
+            title=f"Source code for {model_name}",
+            description="GitHub repo of the pytorch model",
+            href="https://github.com/qubvel-org/segmentation_models.pytorch",
             media_type="text/html",
             roles=[
                 "mlm:source_code",
-                "code",
             ],
+            extra_fields={"mlm:entrypoint": arch},
         )
 
     item = Item(
@@ -271,22 +266,23 @@ def from_torch(
         assets=assets,
     )
 
-    for link in links or []:
+    for link in links:
         item.add_link(Link(**link))
 
     ext = MLModelExtension.ext(item, add_if_missing=True)
     ext.apply(mlm_props)
 
-    eo_model_asset = cast(
-        EOExtension[Asset],
-        EOExtension.ext(assets["model"], add_if_missing=True),
-    )
-    eo_bands = []
-    for name in bands:
-        band = Band({})
-        band.apply(name=name)
-        eo_bands.append(band)
-    eo_model_asset.apply(bands=eo_bands)
+    if "model" in assets:
+        eo_model_asset = cast(
+            EOExtension[Asset],
+            EOExtension.ext(assets["model"], add_if_missing=True),
+        )
+        eo_bands = []
+        for name in bands:
+            band = Band({})
+            band.apply(name=name)
+            eo_bands.append(band)
+        eo_model_asset.apply(bands=eo_bands)
 
     item_mlm = MLModelExtension.ext(item, add_if_missing=True)
     item_mlm.apply(mlm_props.model_dump(by_alias=True, exclude_unset=True, exclude_defaults=True))
