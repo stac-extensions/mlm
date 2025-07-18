@@ -36,6 +36,10 @@ def normalize_dtype(torch_dtype: torch.dtype) -> DataType:
 
 
 def find_tensor_by_key(state_dict: dict[str, torch.Tensor], key_substring: str, reverse: bool = False) -> torch.Tensor:
+    """
+    Find a tensor in the state_dict by a substring in its key.
+    If `reverse` is True, search from the end of the dictionary.
+    """
     items = reversed(state_dict.items()) if reverse else state_dict.items()
     for key, tensor in items:
         if key_substring in key:
@@ -67,7 +71,7 @@ def get_output_dtype(state_dict: dict[str, torch.Tensor]) -> DataType:
 def get_input_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     Get number of input channels from the first convolutional layer's weights.
-    """    
+    """
     tensor = find_tensor_by_key(state_dict, "encoder._conv_stem.weight")
     return tensor.shape[1]
 
@@ -97,7 +101,25 @@ def from_torch(
     # torch parameters
     weights: Optional[WeightsWithMeta] = None,
 ) -> ItemMLModelExtension:
-    
+    """Creates a STAC Item with ML Model Extension metadata from a PyTorch model.
+
+    Args:
+        model (nn.Module): The PyTorch model to export.
+        task (set[ModelTask]): Set of ML tasks the model supports (e.g., classification, segmentation).
+        item_id (str): Unique identifier for the STAC item.
+        collection (str | Collection): Collection ID or Collection object the item belongs to.
+        bbox (list[float] | None): Bounding box of the item.
+        geometry (dict[str, Any] | None): GeoJSON-like geometry defining the spatial extent of the item.
+        links (Optional[list[dict[str, Any]]], optional): List of STAC links to associate with the item.
+        datetime (Optional[datetime], optional): Timestamp associated with the item.
+        datetime_range (Optional[tuple[Union[str, datetime], Union[str, datetime]]], optional): Temporal extent as a start/end range.
+        stac_extensions (Optional[list[str]], optional): Additional STAC extensions to include.
+        stac_properties (Optional[dict[str, Any]], optional): Additional custom STAC properties.
+        weights (Optional[WeightsWithMeta], optional): Optional PyTorch weights object with metadata.
+
+    Returns:
+        ItemMLModelExtension: A STAC Item with the Machine Learning Model extension populated.
+    """
     if bbox is None and geometry is None:
         raise ValueError("Either bbox or geometry must be provided for a valid STAC item.")
     
@@ -110,8 +132,8 @@ def from_torch(
 
     properties = {
         "description": "An Item with Machine Learning Model Extension metadata for a PyTorch model.",
-
     }
+
     if datetime_range:
         properties.update({
             "start_datetime": str(datetime_range[0]),
@@ -241,6 +263,7 @@ def from_torch(
                 "title": title,
             }
         )
+
     # Source code asset
     if url and "segmentation" in arch:
         # Define more href depending of model architecture 
