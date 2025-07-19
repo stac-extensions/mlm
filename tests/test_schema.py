@@ -79,7 +79,7 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
         ("mlm:input", []),
         ("mlm:output", []),
         ("mlm:hyperparameters", {"test": {}}),
-    ]
+    ],
 )
 def test_mlm_no_undefined_prefixed_field_asset_properties(
     mlm_validator: STACValidator,
@@ -102,7 +102,7 @@ def test_mlm_no_undefined_prefixed_field_asset_properties(
     assert test_field in errors[0].instance
     assert errors[0].schema["description"] in [
         "All possible MLM fields regardless of the level they apply (Collection, Item, Asset, Link).",
-        "Fields that are disallowed under the Asset properties."
+        "Fields that are disallowed under the Asset properties.",
     ]
 
 
@@ -266,7 +266,7 @@ def test_mlm_other_non_mlm_assets_allowed(
         ({"roles": ["checkpoint", "mlm:model"]}, False),
         ({"roles": ["checkpoint"], "mlm:artifact_type": "test"}, False),
         ({"roles": ["checkpoint", "mlm:model"], "mlm:artifact_type": "test"}, True),
-    ]
+    ],
 )
 def test_mlm_at_least_one_asset_model(
     mlm_validator: STACValidator,
@@ -296,7 +296,7 @@ def test_mlm_at_least_one_asset_model(
         errors = cast(list[ValidationError], exc.value.source)
         assert errors[0].schema["$comment"] in [
             "At least one Asset must provide the model definition indicated by the 'mlm:model' role.",
-            "Used to check the artifact type property that is required by a Model Asset annotated by 'mlm:model' role."
+            "Used to check the artifact type property that is required by a Model Asset annotated by 'mlm:model' role.",
         ]
 
 
