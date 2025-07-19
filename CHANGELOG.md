@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add official Python 3.13 support to the CI workflow and package release.
 - Add `examples/torch/mlm-metadata.yaml` example that provides a minimal metadata example for
   a PyTorch model which can be validated using the MLM Schema without the need to be fully
   compliant with the STAC Specification.

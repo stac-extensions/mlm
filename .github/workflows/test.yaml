@@ -1,7 +1,7 @@
 name: Check Markdown and Examples
 on: [push, pull_request]
 jobs:
-  deploy:
+  check-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@v4
