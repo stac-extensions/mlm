@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Enforce `roles: ["code"]` (minimally) to be included if an Asset specified `mlm:entrypoint`.
 - Update `stac-model==0.4.0` to provide corresponding additions for `variables` reference.
 - Refactor `ModelInput` and `ModelOutput` objects to use a new `ModelBandsOrVariablesReferences` definition
   combining the `ModelBand` and `ModelDataVariable` lists.
@@ -58,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix JSON schema not allowing `mlm:entrypoint` to be defined under a [Source Code Asset](README.md#source-code-asset).
 - Fix `stac_model.output.ModelOutput` enforcing the need to specify `classification:classes` or `classes`.
   The property can now be omitted if the model does not need to indicate that it produces a classification output.
 - Fix missing ``encoding="utf-8"`` parameters in `open` calls leading to failing parsing of example JSON STAC Item
