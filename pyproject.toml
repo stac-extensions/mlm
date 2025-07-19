@@ -23,7 +23,6 @@ dependencies = [
     "shapely<3,>=2",
     "jsonschema<5.0.0,>=4.21.1",
     "pip>=25.0.0",
-    "requests[dev]>=2.32.3",
 ]
 # important: leave the name and version together for bump resolution
 name = "stac-model"
@@ -77,6 +76,7 @@ dev-dependencies = [
     "ruff<1.0.0,>=0.2.2",
     "bump-my-version>=0.21",
     "types-python-dateutil>=2.9.0.20241003",
+    "requests>=2.32.4",
 ]
 
 [project.urls]
