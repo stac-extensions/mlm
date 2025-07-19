@@ -21,10 +21,14 @@
 
 <!-- Mark with an `x` all the checkboxes that apply (like `[x]`) -->
 
-- [ ] I've read the [`CONTRIBUTING.md`](https://github.com/stac-extensions/mlm/blob/main/CONTRIBUTING.md) guide;
-- [ ] I've updated the [`CHANGELOG.md`](https://github.com/stac-extensions/mlm/blob/main/CHANGELOG.md) with provided changes;
-- [ ] I've updated the [`README.md`](https://github.com/stac-extensions/mlm/blob/main/README.md) and/or
-      [`best-practices.md`](https://github.com/stac-extensions/mlm/blob/main/best-practices.md) as applicable with new features;
+- [ ] I've read the [`CONTRIBUTING.md`][contrib] guide;
+- [ ] I've updated the [`CHANGELOG.md`][changes] with provided changes;
+- [ ] I've updated the [`README.md`][readme] and/or [`best-practices.md`][best-practices] as applicable with new features;
 - [ ] I've updated the code style using `make check`;
 - [ ] I've written tests for all new methods and classes that I created;
 - [ ] I've written the docstring in `Google` format for all the methods and classes that I used.
+
+[contrib]: https://github.com/stac-extensions/mlm/blob/main/CONTRIBUTING.md
+[changes]: https://github.com/stac-extensions/mlm/blob/main/CHANGELOG.md
+[readme]: https://github.com/stac-extensions/mlm/blob/main/README.md
+[best-practices]: https://github.com/stac-extensions/mlm/blob/main/best-practices.md
