@@ -1255,7 +1255,7 @@ dev = [
     { name = "pytest-sugar", specifier = ">=0.9.7,<1.0.0" },
     { name = "pytest-timeout", specifier = ">=2.2.0,<3.0.0" },
     { name = "ruff", specifier = ">=0.2.2,<1.0.0" },
-    { name = "safety", specifier = ">=2.3.4,<3.0.0" },
+    { name = "safety", specifier = ">=2.3.5,<3.0.0" },
     { name = "setuptools", specifier = ">=78.1.1" },
     { name = "types-python-dateutil", specifier = ">=2.9.0.20241003" },
 ]
