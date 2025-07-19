@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add official Python 3.13 support to the CI workflow and package release.
 - Add `ModelDataVariable` to `stac_model` for corresponding `mlm:input` and `mlm:output` definitions as the JSON schema.
 - Add `variables` properties to [Model Input Object](README.md#model-input-object)
   to allow specifying the relevant data variables used by the model,
