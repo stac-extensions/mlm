@@ -23,6 +23,7 @@ class WeightsWithMeta(Protocol):
 
     See: https://github.com/pytorch/vision/blob/main/torchvision/models/_api.py
     """
+
     url: str
     transforms: Callable[..., Any]
     meta: dict[str, Any]
@@ -97,7 +98,7 @@ def from_torch(
     datetime: Optional[datetime] = None,
     datetime_range: Optional[tuple[Union[str, datetime], Union[str, datetime]]] = None,
     stac_extensions: Optional[list[str]] = None,
-    stac_properties: Optional[dict[str, Any]] = None, 
+    stac_properties: Optional[dict[str, Any]] = None,
     # torch parameters
     weights: Optional[WeightsWithMeta] = None,
 ) -> ItemMLModelExtension:
@@ -122,7 +123,7 @@ def from_torch(
     """
     if bbox is None and geometry is None:
         raise ValueError("Either bbox or geometry must be provided for a valid STAC item.")
-    
+
     if bbox is None:
         assert geometry is not None
         bbox = utils.geometry_to_bbox(geometry)
@@ -135,11 +136,13 @@ def from_torch(
     }
 
     if datetime_range:
-        properties.update({
-            "start_datetime": str(datetime_range[0]),
-            "end_datetime": str(datetime_range[1]),
-        })
-    
+        properties.update(
+            {
+                "start_datetime": str(datetime_range[0]),
+                "end_datetime": str(datetime_range[1]),
+            }
+        )
+
     if not datetime and not datetime_range:
         raise ValueError("datetime or datetime range must be provided for a valid STAC item.")
 
@@ -169,14 +172,14 @@ def from_torch(
         num_classes = get_output_channels(state_dict)
 
     h, w = get_input_hw(state_dict)
-    input_shape = [1, in_chans, h, w]
-    output_shape = [1, num_classes]
+    input_shape = [-1, in_chans, h, w]
+    output_shape = [-1, num_classes]
     input_data_type = get_input_dtype(state_dict)
     output_data_type = get_output_dtype(state_dict)
 
     input_struct = InputStructure(
         shape=input_shape,
-        dim_order=["batch", "channel", "height", "width"],
+        dim_order=["batch", "bands", "height", "width"],
         data_type=input_data_type,
     )
 
@@ -213,10 +216,10 @@ def from_torch(
 
     # If weights are provided with metadata, extract metadata from them
     meta, url = (weights.meta, weights.url) if weights else ({}, None)
-    raw_model = meta.get('model', 'Model')
-    model_encoder = meta.get('encoder', 'Encoder')
+    raw_model = meta.get("model", "Model")
+    model_encoder = meta.get("encoder", "Encoder")
     model_name = f"{raw_model}_{model_encoder}"
-    license = meta.get('license', 'license')
+    license = meta.get("license", "license")
     publication_url = meta.get("publication", None)
     pretrained = weights is not None
     mlm_props = MLModelProperties(
@@ -237,10 +240,7 @@ def from_torch(
     if url:
         assets["model"] = Asset(
             title=model_name,
-            description=(
-                f"A {raw_model} segmentation model with {model_encoder} encoder "
-                f"Weights are {license}."
-            ),
+            description=(f"A {raw_model} segmentation model with {model_encoder} encoder " f"Weights are {license}."),
             href=url,
             media_type="application/octet-stream; application=pytorch",
             roles=[
@@ -254,7 +254,7 @@ def from_torch(
     links = links or []
 
     if publication_url:
-        title = "Publication for the model"
+        title = "Publication for the training dataset of the model"
         links.append(
             {
                 "rel": "cite-as",
@@ -266,7 +266,7 @@ def from_torch(
 
     # Source code asset
     if url and "segmentation" in arch:
-        # Define more href depending of model architecture 
+        # Define more href depending of model architecture
         assets["source_code"] = Asset(
             title=f"Source code for {model_name}",
             description="GitHub repo of the pytorch model",
@@ -285,7 +285,7 @@ def from_torch(
         bbox=bbox,
         datetime=datetime,
         properties=properties,
-        stac_extensions=[MLModelExtension.get_schema_uri()]  + (stac_extensions or []),
+        stac_extensions=[MLModelExtension.get_schema_uri()] + (stac_extensions or []),
         assets=assets,
     )
 
