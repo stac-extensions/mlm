@@ -13,6 +13,7 @@ from stac_model.torch.export import (
     package,
 )
 
+pytest.importorskip("torch")
 
 def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> None:
     device = torch.device(device)
