@@ -25,11 +25,11 @@ def package(
     """Packages a model and its transforms AOTI exported programs into a single archive file.
 
     Args:
-        output_file (str): The path to the output archive file.
-        model_program (torch.export.ExportedProgram): The exported model program.
-        transforms_program (torch.export.ExportedProgram | None): The exported transforms program.
-        metadata_path (str | None): Path to the YAML file containing model metadata.
-        aoti_compile_and_package (bool): Whether to compile and package the model and transforms using AOTI. Defaults to True.
+        output_file: The path to the output archive file.
+        model_program: The exported model program.
+        transforms_program: The exported transforms program.
+        metadata_path: Path to the YAML file containing model metadata.
+        aoti_compile_and_package: Whether to compile and package the model and transforms using AOTI. Defaults to True.
     """
     # Load metadata file
     if metadata_path is not None:
@@ -108,14 +108,13 @@ def export(
     """Exports a model and its transforms to programs.
 
     Args:
-        model (torch.nn.Module): The model to export.
-        transforms (torch.nn.Module): The transforms to export.
-        input_shape (Sequence[int]): The shape of the input tensor, where -1 indicates a dynamic dimension.
-        device (torch.device): The device to export the model and transforms to.
+        model: The model to export.
+        transforms: The transforms to export.
+        input_shape: The shape of the input tensor, where -1 indicates a dynamic dimension.
+        device: The device to export the model and transforms to.
 
     Returns:
-        tuple[torch.export.ExportedProgram, torch.export.ExportedProgram]:
-            A tuple containing the exported model program and transforms program.
+            The exported model and transforms programs.
     """
     model.eval()
     transforms.eval()
