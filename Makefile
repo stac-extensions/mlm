@@ -3,7 +3,15 @@ SHELL ?= /usr/bin/env bash
 
 # use the directory rather than the python binary to allow auto-discovery, which is more cross-platform compatible
 PYTHON_PATH := $(shell which python)
-PYTHON_ROOT := $(shell dirname $(dir $(PYTHON_PATH)))
+# handle whether running on Windows or Unix-like systems
+ifneq ($(findstring $(PYTHON_PATH),bin/python),)
+	PYTHON_ROOT := $(shell dirname $(dir $(PYTHON_PATH)))
+else
+	PYTHON_ROOT := $(shell dirname $(PYTHON_PATH))
+endif
+ifeq ($(patsubst %/bin,,$(lastword $(PYTHON_ROOT))),)
+  PYTHON_ROOT := $(dir $(PYTHON_ROOT))
+endif
 UV_PYTHON_ROOT ?= $(PYTHON_ROOT)
 
 # to actually reuse an existing virtual/conda environment, the 'UV_PROJECT_ENVIRONMENT' variable must be set to it
@@ -54,7 +62,7 @@ format: codestyle
 #* Linting
 .PHONY: test
 test: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml --cov-report=html --cov=stac_model tests/
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
 check: check-examples check-markdown check-lint check-mypy check-safety check-citation

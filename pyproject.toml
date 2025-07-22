@@ -39,6 +39,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
     "Framework :: Pydantic",
     "Framework :: Pydantic :: 2",
@@ -59,7 +60,7 @@ dev-dependencies = [
     "mypy-extensions<1.0.0,>=0.4.3",
     "pre-commit<3.0.0,>=2.21.0",
     "bandit<2.0.0,>=1.7.5",
-    "safety<3.0.0,>=2.3.4",
+    "safety<3.0.0,>=2.3.5",
     "pystac<2.0.0,>=1.10.0",
     "pydocstyle[toml]<7.0.0,>=6.2.0",
     "pydoclint<0.6,>=0.3",
@@ -75,6 +76,7 @@ dev-dependencies = [
     "ruff<1.0.0,>=0.2.2",
     "bump-my-version>=0.21",
     "types-python-dateutil>=2.9.0.20241003",
+    "requests>=2.32.4",
 ]
 
 [project.urls]
@@ -109,6 +111,38 @@ message = "Bump version: {current_version} → {new_version}"
 
 [[tool.bumpversion.files]]
 glob = "**/*.json"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
+glob = "**/*.yml"
+glob_exclude = [
+  ".git/**",
+  "**/__pycache__/**",
+  ".mypy_cache/**",
+  ".tox/**",
+  ".venv/**",
+  "_build/**",
+  "build/**",
+  "dist/**",
+  "node_modules/**",
+]
+search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
+replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
+
+[[tool.bumpversion.files]]
+glob = "**/*.yaml"
 glob_exclude = [
   ".git/**",
   "**/__pycache__/**",
@@ -197,7 +231,7 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "E501"]
+ignore = ["UP007", "UP015", "E501"]
 exclude = [
     ".git",
     "__pycache__",
@@ -328,7 +362,7 @@ exclude_also = [
   "def main",
   "if __name__ == .__main__.:"
 ]
-fail_under = 50
+fail_under = 80
 show_missing = true
 
 [tool.coverage.paths]

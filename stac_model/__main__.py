@@ -35,7 +35,7 @@ def main(
 ) -> ItemMLModelExtension:
     """Generate example spec."""
     ml_model_meta = eurosat_resnet()
-    with open("example.json", "w") as json_file:
+    with open("example.json", mode="w", encoding="utf-8") as json_file:
         json.dump(ml_model_meta.item.to_dict(), json_file, indent=4)
     print("Example model metadata written to ./example.json.")
     return ml_model_meta
