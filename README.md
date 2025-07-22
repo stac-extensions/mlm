@@ -864,27 +864,35 @@ See the [Best Practices - Framework Specific Artifact Types](./best-practices.md
 
 ### Source Code Asset
 
-| Field Name     | Type      | Description                                                                   |
-|----------------|-----------|-------------------------------------------------------------------------------|
-| title          | string    | Title of the source code.                                                     |
-| href           | string    | URI to the code repository, a ZIP archive, or an individual code/script file. |
-| type           | string    | Media-type of the URI.                                                        |
-| roles          | \[string] | **RECOMMENDED** Specify one or more of `["model", "code", "metadata"]`        |
-| description    | string    | Description of the source code.                                               |
-| mlm:entrypoint | string    | Specific entrypoint reference in the code to use for running model inference. |
+| Field Name     | Type      | Description                                                                                                               |
+|----------------|-----------|---------------------------------------------------------------------------------------------------------------------------|
+| title          | string    | Title of the source code.                                                                                                 |
+| href           | string    | URI to the code repository, a ZIP archive, or an individual code/script file.                                             |
+| type           | string    | Media-type of the URI.                                                                                                    |
+| roles          | \[string] | **RECOMMENDED** Specify one or more of `["model", "code", "metadata"]`.                                                   |
+| description    | string    | Description of the source code.                                                                                           |
+| mlm:entrypoint | string    | Specific entrypoint reference in the code to use for running model inference. If specified, the `code` role is MANDATORY. |
 
-If the referenced code does not directly offer a callable script to run the model, the `mlm:entrypoint` field should be
-added to the [Asset Object][stac-asset] in order to provide a pointer to the inference function to execute the model.
-For example, `my_package.my_module:predict` would refer to the `predict` function located in the `my_module` inside the
-`my_package` library provided by the repository.
+If the referenced code does not directly offer a callable script to run the model
+(i.e.: calling the script automatically resolves into invoking model inference within input data),
+then the `mlm:entrypoint` field should be provided into an [Asset Object][stac-asset] in order to provide
+a pointer to the inference function to execute the model.
+For example, using a Python script, a `mlm:entrypoint` value of `"my_package.my_module:predict"` would refer
+to the `predict` function located in the `my_module` inside the `my_package` library provided by the repository.
 
 It is strongly recommended to use a specific media-type such as `text/x-python` if the source code refers directly
 to a script of a known programming language. Using the HTML rendering of that source file, such as though GitHub
-for example, should be avoided. Using the "Raw Contents" endpoint for such cases is preferable.
-The `text/html` media-type should be reserved for cases where the URI generally points at a Git repository.
-Note that the URI including the specific commit hash, release number or target branch should be preferred over
-other means of referring to checkout procedures, although this specification does not prohibit the use of additional
-properties to better describe the Asset.
+for example, should be avoided. It is preferable to provide the "Raw Contents" endpoint of the script to facilitate
+its invocation without additional parsing to retrieve the source code.
+The `text/html` media-type can be used for identification purpose using the URI referring to a version control 
+repository such as Git, and where the `mlm:entrypoint` function can be easily resolved, through the corresponding 
+package installed from PyPI. 
+
+If an URI to a version control system is employed, it is recommended that it includes a specific commit hash, a
+release number, a target branch or Git tag in order to ensure correct resolution of the specific model being described.
+Embedded this information into the URI is recommended over other means of referring to checkout procedures simple to
+facilitate the retrieval of the source code with a single reference, although this specification does not prohibit
+the use of additional properties to better describe the Asset as needed.
 
 Since the source code of a model provides useful example on how to use it, it is also recommended to define relevant
 references to documentation using the `example` extension.
