@@ -712,7 +712,16 @@
           "$ref": "#/$defs/ResizeType"
         },
         "pre_processing_function": {
-          "$ref": "#/$defs/ProcessingExpression"
+          "oneOf": [
+            {"$ref": "#/$defs/ProcessingExpression"},
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ProcessingExpression"
+              },
+              "minItems": 1
+            }
+          ]
         }
       }
     },
@@ -753,7 +762,16 @@
           "$ref": "#/$defs/ClassificationClasses"
         },
         "post_processing_function": {
-          "$ref": "#/$defs/ProcessingExpression"
+          "oneOf": [
+            {"$ref": "#/$defs/ProcessingExpression"},
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ProcessingExpression"
+              },
+              "minItems": 1
+            }
+          ]
         }
       }
     },
