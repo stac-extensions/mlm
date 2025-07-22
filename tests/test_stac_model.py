@@ -128,16 +128,25 @@ class Omitted:
             [
                 (
                     # explicit empty list should be kept
-                    [], [], [], []
+                    [],
+                    [],
+                    [],
+                    [],
                 ),
                 (
                     # explicit None should drop the definitions
-                    None, None, Omitted, Omitted,
+                    None,
+                    None,
+                    Omitted,
+                    Omitted,
                 ),
                 (
                     # omitting the properties should default to empty definitions
-                    Omitted, Omitted, [], [],
-                )
+                    Omitted,
+                    Omitted,
+                    [],
+                    [],
+                ),
             ],
         )
     ],
@@ -155,11 +164,7 @@ def test_model_bands_or_variables_defaults(
     if variables is not Omitted:
         mlm_xargs["variables"] = variables
     mlm_struct = make_struct(model_class, [1, 2, 3])
-    mlm_input = model_class(
-        name="test",
-        **mlm_struct,
-        **mlm_xargs
-    )
+    mlm_input = model_class(name="test", **mlm_struct, **mlm_xargs)
     mlm_input_json = mlm_input.model_dump()
     if expected_bands is Omitted:
         assert "bands" not in mlm_input_json

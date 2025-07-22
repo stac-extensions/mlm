@@ -3,27 +3,33 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm.build]
-includes = [
-    "stac_model",
-]
+includes = ["stac_model"]
 
 [project]
 authors = [
-    {name = "Ryan Avery", email = "ryan@wherobots.com"},
-    {name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca"},
+  { name = "Ryan Avery", email = "ryan@wherobots.com" },
+  { name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca" },
 ]
-license = {text = "Apache Software License 2.0"}
-requires-python = "<4.0,>=3.10"
+license = { text = "Apache Software License 2.0" }
+requires-python = "<4.0,>=3.11"
 dependencies = [
-    "typer<1.0.0,>=0.9.0",
-    "rich>=13.7.0,<15.0.0",
-    "pydantic<3.0.0,>=2.6.3",
-    "pydantic-core<3,>=2",
-    "pystac<2.0.0,>=1.9.0",
-    "shapely<3,>=2",
-    "jsonschema<5.0.0,>=4.21.1",
-    "pip>=25.0.0",
+  "typer<1.0.0,>=0.9.0",
+  "rich>=13.7.0,<15.0.0",
+  "pydantic<3.0.0,>=2.6.3",
+  "pydantic-core<3,>=2",
+  "pystac<2.0.0,>=1.9.0",
+  "shapely<3,>=2",
+  "jsonschema<5.0.0,>=4.21.1",
+  "pip>=25.0.0",
 ]
+optional-dependencies.torch = ["torch>=2.8.0.dev,<2.9.0", "torchvision>=0.21"]
+optional-dependencies.torch-cu126 = [
+  "pytorch-triton; sys_platform=='linux'",
+  "torch>=2.8.0.dev,<2.9.0; sys_platform=='linux'",
+  "torchgeo; sys_platform=='linux'",
+  "torchvision>=0.21,<1; sys_platform=='linux'",
+]
+
 # important: leave the name and version together for bump resolution
 name = "stac-model"
 version = "0.3.0"
@@ -31,53 +37,81 @@ description = "A PydanticV2 validation and serialization libary for the STAC ML 
 readme = "README_STAC_MODEL.md"
 keywords = []
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3 :: Only",
-    "Framework :: Pydantic",
-    "Framework :: Pydantic :: 2",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: Science/Research",
-    "Topic :: File Formats :: JSON :: JSON Schema",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Scientific/Engineering :: GIS",
-    "Topic :: Scientific/Engineering :: Image Processing",
-    "Topic :: Scientific/Engineering :: Image Recognition",
+  "Development Status :: 4 - Beta",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3 :: Only",
+  "Framework :: Pydantic",
+  "Framework :: Pydantic :: 2",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "Topic :: File Formats :: JSON :: JSON Schema",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 
 [tool.uv]
 dev-dependencies = [
-    "setuptools>=78.1.1",
-    "mypy<2.0.0,>=1.0.0",
-    "mypy-extensions<1.0.0,>=0.4.3",
-    "pre-commit<3.0.0,>=2.21.0",
-    "bandit<2.0.0,>=1.7.5",
-    "safety<3.0.0,>=2.3.5",
-    "pystac<2.0.0,>=1.10.0",
-    "pydocstyle[toml]<7.0.0,>=6.2.0",
-    "pydoclint<0.6,>=0.3",
-    "pytest<8.0.0,>=7.2.1",
-    "pytest-cov<5.0.0,>=4.1.0",
-    "pytest-mock<4.0.0,>=3.10.0",
-    "pytest-timeout<3.0.0,>=2.2.0",
-    "pytest-benchmark<5.0.0,>=4.0.0",
-    "pytest-sugar<1.0.0,>=0.9.7",
-    "pytest-click<2.0.0,>=1.1.0",
-    "pytest-pikachu<2.0.0,>=1.0.0",
-    "coverage<8.0.0,>=7.3.0",
-    "ruff<1.0.0,>=0.2.2",
-    "bump-my-version>=0.21",
-    "types-python-dateutil>=2.9.0.20241003",
-    "requests>=2.32.4",
+  "setuptools>=78.1.1",
+  "mypy<2.0.0,>=1.0.0",
+  "mypy-extensions<1.0.0,>=0.4.3",
+  "pre-commit<3.0.0,>=2.21.0",
+  "bandit<2.0.0,>=1.7.5",
+  "safety<3.0.0,>=2.3.5",
+  "pystac<2.0.0,>=1.10.0",
+  "pydocstyle[toml]<7.0.0,>=6.2.0",
+  "pydoclint<0.6,>=0.3",
+  "pytest<8.0.0,>=7.2.1",
+  "pytest-cov<5.0.0,>=4.1.0",
+  "pytest-mock<4.0.0,>=3.10.0",
+  "pytest-timeout<3.0.0,>=2.2.0",
+  "pytest-benchmark<5.0.0,>=4.0.0",
+  "pytest-sugar<1.0.0,>=0.9.7",
+  "pytest-click<2.0.0,>=1.1.0",
+  "pytest-pikachu<2.0.0,>=1.0.0",
+  "coverage<8.0.0,>=7.3.0",
+  "ruff<1.0.0,>=0.2.2",
+  "bump-my-version>=0.21",
+  "types-python-dateutil>=2.9.0.20241003",
+  "requests>=2.32.4",
 ]
+
+conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
+prerelease = "allow"
+required-environments = [
+  "sys_platform == 'darwin' and platform_machine == 'arm64'",
+  "sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/nightly/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/nightly/cu126"
+explicit = true
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", extra = "torch" },
+  { index = "pytorch-cu126", extra = "torch-cu126" },
+]
+torchvision = [
+  { index = "pytorch-cpu", extra = "torch" },
+  { index = "pytorch-cu126", extra = "torch-cu126" },
+]
+pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
+torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "bc9453efbcf29d74e6a85719b85e008f862ff26b" }
 
 [project.urls]
 homepage = "https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md"
@@ -233,18 +267,18 @@ replace = "\"version\": \"{new_version}\""
 [tool.ruff]
 ignore = ["UP007", "UP015", "E501"]
 exclude = [
-    ".git",
-    "__pycache__",
-    ".mypy_cache",
-    ".tox",
-    ".venv",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "env",
-    "venv",
-    "node_modules",
+  ".git",
+  "__pycache__",
+  ".mypy_cache",
+  ".tox",
+  ".venv",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "env",
+  "venv",
+  "node_modules",
 ]
 respect-gitignore = true
 line-length = 120
@@ -252,18 +286,18 @@ show-fixes = true
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
 
 [tool.ruff.lint.isort]
@@ -298,9 +332,7 @@ warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-plugins = [
-  "pydantic.mypy"
-]
+plugins = ["pydantic.mypy"]
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
@@ -329,7 +361,7 @@ check-return-types = false
 # https://github.com/pytest-dev/pytest
 # https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
 # Directories that are not visited by pytest collector:
-norecursedirs =[
+norecursedirs = [
   "hooks",
   "*.egg",
   ".eggs",
@@ -341,7 +373,11 @@ norecursedirs =[
   "__pycache__",
   "node_modules",
 ]
-doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+doctest_optionflags = [
+  "NUMBER",
+  "NORMALIZE_WHITESPACE",
+  "IGNORE_EXCEPTION_DETAIL",
+]
 timeout = 1000
 
 # Extra options:
@@ -350,7 +386,7 @@ addopts = [
   "--tb=short",
   "--doctest-modules",
   "--doctest-continue-on-failure",
-  "--pikachu"
+  "--pikachu",
 ]
 
 [tool.coverage.run]
@@ -358,10 +394,7 @@ source = ["tests"]
 branch = true
 
 [tool.coverage.report]
-exclude_also = [
-  "def main",
-  "if __name__ == .__main__.:"
-]
+exclude_also = ["def main", "if __name__ == .__main__.:"]
 fail_under = 80
 show_missing = true
 
