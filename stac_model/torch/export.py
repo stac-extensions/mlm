@@ -66,11 +66,7 @@ def package(
             with zipfile.ZipFile(model_path, "r") as zip_ref:
                 zip_ref.extractall(model_tmpdir)
 
-            model_files = [
-                f
-                for f in glob.glob(os.path.join(model_tmpdir, "**"), recursive=True)
-                if os.path.isfile(f)
-            ]
+            model_files = [f for f in glob.glob(os.path.join(model_tmpdir, "**"), recursive=True) if os.path.isfile(f)]
             aoti_files = {"model": model_files}
 
             if transforms_program is not None:
@@ -84,9 +80,7 @@ def package(
                     zip_ref.extractall(transforms_tmpdir)
 
                 transforms_files = [
-                    f
-                    for f in glob.glob(os.path.join(transforms_tmpdir, "**"), recursive=True)
-                    if os.path.isfile(f)
+                    f for f in glob.glob(os.path.join(transforms_tmpdir, "**"), recursive=True) if os.path.isfile(f)
                 ]
                 aoti_files["transforms"] = transforms_files
 
@@ -132,9 +126,7 @@ def export(
     transforms_arg = next(iter(inspect.signature(transforms.forward).parameters))
 
     # Export model and transforms
-    model_program = torch.export.export(
-        mod=model, args=(example_inputs,), dynamic_shapes={model_arg: dims}
-    )
+    model_program = torch.export.export(mod=model, args=(example_inputs,), dynamic_shapes={model_arg: dims})
     transforms_program = torch.export.export(
         mod=transforms, args=(example_inputs,), dynamic_shapes={transforms_arg: dims}
     )

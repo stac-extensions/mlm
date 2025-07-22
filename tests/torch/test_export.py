@@ -15,6 +15,7 @@ from stac_model.torch.export import (
 
 pytest.importorskip("torch")
 
+
 def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> None:
     device = torch.device(device)
     input_shape = (-1, 8, -1, -1)
