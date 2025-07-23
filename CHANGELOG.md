@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add `pre_processing_function` and `post_processing_function` support as JSON array 
+  of [Processing Expression](README.md#processing-expression) definitions respectively
+  for the [Model Input Object](README.md#model-input-object) and [Model Output Object](README.md#model-output-object)
+  (fixes [#93](https://github.com/stac-extensions/mlm/issues/93)).
 - Add official Python 3.13 support to the CI workflow and package release.
 - Add `examples/torch/mlm-metadata.yaml` example that provides a minimal metadata example for
   a PyTorch model which can be validated using the MLM Schema without the need to be fully
@@ -37,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Enforce `roles: ["code"]` (minimally) to be included if an Asset specified `mlm:entrypoint`.
 - Update `stac-model==0.4.0` to provide corresponding additions for `variables` reference.
 - Refactor `ModelInput` and `ModelOutput` objects to use a new `ModelBandsOrVariablesReferences` definition
   combining the `ModelBand` and `ModelDataVariable` lists.
@@ -62,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fix JSON schema not allowing `mlm:entrypoint` to be defined under a [Source Code Asset](README.md#source-code-asset).
 - Fix `stac_model.output.ModelOutput` enforcing the need to specify `classification:classes` or `classes`.
   The property can now be omitted if the model does not need to indicate that it produces a classification output.
 - Fix missing ``encoding="utf-8"`` parameters in `open` calls leading to failing parsing of example JSON STAC Item

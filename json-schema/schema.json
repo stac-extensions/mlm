@@ -55,6 +55,10 @@
             "$ref": "#/$defs/AssetModelRoleMinimumOneDefinition"
           },
           {
+            "$comment": "Schema to validate any Asset containing an entrypoint is associated with code role.",
+            "$ref": "#/$defs/AssetCodeRoleWithEntrypoint"
+          },
+          {
             "$comment": "Schema to validate that the Asset model properties are mutually exclusive to the model role.",
             "$ref": "#/$defs/AssetModelRequiredProperties"
           }
@@ -364,6 +368,9 @@
         },
         "mlm:compile_method": {
           "$ref": "#/$defs/mlm:compile_method"
+        },
+        "mlm:entrypoint": {
+          "$ref": "#/$defs/mlm:entrypoint"
         }
       },
       "$comment": "Allow properties not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
@@ -416,7 +423,8 @@
           "not": {
             "anyOf": [
               {"required": ["mlm:artifact_type"]},
-              {"required": ["mlm:compile_method"]}
+              {"required": ["mlm:compile_method"]},
+              {"required": ["mlm:entrypoint"]}
             ]
           }
         },
@@ -538,6 +546,15 @@
       "examples": [
         "aot",
         "jit"
+      ]
+    },
+    "mlm:entrypoint": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Entrypoint script or function where the model can be invoked for inference on input data.",
+      "examples": [
+        "my_package.my_module:inference_function",
+        "inference.py"
       ]
     },
     "mlm:tasks": {
@@ -695,7 +712,16 @@
           "$ref": "#/$defs/ResizeType"
         },
         "pre_processing_function": {
-          "$ref": "#/$defs/ProcessingExpression"
+          "oneOf": [
+            {"$ref": "#/$defs/ProcessingExpression"},
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ProcessingExpression"
+              },
+              "minItems": 1
+            }
+          ]
         }
       }
     },
@@ -736,7 +762,16 @@
           "$ref": "#/$defs/ClassificationClasses"
         },
         "post_processing_function": {
-          "$ref": "#/$defs/ProcessingExpression"
+          "oneOf": [
+            {"$ref": "#/$defs/ProcessingExpression"},
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/ProcessingExpression"
+              },
+              "minItems": 1
+            }
+          ]
         }
       }
     },
@@ -1117,6 +1152,42 @@
           }
         }
       ]
+    },
+    "AssetCodeRoleWithEntrypoint": {
+      "$comment": "Used to check the presence of 'code' role if an entrypoint is provided in an Asset.",
+      "properties": {
+        "assets": {
+          "additionalProperties": {
+            "oneOf": [
+              {
+                "required": [
+                  "mlm:entrypoint",
+                  "roles"
+                ],
+                "properties": {
+                  "mlm:entrypoint": {
+                    "$ref": "#/$defs/mlm:entrypoint"
+                  },
+                  "roles": {
+                    "type": "array",
+                    "contains": {
+                      "const": "code"
+                    },
+                    "minItems": 1
+                  }
+                }
+              },
+              {
+                "not": {
+                  "required": [
+                    "mlm:entrypoint"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
     },
     "ModelBandsVariables": {
       "description": "List of bands or variables (if any) that compose the input. Band and/or variable order represents the index position within the input. If both bands and variables are provided, their other should be distinguished using corresponding names in 'dim_order'.",
