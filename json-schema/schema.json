@@ -651,6 +651,7 @@
           "type": "string",
           "enum": [
             "amd64",
+            "cpu",
             "cuda",
             "xla",
             "amd-rocm",
