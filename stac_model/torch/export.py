@@ -111,16 +111,14 @@ def package(
         extra_files = {"metadata": yaml.dump(metadata)}
 
     if aoti_compile_and_package:
-        with (
-            tempfile.TemporaryDirectory() as model_tmpdir,
-            tempfile.TemporaryDirectory() as transforms_tmpdir,
-        ):
-            aoti_files = aoti_compile(
-                model_directory=model_tmpdir,
-                model_program=model_program,
-                transforms_directory=transforms_tmpdir,
-                transforms_program=transforms_program,
-            )
+        model_tmpdir = tempfile.TemporaryDirectory()
+        transforms_tmpdir = tempfile.TemporaryDirectory()
+        aoti_files = aoti_compile(
+            model_directory=model_tmpdir.name,
+            model_program=model_program,
+            transforms_directory=transforms_tmpdir.name,
+            transforms_program=transforms_program,
+        )
     else:
         exported_programs = {"model": model_program}
         if transforms_program is not None:
@@ -132,3 +130,7 @@ def package(
         aoti_files=aoti_files,  # type: ignore[arg-type]
         extra_files=extra_files,
     )
+
+    if aoti_compile_and_package:
+        model_tmpdir.cleanup()
+        transforms_tmpdir.cleanup()
