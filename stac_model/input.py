@@ -77,4 +77,4 @@ class ModelInput(ModelBandsOrVariablesReferences):
     input: InputStructure
     value_scaling: Annotated[list[ValueScalingObject] | None, OmitIfNone] = None
     resize_type: Annotated[ResizeType | None, OmitIfNone] = None
-    pre_processing_function: ProcessingExpression | None = None
+    pre_processing_function: ProcessingExpression | list[ProcessingExpression] | None = None

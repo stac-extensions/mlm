@@ -50,7 +50,10 @@ def test_mlm_no_undefined_prefixed_field_item_properties(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         mlm_item = pystac.Item.from_dict(mlm_data)
         pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert all(info in str(exc.value.source) for info in ["mlm:unknown", "^(?!mlm:)"])
+    assert all(
+        info in str(exc.value.source)
+        for info in ["mlm:unknown", "^(?!mlm:)"]
+    )
 
     # defined property only allowed at the Asset level
     mlm_data = copy.deepcopy(mlm_example)
