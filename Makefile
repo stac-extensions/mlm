@@ -47,6 +47,11 @@ install-dev: setup
 	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt
 	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
 
+.PHONY: install-dev-extras
+install-dev: setup
+	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt --extra torch
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
+
 .PHONY: pre-commit-install
 pre-commit-install: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pre-commit install
