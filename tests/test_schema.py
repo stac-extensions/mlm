@@ -350,3 +350,76 @@ def test_collection_include_all_items(mlm_example):
     col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
     all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
     assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
+def test_mlm_entrypoint_asset_allowed(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
+
+    mlm_data["assets"]["runtime"] = {
+        "type": "text/x-python",
+        "href": "https://example.com/package/",
+        "roles": ["code", "mlm:source_code", "mlm:inference-runtime"],
+        "title": "Model Inference Code",
+        "mlm:entrypoint": "package.inference:main",
+    }
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # still valid
+    assert mlm_item.assets["runtime"].to_dict().get("mlm:entrypoint") == "package.inference:main"
+    assert mlm_item.assets["runtime"].roles == ["code", "mlm:source_code", "mlm:inference-runtime"]
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
+def test_mlm_entrypoint_asset_code_role_required(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
+
+    mlm_data["assets"]["runtime"] = {
+        "type": "text/x-python",
+        "href": "https://example.com/package/",
+        "roles": ["mlm:inference-runtime"],
+        "title": "Model Inference Code",
+        "mlm:entrypoint": "package.inference:main",
+    }
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    with pytest.raises(pystac.errors.STACValidationError) as exc:
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+    assert exc.value.source[0].instance == mlm_data["assets"]["runtime"]
+    assert "'contains': {'const': 'code'}" in str(exc.value.args)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
+def test_mlm_entrypoint_item_disallowed(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
+
+    mlm_data["properties"]["mlm:entrypoint"] = "package.inference:main"
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    with pytest.raises(pystac.errors.STACValidationError) as exc:
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+    assert "Fields that are disallowed under the Item properties." in str(exc.value.args)

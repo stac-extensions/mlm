@@ -74,6 +74,6 @@ ResizeType: TypeAlias = Literal["crop", "pad", "interpolation-nearest", "interpo
 class ModelInput(ModelBandsOrVariablesReferences):
     name: str
     input: InputStructure
-    value_scaling: Annotated[list[ValueScalingObject] | None, OmitIfNone] = None
-    resize_type: Annotated[ResizeType | None, OmitIfNone] = None
-    pre_processing_function: ProcessingExpression | None = None
+    value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
+    resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
+    pre_processing_function: Optional[ProcessingExpression | list[ProcessingExpression]] = None
