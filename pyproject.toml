@@ -11,7 +11,7 @@ authors = [
   { name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca" },
 ]
 license = { text = "Apache Software License 2.0" }
-requires-python = "<4.0,>=3.11"
+requires-python = "<4.0,>=3.10"
 dependencies = [
   "typer<1.0.0,>=0.9.0",
   "rich>=13.7.0,<15.0.0",
@@ -21,13 +21,19 @@ dependencies = [
   "shapely<3,>=2",
   "jsonschema<5.0.0,>=4.21.1",
   "pip>=25.0.0",
+  "ipykernel>=7.0.0a1",
+  "ipywidgets>=8.1.7",
 ]
-optional-dependencies.torch = ["torch>=2.8.0.dev,<2.9.0", "torchvision>=0.21"]
+optional-dependencies.torch = [
+  "torch>=2.8.0.dev,<2.9.0; python_version>='3.11'",
+  "torchgeo; sys_platform=='linux' and python_version>='3.11'",
+  "torchvision>=0.21; python_version>='3.11'"
+]
 optional-dependencies.torch-cu126 = [
-  "pytorch-triton; sys_platform=='linux'",
-  "torch>=2.8.0.dev,<2.9.0; sys_platform=='linux'",
-  "torchgeo; sys_platform=='linux'",
-  "torchvision>=0.21,<1; sys_platform=='linux'",
+  "pytorch-triton; sys_platform=='linux' and python_version>='3.11'",
+  "torch>=2.8.0.dev,<2.9.0; sys_platform=='linux' and python_version>='3.11'",
+  "torchgeo; sys_platform=='linux' and python_version>='3.11'",
+  "torchvision>=0.21,<1; sys_platform=='linux' and python_version>='3.11'",
 ]
 
 # important: leave the name and version together for bump resolution
