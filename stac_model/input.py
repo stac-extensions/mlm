@@ -1,4 +1,5 @@
-from typing import Annotated, Literal, Self, TypeAlias, Union
+from typing import Annotated, Literal, TypeAlias, Union
+from typing_extensions import Self
 
 from pydantic import Field, model_validator
 
@@ -76,4 +77,4 @@ class ModelInput(ModelBandsOrVariablesReferences):
     input: InputStructure
     value_scaling: Annotated[list[ValueScalingObject] | None, OmitIfNone] = None
     resize_type: Annotated[ResizeType | None, OmitIfNone] = None
-    pre_processing_function: ProcessingExpression | list[ProcessingExpression] | None = None
+    pre_processing_function: ProcessingExpression | None = None
