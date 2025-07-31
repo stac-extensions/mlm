@@ -98,7 +98,7 @@ class ModelOutput(ModelBandsOrVariablesReferences):
         validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
         default=None,
     )
-    post_processing_function: ProcessingExpression | list[ProcessingExpression] | None = None
+    post_processing_function: ProcessingExpression | None = None
 
     model_config = ConfigDict(
         populate_by_name=True,
