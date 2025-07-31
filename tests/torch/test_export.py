@@ -17,7 +17,7 @@ from stac_model.torch.export import (
 )
 
 
-def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> None:
+def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_transforms: bool) -> None:
     input_shape = (-1, 8, -1, -1)
     archive_path = os.path.join(tmpdir, "model.pt2")
     metadata_path = os.path.join("tests", "torch", "ftw-metadata.yaml")
@@ -26,7 +26,7 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> N
     model = unet(weights=weights)
     model_program, transforms_program = export(
         model=model,
-        transforms=transforms,
+        transforms=None if no_transforms else transforms,
         input_shape=input_shape,
         device=device,
         dtype=torch.float32,
@@ -45,32 +45,36 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> N
     x = torch.randn(1, 8, 128, 128, device=device, dtype=torch.float32)
     if pt2.aoti_runners != {}:
         model_aoti = pt2.aoti_runners["model"]
-        transforms_aoti = pt2.aoti_runners["transforms"]
+        preds = model_aoti(x)
+        assert preds.shape == (1, 3, 128, 128)
 
-        transformed = transforms_aoti(x)
-        preds = model_aoti(transformed)
-        assert transformed.shape == (1, 8, 256, 256)
-        assert preds.shape == (1, 3, 256, 256)
+        if "transforms" in pt2.aoti_runners:
+            transforms_aoti = pt2.aoti_runners["transforms"]
+            transformed = transforms_aoti(x)
+            assert transformed.shape == (1, 8, 256, 256)
     else:
         model_exported = pt2.exported_programs["model"].module()
-        transforms_exported = pt2.exported_programs["transforms"].module()
+        preds = model_exported(x)
+        assert preds.shape == (1, 3, 128, 128)
 
-        transformed = transforms_exported(x)
-        preds = model_exported(transformed)
-        assert transformed.shape == (1, 8, 256, 256)
-        assert preds.shape == (1, 3, 256, 256)
+        if "transforms" in pt2.exported_programs:
+            transforms_exported = pt2.exported_programs["transforms"].module()
+            transformed = transforms_exported(x)
+            assert transformed.shape == (1, 8, 256, 256)
 
     # Validate metadata is valid yaml
     metadata = pt2.extra_files["metadata"]
     yaml.safe_load(metadata)
 
 
-@pytest.mark.parametrize("aoti_compile_and_package", [True, False])
-def test_ftw_export_cpu(tmpdir: Path, aoti_compile_and_package: bool) -> None:
-    export_model(tmpdir, "cpu", aoti_compile_and_package=aoti_compile_and_package)
+@pytest.mark.parametrize("no_transforms", [True, False])
+@pytest.mark.parametrize("aoti_compile_and_package", [False, True])
+def test_ftw_export_cpu(tmpdir: Path, aoti_compile_and_package: bool, no_transforms: bool) -> None:
+    export_model(tmpdir, "cpu", aoti_compile_and_package, no_transforms)
 
 
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is not available")
-@pytest.mark.parametrize("aoti_compile_and_package", [True, False])
-def test_ftw_export_cuda(tmpdir: Path, aoti_compile_and_package: bool) -> None:
-    export_model(tmpdir, "cuda", aoti_compile_and_package=aoti_compile_and_package)
+@pytest.mark.parametrize("no_transforms", [True, False])
+@pytest.mark.parametrize("aoti_compile_and_package", [False, True])
+def test_ftw_export_cuda(tmpdir: Path, aoti_compile_and_package: bool, no_transforms: bool) -> None:
+    export_model(tmpdir, "cuda", aoti_compile_and_package, no_transforms)

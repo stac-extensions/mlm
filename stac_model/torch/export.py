@@ -80,6 +80,8 @@ def export(
         transforms_program = torch.export.export(
             mod=transforms, args=(example_inputs,), dynamic_shapes={transforms_arg: dims}
         )
+    else:
+        transforms_program = None
 
     return model_program, transforms_program
 
