@@ -63,7 +63,6 @@ def export(
     Returns:
         The exported model and transforms programs.
     """
-    device: torch.device = torch.device(device)
     example_inputs = create_example_input_from_shape(input_shape).to(device).to(dtype)
     dims = tuple(Dim.AUTO if dim == -1 else dim for dim in input_shape)
     logger.debug("Exporting with dims: %s", dims)

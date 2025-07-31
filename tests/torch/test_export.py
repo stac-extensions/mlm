@@ -17,7 +17,6 @@ pytest.importorskip("torch")
 
 
 def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> None:
-    device = torch.device(device)
     input_shape = (-1, 8, -1, -1)
     archive_path = os.path.join(tmpdir, "model.pt2")
     metadata_path = os.path.join("tests", "torch", "ftw-metadata.yaml")
@@ -29,6 +28,7 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> N
         transforms=transforms,
         input_shape=input_shape,
         device=device,
+        dtype=torch.float32,
     )
     package(
         output_file=archive_path,
@@ -38,23 +38,26 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> N
         aoti_compile_and_package=aoti_compile_and_package,
     )
 
-    # Validate that pt2 is loadable
+    # Validate that pt2 is loadable and model/transform are usable
     pt2 = load_pt2(archive_path)
+
+    x = torch.randn(1, 8, 128, 128, device=device, dtype=torch.float32)
     if pt2.aoti_runners != {}:
-        model = pt2.aoti_runners["model"]
-        transforms = pt2.aoti_runners["transforms"]
+        model_aoti = pt2.aoti_runners["model"]
+        transforms_aoti = pt2.aoti_runners["transforms"]
+
+        transformed = transforms_aoti(x)
+        preds = model_aoti(transformed)
+        assert transformed.shape == (1, 8, 256, 256)
+        assert preds.shape == (1, 3, 256, 256)
     else:
-        model = pt2.exported_programs["model"].module()
-        transforms = pt2.exported_programs["transforms"].module()
+        model_exported = pt2.exported_programs["model"].module()
+        transforms_exported = pt2.exported_programs["transforms"].module()
 
-    # Validate transforms are usable
-    x = torch.randn(1, 8, 128, 128, device=device, requires_grad=False)
-    out = transforms(x)
-    assert out.shape == (1, 8, 256, 256)
-
-    # Validate model is usable
-    out = model(out)
-    assert out.shape == (1, 3, 256, 256)
+        transformed = transforms_exported(x)
+        preds = model_exported(transformed)
+        assert transformed.shape == (1, 8, 256, 256)
+        assert preds.shape == (1, 3, 256, 256)
 
     # Validate metadata is valid yaml
     metadata = pt2.extra_files["metadata"]
