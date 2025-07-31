@@ -1,7 +1,10 @@
+import pytest
+
+pytest.importorskip("torchgeo")
+
 import os
 from pathlib import Path
 
-import pytest
 import torch
 import torchvision.transforms.v2 as T
 import yaml
@@ -12,8 +15,6 @@ from stac_model.torch.export import (
     export,
     package,
 )
-
-pytest.importorskip("torch")
 
 
 def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool) -> None:
