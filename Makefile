@@ -50,7 +50,7 @@ install-dev: setup
 .PHONY: install-dev-extras
 install-dev-extras: setup
 	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt --extra torch
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt --extra-index-url https://download.pytorch.org/whl/test/cpu --index-strategy unsafe-best-match
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
