@@ -271,7 +271,6 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "UP015", "E501"]
 exclude = [
   ".git",
   "__pycache__",
@@ -305,6 +304,7 @@ select = [
   # isort
   "I",
 ]
+ignore = ["UP007", "UP015", "E501"]
 
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
@@ -379,6 +379,7 @@ norecursedirs = [
   "__pycache__",
   "node_modules",
 ]
+markers = ["slow: mark test as slow to run (more than a few minutes)"]
 doctest_optionflags = [
   "NUMBER",
   "NORMALIZE_WHITESPACE",
@@ -398,6 +399,9 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 branch = true
+omit = [
+    "stac_model/torch/*",
+]
 
 [tool.coverage.report]
 exclude_also = ["def main", "if __name__ == .__main__.:"]

@@ -48,7 +48,7 @@ install-dev: setup
 	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
 
 .PHONY: install-dev-extras
-install-dev: setup
+install-dev-extras: setup
 	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt --extra torch
 	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
 
@@ -64,11 +64,16 @@ codestyle: setup
 .PHONY: format
 format: codestyle
 
-#* Linting
+#* Testing
 .PHONY: test
 test: setup
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -m "not slow" -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
+
+.PHONY: test-all
+test-all: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
 
+#* Linting
 .PHONY: check
 check: check-examples check-markdown check-lint check-mypy check-safety check-citation
 

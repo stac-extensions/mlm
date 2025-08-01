@@ -67,12 +67,14 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
     yaml.safe_load(metadata)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("no_transforms", [True, False])
 @pytest.mark.parametrize("aoti_compile_and_package", [False, True])
 def test_ftw_export_cpu(tmpdir: Path, aoti_compile_and_package: bool, no_transforms: bool) -> None:
     export_model(tmpdir, "cpu", aoti_compile_and_package, no_transforms)
 
 
+@pytest.mark.slow
 @pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA is not available")
 @pytest.mark.parametrize("no_transforms", [True, False])
 @pytest.mark.parametrize("aoti_compile_and_package", [False, True])
