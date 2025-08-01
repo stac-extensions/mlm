@@ -313,13 +313,13 @@ def test_mlm_asset_artifact_type_checked(
     mlm_item = pystac.Item.from_dict(mlm_data)
     pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
 
-    mlm_data["assets"]["model"]["mlm:artifact_type"] = 1234  # type: ignore
+    mlm_data["assets"]["model"]["mlm:artifact_type"] = 1234
     mlm_item = pystac.Item.from_dict(mlm_data)
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert "1234 is not of type 'string'" in str(exc.value.source)
 
-    mlm_data["assets"]["model"]["mlm:artifact_type"] = ""  # type: ignore
+    mlm_data["assets"]["model"]["mlm:artifact_type"] = ""
     mlm_item = pystac.Item.from_dict(mlm_data)
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
