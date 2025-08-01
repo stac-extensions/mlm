@@ -94,7 +94,7 @@ check-safety: setup
 
 .PHONY: lint
 lint: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" --extra torch ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
 check-lint: lint
