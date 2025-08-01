@@ -82,7 +82,7 @@ check-all: check
 
 .PHONY: mypy
 mypy: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml
 
 .PHONY: check-mypy
 check-mypy: mypy
