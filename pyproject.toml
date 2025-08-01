@@ -66,11 +66,11 @@ classifiers = [
 [tool.uv]
 dev-dependencies = [
     "setuptools>=78.1.1",
-    "mypy<2.0.0,>=1.0.0",
-    "mypy-extensions<1.0.0,>=0.4.3",
+    "mypy>=1.10.0,<2.0.0",
+    "mypy-extensions>=0.4.3,<1.2.0",
     "pre-commit<3.0.0,>=2.21.0",
     "bandit<2.0.0,>=1.7.5",
-    "safety<3.0.0,>=2.3.5",
+    "safety>=3.6.0,<4.0.0",
     "pystac<2.0.0,>=1.10.0",
     "pydocstyle[toml]<7.0.0,>=6.2.0",
     "pydoclint<0.6,>=0.3",
@@ -89,6 +89,8 @@ dev-dependencies = [
     "types-pyyaml>=6.0.12.20250516",
     "requests>=2.32.4",
     "urllib3>=2.5.0,<3.0.0",
+    "httpx<0.26.0",
+    "referencing>=0.36.2",
 ]
 
 conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
@@ -99,12 +101,12 @@ required-environments = [
 ]
 [[tool.uv.index]]
 name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/nightly/cpu"
+url = "https://download.pytorch.org/whl/test/cpu"
 explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cu126"
-url = "https://download.pytorch.org/whl/nightly/cu126"
+url = "https://download.pytorch.org/whl/test/cu126"
 explicit = true
 
 [tool.uv.sources]
@@ -271,7 +273,6 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "UP015", "E501"]
 exclude = [
   ".git",
   "__pycache__",
@@ -305,6 +306,7 @@ select = [
   # isort
   "I",
 ]
+ignore = ["UP007", "UP015", "E501"]
 
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
@@ -318,7 +320,11 @@ python_version = "3.10"
 pretty = true
 show_traceback = true
 color_output = true
-
+exclude = '(^\\.venv/|site-packages/)'
+files = [
+  "stac_model",
+  "tests",
+]
 allow_redefinition = false
 check_untyped_defs = true
 disallow_any_generics = true
@@ -379,6 +385,7 @@ norecursedirs = [
   "__pycache__",
   "node_modules",
 ]
+markers = ["slow: mark test as slow to run (more than a few minutes)"]
 doctest_optionflags = [
   "NUMBER",
   "NORMALIZE_WHITESPACE",
@@ -398,6 +405,9 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 branch = true
+omit = [
+    "stac_model/torch/*",
+]
 
 [tool.coverage.report]
 exclude_also = ["def main", "if __name__ == .__main__.:"]

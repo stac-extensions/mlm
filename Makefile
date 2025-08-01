@@ -48,9 +48,9 @@ install-dev: setup
 	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
 
 .PHONY: install-dev-extras
-install-dev: setup
+install-dev-extras: setup
 	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt --extra torch
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt --extra-index-url https://download.pytorch.org/whl/test/cpu --index-strategy unsafe-best-match
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
@@ -64,11 +64,16 @@ codestyle: setup
 .PHONY: format
 format: codestyle
 
-#* Linting
+#* Testing
 .PHONY: test
 test: setup
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -m "not slow" -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
+
+.PHONY: test-all
+test-all: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
 
+#* Linting
 .PHONY: check
 check: check-examples check-markdown check-lint check-mypy check-safety check-citation
 
@@ -77,7 +82,7 @@ check-all: check
 
 .PHONY: mypy
 mypy: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml
 
 .PHONY: check-mypy
 check-mypy: mypy
@@ -89,7 +94,7 @@ check-safety: setup
 
 .PHONY: lint
 lint: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" --extra torch ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
 check-lint: lint
