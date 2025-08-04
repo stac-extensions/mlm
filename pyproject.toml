@@ -410,7 +410,10 @@ omit = [
 ]
 
 [tool.coverage.report]
-exclude_also = ["def main", "if __name__ == .__main__.:"]
+exclude_also = [
+  "def main",
+  "if __name__ == .__main__.:"
+]
 fail_under = 80
 show_missing = true
 
