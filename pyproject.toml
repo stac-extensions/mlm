@@ -13,7 +13,7 @@ authors = [
     {name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca"},
 ]
 license = {text = "Apache Software License 2.0"}
-requires-python = "<4.0,>=3.11"
+requires-python = "<4.0,>=3.10"
 dependencies = [
     "typer<1.0.0,>=0.9.0",
     "rich>=13.7.0,<15.0.0",
@@ -23,7 +23,6 @@ dependencies = [
     "shapely<3,>=2",
     "jsonschema<5.0.0,>=4.21.1",
     "pip>=25.0.0",
-    "torch>=2.7.1",
 ]
 # important: leave the name and version together for bump resolution
 name = "stac-model"
@@ -82,7 +81,7 @@ dev-dependencies = [
 
 [project.optional-dependencies]
 torchgeo = [
-  "torchgeo @ git+https://github.com/microsoft/torchgeo.git@86da0ee97c548dddae033a32ffab1573679262ed" # dependency with at least 0.8.0.dev0
+  "torchgeo @ git+https://github.com/microsoft/torchgeo.git@86da0ee97c548dddae033a32ffab1573679262ed ; python_version >= '3.11'" # dependency with at least 0.8.0.dev0
 ]
 
 [project.urls]
@@ -275,6 +274,7 @@ select = [
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
 known-first-party = ["stac_model"]
+known-third-party = ["torch"]
 extra-standard-library = ["typing_extensions"]
 
 [tool.mypy]

@@ -2,12 +2,12 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any, Optional, Protocol, Union, cast
 
+import torch
+import torch.nn as nn
 from pystac import Asset, Collection, Item, Link, utils
 from pystac.extensions.eo import Band, EOExtension
 from shapely import geometry as geom
 
-import torch
-import torch.nn as nn
 from stac_model.base import DataType, ModelTask
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
@@ -74,7 +74,7 @@ def get_input_channels(state_dict: dict[str, torch.Tensor]) -> int:
     Get number of input channels from the first convolutional layer's weights.
     """
     tensor = find_tensor_by_key(state_dict, "encoder._conv_stem.weight")
-    return tensor.shape[1]
+    return int(tensor.shape[1])
 
 
 def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
@@ -82,7 +82,7 @@ def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     Get number of output channels from the segmentation head's last conv layer.
     """
     tensor = find_tensor_by_key(state_dict, "segmentation_head.0.weight", reverse=True)
-    return tensor.shape[0]
+    return int(tensor.shape[0])
 
 
 def from_torch(
@@ -274,8 +274,8 @@ def from_torch(
             media_type="text/html",
             roles=[
                 "mlm:source_code",
+                "code",
             ],
-            extra_fields={"mlm:entrypoint": arch},
         )
 
     item = Item(
@@ -287,6 +287,7 @@ def from_torch(
         properties=properties,
         stac_extensions=[MLModelExtension.get_schema_uri()] + (stac_extensions or []),
         assets=assets,
+        extra_fields={"mlm:entrypoint": arch},
     )
 
     for link in links:

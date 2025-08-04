@@ -66,14 +66,14 @@
         "name": "model_input",
         "input": {
           "shape": [
-            1,
+            -1,
             8,
             3,
             3
           ],
           "dim_order": [
             "batch",
-            "channel",
+            "bands",
             "height",
             "width"
           ],
@@ -92,7 +92,7 @@
         ],
         "result": {
           "shape": [
-            1,
+            -1,
             2
           ],
           "dim_order": [
@@ -125,12 +125,12 @@
       "rel": "cite-as",
       "href": "https://arxiv.org/abs/2409.16252",
       "type": "text/html",
-      "title": "Publication for the model"
+      "title": "Publication for the training dataset of the model"
     },
     {
       "rel": "self",
       "href": "./item_pytorch_geo_unet.json",
-      "type": "application/json"
+      "type": "application/geo+json"
     },
     {
       "rel": "collection",
@@ -182,11 +182,12 @@
       "type": "text/html",
       "title": "Source code for U-Net_efficientnet-b3",
       "description": "GitHub repo of the pytorch model",
-      "mlm:entrypoint": "segmentation_models_pytorch.decoders.unet.model.Unet",
       "roles": [
-        "mlm:source_code"
+        "mlm:source_code",
+        "code"
       ]
     }
   },
-  "collection": "ml-model-examples"
+  "collection": "ml-model-examples",
+  "mlm:entrypoint": "segmentation_models_pytorch.decoders.unet.model.Unet"
 }

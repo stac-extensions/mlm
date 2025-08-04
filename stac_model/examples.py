@@ -5,7 +5,6 @@ import shapely
 from dateutil.parser import parse as parse_dt
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
-from torchgeo.models import Unet_Weights, unet
 
 from stac_model.base import ProcessingExpression, TaskEnum
 from stac_model.input import InputStructure, ModelInput, ValueScalingObject
@@ -248,6 +247,8 @@ def unet_mlm() -> ItemMLModelExtension:
 
     Returns an ItemMLModelExtension with Machine Learning Model Extension metadata.
     """
+    from torchgeo.models import Unet_Weights, unet
+
     weights = Unet_Weights.SENTINEL2_2CLASS_NC_FTW
     model = unet(weights=weights)
     item_id = "pytorch_geo_unet"
@@ -293,10 +294,10 @@ def unet_mlm() -> ItemMLModelExtension:
     item_name = f"item_{item_id}.json"
     item_self_href = f"./{item_name}"
 
-    link = pystac.Link(rel="self", target=item_self_href, media_type="application/json")
+    link = pystac.Link(rel="self", target=item_self_href, media_type=pystac.MediaType.GEOJSON)
     link._target_href = item_self_href
     item.add_link(link)
-    item.add_link(pystac.Link(rel="collection", target="./collection.json", media_type="application/json"))
+    item.add_link(pystac.Link(rel="collection", target="./collection.json", media_type=pystac.MediaType.JSON))
 
     item_ext.item = item
     return item_ext
