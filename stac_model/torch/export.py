@@ -9,7 +9,6 @@ from torch.export.pt2_archive._package import package_pt2
 
 from .utils import aoti_compile_and_extract, create_example_input_from_shape, extract_module_arg_names
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 
