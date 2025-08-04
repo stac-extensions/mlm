@@ -11,6 +11,7 @@ import yaml
 from torch.export.pt2_archive._package import load_pt2
 from torchgeo.models import Unet_Weights, unet
 
+from stac_model.schema import MLModelProperties
 from stac_model.torch.export import (
     export,
     package,
@@ -63,8 +64,9 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
             assert transformed.shape == (1, 8, 256, 256)
 
     # Validate metadata is valid yaml
-    metadata = pt2.extra_files["metadata"]
-    yaml.safe_load(metadata)
+    metadata = pt2.extra_files["mlm-metadata"]
+    metadata = yaml.safe_load(metadata)
+    MLModelProperties.model_validate(metadata["properties"])
 
 
 @pytest.mark.slow
