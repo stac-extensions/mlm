@@ -4,6 +4,7 @@ import os
 import tempfile
 import zipfile
 from collections.abc import Sequence
+from pathlib import Path
 
 import torch
 
@@ -50,7 +51,7 @@ def aoti_compile_and_extract(
         with zipfile.ZipFile(path, "r") as zip_ref:
             zip_ref.extractall(output_directory)
 
-    return [f for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)]
+    return [Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)]
 
 
 def aoti_compile(
