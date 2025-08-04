@@ -49,8 +49,7 @@ install-dev: setup
 
 .PHONY: install-dev-extras
 install-dev-extras: setup
-	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt --extra torch
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-dev.txt --extra-index-url https://download.pytorch.org/whl/test/cpu --index-strategy unsafe-best-match
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -e .[torch]
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
@@ -92,9 +91,12 @@ check-safety: setup
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" safety check --full-report
 	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" bandit -ll --recursive stac_model tests
 
+.PHONY: lint-only
+lint-only: setup
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
+
 .PHONY: lint
-lint: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" --extra torch ruff check --fix --config=pyproject.toml ./
+lint: install-dev-extras lint-only
 
 .PHONY: check-lint
 check-lint: lint
@@ -128,7 +130,7 @@ FORMATTERS := lint markdown examples
 $(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 
 .PHONY: lint-all
-lint-all: lint mypy check-safety check-markdown
+lint-all: lint-only mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps: setup
