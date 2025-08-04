@@ -26,7 +26,8 @@ def export(
 
     Args:
         model: The model to export.
-        transforms: The transforms to export.
+        transforms: The transforms to export. The transforms should be a `torch.nn.Module. If you have
+            multiple transforms, it is recommended to wrap them in a `torch.nn.Sequential`.
         input_shape: The shape of the input tensor, where -1 indicates a dynamic dimension.
         device: The device to export the model and transforms to.
         dtype: The data type to use for the model and transforms. Defaults to torch.float32.
