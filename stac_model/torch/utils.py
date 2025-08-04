@@ -1,14 +1,14 @@
 import glob
 import inspect
 import os
+import pathlib
 import tempfile
 import zipfile
 from collections.abc import Sequence
-from pathlib import Path
 
 import torch
 
-from ..base import Paths
+from ..base import Path
 from .base import AOTIFiles
 
 
@@ -32,8 +32,8 @@ def extract_module_arg_names(module: torch.nn.Module) -> str:
 
 def aoti_compile_and_extract(
     program: torch.export.ExportedProgram,
-    output_directory: str
-) -> Paths:
+    output_directory: Path
+) -> list[Path]:
     """Compiles an exported program using AOTI and extracts the files to the specified directory.
 
     Args:
@@ -51,13 +51,13 @@ def aoti_compile_and_extract(
         with zipfile.ZipFile(path, "r") as zip_ref:
             zip_ref.extractall(output_directory)
 
-    return [Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)]
+    return [pathlib.Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)]
 
 
 def aoti_compile(
-    model_directory: str,
+    model_directory: Path,
     model_program: torch.export.ExportedProgram,
-    transforms_directory: str | None = None,
+    transforms_directory: Path | None = None,
     transforms_program: torch.export.ExportedProgram | None = None,
 ) -> AOTIFiles:
     """Compiles a model and its transforms using AOTI.

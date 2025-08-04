@@ -1,4 +1,5 @@
 import logging
+import pathlib
 import tempfile
 from collections.abc import Sequence
 
@@ -7,6 +8,7 @@ import yaml
 from torch.export.dynamic_shapes import Dim
 from torch.export.pt2_archive._package import package_pt2
 
+from ..base import Path
 from ..schema import MLModelProperties
 from .base import AOTIFiles, ExportedPrograms, ExtraFiles
 from .utils import aoti_compile, create_example_input_from_shape, extract_module_arg_names
@@ -19,7 +21,7 @@ def export(
     input_shape: Sequence[int],
     model: torch.nn.Module,
     transforms: torch.nn.Module | None = None,
-    device: str = "cpu",
+    device: str | torch.device = "cpu",
     dtype: torch.dtype = torch.float32,
 ) -> tuple[torch.export.ExportedProgram, torch.export.ExportedProgram | None]:
     """Exports a model and its transforms to programs.
@@ -59,10 +61,10 @@ def export(
 
 
 def package(
-    output_file: str,
+    output_file: Path,
     model_program: torch.export.ExportedProgram,
     transforms_program: torch.export.ExportedProgram | None = None,
-    metadata_path: str | None = None,
+    metadata_path: Path | None = None,
     aoti_compile_and_package: bool = False,
 ) -> None:
     """Packages a model and its transforms AOTI exported programs into a single archive file.
@@ -92,9 +94,9 @@ def package(
         model_tmpdir = tempfile.TemporaryDirectory()
         transforms_tmpdir = tempfile.TemporaryDirectory()
         aoti_files.update(aoti_compile(
-            model_directory=model_tmpdir.name,
+            model_directory=pathlib.Path(model_tmpdir.name),
             model_program=model_program,
-            transforms_directory=transforms_tmpdir.name,
+            transforms_directory=pathlib.Path(transforms_tmpdir.name),
             transforms_program=transforms_program,
         ))
     else:

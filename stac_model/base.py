@@ -9,7 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_valid
 
 Number: TypeAlias = int | float
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | Number | bool | str | None
-Paths: TypeAlias = list[os.PathLike[str]]
+Path: TypeAlias = os.PathLike[str]
 
 
 @dataclass

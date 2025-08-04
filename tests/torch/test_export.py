@@ -2,8 +2,7 @@ import pytest
 
 pytest.importorskip("torchgeo")
 
-import os
-from pathlib import Path
+import pathlib
 
 import torch
 import torchvision.transforms.v2 as T
@@ -11,6 +10,7 @@ import yaml
 from torch.export.pt2_archive._package import load_pt2
 from torchgeo.models import Unet_Weights, unet
 
+from stac_model.base import Path
 from stac_model.schema import MLModelProperties
 from stac_model.torch.export import (
     export,
@@ -18,10 +18,10 @@ from stac_model.torch.export import (
 )
 
 
-def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_transforms: bool) -> None:
+def export_model(tmpdir: Path, device: str | torch.device, aoti_compile_and_package: bool, no_transforms: bool) -> None:
     input_shape = (-1, 8, -1, -1)
-    archive_path = os.path.join(tmpdir, "model.pt2")
-    metadata_path = os.path.join("tests", "torch", "ftw-metadata.yaml")
+    archive_path = pathlib.Path(tmpdir) / "model.pt2"
+    metadata_path = pathlib.Path("tests") / "torch" / "ftw-metadata.yaml"
     weights = Unet_Weights.SENTINEL2_3CLASS_FTW
     transforms = torch.nn.Sequential(T.Resize((256, 256)), T.Normalize(mean=[0.0], std=[3000.0]))
     model = unet(weights=weights)
@@ -32,6 +32,10 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
         device=device,
         dtype=torch.float32,
     )
+
+    if no_transforms:
+        assert transforms_program is None
+
     package(
         output_file=archive_path,
         model_program=model_program,
@@ -49,6 +53,11 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
         preds = model_aoti(x)
         assert preds.shape == (1, 3, 128, 128)
 
+        if no_transforms:
+            assert "transforms" not in pt2.aoti_runners
+        else:
+            assert "transforms" in pt2.aoti_runners
+
         if "transforms" in pt2.aoti_runners:
             transforms_aoti = pt2.aoti_runners["transforms"]
             transformed = transforms_aoti(x)
@@ -57,6 +66,11 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
         model_exported = pt2.exported_programs["model"].module()
         preds = model_exported(x)
         assert preds.shape == (1, 3, 128, 128)
+
+        if no_transforms:
+            assert "transforms" not in pt2.exported_programs
+        else:
+            assert "transforms" in pt2.exported_programs
 
         if "transforms" in pt2.exported_programs:
             transforms_exported = pt2.exported_programs["transforms"].module()
@@ -69,7 +83,6 @@ def export_model(tmpdir: Path, device: str, aoti_compile_and_package: bool, no_t
     MLModelProperties.model_validate(metadata["properties"])
 
 
-@pytest.mark.slow
 @pytest.mark.parametrize("no_transforms", [True, False])
 @pytest.mark.parametrize("aoti_compile_and_package", [False, True])
 def test_ftw_export_cpu(tmpdir: Path, aoti_compile_and_package: bool, no_transforms: bool) -> None:
