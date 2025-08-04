@@ -1,3 +1,4 @@
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
@@ -8,6 +9,7 @@ from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_valid
 
 Number: TypeAlias = int | float
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | Number | bool | str | None
+Paths: TypeAlias = list[os.PathLike[str]]
 
 
 @dataclass

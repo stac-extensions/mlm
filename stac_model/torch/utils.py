@@ -7,6 +7,9 @@ from collections.abc import Sequence
 
 import torch
 
+from ..base import Paths
+from .base import AOTIFiles
+
 
 def extract_module_arg_names(module: torch.nn.Module) -> str:
     """Extracts the argument names of the forward method of a given module.
@@ -29,7 +32,7 @@ def extract_module_arg_names(module: torch.nn.Module) -> str:
 def aoti_compile_and_extract(
     program: torch.export.ExportedProgram,
     output_directory: str
-) -> list[str]:
+) -> Paths:
     """Compiles an exported program using AOTI and extracts the files to the specified directory.
 
     Args:
@@ -55,7 +58,7 @@ def aoti_compile(
     model_program: torch.export.ExportedProgram,
     transforms_directory: str | None = None,
     transforms_program: torch.export.ExportedProgram | None = None,
-) -> dict[str, list[str]]:
+) -> AOTIFiles:
     """Compiles a model and its transforms using AOTI.
 
     Args:
@@ -68,7 +71,7 @@ def aoti_compile(
         program=model_program,
         output_directory=model_directory,
     )
-    aoti_files = {"model": model_files}
+    aoti_files: AOTIFiles = {"model": model_files}
 
     if transforms_program is not None and transforms_directory is not None:
         transforms_files = aoti_compile_and_extract(
@@ -78,6 +81,7 @@ def aoti_compile(
         aoti_files["transforms"] = transforms_files
 
     return aoti_files
+
 
 def create_example_input_from_shape(input_shape: Sequence[int]) -> torch.Tensor:
     """Creates an example input tensor based on the provided input shape.

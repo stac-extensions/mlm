@@ -7,11 +7,11 @@ import yaml
 from torch.export.dynamic_shapes import Dim
 from torch.export.pt2_archive._package import package_pt2
 
+from ..schema import MLModelProperties
+from .base import ExportedPrograms, ExtraFiles
 from .utils import aoti_compile, create_example_input_from_shape, extract_module_arg_names
 
 logger = logging.getLogger(__name__)
-
-
 
 
 @torch.no_grad()
@@ -72,6 +72,9 @@ def package(
         transforms_program: The exported transforms program.
         metadata_path: Path to the YAML file containing model metadata.
         aoti_compile_and_package: Whether to compile and package the model and transforms using AOTI.
+
+    Raises:
+        ValidationError: if the model metadata is not valid MLModelProperties.
     """
     aoti_files = None
     extra_files = None
@@ -80,7 +83,9 @@ def package(
     if metadata_path is not None:
         with open(metadata_path) as f:
             metadata = yaml.safe_load(f)
-        extra_files = {"metadata": yaml.dump(metadata)}
+            MLModelProperties.model_validate(metadata["properties"])
+
+        extra_files: ExtraFiles = {"mlm-metadata": yaml.dump(metadata)}
 
     if aoti_compile_and_package:
         model_tmpdir = tempfile.TemporaryDirectory()
@@ -92,15 +97,15 @@ def package(
             transforms_program=transforms_program,
         )
     else:
-        exported_programs = {"model": model_program}
+        exported_programs: ExportedPrograms = {"model": model_program}
         if transforms_program is not None:
             exported_programs["transforms"] = transforms_program
 
     package_pt2(
         f=output_file,
-        exported_programs=exported_programs,
+        exported_programs=exported_programs,  # type: ignore[arg-type]
         aoti_files=aoti_files,  # type: ignore[arg-type]
-        extra_files=extra_files,
+        extra_files=extra_files,  # type: ignore[arg-type]
     )
 
     if aoti_compile_and_package:
