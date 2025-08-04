@@ -7,39 +7,11 @@ import yaml
 from torch.export.dynamic_shapes import Dim
 from torch.export.pt2_archive._package import package_pt2
 
-from .utils import aoti_compile_and_extract, create_example_input_from_shape, extract_module_arg_names
+from .utils import aoti_compile, create_example_input_from_shape, extract_module_arg_names
 
 logger = logging.getLogger(__name__)
 
 
-def aoti_compile(
-    model_directory: str,
-    model_program: torch.export.ExportedProgram,
-    transforms_directory: str | None = None,
-    transforms_program: torch.export.ExportedProgram | None = None,
-) -> dict[str, list[str]]:
-    """Compiles a model and its transforms using AOTI.
-
-    Args:
-        model_directory: The directory to store the compiled model files.
-        model_program: The exported model program.
-        transforms_directory: The directory to store the compiled transforms files.
-        transforms_program: The exported transforms program.
-    """
-    model_files = aoti_compile_and_extract(
-        program=model_program,
-        output_directory=model_directory,
-    )
-    aoti_files = {"model": model_files}
-
-    if transforms_program is not None and transforms_directory is not None:
-        transforms_files = aoti_compile_and_extract(
-            program=transforms_program,
-            output_directory=transforms_directory,
-        )
-        aoti_files["transforms"] = transforms_files
-
-    return aoti_files
 
 
 @torch.no_grad()
