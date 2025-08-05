@@ -83,6 +83,7 @@ def export_model(tmpdir: Path, device: str | torch.device, aoti_compile_and_pack
     MLModelProperties.model_validate(metadata["properties"])
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize("no_transforms", [True, False])
 @pytest.mark.parametrize("aoti_compile_and_package", [False, True])
 def test_ftw_export_cpu(tmpdir: Path, aoti_compile_and_package: bool, no_transforms: bool) -> None:
