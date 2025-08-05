@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `cpu` device type
+- Add `cpu` device type to `mlm:accelerator` and corresponding `stac_model.runtime.AcceleratorEnum`.
 - Add `pre_processing_function` and `post_processing_function` support as JSON array 
   of [Processing Expression](README.md#processing-expression) definitions respectively
   for the [Model Input Object](README.md#model-input-object) and [Model Output Object](README.md#model-output-object)
