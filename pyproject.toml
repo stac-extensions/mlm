@@ -24,7 +24,7 @@ dependencies = [
 ]
 optional-dependencies.torch = [
   "torch>=2.8.0.dev,<2.9.0; python_version>='3.11'",
-  "torchgeo; sys_platform=='linux' and python_version>='3.11'",
+  "torchgeo; python_version>='3.11'",
   "torchvision>=0.21; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
