@@ -49,12 +49,12 @@ install-dev: setup
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pre-commit install
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" pre-commit install
 
 #* Formatters
 .PHONY: codestyle
 codestyle: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff format --config=pyproject.toml stac_model tests
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff format --config=pyproject.toml stac_model tests
 
 .PHONY: format
 format: codestyle
@@ -62,7 +62,7 @@ format: codestyle
 #* Linting
 .PHONY: test
 test: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model tests/
 
 .PHONY: check
 check: check-examples check-markdown check-lint check-mypy check-safety check-citation
@@ -72,27 +72,31 @@ check-all: check
 
 .PHONY: mypy
 mypy: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
 check-mypy: mypy
 
 .PHONY: check-safety
 check-safety: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" safety check --full-report
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" bandit -ll --recursive stac_model tests
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" safety check --full-report
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" bandit -ll --recursive stac_model tests
+
+.PHONY: check-citation
+check-citation: setup
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" cffconvert --validate
 
 .PHONY: lint
 lint: setup
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
 
 .PHONY: check-lint
 check-lint: lint
-	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint
 format-lint: lint
-	ruff format --config=pyproject.toml ./
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff check --fix --config=pyproject.toml ./
 
 .PHONY: install-npm
 install-npm:

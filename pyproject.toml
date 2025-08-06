@@ -79,7 +79,11 @@ dev-dependencies = [
     "types-pyyaml>=6.0.12.20250516",
     "requests>=2.32.4",
     "urllib3>=2.5.0,<3.0.0",
+    "cffconvert",
 ]
+
+[tool.uv.sources]
+cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]
 homepage = "https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md"
