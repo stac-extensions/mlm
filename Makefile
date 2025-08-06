@@ -129,7 +129,7 @@ FORMATTERS := lint markdown examples
 $(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 
 .PHONY: lint-all
-lint-all: lint-only mypy check-safety check-markdown
+lint-all: lint mypy check-safety check-markdown
 
 .PHONY: update-dev-deps
 update-dev-deps: setup

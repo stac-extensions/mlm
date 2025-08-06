@@ -30,10 +30,7 @@ def extract_module_arg_names(module: torch.nn.Module) -> str:
     return next(iter(inspect.signature(module.forward).parameters))
 
 
-def aoti_compile_and_extract(
-    program: torch.export.ExportedProgram,
-    output_directory: Path
-) -> list[Path]:
+def aoti_compile_and_extract(program: torch.export.ExportedProgram, output_directory: Path) -> list[Path]:
     """Compiles an exported program using AOTI and extracts the files to the specified directory.
 
     Args:
@@ -44,14 +41,14 @@ def aoti_compile_and_extract(
         A list of file paths extracted from the compiled package.
     """
     with tempfile.TemporaryDirectory() as tmpdir:
-        path = torch._inductor.aoti_compile_and_package(
-            program, package_path=os.path.join(tmpdir, "file.pt2")
-        )
+        path = torch._inductor.aoti_compile_and_package(program, package_path=os.path.join(tmpdir, "file.pt2"))
 
         with zipfile.ZipFile(path, "r") as zip_ref:
             zip_ref.extractall(output_directory)
 
-    return [pathlib.Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)]
+    return [
+        pathlib.Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)
+    ]
 
 
 def aoti_compile(

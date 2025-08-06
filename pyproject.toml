@@ -28,10 +28,10 @@ optional-dependencies.torch = [
   "torchvision>=0.21; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
-  "pytorch-triton; sys_platform=='linux' and python_version>='3.11'",
-  "torch>=2.8.0.dev,<2.9.0; sys_platform=='linux' and python_version>='3.11'",
-  "torchgeo; sys_platform=='linux' and python_version>='3.11'",
-  "torchvision>=0.21,<1; sys_platform=='linux' and python_version>='3.11'",
+  "pytorch-triton; python_version>='3.11'",
+  "torch>=2.8.0,<2.9.0; python_version>='3.11'",
+  "torchgeo; python_version>='3.11'",
+  "torchvision>=0.21,<1; python_version>='3.11'",
 ]
 
 # important: leave the name and version together for bump resolution
@@ -96,18 +96,15 @@ dev-dependencies = [
 
 conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
 prerelease = "allow"
-required-environments = [
-  "sys_platform == 'darwin' and platform_machine == 'arm64'",
-  "sys_platform == 'linux' and platform_machine == 'x86_64'",
-]
+
 [[tool.uv.index]]
 name = "pytorch-cpu"
-url = "https://download.pytorch.org/whl/test/cpu"
+url = "https://download.pytorch.org/whl/cpu"
 explicit = true
 
 [[tool.uv.index]]
 name = "pytorch-cu126"
-url = "https://download.pytorch.org/whl/test/cu126"
+url = "https://download.pytorch.org/whl/cu126"
 explicit = true
 
 [tool.uv.sources]
@@ -120,7 +117,7 @@ torchvision = [
   { index = "pytorch-cu126", extra = "torch-cu126" },
 ]
 pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
-torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "bc9453efbcf29d74e6a85719b85e008f862ff26b" }
+torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" }
 cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]

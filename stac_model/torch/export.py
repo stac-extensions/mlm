@@ -93,12 +93,14 @@ def package(
     if aoti_compile_and_package:
         model_tmpdir = tempfile.TemporaryDirectory()
         transforms_tmpdir = tempfile.TemporaryDirectory()
-        aoti_files.update(aoti_compile(
-            model_directory=pathlib.Path(model_tmpdir.name),
-            model_program=model_program,
-            transforms_directory=pathlib.Path(transforms_tmpdir.name),
-            transforms_program=transforms_program,
-        ))
+        aoti_files.update(
+            aoti_compile(
+                model_directory=pathlib.Path(model_tmpdir.name),
+                model_program=model_program,
+                transforms_directory=pathlib.Path(transforms_tmpdir.name),
+                transforms_program=transforms_program,
+            )
+        )
     else:
         exported_programs["model"] = model_program
         if transforms_program is not None:
