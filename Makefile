@@ -49,7 +49,8 @@ install-dev: setup
 
 .PHONY: install-dev-extras
 install-dev-extras: setup
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -e .[torch]
+	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -e .[torch] -r requirements-dev.txt
 
 .PHONY: pre-commit-install
 pre-commit-install: setup
