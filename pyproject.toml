@@ -394,6 +394,7 @@ timeout = 1000
 
 # Extra options:
 addopts = [
+  "-m not slow",
   "--strict-markers",
   "--tb=short",
   "--doctest-modules",
