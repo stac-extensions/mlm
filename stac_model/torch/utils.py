@@ -1,10 +1,10 @@
 import glob
 import inspect
 import os
-import pathlib
 import tempfile
 import zipfile
 from collections.abc import Sequence
+from typing import cast
 
 import torch
 
@@ -47,7 +47,9 @@ def aoti_compile_and_extract(program: torch.export.ExportedProgram, output_direc
             zip_ref.extractall(output_directory)
 
     return [
-        pathlib.Path(f) for f in glob.glob(os.path.join(output_directory, "**"), recursive=True) if os.path.isfile(f)
+        cast(os.PathLike[str], f)
+        for f in glob.glob(os.path.join(output_directory, "**"), recursive=True)
+        if os.path.isfile(f)
     ]
 
 
