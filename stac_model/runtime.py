@@ -8,6 +8,7 @@ from stac_model.base import MLMBaseModel, OmitIfNone
 
 class AcceleratorEnum(str, Enum):
     amd64 = "amd64"
+    cpu = "cpu"
     cuda = "cuda"
     xla = "xla"
     amd_rocm = "amd-rocm"
@@ -21,6 +22,7 @@ class AcceleratorEnum(str, Enum):
 
 AcceleratorName = Literal[
     "amd64",
+    "cpu",
     "cuda",
     "xla",
     "amd-rocm",

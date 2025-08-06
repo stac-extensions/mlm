@@ -91,6 +91,7 @@ dev-dependencies = [
     "urllib3>=2.5.0,<3.0.0",
     "httpx<0.26.0",
     "referencing>=0.36.2",
+    "cffconvert",
 ]
 
 conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
@@ -120,6 +121,7 @@ torchvision = [
 ]
 pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
 torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "bc9453efbcf29d74e6a85719b85e008f862ff26b" }
+cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]
 homepage = "https://github.com/stac-extensions/mlm/blob/main/README_STAC_MODEL.md"

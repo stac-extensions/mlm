@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10, <4.0"
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'linux' and extra != 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'",
@@ -393,6 +393,18 @@ wheels = [
 ]
 
 [[package]]
+name = "cffconvert"
+version = "3.0.0a0"
+source = { git = "https://github.com/citation-file-format/cffconvert.git?rev=b6045d78aac9e02b039703b030588d54d53262ac#b6045d78aac9e02b039703b030588d54d53262ac" }
+dependencies = [
+    { name = "click" },
+    { name = "jsonschema" },
+    { name = "pykwalify" },
+    { name = "requests" },
+    { name = "ruamel-yaml" },
+]
+
+[[package]]
 name = "cfgv"
 version = "3.4.0"
 source = { registry = "https://pypi.org/simple" }
@@ -752,6 +764,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/b2/9d/c3b43da9515bd270d
 wheels = [
     { url = "https://files.pythonhosted.org/packages/55/e2/2537ebcff11c1ee1ff17d8d0b6f4db75873e3b0fb32c2d4a2ee31ecb310a/docstring_parser-0.17.0-py3-none-any.whl", hash = "sha256:cf2569abd23dce8099b300f9b4fa8191e9582dda731fd533daf54c4551658708", size = 36896, upload-time = "2025-07-21T07:35:00.684Z" },
 ]
+
+[[package]]
+name = "docopt"
+version = "0.6.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a2/55/8f8cab2afd404cf578136ef2cc5dfb50baa1761b68c9da1fb1e4eed343c9/docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491", size = 25901, upload-time = "2014-06-16T11:18:57.406Z" }
 
 [[package]]
 name = "docstring-parser-fork"
@@ -2694,6 +2712,20 @@ wheels = [
 ]
 
 [[package]]
+name = "pykwalify"
+version = "1.8.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "docopt" },
+    { name = "python-dateutil" },
+    { name = "ruamel-yaml" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/d5/77/2d6849510dbfce5f74f1f69768763630ad0385ad7bb0a4f39b55de3920c7/pykwalify-1.8.0.tar.gz", hash = "sha256:796b2ad3ed4cb99b88308b533fb2f559c30fa6efb4fa9fda11347f483d245884", size = 62462, upload-time = "2020-12-30T22:31:10.745Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1f/fd/ac2161cce19fd67a18c269073f8e86292b5511acec6f8ef6eab88615d032/pykwalify-1.8.0-py2.py3-none-any.whl", hash = "sha256:731dfa87338cca9f559d1fca2bdea37299116e3139b73f78ca90a543722d6651", size = 24860, upload-time = "2020-12-30T22:31:09.09Z" },
+]
+
+[[package]]
 name = "pyparsing"
 version = "3.2.3"
 source = { registry = "https://pypi.org/simple" }
@@ -3589,6 +3621,7 @@ torch-cu126 = [
 dev = [
     { name = "bandit" },
     { name = "bump-my-version" },
+    { name = "cffconvert" },
     { name = "coverage" },
     { name = "httpx" },
     { name = "mypy" },
@@ -3639,6 +3672,7 @@ provides-extras = ["torch", "torch-cu126"]
 dev = [
     { name = "bandit", specifier = ">=1.7.5,<2.0.0" },
     { name = "bump-my-version", specifier = ">=0.21" },
+    { name = "cffconvert", git = "https://github.com/citation-file-format/cffconvert.git?rev=b6045d78aac9e02b039703b030588d54d53262ac" },
     { name = "coverage", specifier = ">=7.3.0,<8.0.0" },
     { name = "httpx", specifier = "<0.26.0" },
     { name = "mypy", specifier = ">=1.10.0,<2.0.0" },

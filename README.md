@@ -270,6 +270,7 @@ to use common names when applicable. Below are a few notable entries.
 It is recommended to define `accelerator` with one of the following values:
 
 - `amd64` models compatible with AMD or Intel CPUs (no hardware specific optimizations)
+- `cpu` an alias for the `amd64` accelerator type
 - `cuda` models compatible with NVIDIA GPUs
 - `xla` models compiled with XLA. Models trained on TPUs are typically compiled with XLA.
 - `amd-rocm` models trained on AMD GPUs
