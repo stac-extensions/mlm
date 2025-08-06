@@ -76,21 +76,24 @@ ValueScalingObject: TypeAlias = Union[
     ValueScalingOffset,
     ValueScalingScale,
     ValueScalingProcessingExpression,
-    None
+    None,
 ]
 
-ResizeType: TypeAlias = Literal[
-    "crop",
-    "pad",
-    "interpolation-nearest",
-    "interpolation-linear",
-    "interpolation-cubic",
-    "interpolation-area",
-    "interpolation-lanczos4",
-    "interpolation-max",
-    "wrap-fill-outliers",
-    "wrap-inverse-map",
-] | None
+ResizeType: TypeAlias = (
+    Literal[
+        "crop",
+        "pad",
+        "interpolation-nearest",
+        "interpolation-linear",
+        "interpolation-cubic",
+        "interpolation-area",
+        "interpolation-lanczos4",
+        "interpolation-max",
+        "wrap-fill-outliers",
+        "wrap-inverse-map",
+    ]
+    | None
+)
 
 
 class ModelInput(ModelBandsOrVariablesReferences):
