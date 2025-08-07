@@ -92,6 +92,7 @@ dev-dependencies = [
     "httpx<0.26.0",
     "referencing>=0.36.2",
     "cffconvert",
+    "coverage-conditional-plugin>=0.9.0",
 ]
 
 conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
@@ -405,6 +406,9 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 branch = true
+
+[tool.coverage.coverage_conditional_plugin.omit]
+"sys_version_info < (3, 11)" = "stac_model/torch/*.py"
 
 [tool.coverage.report]
 exclude_also = [

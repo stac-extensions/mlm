@@ -683,6 +683,19 @@ toml = [
 ]
 
 [[package]]
+name = "coverage-conditional-plugin"
+version = "0.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "coverage" },
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2e/6e/82f411d325a38cc24289060ca5f80d990ee8d026f4de9782006acf061f9b/coverage_conditional_plugin-0.9.0.tar.gz", hash = "sha256:6893dab0542695dbd5ea714281dae0dfec8d0e36480ba32d839e9fa7344f8215", size = 10579, upload-time = "2023-06-02T10:25:10.166Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/06/83/df10dd1911cb1695274da836e786ade7eaace9ed625b14056eb0bd6117d8/coverage_conditional_plugin-0.9.0-py3-none-any.whl", hash = "sha256:1b37bc469019d2ab5b01f5eee453abe1846b3431e64e209720c2a9ec4afb8130", size = 7317, upload-time = "2023-06-02T10:25:08.177Z" },
+]
+
+[[package]]
 name = "cryptography"
 version = "45.0.5"
 source = { registry = "https://pypi.org/simple" }
@@ -3609,6 +3622,7 @@ dev = [
     { name = "bump-my-version" },
     { name = "cffconvert" },
     { name = "coverage" },
+    { name = "coverage-conditional-plugin" },
     { name = "httpx" },
     { name = "mypy" },
     { name = "mypy-extensions" },
@@ -3660,6 +3674,7 @@ dev = [
     { name = "bump-my-version", specifier = ">=0.21" },
     { name = "cffconvert", git = "https://github.com/citation-file-format/cffconvert.git?rev=b6045d78aac9e02b039703b030588d54d53262ac" },
     { name = "coverage", specifier = ">=7.3.0,<8.0.0" },
+    { name = "coverage-conditional-plugin", specifier = ">=0.9.0" },
     { name = "httpx", specifier = "<0.26.0" },
     { name = "mypy", specifier = ">=1.10.0,<2.0.0" },
     { name = "mypy-extensions", specifier = ">=0.4.3,<1.2.0" },
