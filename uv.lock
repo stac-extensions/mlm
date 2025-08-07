@@ -798,7 +798,7 @@ name = "exceptiongroup"
 version = "1.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.11' or (python_full_version < '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0b/9f/a65090624ecf468cdca03533906e7c69ed7588582240cfe7cc9e770b50eb/exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88", size = 29749, upload-time = "2025-05-10T17:42:51.123Z" }
 wheels = [
@@ -3644,11 +3644,11 @@ requires-dist = [
     { name = "pytorch-triton", marker = "python_full_version >= '3.11' and extra == 'torch-cu126'", index = "https://download.pytorch.org/whl/cu126", conflict = { package = "stac-model", extra = "torch-cu126" } },
     { name = "rich", specifier = ">=13.7.0,<15.0.0" },
     { name = "shapely", specifier = ">=2,<3" },
-    { name = "torch", marker = "python_full_version >= '3.11' and extra == 'torch'", specifier = ">=2.8.0.dev0,<2.9.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "stac-model", extra = "torch" } },
-    { name = "torch", marker = "python_full_version >= '3.11' and extra == 'torch-cu126'", specifier = ">=2.8.0,<2.9.0", index = "https://download.pytorch.org/whl/cu126", conflict = { package = "stac-model", extra = "torch-cu126" } },
+    { name = "torch", marker = "python_full_version >= '3.11' and extra == 'torch'", specifier = "==2.8.0", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "stac-model", extra = "torch" } },
+    { name = "torch", marker = "python_full_version >= '3.11' and extra == 'torch-cu126'", specifier = "==2.8.0", index = "https://download.pytorch.org/whl/cu126", conflict = { package = "stac-model", extra = "torch-cu126" } },
     { name = "torchgeo", marker = "python_full_version >= '3.11' and extra == 'torch'", git = "https://github.com/microsoft/torchgeo?rev=95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" },
     { name = "torchgeo", marker = "python_full_version >= '3.11' and extra == 'torch-cu126'", git = "https://github.com/microsoft/torchgeo?rev=95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" },
-    { name = "torchvision", marker = "python_full_version >= '3.11' and extra == 'torch'", specifier = ">=0.21", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "stac-model", extra = "torch" } },
+    { name = "torchvision", marker = "python_full_version >= '3.11' and extra == 'torch'", specifier = ">=0.21,<1", index = "https://download.pytorch.org/whl/cpu", conflict = { package = "stac-model", extra = "torch" } },
     { name = "torchvision", marker = "python_full_version >= '3.11' and extra == 'torch-cu126'", specifier = ">=0.21,<1", index = "https://download.pytorch.org/whl/cu126", conflict = { package = "stac-model", extra = "torch-cu126" } },
     { name = "typer", specifier = ">=0.9.0,<1.0.0" },
 ]
