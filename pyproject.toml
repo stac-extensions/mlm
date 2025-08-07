@@ -411,6 +411,9 @@ plugins = ["coverage_conditional_plugin"]
 [tool.coverage.coverage_conditional_plugin.omit]
 "not is_installed('torch')" = "stac_model/torch/*.py"
 
+[tool.coverage.coverage_conditional_plugin.rules]
+has-torch = "is_installed('torch')"
+
 [tool.coverage.report]
 exclude_also = [
   "def main",
