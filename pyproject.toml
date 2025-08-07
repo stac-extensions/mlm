@@ -409,7 +409,7 @@ branch = true
 plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.coverage_conditional_plugin.omit]
-"sys_version_info < (3, 11)" = "stac_model/torch/*.py"
+"not is_installed('torch')" = "stac_model/torch/*.py"
 
 [tool.coverage.report]
 exclude_also = [
