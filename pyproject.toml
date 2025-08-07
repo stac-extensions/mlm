@@ -405,9 +405,6 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 branch = true
-omit = [
-    "stac_model/torch/*",
-]
 
 [tool.coverage.report]
 exclude_also = [
