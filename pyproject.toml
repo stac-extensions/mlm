@@ -29,7 +29,12 @@ name = "stac-model"
 version = "0.3.0"
 description = "A PydanticV2 validation and serialization libary for the STAC ML Model Extension"
 readme = "README_STAC_MODEL.md"
-keywords = []
+keywords = [
+  "STAC",
+  "SpatioTemporal Asset Catalog",
+  "Machine Learning Model",
+  "Artificial Intelligence",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Operating System :: OS Independent",
