@@ -406,6 +406,7 @@ addopts = [
 [tool.coverage.run]
 source = ["tests"]
 branch = true
+plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.coverage_conditional_plugin.omit]
 "sys_version_info < (3, 11)" = "stac_model/torch/*.py"
