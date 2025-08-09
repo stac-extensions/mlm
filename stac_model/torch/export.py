@@ -1,24 +1,28 @@
 import logging
 import pathlib
 import tempfile
-from collections.abc import Sequence
 
 import torch
-import yaml
 from torch.export.dynamic_shapes import Dim
 from torch.export.pt2_archive._package import package_pt2
 
 from ..base import Path
 from ..schema import MLModelProperties
 from .base import AOTIFiles, ExportedPrograms, ExtraFiles
-from .utils import aoti_compile, create_example_input_from_shape, extract_module_arg_names
+from .utils import (
+    aoti_compile,
+    create_example_input_from_shape,
+    extract_module_arg_names,
+    model_properties_to_metadata,
+    update_properties,
+)
 
 logger = logging.getLogger(__name__)
 
 
 @torch.no_grad()
 def export(
-    input_shape: Sequence[int],
+    input_shape: list[int],
     model: torch.nn.Module,
     transforms: torch.nn.Module | None = None,
     device: str | torch.device = "cpu",
@@ -64,7 +68,7 @@ def package(
     output_file: Path,
     model_program: torch.export.ExportedProgram,
     transforms_program: torch.export.ExportedProgram | None = None,
-    metadata_path: Path | None = None,
+    metadata_properties: MLModelProperties | None = None,
     aoti_compile_and_package: bool = False,
 ) -> None:
     """Packages a model and its transforms AOTI exported programs into a single archive file.
@@ -73,7 +77,7 @@ def package(
         output_file: The path to the output archive file.
         model_program: The exported model program.
         transforms_program: The exported transforms program.
-        metadata_path: Path to the YAML file containing model metadata.
+        metadata_properties: MLModelProperties object
         aoti_compile_and_package: Whether to compile and package the model and transforms using AOTI.
 
     Raises:
@@ -83,12 +87,9 @@ def package(
     extra_files: ExtraFiles = {}
     exported_programs: ExportedPrograms = {}
 
-    if metadata_path is not None:
-        with open(metadata_path) as f:
-            metadata = yaml.safe_load(f)
-            MLModelProperties.model_validate(metadata["properties"])
-
-        extra_files["mlm-metadata"] = yaml.dump(metadata)
+    if metadata_properties is not None:
+        metadata_yaml = model_properties_to_metadata(metadata_properties)
+        extra_files["mlm-metadata"] = metadata_yaml
 
     if aoti_compile_and_package:
         model_tmpdir = tempfile.TemporaryDirectory()
@@ -116,3 +117,45 @@ def package(
     if aoti_compile_and_package:
         model_tmpdir.cleanup()
         transforms_tmpdir.cleanup()
+
+
+def save(
+    output_file: Path,
+    input_shape: list[int],
+    model: torch.nn.Module,
+    transforms: torch.nn.Module | None = None,
+    metadata: Path | MLModelProperties | None = None,
+    device: str | torch.device = "cpu",
+    dtype: torch.dtype = torch.float32,
+    aoti_compile_and_package: bool = False,
+) -> None:
+    """Exports a model and its transforms to a packaged archive file.
+    Args:
+        output_file: The path to the output archive file.
+        input_shape: The shape of the input tensor, where -1 indicates a dynamic dimension.
+        model: The model to export.
+        transforms: The transforms to export. The transforms should be a `torch.nn.Module`. If you have
+            multiple transforms, it is recommended to wrap them in a `torch.nn.Sequential`.
+        metadata: Path to the YAML file containing model metadata or an instance of MLModelProperties.
+        device: The device to export the model and transforms to.
+        dtype: The data type to use for the model and transforms. Defaults to torch.float32.
+        aoti_compile_and_package: Whether to compile and package the model and transforms using AOTI.
+    """
+    model_program, transforms_program = export(
+        model=model,
+        transforms=transforms,
+        input_shape=input_shape,
+        device=device,
+        dtype=dtype,
+    )
+
+    if metadata is not None:
+        metadata_properties = update_properties(metadata=metadata, input_shape=input_shape, device=device, dtype=dtype)
+
+    package(
+        output_file=output_file,
+        model_program=model_program,
+        transforms_program=transforms_program,
+        metadata_properties=metadata_properties,
+        aoti_compile_and_package=aoti_compile_and_package,
+    )

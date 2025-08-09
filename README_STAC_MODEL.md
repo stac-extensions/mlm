@@ -72,13 +72,13 @@ and model metadata using functions in `stac_model.torch.export`. Below is an exa
 U-Net model pretrained on the [Fields of The World (FTW) dataset](https://fieldsofthe.world/) for
 field boundary segmentation in Sentinel-2 satellite imagery using the [TorchGeo](https://github.com/microsoft/torchgeo) library.
 
-> 📝 **Note:** To customize the metadata for your model you can use this [example](./tests/torch/ftw-metadata.yaml) as a template.
+> 📝 **Note:** To customize the metadata for your model you can use this [example](./tests/torch/metadata.yaml) as a template.
 
 ```python
 import torch
 import torchvision.transforms.v2 as T
 from torchgeo.models import Unet_Weights, unet
-from stac_model.torch.export import export, package
+from stac_model.torch.export import save
 
 weights = Unet_Weights.SENTINEL2_3CLASS_FTW
 transforms = torch.nn.Sequential(
@@ -86,18 +86,15 @@ transforms = torch.nn.Sequential(
   T.Normalize(mean=[0.0], std=[3000.0])
 )
 model = unet(weights=weights)
-model_program, transforms_program = export(
-    model=model,
-    transforms=transforms,
-    input_shape=(-1, 8, -1, -1),  # -1 indicates a dynamic shaped dimension
+
+save(
+    output_file="ftw.pt2",
+    model=model,  # Must be an nn.Module
+    transforms=transforms,  # Must be an nn.Module
+    metadata_path="metadata.yaml",  # Can be a metadata yaml or MLModelProperties object
+    input_shape=[-1, 8, -1, -1],  # -1 indicates a dynamic shaped dimension
     device="cpu",
     dtype=torch.float32,
-)
-package(
-    output_file="ftw.pt2",
-    model_program=model_program,
-    transforms_program=transforms_program,
-    metadata_path="metadata.yaml",
     aoti_compile_and_package=False,  # True for AOTInductor compile otherwise use torch.export
 )
 ```

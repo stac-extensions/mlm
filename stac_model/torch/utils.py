@@ -1,14 +1,17 @@
 import glob
 import inspect
 import os
+import pathlib
 import tempfile
 import zipfile
-from collections.abc import Sequence
 from typing import cast
 
 import torch
+import yaml
 
-from ..base import Path
+from ..base import DataType, Path
+from ..runtime import AcceleratorName
+from ..schema import SCHEMA_URI, MLModelProperties
 from .base import AOTIFiles
 
 
@@ -83,7 +86,7 @@ def aoti_compile(
     return aoti_files
 
 
-def create_example_input_from_shape(input_shape: Sequence[int]) -> torch.Tensor:
+def create_example_input_from_shape(input_shape: list[int]) -> torch.Tensor:
     """Creates an example input tensor based on the provided input shape.
 
     If batch dimension is dynamic (-1), it defaults to 2. Other dynamic dimensions
@@ -110,3 +113,61 @@ def create_example_input_from_shape(input_shape: Sequence[int]) -> torch.Tensor:
         shape = list(input_shape)
 
     return torch.randn(*shape, requires_grad=False)
+
+
+def model_properties_to_metadata(properties: MLModelProperties) -> str:
+    """Converts MLModelProperties to a metadata dictionary in YAML format.
+
+    Args:
+        properties: An instance of MLModelProperties containing model metadata.
+
+    Returns:
+        A YAML string representation of the model properties.
+    """
+    properties_dict = properties.model_dump(by_alias=False, exclude_none=True)
+    properties_dict = {k.replace("mlm:", ""): v for k, v in properties_dict.items()}
+    return yaml.dump(
+        {
+            "$schema": SCHEMA_URI,
+            "properties": properties_dict,
+        },
+        default_flow_style=False,
+    )
+
+
+def update_properties(
+    metadata: Path | MLModelProperties, input_shape: list[int], device: str | torch.device, dtype: torch.dtype
+) -> MLModelProperties:
+    """Updates the MLModelProperties with the given metadata, device, and dtype.
+
+    Args:
+        metadata: Path to the YAML file containing model metadata or an instance of MLModelProperties.
+        input_shape: The shape of the input tensor, where -1 indicates a dynamic dimension.
+        device: The device to export the model and transforms to.
+        dtype: The data type to use for the model and transforms.
+
+    Returns:
+        An instance of MLModelProperties with updated properties.
+
+    Raises:
+        ValidationError: if the metadata is not valid MLModelProperties.
+        TypeError: if metadata is not a path to a YAML file or an instance of MLModelProperties.
+    """
+    if isinstance(metadata, pathlib.Path | str):
+        with open(metadata) as f:
+            meta = yaml.safe_load(f)
+            properties = MLModelProperties(**meta["properties"])
+    elif isinstance(metadata, MLModelProperties):
+        properties = metadata
+    else:
+        raise TypeError("Metadata must be a path to a YAML file or an instance of MLModelProperties.")
+
+    accelerator = cast(AcceleratorName, str(device).split(":")[0])
+    data_type = cast(DataType, str(dtype).split(".")[-1])
+
+    properties.accelerator = accelerator
+    properties.input[0].input.shape = input_shape  # type: ignore[assignment]
+    properties.input[0].input.data_type = data_type
+    properties.output[0].result.data_type = data_type
+
+    return properties
