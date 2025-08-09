@@ -1,6 +1,6 @@
 import pytest
 
-pytest.importorskip("torch")
+pytest.importorskip("torchgeo")
 
 import pathlib
 
