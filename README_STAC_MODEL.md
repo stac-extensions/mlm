@@ -67,7 +67,7 @@ MLModelProperties.model_validate(metadata["properties"])
 
 ## Exporting and Packaging PyTorch Models, Transforms, and Model Metadata
 
-As of PyTorch 2.8, and stac_model 1.5.0, you can now export and package PyTorch models, transforms,
+As of PyTorch 2.8, and stac_model 0.4.0, you can now export and package PyTorch models, transforms,
 and model metadata using functions in `stac_model.torch.export`. Below is an example of exporting a
 U-Net model pretrained on the [Fields of The World (FTW) dataset](https://fieldsofthe.world/) for
 field boundary segmentation in Sentinel-2 satellite imagery using the [TorchGeo](https://github.com/microsoft/torchgeo) library.
