@@ -1,0 +1,41 @@
+# This file is used in torch export tests to check that the metadata is
+# validated using the MLModelMetadata Pydantic model and the export
+# functions work as expected.
+$schema: "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
+properties:
+  name: FTW 3 Class Unet
+  architecture: torchgeo.models.unet
+  artifact_type: torch.export.save
+  framework: torch
+  framework_version: 2.8.0
+  accelerator: cuda
+  total_parameters: 1234567
+  tasks: [semantic-segmentation]
+  input:
+    - name: Imagery
+      bands: [B04, B03, B02, B05, B04, B03, B02, B05]
+      input:
+        shape: [-1, 8, -1, -1]
+        dim_order: [batch, channel, height, width]
+        data_type: float32
+      pre_processing_function:
+        format: torch.export.load
+        expression:
+          id: export-transform
+          name: transforms
+          href: path/to/archive.pt2
+          type: "application/octet-stream; framework=pytorch; profile=ExportedProgram"
+  output:
+    - name: segmentation-output
+      tasks: [semantic-segmentation]
+      result:
+        shape: [-1, 3, -1, -1]
+        dim_order: [batch, classes, height, width]
+        data_type: float32
+      classification:classes:
+        - value: 0
+          name: background
+        - value: 1
+          name: field
+        - value: 2
+          name: field-boundary

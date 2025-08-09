@@ -65,6 +65,62 @@ with open("examples/mlm-metadata.yaml", "r", encoding="utf-8") as f:
 MLModelProperties.model_validate(metadata["properties"])  
 ```
 
+## Exporting and Packaging PyTorch Models, Transforms, and Model Metadata
+
+As of PyTorch 2.8, and stac_model 0.4.0, you can now export and package PyTorch models, transforms,
+and model metadata using functions in `stac_model.torch.export`. Below is an example of exporting a
+U-Net model pretrained on the [Fields of The World (FTW) dataset](https://fieldsofthe.world/) for
+field boundary segmentation in Sentinel-2 satellite imagery using the [TorchGeo](https://github.com/microsoft/torchgeo) library.
+
+> 📝 **Note:** To customize the metadata for your model you can use this [example](./tests/torch/metadata.yaml) as a template.
+
+```python
+import torch
+import torchvision.transforms.v2 as T
+from torchgeo.models import Unet_Weights, unet
+from stac_model.torch.export import save
+
+weights = Unet_Weights.SENTINEL2_3CLASS_FTW
+transforms = torch.nn.Sequential(
+  T.Resize((256, 256)),
+  T.Normalize(mean=[0.0], std=[3000.0])
+)
+model = unet(weights=weights)
+
+save(
+    output_file="ftw.pt2",
+    model=model,  # Must be an nn.Module
+    transforms=transforms,  # Must be an nn.Module
+    metadata_path="metadata.yaml",  # Can be a metadata yaml or stac_model.schema.MLModelProperties object
+    input_shape=[-1, 8, -1, -1],  # -1 indicates a dynamic shaped dimension
+    device="cpu",
+    dtype=torch.float32,
+    aoti_compile_and_package=False,  # True for AOTInductor compile otherwise use torch.export
+)
+```
+
+The model, transforms, and metadata can then be loaded into an environment with only torch and stac_model as required dependencies like below:
+
+```python
+import yaml
+from torch.export.pt2_archive._package import load_pt2
+
+pt2 = load_pt2(archive_path)
+metadata = yaml.safe_load(pt2.extra_files["mlm-metadata"])
+
+# If exported with aoti_compile_and_package=True
+model = pt2.aoti_runners["model"]
+transforms = pt2.aoti_runners["transforms"]
+
+# If exported with aoti_compile_and_package=False
+model = pt2.exported_programs["model"].module()
+transforms = pt2.exported_programs["transforms"].module()
+
+# Inference
+batch = ...  # An input batch tensor
+outputs = model(transforms(batch))
+```
+
 ## 📈 Releases
 
 You can see the list of available releases on the [GitHub Releases][github-releases] page.

@@ -1,4 +1,4 @@
-from typing import Annotated, Any, Optional, cast
+from typing import Annotated, Any, cast
 
 from pydantic import AliasChoices, ConfigDict, Field, model_serializer
 from pystac.extensions.classification import Classification
@@ -98,7 +98,7 @@ class ModelOutput(ModelBandsOrVariablesReferences):
         validation_alias=AliasChoices("classification:classes", "classification_classes", "classes"),
         default=None,
     )
-    post_processing_function: Optional[ProcessingExpression | list[ProcessingExpression]] = None
+    post_processing_function: ProcessingExpression | list[ProcessingExpression] | None = None
 
     model_config = ConfigDict(
         populate_by_name=True,
