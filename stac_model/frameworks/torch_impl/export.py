@@ -2,6 +2,7 @@ from collections.abc import Callable
 from datetime import datetime
 from typing import Any, Optional, Protocol, Union, cast
 
+import kornia.augmentation as K
 import torch
 import torch.nn as nn
 from pystac import Asset, Collection, Item, Link, utils
@@ -83,6 +84,42 @@ def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     """
     tensor = find_tensor_by_key(state_dict, "segmentation_head.0.weight", reverse=True)
     return int(tensor.shape[0])
+
+
+def extract_value_scaling(transforms: K.AugmentationSequential) -> list[dict[str, Any]]:
+    children = list(transforms.children())
+
+    def _tensor_to_value(tensor) -> Any:
+        return tensor.item() if tensor.numel() == 1 else tensor.tolist()
+
+    scaling_defs = []
+
+    for t in children:
+        if isinstance(t, K.Normalize):
+            buffers = dict(t.named_buffers()) if hasattr(t, "named_buffers") else {}
+            mean = buffers.get("mean")
+            stddev = buffers.get("std")
+
+            if mean is None or stddev is None:
+                flags = getattr(t, "flags", {})
+                mean = mean or flags.get("mean")
+                stddev = stddev or flags.get("std")
+
+            if mean is None or stddev is None:
+                raise AttributeError("Normalize transform missing mean/std info")
+
+            scaling_defs.append(
+                {
+                    "type": "z-score",
+                    "mean": _tensor_to_value(mean),
+                    "stddev": _tensor_to_value(stddev),
+                }
+            )
+
+        elif isinstance(t, K.AugmentationSequential):
+            scaling_defs.extend(extract_value_scaling(t))
+
+    return scaling_defs
 
 
 def from_torch(
@@ -184,11 +221,14 @@ def from_torch(
     )
 
     bands = weights.meta["bands"] if weights and "bands" in weights.meta else None
+    transforms = weights.transforms if weights and hasattr(weights, "transforms") else None
+    value_scaling = extract_value_scaling(transforms) if transforms else None
 
     model_input = ModelInput(
         name="model_input",
         bands=bands,
         input=input_struct,
+        value_scaling=value_scaling,
         resize_type=None,
         pre_processing_function=None,
     )
@@ -240,7 +280,7 @@ def from_torch(
     if url:
         assets["model"] = Asset(
             title=model_name,
-            description=(f"A {raw_model} segmentation model with {model_encoder} encoder " f"Weights are {license}."),
+            description=(f"A {raw_model} segmentation model with {model_encoder} encoder Weights are {license}."),
             href=url,
             media_type="application/octet-stream; application=pytorch",
             roles=[
