@@ -1,6 +1,6 @@
 {
   "type": "Feature",
-  "stac_version": "1.0.0",
+  "stac_version": "1.1.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
     "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
@@ -40,7 +40,7 @@
     58.21
   ],
   "properties": {
-    "description": "STAC item generated using unet_mlm() in stac_model/examples.py example.",
+    "description": "STAC item generated using unet_mlm() in stac_model/examples.py example. Specified in https://github.com/fieldsoftheworld/ftw-baselines First 4 S2 bands are for image t1 and last 4 bands are for image t2",
     "start_datetime": "2015-06-23T00:00:00Z",
     "end_datetime": "2024-08-27T23:59:59Z",
     "mlm:framework": "segmentation_models_pytorch.decoders.unet.model",

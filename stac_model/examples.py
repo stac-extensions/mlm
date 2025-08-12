@@ -274,7 +274,9 @@ def unet_mlm() -> ItemMLModelExtension:
     task = {TaskEnum.SEMANTIC_SEGMENTATION}
 
     properties = {
-        "description": "STAC item generated using unet_mlm() in stac_model/examples.py example.",
+        "description": "STAC item generated using unet_mlm() in stac_model/examples.py example. "
+        "Specified in https://github.com/fieldsoftheworld/ftw-baselines "
+        "First 4 S2 bands are for image t1 and last 4 bands are for image t2",
     }
 
     item_ext = MLModelExtension.from_torch(
