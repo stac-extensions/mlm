@@ -15,7 +15,7 @@ from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelPro
 def eurosat_resnet() -> ItemMLModelExtension:
     input_struct = InputStructure(
         shape=[-1, 13, 64, 64],
-        dim_order=["batch", "channel", "height", "width"],
+        dim_order=["batch", "bands", "height", "width"],
         data_type="float32",
     )
     band_names = [
@@ -176,7 +176,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         58.21798141355221,
     ]
     geometry = shapely.geometry.Polygon.from_bounds(*bbox).__geo_interface__
-    item_name = "item_basic"
+    item_name = "eurosat-resnet-mlm-example"
     col_name = "ml-model-examples"
     item = pystac.Item(
         id=item_name,

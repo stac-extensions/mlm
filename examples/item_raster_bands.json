@@ -89,7 +89,7 @@
           ],
           "dim_order": [
             "batch",
-            "channel",
+            "bands",
             "height",
             "width"
           ],

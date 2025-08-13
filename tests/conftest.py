@@ -60,6 +60,20 @@ def mlm_validator(
 
 @pytest.fixture
 def mlm_example(request: "SubRequest") -> dict[str, JSON]:
+    """
+    Fixture that loads an example STAC Item with MLM extension from the examples directory.
+
+    Usage:
+
+        ```python
+        @pytest.mark.parametrize(
+            "mlm_example",
+            ["path/to/example1.json", "path/to/example2.yaml"],  # or just the name if in 'EXAMPLES_DIR'
+            indirect=True,
+        )
+        def test_example(mlm_example: dict[str, JSON]) -> None: ...
+        ```
+    """
     with open(os.path.join(EXAMPLES_DIR, request.param), mode="r", encoding="utf-8") as example_file:
         if request.param.endswith(".json"):
             data = json.load(example_file)

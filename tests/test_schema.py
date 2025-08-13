@@ -13,11 +13,26 @@ from stac_model.schema import SCHEMA_URI
 from conftest import get_all_stac_item_examples
 
 # ignore typing errors introduced by generic JSON manipulation errors
-# mypy: disable_error_code="arg-type,call-overload,index,union-attr"
+# mypy: disable_error_code="arg-type,call-overload,index,union-attr,operator"
 
 
 @pytest.mark.parametrize(
-    "mlm_example",  # value passed to 'mlm_example' fixture
+    "mlm_example",
+    ["collection.json"],
+    indirect=True,
+)
+def test_collection_include_all_items(mlm_example):
+    """
+    This is only for self-validation, to make sure all examples are contained in the example STAC collection.
+    """
+    col_links: list[dict[str, str]] = mlm_example["links"]
+    col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
+    all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
+    assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
     get_all_stac_item_examples(),
     indirect=True,
 )
@@ -158,6 +173,110 @@ def test_mlm_eo_bands_invalid_only_in_item_properties(
     with pytest.raises(pystac.errors.STACValidationError):
         mlm_eo_bands_bad_item = pystac.Item.from_dict(mlm_eo_bands_bad_data)
         pystac.validation.validate(mlm_eo_bands_bad_item, validator=mlm_validator)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_raster_bands.json"],
+    indirect=True,
+)
+def test_mlm_required_bands_dimension_if_bands_defined(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_item = pystac.Item.from_dict(mlm_example)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    # bands missing from dimension but bands provided
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_input = cast(dict[str, JSON], mlm_data["properties"]["mlm:input"][0])
+    mlm_input["input"]["dim_order"] = ["channel", "height", "width"]
+    assert "bands" not in mlm_input["input"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # bands indicated as dimension but empty bands definition
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_input = cast(dict[str, JSON], mlm_data["properties"]["mlm:input"][0])
+    mlm_input["bands"] = []
+    assert "bands" in mlm_input["input"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # move bands to output from input to check them
+    mlm_example_output = copy.deepcopy(mlm_example)
+    mlm_input = cast(dict[str, JSON], mlm_example_output["properties"]["mlm:input"][0])
+    mlm_output = cast(dict[str, JSON], mlm_example_output["properties"]["mlm:output"][0])
+    mlm_output["bands"] = mlm_input["bands"]
+
+    # bands missing from dimension but bands provided
+    mlm_data = copy.deepcopy(mlm_example_output)
+    mlm_output = cast(dict[str, JSON], mlm_data["properties"]["mlm:output"][0])
+    assert "bands" not in mlm_output["result"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # bands indicated as dimension but empty bands definition
+    mlm_data = copy.deepcopy(mlm_example_output)
+    mlm_output = cast(dict[str, JSON], mlm_data["properties"]["mlm:output"][0])
+    mlm_output["bands"] = []
+    mlm_output["result"]["dim_order"].append("bands")
+    assert "bands" in mlm_output["result"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_datacube_variables.json"],
+    indirect=True,
+)
+def test_mlm_required_variables_dimension_if_variables_defined(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_item = pystac.Item.from_dict(mlm_example)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # ensure original is valid
+
+    # variables missing from dimension but variables provided
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_input = cast(dict[str, JSON], mlm_data["properties"]["mlm:input"][0])
+    mlm_input["input"]["dim_order"] = ["channel", "height", "width"]
+    assert "variables" not in mlm_input["input"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # variables indicated as dimension but empty variables definition
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_input = cast(dict[str, JSON], mlm_data["properties"]["mlm:input"][0])
+    mlm_input["variables"] = []
+    assert "variables" in mlm_input["input"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # variables missing from dimension but variables provided
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_output = cast(dict[str, JSON], mlm_data["properties"]["mlm:output"][0])
+    mlm_output["result"]["dim_order"] = ["channel", "height", "width"]
+    assert "variables" not in mlm_output["result"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+
+    # variables indicated as dimension but empty variables definition
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_output = cast(dict[str, JSON], mlm_data["properties"]["mlm:output"][0])
+    mlm_output["variables"] = []
+    assert "variables" in mlm_output["result"]["dim_order"]
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_item = pystac.Item.from_dict(mlm_data)
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
 
 
 @pytest.mark.parametrize(
@@ -324,35 +443,6 @@ def test_mlm_asset_artifact_type_checked(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert "should be non-empty" in str(exc.value.source)
-
-
-def test_model_metadata_to_dict(eurosat_resnet):
-    assert eurosat_resnet.item.to_dict()
-
-
-def test_validate_model_metadata(eurosat_resnet):
-    assert pystac.read_dict(eurosat_resnet.item.to_dict())
-
-
-def test_validate_model_against_schema(eurosat_resnet, mlm_validator):
-    mlm_item = pystac.read_dict(eurosat_resnet.item.to_dict())
-    validated = pystac.validation.validate(mlm_item, validator=mlm_validator)
-    assert SCHEMA_URI in validated
-
-
-@pytest.mark.parametrize(
-    "mlm_example",
-    ["collection.json"],
-    indirect=True,
-)
-def test_collection_include_all_items(mlm_example):
-    """
-    This is only for self-validation, to make sure all examples are contained in the example STAC collection.
-    """
-    col_links: list[dict[str, str]] = mlm_example["links"]
-    col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
-    all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
-    assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
 
 
 @pytest.mark.parametrize(

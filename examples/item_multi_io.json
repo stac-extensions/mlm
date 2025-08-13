@@ -79,7 +79,7 @@
           ],
           "dim_order": [
             "batch",
-            "channel",
+            "bands",
             "height",
             "width"
           ],
@@ -89,6 +89,7 @@
         "resize_type": null
       },
       {
+        "description": "Compute NDVI from Sentinel-2 bands. The single 'NDVI' virtual band is then fed as 'bands' dimension to the model input.",
         "name": "NDVI",
         "bands": [
           "B04",
@@ -107,7 +108,7 @@
           ],
           "dim_order": [
             "batch",
-            "ndvi",
+            "bands",
             "height",
             "width"
           ],
@@ -115,8 +116,8 @@
         }
       },
       {
-        "name": "DEM",
         "description": "Digital elevation model. Comes from another source than the Sentinel bands. Therefore, no 'bands' associated to it.",
+        "name": "DEM",
         "bands": [],
         "input": {
           "shape": [
@@ -127,9 +128,9 @@
           ],
           "dim_order": [
             "batch",
-            "ndvi",
-            "height",
-            "width"
+            "h",
+            "y",
+            "x"
           ],
           "data_type": "float32"
         }
