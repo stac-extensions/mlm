@@ -579,10 +579,14 @@ Below are some notable common names recommended for use, but others can be emplo
 For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
+<!-- lint disable no-undefined-references -->
+
 > [!NOTE]
 > When selecting or interpreting dimension names, users should take careful consideration over the multiple
 > interpretations they might introduce based on context. For example, `h`/`height` could either represent the height of
 > the image (often mapped to `y` dimension in geomatics) or it could represent the literal height/altitude of a measure.
+
+<!-- lint enable no-undefined-references -->
 
 #### Value Scaling Object
 
