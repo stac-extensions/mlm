@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `"variables"` dimensions indicated in `dim_order` to ensure they are coherent. Because of this validation, the
   `"bands"` and `"variables"` dimension names are now considered reserved for this purpose and cannot be employed as
   general dimension names without accompanying `bands` or `variables` definitions.
+- Add torch export and packaging utilities for combining a model, transforms, and MLM schema
+  compliant metadata into a single `.pt2` archive.
 - Add `cpu` device type to `mlm:accelerator` and corresponding `stac_model.runtime.AcceleratorEnum`.
 - Add `pre_processing_function` and `post_processing_function` support as JSON array 
   of [Processing Expression](README.md#processing-expression) definitions respectively
