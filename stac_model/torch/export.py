@@ -9,7 +9,7 @@ from pystac.extensions.eo import Band, EOExtension
 from shapely import geometry as geom
 
 from stac_model.base import ModelTask
-from stac_model.frameworks.torch.utils import (
+from stac_model.torch.utils import (
     extract_value_scaling,
     get_input_channels,
     get_input_dtype,
