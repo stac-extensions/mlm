@@ -1,13 +1,13 @@
 import json
-import sys
 from pathlib import Path
 
 import pytest
 
+pytest.importorskip("torchgeo")
+
 from stac_model.examples import unet_mlm
 
 
-@pytest.mark.skipif(sys.version_info < (3, 11), reason="Requires Python 3.11+")
 def test_unet_mlm_matches_example_json():
     try:
         item = unet_mlm().item.to_dict()

@@ -1,12 +1,12 @@
 import logging
 import pathlib
 import tempfile
-from collections.abc import Callable
 from datetime import datetime
 from typing import Any, Protocol, Union, cast
 
 import torch
 import torch.nn as nn
+from kornia.augmentation import AugmentationSequential
 from pystac import Asset, Collection, Item, Link, utils
 from pystac.extensions.eo import Band, EOExtension
 from shapely import geometry as geom
@@ -46,7 +46,7 @@ class WeightsWithMeta(Protocol):
     """
 
     url: str
-    transforms: Callable[..., Any]
+    transforms: AugmentationSequential
     meta: dict[str, Any]
 
 
@@ -148,7 +148,7 @@ def from_torch(
         data_type=input_data_type,
     )
 
-    bands = weights.meta["bands"] if weights and "bands" in weights.meta else None
+    bands = weights.meta.get("bands", []) if weights else []
     transforms = weights.transforms if weights and hasattr(weights, "transforms") else None
     value_scaling = extract_value_scaling(transforms) if transforms else None
 

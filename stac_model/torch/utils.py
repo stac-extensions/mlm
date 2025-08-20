@@ -4,13 +4,14 @@ import os
 import pathlib
 import tempfile
 import zipfile
-from typing import Any, cast
+from typing import cast
 
 import kornia.augmentation as K
 import torch
 import yaml
 
 from ..base import DataType, Path
+from ..input import ValueScalingObject, ValueScalingZScore
 from ..runtime import AcceleratorName
 from ..schema import SCHEMA_URI, MLModelProperties
 from .base import AOTIFiles
@@ -72,13 +73,20 @@ def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     return int(tensor.shape[0])
 
 
-def extract_value_scaling(transforms: K.AugmentationSequential) -> list[dict[str, Any]]:
+def extract_value_scaling(transforms: K.AugmentationSequential) -> list[ValueScalingObject]:
+    """
+    Extracts value scaling definitions from a Kornia AugmentationSequential object.
+    """
     children = list(transforms.children())
 
-    def _tensor_to_value(tensor) -> Any:
-        return tensor.item() if tensor.numel() == 1 else tensor.tolist()
+    def _tensor_to_value(tensor: torch.Tensor) -> int:
+        """
+        Convert a tensor to an int.
+        """
+        flat_tensor = tensor.view(-1)
+        return int(flat_tensor[0])
 
-    scaling_defs = []
+    scaling_defs: list[ValueScalingObject] = []
 
     for t in children:
         if isinstance(t, K.Normalize):
@@ -94,13 +102,7 @@ def extract_value_scaling(transforms: K.AugmentationSequential) -> list[dict[str
             if mean is None or stddev is None:
                 raise AttributeError("Normalize transform missing mean/std info")
 
-            scaling_defs.append(
-                {
-                    "type": "z-score",
-                    "mean": int(_tensor_to_value(mean)),
-                    "stddev": int(_tensor_to_value(stddev)),
-                }
-            )
+            scaling_defs.append(ValueScalingZScore(mean=_tensor_to_value(mean), stddev=_tensor_to_value(stddev)))
 
         elif isinstance(t, K.AugmentationSequential):
             scaling_defs.extend(extract_value_scaling(t))
