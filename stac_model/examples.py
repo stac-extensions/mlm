@@ -248,6 +248,8 @@ def unet_mlm() -> ItemMLModelExtension:
     Returns an ItemMLModelExtension with Machine Learning Model Extension metadata.
     """
     from torchgeo.models import Unet_Weights, unet
+    # Set the STAC version to 1.0.0 for compatibility with the example using relative links
+    pystac.set_stac_version("1.0.0")
 
     weights = Unet_Weights.SENTINEL2_2CLASS_NC_FTW
     model = unet(weights=weights)
