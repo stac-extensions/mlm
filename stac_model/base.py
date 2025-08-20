@@ -1,12 +1,15 @@
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
-from typing import Annotated, Any, Literal, Optional, Self, TypeAlias, Union
+from typing import Annotated, Any, Literal, TypeAlias, Union
+from typing_extensions import Self
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 Number: TypeAlias = int | float
 JSON: TypeAlias = dict[str, "JSON"] | list["JSON"] | Number | bool | str | None
+Path: TypeAlias = os.PathLike[str]
 
 
 @dataclass
@@ -139,11 +142,11 @@ class ModelCrossReferenceObject(MLMBaseModel):
         )
     )
     # similar to 'ProcessingExpression', but they can be omitted here
-    format: Annotated[Optional[str], OmitIfNone] = Field(
+    format: Annotated[str | None, OmitIfNone] = Field(
         default=None,
         description="The type of the expression that is specified in the 'expression' property.",
     )
-    expression: Annotated[Optional[Any], OmitIfNone] = Field(
+    expression: Annotated[Any | None, OmitIfNone] = Field(
         default=None,
         description=(
             "An expression compliant with the 'format' specified. "

@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add `item_pytorch_geo_unet.json` generated using the example `unet_mlm()` function.
 - Add `from_torch` function in `framework/` to convert a PyTorch model and optional
   TorchVision-style weights into a STAC Item with ML Model Extension metadata.
+- Add torch export and packaging utilities for combining a model, transforms, and MLM schema
+  compliant metadata into a single `.pt2` archive.
 - Add `cpu` device type to `mlm:accelerator` and corresponding `stac_model.runtime.AcceleratorEnum`.
 - Add `pre_processing_function` and `post_processing_function` support as JSON array 
   of [Processing Expression](README.md#processing-expression) definitions respectively
@@ -60,9 +62,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make `total_parameters` optional in `stac-model` and enforce greater than 0 to match with JSON-schema
   (applied in [#101](https://github.com/stac-extensions/mlm/pull/101).
 - Update `stac-model==0.3.0` to provide `ValueScalingObject` from installed package.
-- Update Python version requirement from `^3.10` to `>=3.11,<4` due to dependency on torchgeo example.  
-  See [microsoft/torchgeo#2559](https://github.com/microsoft/torchgeo/pull/2559) for details.
-- Update `[tool.mypy] python_version` to `3.11` in `pyproject.toml` to align with the updated Python requirement.
 
 ### Deprecated
 

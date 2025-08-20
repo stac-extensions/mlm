@@ -1,4 +1,5 @@
-from typing import Annotated, Literal, Optional, Self, TypeAlias, Union
+from typing import Annotated, Literal, TypeAlias, Union
+from typing_extensions import Self
 
 from pydantic import Field, model_validator
 
@@ -66,20 +67,19 @@ class ValueScalingProcessingExpression(ProcessingExpression):
     type: Literal["processing"] = "processing"
 
 
-ValueScalingObject: TypeAlias = Optional[
-    Union[
-        ValueScalingMinMax,
-        ValueScalingZScore,
-        ValueScalingClip,
-        ValueScalingClipMin,
-        ValueScalingClipMax,
-        ValueScalingOffset,
-        ValueScalingScale,
-        ValueScalingProcessingExpression,
-    ]
+ValueScalingObject: TypeAlias = Union[
+    ValueScalingMinMax,
+    ValueScalingZScore,
+    ValueScalingClip,
+    ValueScalingClipMin,
+    ValueScalingClipMax,
+    ValueScalingOffset,
+    ValueScalingScale,
+    ValueScalingProcessingExpression,
+    None,
 ]
 
-ResizeType: TypeAlias = Optional[
+ResizeType: TypeAlias = (
     Literal[
         "crop",
         "pad",
@@ -92,12 +92,13 @@ ResizeType: TypeAlias = Optional[
         "wrap-fill-outliers",
         "wrap-inverse-map",
     ]
-]
+    | None
+)
 
 
 class ModelInput(ModelBandsOrVariablesReferences):
     name: str
     input: InputStructure
-    value_scaling: Annotated[Optional[list[ValueScalingObject]], OmitIfNone] = None
-    resize_type: Annotated[Optional[ResizeType], OmitIfNone] = None
-    pre_processing_function: Optional[ProcessingExpression | list[ProcessingExpression]] = None
+    value_scaling: Annotated[list[ValueScalingObject] | None, OmitIfNone] = None
+    resize_type: Annotated[ResizeType | None, OmitIfNone] = None
+    pre_processing_function: ProcessingExpression | list[ProcessingExpression] | None = None

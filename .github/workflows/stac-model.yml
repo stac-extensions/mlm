@@ -8,6 +8,8 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12", "3.13"]
+    env:
+      COVERAGE_FILE: .coverage.${{ matrix.python-version }}
 
     steps:
     - uses: actions/checkout@v4
@@ -24,12 +26,18 @@ jobs:
       with:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('uv.lock') }}
+
     - name: Install dependencies
       run: make install-dev
+      if: ${{ matrix.python-version == '3.10' }}
+
+    - name: Install dependencies with extras
+      run: make install-dev-extras
+      if: ${{ matrix.python-version != '3.10' }}
 
     - name: Run checks
-      run: |
-        make lint-all
+      if: ${{ matrix.python-version != '3.10' }}
+      run: make lint-all
 
     - name: Run tests
       run: |

@@ -3,27 +3,37 @@ requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
 [tool.pdm.build]
-includes = [
-    "stac_model",
-]
+includes = ["stac_model"]
 
 [project]
 authors = [
-    {name = "Ryan Avery", email = "ryan@wherobots.com"},
-    {name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca"},
+  { name = "Ryan Avery", email = "ryan@wherobots.com" },
+  { name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca" },
 ]
-license = {text = "Apache Software License 2.0"}
+license = { text = "Apache Software License 2.0" }
 requires-python = "<4.0,>=3.10"
 dependencies = [
-    "typer<1.0.0,>=0.9.0",
-    "rich>=13.7.0,<15.0.0",
-    "pydantic<3.0.0,>=2.6.3",
-    "pydantic-core<3,>=2",
-    "pystac<2.0.0,>=1.9.0",
-    "shapely<3,>=2",
-    "jsonschema<5.0.0,>=4.21.1",
-    "pip>=25.0.0",
+  "typer<1.0.0,>=0.9.0",
+  "rich>=13.7.0,<15.0.0",
+  "pydantic<3.0.0,>=2.6.3",
+  "pydantic-core<3,>=2",
+  "pystac<2.0.0,>=1.9.0",
+  "shapely<3,>=2",
+  "jsonschema<5.0.0,>=4.21.1",
+  "pip>=25.0.0",
 ]
+optional-dependencies.torch = [
+  "torch==2.8.0; python_version>='3.11'",
+  "torchgeo; python_version>='3.11'",
+  "torchvision>=0.21,<1; python_version>='3.11'"
+]
+optional-dependencies.torch-cu126 = [
+  "pytorch-triton; python_version>='3.11'",
+  "torch==2.8.0; python_version>='3.11'",
+  "torchgeo; python_version>='3.11'",
+  "torchvision>=0.21,<1; python_version>='3.11'",
+]
+
 # important: leave the name and version together for bump resolution
 name = "stac-model"
 version = "0.3.0"
@@ -36,36 +46,36 @@ keywords = [
   "Artificial Intelligence",
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
-    "Operating System :: OS Independent",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3 :: Only",
-    "Framework :: Pydantic",
-    "Framework :: Pydantic :: 2",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: Science/Research",
-    "Topic :: File Formats :: JSON :: JSON Schema",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Scientific/Engineering :: GIS",
-    "Topic :: Scientific/Engineering :: Image Processing",
-    "Topic :: Scientific/Engineering :: Image Recognition",
+  "Development Status :: 4 - Beta",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3 :: Only",
+  "Framework :: Pydantic",
+  "Framework :: Pydantic :: 2",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "Topic :: File Formats :: JSON :: JSON Schema",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Scientific/Engineering :: GIS",
+  "Topic :: Scientific/Engineering :: Image Processing",
+  "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 
 [tool.uv]
 dev-dependencies = [
     "setuptools>=78.1.1",
-    "mypy<2.0.0,>=1.0.0",
-    "mypy-extensions<1.0.0,>=0.4.3",
+    "mypy>=1.10.0,<2.0.0",
+    "mypy-extensions>=0.4.3,<1.2.0",
     "pre-commit<3.0.0,>=2.21.0",
     "bandit<2.0.0,>=1.7.5",
-    "safety<3.0.0,>=2.3.5",
+    "safety>=3.6.0,<4.0.0",
     "pystac<2.0.0,>=1.10.0",
     "pydocstyle[toml]<7.0.0,>=6.2.0",
     "pydoclint<0.6,>=0.3",
@@ -84,15 +94,36 @@ dev-dependencies = [
     "types-pyyaml>=6.0.12.20250516",
     "requests>=2.32.4",
     "urllib3>=2.5.0,<3.0.0",
+    "httpx<0.26.0",
+    "referencing>=0.36.2",
     "cffconvert",
+    "coverage-conditional-plugin>=0.9.0",
 ]
 
-[project.optional-dependencies]
-torchgeo = [
-  "torchgeo @ git+https://github.com/microsoft/torchgeo.git@86da0ee97c548dddae033a32ffab1573679262ed ; python_version >= '3.11'" # dependency with at least 0.8.0.dev0
-]
+conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
+prerelease = "allow"
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
 
 [tool.uv.sources]
+torch = [
+  { index = "pytorch-cpu", extra = "torch" },
+  { index = "pytorch-cu126", extra = "torch-cu126" },
+]
+torchvision = [
+  { index = "pytorch-cpu", extra = "torch" },
+  { index = "pytorch-cu126", extra = "torch-cu126" },
+]
+pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
+torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" }
 cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]
@@ -247,20 +278,19 @@ search = "\"version\": \"{current_version}\""
 replace = "\"version\": \"{new_version}\""
 
 [tool.ruff]
-ignore = ["UP007", "UP015", "E501"]
 exclude = [
-    ".git",
-    "__pycache__",
-    ".mypy_cache",
-    ".tox",
-    ".venv",
-    "_build",
-    "buck-out",
-    "build",
-    "dist",
-    "env",
-    "venv",
-    "node_modules",
+  ".git",
+  "__pycache__",
+  ".mypy_cache",
+  ".tox",
+  ".venv",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "env",
+  "venv",
+  "node_modules",
 ]
 respect-gitignore = true
 line-length = 120
@@ -268,19 +298,20 @@ show-fixes = true
 
 [tool.ruff.lint]
 select = [
-    # pycodestyle
-    "E",
-    # Pyflakes
-    "F",
-    # pyupgrade
-    "UP",
-    # flake8-bugbear
-    "B",
-    # flake8-simplify
-    "SIM",
-    # isort
-    "I",
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
 ]
+ignore = ["UP007", "UP015", "E501"]
 
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
@@ -291,11 +322,15 @@ extra-standard-library = ["typing_extensions"]
 [tool.mypy]
 # https://github.com/python/mypy
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = "3.11"
+python_version = "3.10"
 pretty = true
 show_traceback = true
 color_output = true
-
+exclude = '(^\\.venv/|site-packages/)'
+files = [
+  "stac_model",
+  "tests",
+]
 allow_redefinition = false
 check_untyped_defs = true
 disallow_any_generics = true
@@ -315,9 +350,7 @@ warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-plugins = [
-  "pydantic.mypy"
-]
+plugins = ["pydantic.mypy"]
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
@@ -346,7 +379,7 @@ check-return-types = false
 # https://github.com/pytest-dev/pytest
 # https://docs.pytest.org/en/6.2.x/customize.html#pyproject-toml
 # Directories that are not visited by pytest collector:
-norecursedirs =[
+norecursedirs = [
   "hooks",
   "*.egg",
   ".eggs",
@@ -358,21 +391,34 @@ norecursedirs =[
   "__pycache__",
   "node_modules",
 ]
-doctest_optionflags = ["NUMBER", "NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+markers = ["slow: mark test as slow to run (more than a few minutes)"]
+doctest_optionflags = [
+  "NUMBER",
+  "NORMALIZE_WHITESPACE",
+  "IGNORE_EXCEPTION_DETAIL",
+]
 timeout = 1000
 
 # Extra options:
 addopts = [
+  "-m not slow",
   "--strict-markers",
   "--tb=short",
   "--doctest-modules",
   "--doctest-continue-on-failure",
-  "--pikachu"
+  "--pikachu",
 ]
 
 [tool.coverage.run]
 source = ["tests"]
 branch = true
+plugins = ["coverage_conditional_plugin"]
+
+[tool.coverage.coverage_conditional_plugin.omit]
+"not is_installed('torch')" = "stac_model/torch/*.py"
+
+[tool.coverage.coverage_conditional_plugin.rules]
+has-torch = "is_installed('torch')"
 
 [tool.coverage.report]
 exclude_also = [
