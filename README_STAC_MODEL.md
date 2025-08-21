@@ -146,8 +146,9 @@ item_ext = MLModelExtension.from_torch(
 )
 
 ```
+
 For a more complete example including STAC Item properties, geometry, and datetime ranges,
-see `stac_model.examples.unet_mlm()`
+see `unet_mlm()` in [`stac_model/examples.py`](stac_model/examples.py).
 
 ## 📈 Releases
 
