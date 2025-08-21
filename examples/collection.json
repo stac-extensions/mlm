@@ -79,6 +79,10 @@
     {
       "href": "item_multi_io.json",
       "rel": "item"
+    },
+    {
+      "href": "item_pytorch_geo_unet.json",
+      "rel": "item"
     }
   ]
 }

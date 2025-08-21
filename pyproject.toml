@@ -254,6 +254,7 @@ ignore = ["UP007", "UP015", "E501"]
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
 known-first-party = ["stac_model"]
+known-third-party = ["torch"]
 extra-standard-library = ["typing_extensions"]
 
 [tool.mypy]

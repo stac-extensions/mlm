@@ -1,0 +1,200 @@
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.4.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+  ],
+  "id": "pytorch_geo_unet",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.88,
+          37.13
+        ],
+        [
+          -7.88,
+          58.21
+        ],
+        [
+          27.91,
+          58.21
+        ],
+        [
+          27.91,
+          37.13
+        ],
+        [
+          -7.88,
+          37.13
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -7.88,
+    37.13,
+    27.91,
+    58.21
+  ],
+  "properties": {
+    "description": "STAC item generated using unet_mlm() in stac_model/examples.py example. Specified in https://github.com/fieldsoftheworld/ftw-baselines First 4 S2 bands are for image t1 and last 4 bands are for image t2",
+    "start_datetime": "2015-06-23T00:00:00Z",
+    "end_datetime": "2024-08-27T23:59:59Z",
+    "mlm:framework": "segmentation_models_pytorch.decoders.unet.model",
+    "mlm:accelerator_constrained": false,
+    "mlm:name": "U-Net_efficientnet-b3",
+    "mlm:architecture": "segmentation_models_pytorch.decoders.unet.model.Unet",
+    "mlm:tasks": [
+      "semantic-segmentation"
+    ],
+    "mlm:input": [
+      {
+        "bands": [
+          "B4",
+          "B3",
+          "B2",
+          "B8A",
+          "B4",
+          "B3",
+          "B2",
+          "B8A"
+        ],
+        "variables": [],
+        "name": "model_input",
+        "input": {
+          "shape": [
+            -1,
+            8,
+            3,
+            3
+          ],
+          "dim_order": [
+            "batch",
+            "bands",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        },
+        "value_scaling": [
+          {
+            "type": "z-score",
+            "mean": 0,
+            "stddev": 3000
+          }
+        ],
+        "pre_processing_function": null
+      }
+    ],
+    "mlm:output": [
+      {
+        "bands": [],
+        "variables": [],
+        "name": "model_output",
+        "tasks": [
+          "semantic-segmentation"
+        ],
+        "result": {
+          "shape": [
+            -1,
+            2
+          ],
+          "dim_order": [
+            "batch",
+            "classes"
+          ],
+          "data_type": "float32"
+        },
+        "classification:classes": [
+          {
+            "value": 0,
+            "name": "class_0",
+            "description": "Auto-generated class 0"
+          },
+          {
+            "value": 1,
+            "name": "class_1",
+            "description": "Auto-generated class 1"
+          }
+        ],
+        "post_processing_function": null
+      }
+    ],
+    "mlm:total_parameters": 13160978,
+    "mlm:pretrained": true,
+    "datetime": null
+  },
+  "links": [
+    {
+      "rel": "cite-as",
+      "href": "https://arxiv.org/abs/2409.16252",
+      "type": "text/html",
+      "title": "Publication for the training dataset of the model"
+    },
+    {
+      "rel": "self",
+      "href": "./item_pytorch_geo_unet.json",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    }
+  ],
+  "assets": {
+    "model": {
+      "href": "https://huggingface.co/torchgeo/ftw/resolve/d2fdab6ea9d9cd38b491292cc9a5c8642533cef5/noncommercial/2-class/sentinel2_unet_effb3-bf010a31.pth",
+      "type": "application/octet-stream; application=pytorch",
+      "title": "U-Net_efficientnet-b3",
+      "description": "A U-Net segmentation model with efficientnet-b3 encoder Weights are non-commercial.",
+      "mlm:artifact_type": "torch.save",
+      "eo:bands": [
+        {
+          "name": "B4"
+        },
+        {
+          "name": "B3"
+        },
+        {
+          "name": "B2"
+        },
+        {
+          "name": "B8A"
+        },
+        {
+          "name": "B4"
+        },
+        {
+          "name": "B3"
+        },
+        {
+          "name": "B2"
+        },
+        {
+          "name": "B8A"
+        }
+      ],
+      "roles": [
+        "mlm:model",
+        "mlm:weights",
+        "data"
+      ]
+    },
+    "source_code": {
+      "href": "https://github.com/qubvel-org/segmentation_models.pytorch",
+      "type": "text/html",
+      "title": "Source code for U-Net_efficientnet-b3",
+      "description": "GitHub repo of the pytorch model",
+      "roles": [
+        "mlm:source_code",
+        "code"
+      ]
+    }
+  },
+  "collection": "ml-model-examples",
+  "mlm:entrypoint": "segmentation_models_pytorch.decoders.unet.model.Unet"
+}

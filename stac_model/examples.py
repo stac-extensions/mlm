@@ -6,7 +6,7 @@ from dateutil.parser import parse as parse_dt
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
-from stac_model.base import ProcessingExpression
+from stac_model.base import ProcessingExpression, TaskEnum
 from stac_model.input import InputStructure, ModelInput, ValueScalingObject
 from stac_model.output import MLMClassification, ModelOutput, ModelResult
 from stac_model.schema import ItemMLModelExtension, MLModelExtension, MLModelProperties
@@ -239,3 +239,69 @@ def eurosat_resnet() -> ItemMLModelExtension:
     item_mlm = MLModelExtension.ext(item, add_if_missing=True)
     item_mlm.apply(ml_model_meta.model_dump(by_alias=True, exclude_unset=True, exclude_defaults=True))
     return item_mlm
+
+
+def unet_mlm() -> ItemMLModelExtension: # pragma: has-torch
+    """
+    Example of a UNet model using PyTorchGeo SENTINEL2_2CLASS_NC_FTW default weights.
+
+    Returns an ItemMLModelExtension with Machine Learning Model Extension metadata.
+    """
+    from torchgeo.models import Unet_Weights, unet
+    # Set the STAC version to 1.0.0 for compatibility with the example using relative links
+    pystac.set_stac_version("1.0.0")
+
+    weights = Unet_Weights.SENTINEL2_2CLASS_NC_FTW
+    model = unet(weights=weights)
+    item_id = "pytorch_geo_unet"
+    collection_id = "ml-model-examples"
+    bbox = [-7.88, 37.13, 27.91, 58.21]
+    geometry = {
+        "type": "Polygon",
+        "coordinates": [
+            [
+                [-7.88, 37.13],
+                [-7.88, 58.21],
+                [27.91, 58.21],
+                [27.91, 37.13],
+                [-7.88, 37.13],
+            ]
+        ],
+    }
+    datetime_range: tuple[str, str] = (
+        "2015-06-23T00:00:00Z",  # Sentinel-2A launch date (first Sentinel-2 data available)
+        "2024-08-27T23:59:59Z",  # Dataset publication date Fields of The World (FTW)
+    )
+
+    task = {TaskEnum.SEMANTIC_SEGMENTATION}
+
+    properties = {
+        "description": "STAC item generated using unet_mlm() in stac_model/examples.py example. "
+        "Specified in https://github.com/fieldsoftheworld/ftw-baselines "
+        "First 4 S2 bands are for image t1 and last 4 bands are for image t2",
+    }
+
+    item_ext = MLModelExtension.from_torch(
+        model,
+        task=task,
+        weights=weights,
+        item_id=item_id,
+        collection=collection_id,
+        bbox=bbox,
+        geometry=geometry,
+        datetime_range=datetime_range,
+        stac_properties=properties,
+    )
+
+    # Add additional metadata regarding the examples to have a valid STAC Item
+    item = item_ext.item
+    item_name = f"item_{item_id}.json"
+    item_self_href = f"./{item_name}"
+
+    link = pystac.Link(rel="self", target=item_self_href, media_type=pystac.MediaType.GEOJSON)
+    link._target_href = item_self_href
+    item.add_link(link)
+    item.add_link(pystac.Link(rel="collection", target="./collection.json", media_type=pystac.MediaType.JSON))
+
+    item_ext.item = item
+    return item_ext
