@@ -168,6 +168,7 @@ glob_exclude = [
   "build/**",
   "dist/**",
   "node_modules/**",
+  "htmlcov/**",
 ]
 search = "https://stac-extensions.github.io/mlm/v{current_version}/schema.json"
 replace = "https://stac-extensions.github.io/mlm/v{new_version}/schema.json"
