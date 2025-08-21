@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   which parses a TorchGeo UNet model with `SENTINEL2_2CLASS_NC_FTW` default weights.
 - Add `MLModelExtension.from_torch` class method to convert a PyTorch model and
   optional TorchVision-style weights into a STAC Item with ML Model Extension metadata.
-  (Fixes [#70]https://github.com/stac-extensions/mlm/issues/70)
+  (Fixes [#70](https://github.com/stac-extensions/mlm/issues/70)).
 - Add torch export and packaging utilities for combining a model, transforms, and MLM schema
   compliant metadata into a single `.pt2` archive.
 - Add `cpu` device type to `mlm:accelerator` and corresponding `stac_model.runtime.AcceleratorEnum`.
