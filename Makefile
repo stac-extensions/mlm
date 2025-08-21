@@ -99,8 +99,8 @@ lint: setup
 	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff format --config=pyproject.toml ./
 
 .PHONY: check-lint
-check-lint: lint
-	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
+check-lint: setup
+	$(UV_COMMAND) run --python "$(UV_PYTHON_ROOT)" ruff check --config=pyproject.toml ./
 
 .PHONY: format-lint
 format-lint: lint

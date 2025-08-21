@@ -509,7 +509,7 @@ The `format` and `expression` properties can serve multiple purpose.
 
 <!-- lint disable no-undefined-references -->
 
-> [!HINT]
+> [!TIP]
 > For examples using expressions referring to custom Python scripts, Docker images or file URIs,
 > see [stac-extensions/processing#31](https://github.com/stac-extensions/processing/issues/31)
 > and [stac-extensions/mlm#28](https://github.com/stac-extensions/mlm/issues/28).

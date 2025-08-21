@@ -1,6 +1,7 @@
 import json
 from collections.abc import Iterable
 from typing import (
+    TYPE_CHECKING,
     Annotated,
     Any,
     Generic,
@@ -25,6 +26,9 @@ from stac_model.base import ModelTask, OmitIfNone
 from stac_model.input import ModelInput
 from stac_model.output import ModelOutput
 from stac_model.runtime import Runtime
+
+if TYPE_CHECKING:
+    import torch.nn as nn
 
 T = TypeVar(
     "T",
@@ -154,6 +158,12 @@ class MLModelExtension(
         """Returns the extended summaries object for the given collection."""
         cls.ensure_has_extension(obj, add_if_missing)
         return SummariesMLModelExtension(obj)
+
+    @classmethod
+    def from_torch(cls, model: "nn.Module", **kwargs: Any) -> "ItemMLModelExtension":
+        from stac_model.torch import from_torch
+
+        return from_torch(model, **kwargs)
 
 
 class SummariesMLModelExtension(SummariesExtension):
