@@ -241,7 +241,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
     return item_mlm
 
 
-def unet_mlm() -> ItemMLModelExtension:
+def unet_mlm() -> ItemMLModelExtension: # pragma: has-torch
     """
     Example of a UNet model using PyTorchGeo SENTINEL2_2CLASS_NC_FTW default weights.
 

@@ -124,7 +124,10 @@ outputs = model(transforms(batch))
 ### Creating a STAC Item from a PyTorch Model
 
 You can generate a valid STAC Item using the **Machine Learning Model (MLM) Extension**.  
-The example below demonstrates creating a STAC Item from a U-Net model pretrained on the [Fields of The World (FTW) dataset](https://fieldsofthe.world/) for field boundary segmentation in Sentinel-2 satellite imagery, using the [TorchGeo](https://github.com/microsoft/torchgeo) library.
+
+The example below demonstrates creating a STAC Item from a U-Net model pretrained on the 
+[Fields of The World (FTW) dataset](https://fieldsofthe.world/) for field boundary segmentation 
+in Sentinel-2 satellite imagery, using the [TorchGeo](https://github.com/microsoft/torchgeo) library
 
 ```python
 from stac_model.examples import unet_mlm
@@ -142,9 +145,9 @@ item_ext = MLModelExtension.from_torch(
     item_id="pytorch_geo_unet"
 )
 
-# For a more complete example including STAC Item properties, geometry, and datetime ranges,
-# see `stac_model.examples.unet_mlm()`
 ```
+For a more complete example including STAC Item properties, geometry, and datetime ranges,
+see `stac_model.examples.unet_mlm()`
 
 ## 📈 Releases
 
