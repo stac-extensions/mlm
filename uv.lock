@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10, <4.0"
 resolution-markers = [
     "python_full_version >= '3.13' and extra != 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'",
@@ -275,10 +275,11 @@ wheels = [
 
 [[package]]
 name = "bump-my-version"
-version = "0.31.1"
+version = "1.2.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
+    { name = "httpx" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "questionary" },
@@ -287,9 +288,9 @@ dependencies = [
     { name = "tomlkit" },
     { name = "wcmatch" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ab/1c/11efd01de6eaa730519af987362b5cf7783a74657798e591fc3a98c91c4a/bump_my_version-0.31.1.tar.gz", hash = "sha256:83962dbd593b3edb426661a4c2276a0842a7eaa5dee896543b771c358ac78915", size = 1021738, upload-time = "2025-02-02T15:08:33.32Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/d2/1c/2f26665d4be4f1b82b2dfe46f3bd7901582863ddf1bd597309b5d0a5e6d4/bump_my_version-1.2.1.tar.gz", hash = "sha256:96c48f880c149c299312f983d06b50e0277ffc566e64797bf3a6c240bce2dfcc", size = 1137281, upload-time = "2025-07-19T11:52:03.235Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/7d/af9ad0729d0e64ca79bf76c7b564c890d1471d3d140777b762b66484ac24/bump_my_version-0.31.1-py3-none-any.whl", hash = "sha256:3b9f496eb5554208d91f84fcb781628bdd4549e055fd3282804959453ebd1857", size = 55594, upload-time = "2025-02-02T15:08:31.03Z" },
+    { url = "https://files.pythonhosted.org/packages/5c/f4/40db87f649d9104c5fe69706cc455e24481b90024b2aacb64cc0ef205536/bump_my_version-1.2.1-py3-none-any.whl", hash = "sha256:ddb41d5f30abdccce9d2dc873e880bdf04ec8c7e7237c73a4c893aa10b7d7587", size = 59567, upload-time = "2025-07-19T11:52:01.343Z" },
 ]
 
 [[package]]
@@ -1082,18 +1083,17 @@ wheels = [
 
 [[package]]
 name = "httpx"
-version = "0.25.2"
+version = "0.28.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "anyio" },
     { name = "certifi" },
     { name = "httpcore" },
     { name = "idna" },
-    { name = "sniffio" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8c/23/911d93a022979d3ea295f659fbe7edb07b3f4561a477e83b3a6d0e0c914e/httpx-0.25.2.tar.gz", hash = "sha256:8b8fcaa0c8ea7b05edd69a094e63a2094c4efcb48129fb757361bc423c0ad9e8", size = 123889, upload-time = "2023-11-24T12:36:33.988Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc", size = 141406, upload-time = "2024-12-06T15:37:23.222Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a2/65/6940eeb21dcb2953778a6895281c179efd9100463ff08cb6232bb6480da7/httpx-0.25.2-py3-none-any.whl", hash = "sha256:a05d3d052d9b2dfce0e3896636467f8a5342fb2b902c819428e1ac65413ca118", size = 74980, upload-time = "2023-11-24T12:36:31.403Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad", size = 73517, upload-time = "2024-12-06T15:37:21.509Z" },
 ]
 
 [[package]]
@@ -3743,11 +3743,11 @@ provides-extras = ["torch", "torch-cu126"]
 [package.metadata.requires-dev]
 dev = [
     { name = "bandit", specifier = ">=1.7.5,<2.0.0" },
-    { name = "bump-my-version", specifier = ">=0.21" },
+    { name = "bump-my-version", specifier = ">=1.2.1" },
     { name = "cffconvert", git = "https://github.com/citation-file-format/cffconvert.git?rev=b6045d78aac9e02b039703b030588d54d53262ac" },
     { name = "coverage", specifier = ">=7.3.0,<8.0.0" },
     { name = "coverage-conditional-plugin", specifier = ">=0.9.0" },
-    { name = "httpx", specifier = "<0.26.0" },
+    { name = "httpx", specifier = "<1" },
     { name = "mypy", specifier = ">=1.10.0,<2.0.0" },
     { name = "mypy-extensions", specifier = ">=0.4.3,<1.2.0" },
     { name = "pre-commit", specifier = ">=2.21.0,<3.0.0" },
