@@ -338,15 +338,25 @@ set to `true`, there would be no `accelerator` to contain against. To avoid conf
 > When either `bands` or `variables` are provided (non-empty arrays), they **MUST** refer to corresponding
 > [Band Object](#bands-and-statistics) and [Data Variable](#data-variables) respectively. The MLM extension will
 > explicitly validate that corresponding STAC extensions to describe them are present in the STAC Item for consistency.
+> Furthermore, the corresponding dimension names (indicated in [Dimension Order](#dimension-order)) that characterize
+> the [Input Structure](#input-structure-object) or the [Result Structure](#result-structure-object) **MUST** include
+> `"bands"` and/or `"variables"` when they are provided and defined for a given input or output.
 > 
-> If no `bands` or `variables` are needed to describe the input (e.g.: describing generic text or floating value input),
+> If no `bands` or `variables` are needed to describe dimensions (e.g.: describing generic text or floating value),
 > it is *RECOMMENDED* to set both of them to an empty array (`[]`) to be explicit about it. However, omitting the fields
-> is also permitted. If omitted, `bands` or `variables` should be interpreted as if empty arrays were indicated.
+> entirely is also permitted. If omitted, `bands` and `variables` properties should be interpreted as if empty arrays
+> were explicitly indicated.
 
 > [!IMPORTANT]
-> The order of elements within `bands` and `variables` fields is important, 
-> notably when the [Input Structure Object](#input-structure-object) references `"bands"` and/or `"variables"`
+> The order of elements within `bands` and `variables` fields is important,
+> notably when the [Input Structure Object](#input-structure-object) or the [Result Structure](#result-structure-object)
+> references `"bands"` and/or `"variables"`
 > as dimensions of stacked bands/variables within its [Dimension Order](#dimension-order) property.
+
+> [!WARNING]
+> Due to above requirements regarding `"bands"` and `"variables"` dimension names and their required cross-references
+> to valid definitions under the corresponding properties, these names are reserved and cannot be used as generic
+> dimension names while omitting their definitions.
 
 > [!NOTE]
 > For convenience, each item in `bands` and `variables` can be defined directly as a single `string` value or using an
@@ -559,6 +569,7 @@ Below are some notable common names recommended for use, but others can be emplo
 - `height` (`h`)
 - `width` (`w`)
 - `depth` (`D`)
+- `x`, `y`, `z` (2D or 3D spatial dimensions)
 - `token`
 - `class`
 - `score`
@@ -567,6 +578,15 @@ Below are some notable common names recommended for use, but others can be emplo
 
 For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
+
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
+> When selecting or interpreting dimension names, users should take careful consideration over the multiple
+> interpretations they might introduce based on context. For example, `h`/`height` could either represent the height of
+> the image (often mapped to `y` dimension in geomatics) or it could represent the literal height/altitude of a measure.
+
+<!-- lint enable no-undefined-references -->
 
 #### Value Scaling Object
 

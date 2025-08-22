@@ -651,7 +651,6 @@
           "type": "string",
           "enum": [
             "amd64",
-            "cpu",
             "cuda",
             "xla",
             "amd-rocm",
@@ -679,7 +678,13 @@
     },
     "mlm:input": {
       "type": "array",
-      "items": {"$ref": "#/$defs/ModelInput"}
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/ModelInput"},
+          {"$ref": "#/$defs/ModelInputBandsDimensionRef"},
+          {"$ref": "#/$defs/ModelInputVariablesDimensionRef"}
+        ]
+      }
     },
     "ModelInput": {
       "title": "Model Input Object",
@@ -728,7 +733,13 @@
     },
     "mlm:output": {
       "type": "array",
-      "items": {"$ref": "#/$defs/ModelOutput"}
+      "items": {
+        "allOf": [
+          {"$ref": "#/$defs/ModelOutput"},
+          {"$ref": "#/$defs/ModelOutputBandsDimensionRef"},
+          {"$ref": "#/$defs/ModelOutputVariablesDimensionRef"}
+        ]
+      }
     },
     "ModelOutput": {
       "title": "Model Output Object",
@@ -1191,7 +1202,7 @@
       }
     },
     "ModelBandsVariables": {
-      "description": "List of bands or variables (if any) that compose the input. Band and/or variable order represents the index position within the input. If both bands and variables are provided, their other should be distinguished using corresponding names in 'dim_order'.",
+      "description": "List of bands or variables (if any) that compose the input. Band and/or variable order represents the index position within the input. If both bands and variables are provided, their order should be distinguished using corresponding names in 'dim_order'.",
       "$comment": "No 'minItems' here to support model inputs not using any band (other data source).",
       "type": "array",
       "items": {
@@ -1232,6 +1243,186 @@
             "additionalProperties": false
           }
         ]
+      }
+    },
+    "ModelInputBandsDimensionRef": {
+      "$comment": "This definition ensures that, if an MLM input 'bands' is provided with at least one entry, the corresponding 'bands' dimension is defined in 'dim_order'. Otherwise, 'bands' must be omitted or empty.",
+      "if": {
+        "required": [
+          "bands"
+        ],
+        "properties": {
+          "bands": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "$comment": "The 'bands' dimension is required if bands were indicated.",
+        "properties": {
+          "input": {
+            "properties": {
+              "dim_order": {
+                "type": "array",
+                "contains": {
+                  "const": "bands"
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "$comment": "The 'bands' dimension is forbidden since none are indicated.",
+        "properties": {
+          "input": {
+            "properties": {
+              "dim_order": {
+                "not": {
+                  "contains": {
+                    "const": "bands"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ModelOutputBandsDimensionRef": {
+      "$comment": "This definition ensures that, if an MLM output 'bands' is provided with at least one entry, the corresponding 'bands' dimension is defined in 'dim_order'. Otherwise, 'bands' must be omitted or empty.",
+      "if": {
+        "required": [
+          "bands"
+        ],
+        "properties": {
+          "bands": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "$comment": "The 'bands' dimension is required if bands were indicated.",
+        "properties": {
+          "result": {
+            "properties": {
+              "dim_order": {
+                "type": "array",
+                "contains": {
+                  "const": "bands"
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "$comment": "The 'bands' dimension is forbidden since none are indicated.",
+        "properties": {
+          "result": {
+            "properties": {
+              "dim_order": {
+                "not": {
+                  "contains": {
+                    "const": "bands"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ModelInputVariablesDimensionRef": {
+      "$comment": "This definition ensures that, if an MLM input 'variables' is provided with at least one entry, the corresponding 'variables' dimension is defined in 'dim_order'. Otherwise, 'variables' must be omitted or empty.",
+      "if": {
+        "required": [
+          "variables"
+        ],
+        "properties": {
+          "variables": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "$comment": "The 'variables' dimension is required if bands were indicated.",
+        "properties": {
+          "input": {
+            "properties": {
+              "dim_order": {
+                "type": "array",
+                "contains": {
+                  "const": "variables"
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "$comment": "The 'variables' dimension is forbidden since none are indicated.",
+        "properties": {
+          "input": {
+            "properties": {
+              "dim_order": {
+                "not": {
+                  "contains": {
+                    "const": "variables"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ModelOutputVariablesDimensionRef": {
+      "$comment": "This definition ensures that, if an MLM output 'variables' is provided with at least one entry, the corresponding 'variables' dimension is defined in 'dim_order'. Otherwise, 'variables' must be omitted or empty.",
+      "if": {
+        "required": [
+          "variables"
+        ],
+        "properties": {
+          "variables": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      },
+      "then": {
+        "$comment": "The 'variables' dimension is required if bands were indicated.",
+        "properties": {
+          "result": {
+            "properties": {
+              "dim_order": {
+                "type": "array",
+                "contains": {
+                  "const": "variables"
+                }
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "$comment": "The 'variables' dimension is forbidden since none are indicated.",
+        "properties": {
+          "result": {
+            "properties": {
+              "dim_order": {
+                "not": {
+                  "contains": {
+                    "const": "variables"
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "AnyBandInputRef": {
@@ -1301,7 +1492,7 @@
       }
     },
     "AnyBandsRef": {
-      "$comment": "This definition ensures that, if at least 1 named MLM input 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well. Otherwise, 'bands' must be explicitly empty.",
+      "$comment": "This definition ensures that, if at least 1 named MLM input or output 'bands' is provided, at least 1 of the supported references from EO, Raster or STAC Core 1.1 are provided as well. Otherwise, 'bands' must be explicitly empty.",
       "if": {
         "anyOf": [
           {"$ref": "#/$defs/AnyBandInputRef"},
@@ -1441,7 +1632,7 @@
       }
     },
     "AnyVariablesRef": {
-      "$comment": "This definition ensures that, if at least 1 named MLM input 'variables' is provided, at least 1 of the supported references from STAC datacube is provided as well. Otherwise, 'variables' must be explicitly empty.",
+      "$comment": "This definition ensures that, if at least 1 named MLM input or output 'variables' is provided, at least 1 of the supported references from STAC datacube is provided as well. Otherwise, 'variables' must be explicitly empty.",
       "if": {
         "anyOf": [
           {"$ref": "#/$defs/AnyVariablesInputRef"},
