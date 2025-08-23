@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- n/a
+
+### Changed
+
+- n/a
+
+### Deprecated
+
+- n/a
+
+### Removed
+
+- n/a
+
+### Fixed
+
+- n/a
+
+## [v1.5.0](https://github.com/stac-extensions/mlm/tree/v1.5.0)
+
+### Added
+
 - Add explicit JSON schema validation checks for `bands` and `variables` definitions against corresponding `"bands"`
   and `"variables"` dimensions indicated in `dim_order` to ensure they are coherent. Because of this validation, the
   `"bands"` and `"variables"` dimension names are now considered reserved for this purpose and cannot be employed as

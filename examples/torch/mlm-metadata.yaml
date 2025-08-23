@@ -1,4 +1,4 @@
-$schema: "https://stac-extensions.github.io/mlm/v1.4.0/schema.json"
+$schema: "https://stac-extensions.github.io/mlm/v1.5.0/schema.json"
 properties:
   name: Unet
   architecture: Unet
