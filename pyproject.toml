@@ -36,7 +36,7 @@ optional-dependencies.torch-cu126 = [
 
 # important: leave the name and version together for bump resolution
 name = "stac-model"
-version = "0.3.0"
+version = "0.4.0"
 description = "A PydanticV2 validation and serialization libary for the STAC ML Model Extension"
 readme = "README_STAC_MODEL.md"
 keywords = [
