@@ -412,6 +412,8 @@ def save(
 
     if metadata is not None:
         metadata_properties = update_properties(metadata=metadata, input_shape=input_shape, device=device, dtype=dtype)
+    else:
+        metadata_properties = None
 
     package(
         output_file=output_file,
