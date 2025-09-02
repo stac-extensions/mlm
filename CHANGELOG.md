@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- fix case in `stac-model-torch.export` where `metadata` is None.
 
 ## [v1.5.0](https://github.com/stac-extensions/mlm/tree/v1.5.0)
 
