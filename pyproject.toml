@@ -68,14 +68,18 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 
-[tool.uv]
-dev-dependencies = [
+conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
+prerelease = "allow"
+
+[dependency-groups]
+dev = [
     "setuptools>=78.1.1",
     "mypy>=1.10.0,<2.0.0",
     "mypy-extensions>=0.4.3,<1.2.0",
     "pre-commit<3.0.0,>=2.21.0",
     "bandit<2.0.0,>=1.7.5",
     "safety>=3.6.0,<4.0.0",
+    "typer<0.17",  # fix for https://github.com/pyupio/safety/issues/784
     "pystac<2.0.0,>=1.10.0",
     "pydocstyle[toml]<7.0.0,>=6.2.0",
     "pydoclint<0.6,>=0.3",
@@ -100,8 +104,6 @@ dev-dependencies = [
     "coverage-conditional-plugin>=0.9.0",
 ]
 
-conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
-prerelease = "allow"
 
 [[tool.uv.index]]
 name = "pytorch-cpu"
