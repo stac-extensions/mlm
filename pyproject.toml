@@ -23,13 +23,13 @@ dependencies = [
   "pip>=25.0.0",
 ]
 optional-dependencies.torch = [
-  "torch==2.8.0; python_version>='3.11'",
+  "torch==2.9.1; python_version>='3.11'",
   "torchgeo; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
   "pytorch-triton; python_version>='3.11'",
-  "torch==2.8.0; python_version>='3.11'",
+  "torch==2.9.1; python_version>='3.11'",
   "torchgeo; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'",
 ]
