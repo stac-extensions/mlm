@@ -24,13 +24,13 @@ dependencies = [
 ]
 optional-dependencies.torch = [
   "torch==2.8.0; python_version>='3.11'",
-  "torchgeo; python_version>='3.11'",
+  "torchgeo>=0.8.0; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
   "pytorch-triton; python_version>='3.11'",
   "torch==2.8.0; python_version>='3.11'",
-  "torchgeo; python_version>='3.11'",
+  "torchgeo>=0.8.0; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'",
 ]
 
@@ -68,8 +68,8 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Image Recognition",
 ]
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
     "setuptools>=78.1.1",
     "mypy>=1.10.0,<2.0.0",
     "mypy-extensions>=0.4.3,<1.2.0",
@@ -102,6 +102,7 @@ dev-dependencies = [
     "authlib>=1.6.5",
 ]
 
+[tool.uv]
 conflicts = [[{ extra = "torch" }, { extra = "torch-cu126" }]]
 prerelease = "allow"
 
@@ -125,7 +126,6 @@ torchvision = [
   { index = "pytorch-cu126", extra = "torch-cu126" },
 ]
 pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
-torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" }
 cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]
