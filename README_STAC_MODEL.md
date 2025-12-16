@@ -91,7 +91,7 @@ save(
     output_file="ftw.pt2",
     model=model,  # Must be an nn.Module
     transforms=transforms,  # Must be an nn.Module
-    metadata_path="metadata.yaml",  # Can be a metadata yaml or stac_model.schema.MLModelProperties object
+    metadata="metadata.yaml",  # Can be a metadata yaml or stac_model.schema.MLModelProperties object
     input_shape=[-1, 8, -1, -1],  # -1 indicates a dynamic shaped dimension
     device="cpu",
     dtype=torch.float32,
