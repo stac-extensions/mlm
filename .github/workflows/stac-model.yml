@@ -12,9 +12,9 @@ jobs:
       COVERAGE_FILE: .coverage.${{ matrix.python-version }}
 
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5.6.0
+      uses: actions/setup-python@v6.1.0
       with:
         python-version: ${{ matrix.python-version }}
 
@@ -22,7 +22,7 @@ jobs:
       run: make setup
 
     - name: Set up cache
-      uses: actions/cache@v4.2.4
+      uses: actions/cache@v5.0.1
       with:
         path: .venv
         key: venv-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}-${{ hashFiles('uv.lock') }}
@@ -34,6 +34,9 @@ jobs:
     - name: Install dependencies with extras
       run: make install-dev-extras
       if: ${{ matrix.python-version != '3.10' }}
+
+    - name: Display Packages
+      run: pip list
 
     - name: Run checks
       if: ${{ matrix.python-version != '3.10' }}

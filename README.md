@@ -576,7 +576,7 @@ Below are some notable common names recommended for use, but others can be emplo
 - `confidence`
 - `embedding`
 
-For example, a tensor of multiple RBG images represented as $`B \times C \times H \times W`$ should
+For example, a tensor of multiple RGB images represented as $`B \times C \times H \times W`$ should
 indicate `dim_order = ["batch", "channel", "height", "width"]`.
 
 <!-- lint disable no-undefined-references -->
