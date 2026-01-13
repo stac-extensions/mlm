@@ -17,7 +17,8 @@ resolution-markers = [
     "python_full_version == '3.11.*' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
     "python_full_version < '3.11' and extra == 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
     "python_full_version >= '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
-    "python_full_version >= '3.11' and python_full_version < '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
+    "python_full_version == '3.12.*' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
+    "python_full_version == '3.11.*' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
     "python_full_version < '3.11' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
 ]
 conflicts = [[
@@ -190,14 +191,14 @@ wheels = [
 
 [[package]]
 name = "authlib"
-version = "1.6.1"
+version = "1.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "cryptography" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/8e/a1/d8d1c6f8bc922c0b87ae0d933a8ed57be1bef6970894ed79c2852a153cd3/authlib-1.6.1.tar.gz", hash = "sha256:4dffdbb1460ba6ec8c17981a4c67af7d8af131231b5a36a88a1e8c80c111cdfd", size = 159988, upload-time = "2025-07-20T07:38:42.834Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/3f/1d3bbd0bf23bdd99276d4def22f29c27a914067b4cf66f753ff9b8bbd0f3/authlib-1.6.5.tar.gz", hash = "sha256:6aaf9c79b7cc96c900f0b284061691c5d4e61221640a948fe690b556a6d6d10b", size = 164553, upload-time = "2025-10-02T13:36:09.489Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/58/cc6a08053f822f98f334d38a27687b69c6655fb05cd74a7a5e70a2aeed95/authlib-1.6.1-py2.py3-none-any.whl", hash = "sha256:e9d2031c34c6309373ab845afc24168fe9e93dc52d252631f52642f21f5ed06e", size = 239299, upload-time = "2025-07-20T07:38:39.259Z" },
+    { url = "https://files.pythonhosted.org/packages/f8/aa/5082412d1ee302e9e7d80b6949bc4d2a8fa1149aaab610c5fc24709605d6/authlib-1.6.5-py2.py3-none-any.whl", hash = "sha256:3e0e0507807f842b02175507bdee8957a1d5707fd4afb17c32fb43fee90b6e3a", size = 243608, upload-time = "2025-10-02T13:36:07.637Z" },
 ]
 
 [[package]]
@@ -815,7 +816,7 @@ name = "exceptiongroup"
 version = "1.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "typing-extensions", marker = "python_full_version < '3.11' or (python_full_version < '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "typing-extensions", marker = "python_full_version < '3.11' or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0b/9f/a65090624ecf468cdca03533906e7c69ed7588582240cfe7cc9e770b50eb/exceptiongroup-1.3.0.tar.gz", hash = "sha256:b241f5885f560bc56a59ee63ca4c6a8bfa46ae4ad651af316d4e81817bb9fd88", size = 29749, upload-time = "2025-05-10T17:42:51.123Z" }
 wheels = [
@@ -1950,7 +1951,8 @@ resolution-markers = [
     "python_full_version == '3.12.*' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
     "python_full_version == '3.11.*' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
     "python_full_version >= '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
-    "python_full_version >= '3.11' and python_full_version < '3.13' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
+    "python_full_version == '3.12.*' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
+    "python_full_version == '3.11.*' and extra != 'extra-10-stac-model-torch' and extra != 'extra-10-stac-model-torch-cu126'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/37/7d/3fec4199c5ffb892bed55cff901e4f39a58c81df9c44c280499e92cad264/numpy-2.3.2.tar.gz", hash = "sha256:e0486a11ec30cdecb53f184d496d1c6a20786c81e55e41640270130056f8ee48", size = 20489306, upload-time = "2025-07-24T21:32:07.553Z" }
 wheels = [
@@ -3493,7 +3495,7 @@ wheels = [
 
 [[package]]
 name = "safety"
-version = "3.6.0"
+version = "3.6.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "authlib" },
@@ -3517,14 +3519,14 @@ dependencies = [
     { name = "typer" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/c0/832778e8f53e922f1939455cab4149339ca66c4f06e3c67599511d857279/safety-3.6.0.tar.gz", hash = "sha256:a820f827699f83d3d5c2faab24c0ac4d094911931503180847d97942c0a6f7e3", size = 291056, upload-time = "2025-07-09T11:49:52.384Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/5a/dc84e854574cc5c24a53e04180e18bf3590c8283b80a1b1b3d3ca4390031/safety-3.6.2.tar.gz", hash = "sha256:2e148cd9a4ad2e387d2c142878b7b5a3a9cb9e6538167043faa1ba7023a032be", size = 307273, upload-time = "2025-09-24T14:14:59.627Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/12/7f7dfcd6975011e73573ac8acdd301b29f976d27e6149d8448051ad62189/safety-3.6.0-py3-none-any.whl", hash = "sha256:9cddbfd7a578b35e4d29df4fb6e3808425ed792a09d81400a5b7f4b4535ef666", size = 285260, upload-time = "2025-07-09T11:49:50.994Z" },
+    { url = "https://files.pythonhosted.org/packages/84/72/d8193b84fcc35b674709a2200c78787cd94cc481ae3d65fd12e9449703a9/safety-3.6.2-py3-none-any.whl", hash = "sha256:754f8d6068d1504503b0346cbd3cb0e67015d2abc1d842f3a4e4b662cb4f44ec", size = 285954, upload-time = "2025-09-24T14:14:58.028Z" },
 ]
 
 [[package]]
 name = "safety-schemas"
-version = "0.0.14"
+version = "0.0.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "dparse" },
@@ -3533,9 +3535,9 @@ dependencies = [
     { name = "ruamel-yaml" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/40/e5107b3e456ca4b78d1c0d5bd07be3377e673cc54949b18e5f3aed345067/safety_schemas-0.0.14.tar.gz", hash = "sha256:49953f7a59e919572be25595a8946f9cbbcd2066fe3e160c9467d9d1d6d7af6a", size = 53216, upload-time = "2025-04-15T22:15:50.793Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c2/ef/0e07dfdb4104c4e42ae9fc6e8a0da7be2d72ac2ee198b32f7500796de8f3/safety_schemas-0.0.16.tar.gz", hash = "sha256:3bb04d11bd4b5cc79f9fa183c658a6a8cf827a9ceec443a5ffa6eed38a50a24e", size = 54815, upload-time = "2025-09-16T14:35:31.973Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/7f/f3d1ac7eb0a6546eda3e82c0487233cea0774e511239769945dbd1dd01de/safety_schemas-0.0.14-py3-none-any.whl", hash = "sha256:0bf6fc4aa5e474651b714cc9e427c862792946bf052b61d5c7bec4eac4c0f254", size = 39268, upload-time = "2025-04-15T22:15:49.317Z" },
+    { url = "https://files.pythonhosted.org/packages/84/a2/7840cc32890ce4b84668d3d9dfe15a48355b683ae3fb627ac97ac5a4265f/safety_schemas-0.0.16-py3-none-any.whl", hash = "sha256:6760515d3fd1e6535b251cd73014bd431d12fe0bfb8b6e8880a9379b5ab7aa44", size = 39292, upload-time = "2025-09-16T14:35:32.84Z" },
 ]
 
 [[package]]
@@ -3690,6 +3692,7 @@ torch-cu126 = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "authlib" },
     { name = "bandit" },
     { name = "bump-my-version" },
     { name = "cffconvert" },
@@ -3715,6 +3718,7 @@ dev = [
     { name = "ruff" },
     { name = "safety" },
     { name = "setuptools" },
+    { name = "typer" },
     { name = "types-python-dateutil" },
     { name = "types-pyyaml" },
     { name = "urllib3" },
@@ -3742,6 +3746,7 @@ provides-extras = ["torch", "torch-cu126"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "authlib", specifier = ">=1.6.5" },
     { name = "bandit", specifier = ">=1.7.5,<2.0.0" },
     { name = "bump-my-version", specifier = ">=1.2.1" },
     { name = "cffconvert", git = "https://github.com/citation-file-format/cffconvert.git?rev=b6045d78aac9e02b039703b030588d54d53262ac" },
@@ -3765,8 +3770,9 @@ dev = [
     { name = "referencing", specifier = ">=0.36.2" },
     { name = "requests", specifier = ">=2.32.4" },
     { name = "ruff", specifier = ">=0.2.2,<1.0.0" },
-    { name = "safety", specifier = ">=3.6.0,<4.0.0" },
+    { name = "safety", specifier = ">=3.6.1,<4.0.0" },
     { name = "setuptools", specifier = ">=78.1.1" },
+    { name = "typer", specifier = ">=0.17.0" },
     { name = "types-python-dateutil", specifier = ">=2.9.0.20241003" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20250516" },
     { name = "urllib3", specifier = ">=2.5.0,<3.0.0" },
@@ -4175,7 +4181,7 @@ wheels = [
 
 [[package]]
 name = "typer"
-version = "0.16.1"
+version = "0.19.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -4183,9 +4189,9 @@ dependencies = [
     { name = "shellingham" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/43/78/d90f616bf5f88f8710ad067c1f8705bf7618059836ca084e5bb2a0855d75/typer-0.16.1.tar.gz", hash = "sha256:d358c65a464a7a90f338e3bb7ff0c74ac081449e53884b12ba658cbd72990614", size = 102836, upload-time = "2025-08-18T19:18:22.898Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/21/ca/950278884e2ca20547ff3eb109478c6baf6b8cf219318e6bc4f666fad8e8/typer-0.19.2.tar.gz", hash = "sha256:9ad824308ded0ad06cc716434705f691d4ee0bfd0fb081839d2e426860e7fdca", size = 104755, upload-time = "2025-09-23T09:47:48.256Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/2d/76/06dbe78f39b2203d2a47d5facc5df5102d0561e2807396471b5f7c5a30a1/typer-0.16.1-py3-none-any.whl", hash = "sha256:90ee01cb02d9b8395ae21ee3368421faf21fa138cb2a541ed369c08cec5237c9", size = 46397, upload-time = "2025-08-18T19:18:21.663Z" },
+    { url = "https://files.pythonhosted.org/packages/00/22/35617eee79080a5d071d0f14ad698d325ee6b3bf824fc0467c03b30e7fa8/typer-0.19.2-py3-none-any.whl", hash = "sha256:755e7e19670ffad8283db353267cb81ef252f595aa6834a0d1ca9312d9326cb9", size = 46748, upload-time = "2025-09-23T09:47:46.777Z" },
 ]
 
 [[package]]
