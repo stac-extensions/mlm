@@ -1074,7 +1074,7 @@
               "properties": {
                 "description": {
                   "type": "string",
-                  "description": "Optional information about the pre-processing or post-processing function."
+                  "description": "Optional information about the processing function."
                 }
               }
             }
