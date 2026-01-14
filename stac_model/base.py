@@ -132,6 +132,10 @@ class ProcessingExpression(MLMBaseModel):
             "This represents the processing operation to be applied on the entire data before or after the model."
         )
     )
+    description: Annotated[str | None, OmitIfNone] = Field(
+        default=None,
+        description="Optional information about the processing function.",
+    )
 
 
 class ModelCrossReferenceObject(MLMBaseModel):

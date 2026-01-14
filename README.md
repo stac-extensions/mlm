@@ -669,10 +669,11 @@ Taking inspiration from [Processing Extension - Expression Object][stac-proc-exp
 at the very least a `format` and the applicable `expression` for it to perform pre/post-processing operations on MLM
 inputs/outputs.
 
-| Field Name | Type   | Description                                                                                                                                                     |
-|------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| format     | string | **REQUIRED** The type of the expression that is specified in the `expression` property.                                                                         |
-| expression | \*     | **REQUIRED** An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given, e.g. string or object. |
+| Field Name  | Type   | Description                                                                                                                                                     |
+|-------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| format      | string | **REQUIRED** The type of the expression that is specified in the `expression` property.                                                                         |
+| expression  | \*     | **REQUIRED** An expression compliant with the `format` specified. The expression can be any data type and depends on the `format` given, e.g. string or object. |
+| description | string | Additional details about the processing function such as describing its purpose or expected result that cannot be represented by other properties.              |
 
 On top of the examples already provided by [Processing Extension - Expression Object][stac-proc-expr],
 the following formats are recommended as alternative scripts and function references.

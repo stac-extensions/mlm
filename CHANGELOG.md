@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- n/a
+- Add optional `description` field to `ProcessingExpression` to allow additional information about pre-processing or
+  post-processing functions.
 
 ### Changed
 
