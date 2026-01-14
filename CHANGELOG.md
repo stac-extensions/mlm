@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- n/a
+
+### Changed
+
+- n/a
+
+### Deprecated
+
+- n/a
+
+### Removed
+
+- n/a
+
+### Fixed
+
+- n/a
+
+## [v1.5.1](https://github.com/stac-extensions/mlm/tree/v1.5.1)
+
+### Added
+
 - Add optional `description` field to `ProcessingExpression` to allow additional information about pre-processing or
   post-processing functions.
 

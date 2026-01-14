@@ -1,7 +1,7 @@
 # This file is used in torch export tests to check that the metadata is
 # validated using the MLModelMetadata Pydantic model and the export
 # functions work as expected.
-$schema: "https://stac-extensions.github.io/mlm/v1.5.0/schema.json"
+$schema: "https://stac-extensions.github.io/mlm/v1.5.1/schema.json"
 properties:
   name: FTW 3 Class Unet
   architecture: torchgeo.models.unet
