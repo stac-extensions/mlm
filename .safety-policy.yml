@@ -7,6 +7,21 @@ security: # configuration for the `safety check` command
     ignore-vulnerabilities:
         67599:
             reason: disputed pip feature not used by this project
+        79756:
+            reason: |
+              false positive
+              safety's own 'authlib' dependency that is not a vulnerability
+              https://github.com/pyupio/safety/issues/822
+        82754:
+            reason: |
+              false positive
+              safety's own 'filelock' dependency that is not a vulnerability
+              https://github.com/pyupio/safety/issues/665
+        83159:
+            reason: |
+              false positive
+              safety's own 'marshmallow' dependency that is not a vulnerability
+              https://github.com/pyupio/safety/issues/826
     continue-on-vulnerability-error: False
 alert: # configuration for the `safety alert` command
     security:
