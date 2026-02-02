@@ -362,6 +362,7 @@ plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.coverage_conditional_plugin.rules]
 has-torch = "is_installed('torch')"
+has-torchgeo-unet = "package_version('torchgeo') >= (0, 8, 0)"
 
 [tool.coverage.report]
 exclude_also = [

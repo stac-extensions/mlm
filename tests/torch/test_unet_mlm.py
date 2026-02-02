@@ -8,7 +8,7 @@ pytest.importorskip("torchgeo")
 from stac_model.examples import unet_mlm
 
 
-def test_unet_mlm_matches_example_json():
+def test_unet_mlm_matches_example_json():  # pragma: has-torchgeo-unet
     try:
         item = unet_mlm().item.to_dict()
     except ModuleNotFoundError as e:
