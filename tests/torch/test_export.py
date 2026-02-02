@@ -1,11 +1,6 @@
-import sys
-import pytest
-
-pytest.importorskip("torchgeo")
-assert sys.version_info >= (3, 11), "torchgeo Unet requires Python 3.11+"
-
 import pathlib
 
+import pytest
 import torch
 import torchvision.transforms.v2 as T
 import yaml
