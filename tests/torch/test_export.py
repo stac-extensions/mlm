@@ -1,6 +1,8 @@
+import sys
 import pytest
 
 pytest.importorskip("torchgeo")
+assert sys.version_info >= (3, 11), "torchgeo Unet requires Python 3.11+"
 
 import pathlib
 

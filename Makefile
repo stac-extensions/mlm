@@ -21,11 +21,24 @@ UV_PYTHON_ROOT ?= $(PYTHON_ROOT)
 # activating a conda environment, and reset it in '/path/to/env/etc/conda/deactivate.d/env.sh'
 UV_PROJECT_ENVIRONMENT ?=
 # make sure every uv command employs the specified environment path
-ifeq (${UV_PROJECT_ENVIRONMENT},)
+ifeq ($(UV_PROJECT_ENVIRONMENT),)
   UV_COMMAND := uv
+  # auto-detect conda environment for consistency
+  ifneq ($(CONDA_PREFIX),)
+    ifeq ($(shell realpath $(UV_PYTHON_ROOT)),$(shell realpath $(CONDA_PREFIX)))
+      UV_COMMAND := UV_PROJECT_ENVIRONMENT="${CONDA_PREFIX}" uv
+    endif
+  endif
 else
   UV_COMMAND := UV_PROJECT_ENVIRONMENT="${UV_PROJECT_ENVIRONMENT}" uv
 endif
+
+env:
+	@echo "PYTHON_PATH: $(PYTHON_PATH)"
+	@echo "PYTHON_ROOT: $(PYTHON_ROOT)"
+	@echo "UV_PYTHON_ROOT: $(UV_PYTHON_ROOT)"
+	@echo "UV_PROJECT_ENVIRONMENT: $(UV_PROJECT_ENVIRONMENT)"
+	@echo "UV_COMMAND: $(UV_COMMAND)"
 
 #* UV
 .PHONY: setup
