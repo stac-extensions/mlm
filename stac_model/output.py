@@ -40,7 +40,7 @@ class ModelResult(MLMBaseModel):
 class MLMClassification(MLMBaseModel, Classification):
     @model_serializer()
     def model_dump(self, *_: Any, **__: Any) -> dict[str, Any]:
-        return self.to_dict()  # type: ignore[call-arg]
+        return self.to_dict()
 
     def __init__(
         self,
