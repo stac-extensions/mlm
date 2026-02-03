@@ -20,9 +20,6 @@
 
 </div>
 
-> ⚠️ <br>
-> FIXME: update description with ML framework connectors (pytorch, scikit-learn, etc.)
-
 ## Installation
 
 ```shell
