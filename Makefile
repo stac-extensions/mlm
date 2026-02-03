@@ -79,7 +79,7 @@ update: setup  # install package updates, optionally to a specific package or al
 	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest $(if $(PIP_PACKAGE),-P $(PIP_PACKAGE),-U) $(UV_XARGS)
 
 .PHONY: update-dev
-update-dev: setup  # install package updates with developement dependencies
+update-dev: setup  # install package updates with development dependencies
 	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest --group dev $(UV_XARGS)
 
 .PHONY: update-extras
@@ -179,11 +179,6 @@ $(addprefix fix-, $(FORMATTERS)): fix-%: format-%
 
 .PHONY: lint-all
 lint-all: lint mypy check-safety check-markdown
-
-.PHONY: update-dev-deps
-update-dev-deps: setup
-	$(UV_COMMAND) export --only-dev --format requirements-txt -o requirements-only-dev.txt
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -r requirements-only-dev.txt
 
 #* Cleaning
 .PHONY: pycache-remove
