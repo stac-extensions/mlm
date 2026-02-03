@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update ``examples/item_pytorch_geo_unet.json`` to align with UNet band values defined by `torchgeo==0.8.1`
-  (see https://github.com/torchgeo/torchgeo/commit/41411d4511e0bd1b135e5ba77af1401d0ee0c6e7).
+  (see [torchgeo @ 41411d4](https://github.com/torchgeo/torchgeo/commit/41411d4511e0bd1b135e5ba77af1401d0ee0c6e7)).
 
 ### Deprecated
 
