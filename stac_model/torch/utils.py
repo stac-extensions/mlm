@@ -83,9 +83,15 @@ def tensor_like_as_value(tensor: torch.Tensor | list[float | int]) -> float | in
     Convert a tensor to an int.
     """
     if isinstance(tensor, list):
-        return tensor[0]
-    flat_tensor = tensor.view(-1)
-    return flat_tensor[0].item()
+        value = tensor[0]
+    else:
+        flat_tensor = tensor.view(-1)
+        value = flat_tensor[0].item()
+    val_int = int(value)
+    val_flt = float(value)
+    if val_int == val_flt:
+        return val_int
+    return val_flt
 
 
 def extract_value_scaling(transforms: K.AugmentationSequential) -> list[ValueScalingObject]:

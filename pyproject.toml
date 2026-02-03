@@ -254,7 +254,12 @@ select = [
   # isort
   "I",
 ]
-ignore = ["UP007", "UP015", "E501"]
+ignore = [
+  "UP007",
+  "UP015",
+  "UP038",
+  "E501",
+]
 
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]

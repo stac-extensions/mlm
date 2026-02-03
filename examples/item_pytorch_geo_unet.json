@@ -82,8 +82,8 @@
         "value_scaling": [
           {
             "type": "z-score",
-            "mean": 0.0,
-            "stddev": 3000.0
+            "mean": 0,
+            "stddev": 3000
           }
         ],
         "pre_processing_function": null
