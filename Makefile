@@ -43,7 +43,7 @@ env:
 
 # auto-detect N_CUDA_DEVICES, or override explicitly during make command as desired
 N_CUDA_DEVICES = $(shell which nvidia-smi >/dev/null && nvidia-smi -L | wc -l || echo '0')
-override TORCH_EXTRA = $(if $(filter-out $(N_CUDA_DEVICES),0),torch-cu126,torch)
+TORCH_EXTRA = $(if $(filter-out $(N_CUDA_DEVICES),0),torch-cu126,torch)
 .PHONY: cuda
 cuda:
 	@echo "Available CUDA devices: $(N_CUDA_DEVICES)"
