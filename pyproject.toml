@@ -23,14 +23,16 @@ dependencies = [
   "pip>=25.0.0",
 ]
 optional-dependencies.torch = [
-  "torch==2.8.0; python_version>='3.11'",
-  "torchgeo; python_version>='3.11'",
+  "torch>=2.8.0; python_version>='3.11'",
+  "torchgeo<0.8.0; python_version=='3.10'",
+  "torchgeo>=0.8.1; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
   "pytorch-triton; python_version>='3.11'",
-  "torch==2.8.0; python_version>='3.11'",
-  "torchgeo; python_version>='3.11'",
+  "torch>=2.8.0; python_version>='3.11'",
+  "torchgeo<0.8.0; python_version=='3.10'",
+  "torchgeo>=0.8.1; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'",
 ]
 
@@ -126,7 +128,6 @@ torchvision = [
   { index = "pytorch-cu126", extra = "torch-cu126" },
 ]
 pytorch-triton = [{ index = "pytorch-cu126", extra = "torch-cu126" }]
-torchgeo = { git = "https://github.com/microsoft/torchgeo", rev = "95dba5c43a2828c04a6b0a316d1996c5d1c6b9c5" }
 cffconvert = { git = "https://github.com/citation-file-format/cffconvert.git", rev = "b6045d78aac9e02b039703b030588d54d53262ac" }
 
 [project.urls]
@@ -253,7 +254,12 @@ select = [
   # isort
   "I",
 ]
-ignore = ["UP007", "UP015", "E501"]
+ignore = [
+  "UP007",
+  "UP015",
+  "UP038",
+  "E501",
+]
 
 [tool.ruff.lint.isort]
 known-local-folder = ["tests", "conftest"]
@@ -358,9 +364,14 @@ plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.coverage_conditional_plugin.omit]
 "not is_installed('torch')" = "stac_model/torch/*.py"
+"not is_installed('torchvision')" = "stac_model/torch/*.py"
 
 [tool.coverage.coverage_conditional_plugin.rules]
+no-torch = "not is_installed('torch')"
+no-torchvision = "not is_installed('torch')"
 has-torch = "is_installed('torch')"
+has-torchvision = "is_installed('torchvision')"
+has-torchgeo-unet = "is_installed('torchgeo') and package_version('torchgeo') >= (0, 8, 0)"
 
 [tool.coverage.report]
 exclude_also = [

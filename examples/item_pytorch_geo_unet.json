@@ -56,11 +56,11 @@
           "B4",
           "B3",
           "B2",
-          "B8A",
+          "B8",
           "B4",
           "B3",
           "B2",
-          "B8A"
+          "B8"
         ],
         "variables": [],
         "name": "model_input",
@@ -163,7 +163,7 @@
           "name": "B2"
         },
         {
-          "name": "B8A"
+          "name": "B8"
         },
         {
           "name": "B4"
@@ -175,7 +175,7 @@
           "name": "B2"
         },
         {
-          "name": "B8A"
+          "name": "B8"
         }
       ],
       "roles": [

@@ -21,11 +21,24 @@ UV_PYTHON_ROOT ?= $(PYTHON_ROOT)
 # activating a conda environment, and reset it in '/path/to/env/etc/conda/deactivate.d/env.sh'
 UV_PROJECT_ENVIRONMENT ?=
 # make sure every uv command employs the specified environment path
-ifeq (${UV_PROJECT_ENVIRONMENT},)
+ifeq ($(UV_PROJECT_ENVIRONMENT),)
   UV_COMMAND := uv
+  # auto-detect conda environment for consistency
+  ifneq ($(CONDA_PREFIX),)
+    ifeq ($(shell realpath $(UV_PYTHON_ROOT)),$(shell realpath $(CONDA_PREFIX)))
+      UV_COMMAND := UV_PROJECT_ENVIRONMENT="${CONDA_PREFIX}" uv
+    endif
+  endif
 else
   UV_COMMAND := UV_PROJECT_ENVIRONMENT="${UV_PROJECT_ENVIRONMENT}" uv
 endif
+
+env:
+	@echo "PYTHON_PATH: $(PYTHON_PATH)"
+	@echo "PYTHON_ROOT: $(PYTHON_ROOT)"
+	@echo "UV_PYTHON_ROOT: $(UV_PYTHON_ROOT)"
+	@echo "UV_PROJECT_ENVIRONMENT: $(UV_PROJECT_ENVIRONMENT)"
+	@echo "UV_COMMAND: $(UV_COMMAND)"
 
 #* UV
 .PHONY: setup
@@ -76,12 +89,22 @@ check: check-examples check-markdown check-lint check-mypy check-safety check-ci
 .PHONY: check-all
 check-all: check
 
+.PHONY: check-warn-torch
+check-warn-torch:
+	@$(UV_COMMAND) pip list --quiet --python "$(UV_PYTHON_ROOT)" | grep '^torch\s' >/dev/null || \
+		(echo "Warning: 'torch' is not installed in the current environment. Following operations could report invalid check results." >&2)
+
+.PHONY: check-warn-torchvision
+check-warn-torchvision:
+	@$(UV_COMMAND) pip list --quiet --python "$(UV_PYTHON_ROOT)" | grep '^torchvision\s' >/dev/null || \
+		(echo "Warning: 'torchvision' is not installed in the current environment. Following operations could report invalid check results." >&2)
+
 .PHONY: mypy
 mypy: setup
 	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" mypy --config-file pyproject.toml ./
 
 .PHONY: check-mypy
-check-mypy: mypy
+check-mypy: check-warn-torch check-warn-torchvision mypy
 
 .PHONY: check-safety
 check-safety: setup
@@ -146,21 +169,24 @@ pycache-remove:
 dsstore-remove:
 	find . | grep -E ".DS_Store" | xargs rm -rf
 
-.PHONY: mypycache-remove
-mypycache-remove:
+.PHONY: mypy-cache-remove
+mypy-cache-remove:
 	find . | grep -E ".mypy_cache" | xargs rm -rf
 
-.PHONY: ipynbcheckpoints-remove
-ipynbcheckpoints-remove:
+.PHONY: notebooks-cache-remove
+notebooks-cache-remove:
 	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
 
-.PHONY: pytestcache-remove
-pytestcache-remove:
+.PHONY: pytest-cache-remove
+pytest-cache-remove:
 	find . | grep -E ".pytest_cache" | xargs rm -rf
+
+.PHONY: cache-remove
+cache-remove: pycache-remove dsstore-remove myp-ycache-remove notebooks-cache-remove pytest-cache-remove
 
 .PHONY: build-remove
 build-remove:
 	rm -rf build/
 
 .PHONY: cleanup
-cleanup: pycache-remove dsstore-remove mypycache-remove ipynbcheckpoints-remove pytestcache-remove
+cleanup: build-remove cache-remove
