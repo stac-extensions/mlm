@@ -1,21 +1,21 @@
-import pytest
-
-pytest.importorskip("torchgeo")
-
 import pathlib
 
+import pytest
+
+pytest.importorskip("torch")  # pragma: no-torch
+pytest.importorskip("torchvision")  # pragma: no-torchvision
+
 import torch
-import torchvision.transforms.v2 as T
+import torchvision.transforms.v2 as T  # pragma: no-torchvision
 import yaml
 from torch.export.pt2_archive._package import load_pt2
-from torchgeo.models import Unet_Weights, unet
 
 from stac_model.base import Path
 from stac_model.schema import MLModelProperties
 from stac_model.torch.export import save
 
 
-class TestPT2:
+class TestPT2:  # pragma: has-torch
     in_channels = 3
     num_classes = 2
     height = width = 16
@@ -178,7 +178,7 @@ class TestPT2:
         )
 
 
-class TestTorchGeoFTWPT2(TestPT2):
+class TestTorchGeoFTWPT2(TestPT2):  # pragma: has-torchgeo-unet
     in_channels = 8
     num_classes = 3
     height = width = 256
@@ -187,6 +187,8 @@ class TestTorchGeoFTWPT2(TestPT2):
 
     @pytest.fixture
     def model(self) -> torch.nn.Module:
+        from torchgeo.models import Unet_Weights, unet
+
         model: torch.nn.Module = unet(weights=Unet_Weights.SENTINEL2_3CLASS_FTW)
         return model
 
