@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix resolution (and restrictions) of `torch`, `torchvision` and `torchgeo` dependencies
   in `stac-model` package to allow backward-compatibility with older `python<=3.10` versions.
   Examples using `torchgeo.models.unet` are limited to `python>=3.11` versions, but others remain backward-compatible.
+- Fix `MLModelExtension.from_torch` inference of `value_scaling` values from `torch` model definition when the
+  transforms are based on `torchvision.transforms` utilities rather than `kornia.augmentation`.
 
 ## [v1.5.1](https://github.com/stac-extensions/mlm/tree/v1.5.1)
 

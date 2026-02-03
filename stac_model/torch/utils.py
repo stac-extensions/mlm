@@ -16,6 +16,11 @@ from ..runtime import AcceleratorName
 from ..schema import SCHEMA_URI, MLModelProperties
 from .base import AOTIFiles
 
+try:
+    from torchvision.transforms.v2 import Normalize
+except ImportError:
+    from torchvision.transforms import Normalize
+
 
 def normalize_dtype(torch_dtype: torch.dtype) -> DataType:
     """
@@ -73,26 +78,29 @@ def get_output_channels(state_dict: dict[str, torch.Tensor]) -> int:
     return int(tensor.shape[0])
 
 
+def tensor_like_as_value(tensor: torch.Tensor | list[float | int]) -> float | int:
+    """
+    Convert a tensor to an int.
+    """
+    if isinstance(tensor, list):
+        return tensor[0]
+    flat_tensor = tensor.view(-1)
+    return flat_tensor[0].item()
+
+
 def extract_value_scaling(transforms: K.AugmentationSequential) -> list[ValueScalingObject]:
     """
     Extracts value scaling definitions from a Kornia AugmentationSequential object.
     """
     children = list(transforms.children())
 
-    def _tensor_to_value(tensor: torch.Tensor) -> int:
-        """
-        Convert a tensor to an int.
-        """
-        flat_tensor = tensor.view(-1)
-        return int(flat_tensor[0])
-
     scaling_defs: list[ValueScalingObject] = []
 
     for t in children:
-        if isinstance(t, K.Normalize):
+        if isinstance(t, (K.Normalize, Normalize)):
             buffers = dict(t.named_buffers()) if hasattr(t, "named_buffers") else {}
-            mean = buffers.get("mean")
-            stddev = buffers.get("std")
+            mean = buffers.get("mean") or getattr(t, "mean", None)
+            stddev = buffers.get("std") or getattr(t, "std", None)
 
             if mean is None or stddev is None:
                 flags = getattr(t, "flags", {})
@@ -102,7 +110,8 @@ def extract_value_scaling(transforms: K.AugmentationSequential) -> list[ValueSca
             if mean is None or stddev is None:
                 raise AttributeError("Normalize transform missing mean/std info")
 
-            scaling_defs.append(ValueScalingZScore(mean=_tensor_to_value(mean), stddev=_tensor_to_value(stddev)))
+            scaling = ValueScalingZScore(mean=tensor_like_as_value(mean), stddev=tensor_like_as_value(stddev))
+            scaling_defs.append(scaling)
 
         elif isinstance(t, K.AugmentationSequential):
             scaling_defs.extend(extract_value_scaling(t))
