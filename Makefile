@@ -40,6 +40,15 @@ env:
 	@echo "UV_PROJECT_ENVIRONMENT: $(UV_PROJECT_ENVIRONMENT)"
 	@echo "UV_COMMAND: $(UV_COMMAND)"
 
+
+# auto-detect N_CUDA_DEVICES, or override explicitly during make command as desired
+N_CUDA_DEVICES = $(shell which nvidia-smi >/dev/null && nvidia-smi -L | wc -l || echo '0')
+TORCH_EXTRA = $(if $(filter-out $(N_CUDA_DEVICES),0),torch-cu126,torch)
+.PHONY: cuda
+cuda:
+	@echo "Available CUDA devices: $(N_CUDA_DEVICES)"
+	@echo "Would install using extra: $(TORCH_EXTRA)"
+
 #* UV
 .PHONY: setup
 setup:
@@ -63,7 +72,23 @@ install-dev: setup
 .PHONY: install-dev-extras
 install-dev-extras: setup
 	$(UV_COMMAND) export --format requirements-txt -o requirements-dev.txt
-	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -e .[torch] -r requirements-dev.txt
+	$(UV_COMMAND) pip install --python "$(UV_PYTHON_ROOT)" -e ".[$(TORCH_EXTRA)]" -r requirements-dev.txt
+
+.PHONY: update
+update: setup  # install package updates, optionally to a specific package or all
+	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest $(if $(PIP_PACKAGE),-P $(PIP_PACKAGE),-U) $(UV_XARGS)
+
+.PHONY: update-dev
+update-dev: setup  # install package updates with developement dependencies
+	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest --group dev $(UV_XARGS)
+
+.PHONY: update-extras
+update-extras: setup  # install package updates with extra torch dependencies
+	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest --extra $(TORCH_EXTRA) $(UV_XARGS)
+
+.PHONY: update-all
+update-all: setup  # install package updates with all dependencies
+	$(UV_COMMAND) sync --python "$(UV_PYTHON_ROOT)" --resolution highest --all-groups --extra $(TORCH_EXTRA) $(UV_XARGS)
 
 .PHONY: pre-commit-install
 pre-commit-install: setup

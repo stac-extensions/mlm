@@ -67,8 +67,8 @@ class MLModelExtension(
     #   'pystac.Asset' does not derive from STACObject
     #   therefore, it technically cannot be used in 'ExtensionManagementMixin[T]'
     #   however, this makes our extension definition much easier and avoids lots of code duplication
-    ExtensionManagementMixin[  # type: ignore[type-var]
-        Union[
+    ExtensionManagementMixin[
+        Union[  # type: ignore[type-var]
             pystac.Collection,
             pystac.Item,
             pystac.Asset,
