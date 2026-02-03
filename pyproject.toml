@@ -25,14 +25,14 @@ dependencies = [
 optional-dependencies.torch = [
   "torch>=2.8.0; python_version>='3.11'",
   "torchgeo<0.8.0; python_version=='3.10'",
-  "torchgeo>=0.8.0; python_version>='3.11'",
+  "torchgeo>=0.8.1; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'"
 ]
 optional-dependencies.torch-cu126 = [
   "pytorch-triton; python_version>='3.11'",
   "torch>=2.8.0; python_version>='3.11'",
   "torchgeo<0.8.0; python_version=='3.10'",
-  "torchgeo>=0.8.0; python_version>='3.11'",
+  "torchgeo>=0.8.1; python_version>='3.11'",
   "torchvision>=0.21,<1; python_version>='3.11'",
 ]
 

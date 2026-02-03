@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- n/a
+- Update ``examples/item_pytorch_geo_unet.json`` to align with UNet band values defined by `torchgeo==0.8.1`
+  (see https://github.com/torchgeo/torchgeo/commit/41411d4511e0bd1b135e5ba77af1401d0ee0c6e7).
 
 ### Deprecated
 
@@ -25,7 +26,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- Fix resolution (and restrictions) of `torch`, `torchvision` and `torchgeo` dependencies
+  in `stac-model` package to allow backward-compatibility with older `python<=3.10` versions.
+  Examples using `torchgeo.models.unet` are limited to `python>=3.11` versions, but others remain backward-compatible.
 
 ## [v1.5.1](https://github.com/stac-extensions/mlm/tree/v1.5.1)
 
@@ -48,8 +51,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- fix case in `stac-model-torch.export` where `metadata` is None.
-- fix `stac-model-torch.export` docs to correct `metadata_path` to `metadata` in `README_STAC_MODEL.md`
+- Fix case in `stac_model.torch.export` where `metadata` is `None`.
+- Fix `stac_model.torch.export` docs to correct `metadata_path` to `metadata`
+  in [`README_STAC_MODEL.md`](README_STAC_MODEL.md).
 
 ## [v1.5.0](https://github.com/stac-extensions/mlm/tree/v1.5.0)
 
