@@ -359,10 +359,14 @@ plugins = ["coverage_conditional_plugin"]
 
 [tool.coverage.coverage_conditional_plugin.omit]
 "not is_installed('torch')" = "stac_model/torch/*.py"
+"not is_installed('torchvision')" = "stac_model/torch/*.py"
 
 [tool.coverage.coverage_conditional_plugin.rules]
+no-torch = "not is_installed('torch')"
+no-torchvision = "not is_installed('torch')"
 has-torch = "is_installed('torch')"
-has-torchgeo-unet = "package_version('torchgeo') >= (0, 8, 0)"
+has-torchvision = "is_installed('torchvision')"
+has-torchgeo-unet = "is_installed('torchgeo') and package_version('torchgeo') >= (0, 8, 0)"
 
 [tool.coverage.report]
 exclude_also = [

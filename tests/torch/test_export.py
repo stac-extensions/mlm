@@ -1,8 +1,12 @@
 import pathlib
 
 import pytest
+
+pytest.importorskip("torch")  # pragma: no-torch
+pytest.importorskip("torchvision")  # pragma: no-torchvision
+
 import torch
-import torchvision.transforms.v2 as T
+import torchvision.transforms.v2 as T  # pragma: no-torchvision
 import yaml
 from torch.export.pt2_archive._package import load_pt2
 
