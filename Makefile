@@ -105,7 +105,7 @@ format: codestyle
 #* Testing
 .PHONY: test
 test: setup
-	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model --cov-config pyproject.toml tests/
+	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" pytest -c pyproject.toml -v --cov-report=html --cov=stac_model --cov-config pyproject.toml tests/ $(PYTEST_XARGS)
 
 #* Linting
 .PHONY: check
