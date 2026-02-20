@@ -1,4 +1,5 @@
 {
+  "$comment": "Demonstrate the use of MLM with both EO and Raster extensions using complementary bands details to describe the Model Asset by band name reference.",
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.5.1/schema.json",

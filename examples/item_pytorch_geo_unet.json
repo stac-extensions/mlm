@@ -1,4 +1,5 @@
 {
+  "$comment": "STAC item auto-generated using unet_mlm() in https://raw.githubusercontent.com/stac-extensions/mlm/refs/heads/main/stac_model/examples.py",
   "type": "Feature",
   "stac_version": "1.0.0",
   "stac_extensions": [

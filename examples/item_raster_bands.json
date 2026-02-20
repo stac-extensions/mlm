@@ -1,4 +1,5 @@
 {
+  "$comment": "Demonstrate the use of MLM and Raster for bands description, with Raster bands directly in the Model Asset.",
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.5.1/schema.json",

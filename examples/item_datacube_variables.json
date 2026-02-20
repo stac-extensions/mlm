@@ -1,5 +1,5 @@
 {
-  "$comment": "Demonstrate the use of MLM and DataCube variables description.",
+  "$comment": "Demonstrate the use of MLM and DataCube variables description to characterize its inputs and outputs.",
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.5.1/schema.json",

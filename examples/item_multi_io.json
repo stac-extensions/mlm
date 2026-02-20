@@ -1,4 +1,5 @@
 {
+  "$comment": "Demonstrate the use of MLM with a mixture of inputs, some using EO bands, others without, and some with derived properties.",
   "stac_version": "1.0.0",
   "stac_extensions": [
     "https://stac-extensions.github.io/mlm/v1.5.1/schema.json",
