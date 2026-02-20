@@ -18,6 +18,14 @@ def validated_torchgeo_unet_mlm():  # pragma: has-torchgeo-unet
     from torchgeo.models.unet import _ftw_sentinel2_bands
     assert _ftw_sentinel2_bands == ["B4", "B3", "B2", "B8", "B4", "B3", "B2", "B8"]
 
+    # this part is manually added in the reference example for documentation purpose
+    item.update({
+        "$comment": (
+            "STAC item auto-generated using unet_mlm() in "
+            "https://raw.githubusercontent.com/stac-extensions/mlm/refs/heads/main/stac_model/examples.py"
+        )
+    })
+
     return item
 
 
