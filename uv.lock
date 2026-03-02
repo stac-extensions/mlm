@@ -4561,7 +4561,7 @@ wheels = [
 
 [[package]]
 name = "safety"
-version = "3.8.0b0"
+version = "3.8.0b1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "authlib" },
@@ -4584,9 +4584,9 @@ dependencies = [
     { name = "typer" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/6b/b4/b34372f06e9c2d4c4de805c8c4419a4dea1fd70c329243766dab5043cc06/safety-3.8.0b0.tar.gz", hash = "sha256:30f4d87d5249fe9076ee82634fb7d4303669c0857ee41ee247dab08f7fc38186", size = 348876, upload-time = "2025-12-02T20:57:48.624Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/2e/05ff788c368f90903ad120f8aed45e74c0c0d81fcbc16349304a09a6876d/safety-3.8.0b1.tar.gz", hash = "sha256:2206e4d726ccc94cde0693a950310ef2b08966a71619dff862fd4c147e595dfe", size = 484105, upload-time = "2026-02-25T01:41:11.304Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/54/5f/a998b1c4bc7aa1c444397b197719f65aa3f8a65cbe014b3a477cd057ed74/safety-3.8.0b0-py3-none-any.whl", hash = "sha256:082574aa9ed77b9f1d6ec7803c32e6c76c8bccfc708a20b4a37f8ad36e578fd9", size = 326482, upload-time = "2025-12-02T20:57:47.094Z" },
+    { url = "https://files.pythonhosted.org/packages/c3/86/fdd94a895a32b6812dd3f7c11dd56c1de0729bd31cd4f7c224ccf268376f/safety-3.8.0b1-py3-none-any.whl", hash = "sha256:0396bf2599612f31df87dad36c8d47ce2e405b2baf56ca9b3666ed53b52c44c4", size = 410674, upload-time = "2026-02-25T01:41:09.486Z" },
 ]
 
 [[package]]
