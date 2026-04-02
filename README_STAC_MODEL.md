@@ -151,6 +151,8 @@ see `unet_mlm()` in [`stac_model/examples.py`](stac_model/examples.py).
 
 You can see the list of available releases on the [GitHub Releases][github-releases] page.
 
+For release procedure, see [Building and Releasing](CONTRIBUTING.md#building-and-releasing).
+
 ## 📄 License
 
 [![License][blic1]][blic2]
