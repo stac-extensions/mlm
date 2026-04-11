@@ -70,12 +70,13 @@ However, fields that relate to supervised ML are optional and users can use the 
 
 <!-- lint disable -->
 
-> Francis Charette-Migneault, Ryan Avery, Brian Pondi, Joses Omojola, Simone Vaccari, Parham Membari, Devis Peressutti, Jia Yu, and Jed Sundwall. 2024. Machine Learning Model Specification for Cataloging Spatio-Temporal Models (Demo Paper). In 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data (GeoSearch’24), October 29–November 1 2024, Atlanta, GA, USA. ACM, New York, NY, USA, 4 pages. <https://doi.org/10.1145/3681769.3698586>
+> Francis Charette-Migneault, Ryan Avery, Brian Pondi, Joses Omojola, Simone Vaccari, Parham Membari, Devis Peressutti, Jia Yu, and Jed Sundwall. 2024. *Machine Learning Model Specification for Cataloging Spatio-Temporal Models* (Demo Paper). In 3rd ACM SIGSPATIAL International Workshop on Searching and Mining Large Collections of Geospatial Data (GeoSearch’24), October 29–November 1 2024, Atlanta, GA, USA. ACM, New York, NY, USA, 4 pages. <https://doi.org/10.1145/3681769.3698586>
 
 <!-- lint enable -->
 
-See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
-with this extension as well as suggested values for specific ML framework.
+> [!TIP]
+> See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
+  with this extension as well as suggested values for specific ML framework.
 
 The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
@@ -89,9 +90,10 @@ It also combines multiple definitions from the predecessor [ML-Model](https://gi
 extension to synthesize common use cases into a single reference for "*Machine Learning Models*". For migration
 details from `ml-model` to `mlm`, please refer to the [ML-Model Legacy](./docs/legacy/ml-model.md) document.
 
-For more details about the [`stac-model`](./stac_model) Python package, which provides definitions of the MLM extension
-using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
-connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
+> [!TIP]
+> For more details about the [`stac-model`](./stac_model) Python package, which provides definitions of the MLM extension
+  using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
+  connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
 
 ## Resources
 
