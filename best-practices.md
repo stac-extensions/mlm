@@ -16,7 +16,7 @@ models or creating tools to work with STAC.
   - [File Extension](#file-extension)
   - [Example Extension](#example-extension)
   - [Version Extension](#version-extension)
-- [Framework Specific Artifact Types](#framework-specific-artifact-types)
+- [Framework-specific Artifact Types](#framework-specific-artifact-types)
 
 ## Using STAC Common Metadata Fields for the MLM Extension
 
