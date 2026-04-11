@@ -2,7 +2,7 @@
 
 [![hackmd-github-sync-badge](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA/badge)](https://hackmd.io/XveEXOukQ52ZdpUxT8maeA?both)
 
-- **Title:** Machine Learning Model Extension
+- **Title:** Machine Learning Model
 - **Identifier:** <https://stac-extensions.github.io/mlm/v1.5.1/schema.json>
 - **Field Name Prefix:** mlm
 - **Scope:** Collection, Item, Asset, Links
@@ -46,7 +46,7 @@
 
 ## Description
 
-The STAC Machine Learning Model (MLM) Extension provides a standard set of fields to describe machine learning models
+The STAC Machine Learning Model (MLM) extension provides a standard set of fields to describe machine learning models
 trained on overhead imagery and enable running model inference.
 
 The main objectives of the extension are:
@@ -74,26 +74,35 @@ However, fields that relate to supervised ML are optional and users can use the 
 
 <!-- lint enable -->
 
+<!-- lint disable no-undefined-references -->
+
 > [!TIP]
 > See [Best Practices](./best-practices.md) for guidance on what other STAC extensions you should use in conjunction
-  with this extension as well as suggested values for specific ML framework.
+> with this extension as well as suggested values for specific ML framework.
 
-The Machine Learning Model Extension purposely omits and delegates some definitions to other STAC extensions to favor
+<!-- lint enable no-undefined-references -->
+
+The Machine Learning Model extension purposely omits and delegates some definitions to other STAC extensions to favor
 reusability and avoid metadata duplication whenever possible. A properly defined MLM STAC Item/Collection should almost
-never have the Machine Learning Model Extension exclusively in `stac_extensions`.
+never have the Machine Learning Model extension exclusively in `stac_extensions`.
 
-For details about the earlier (legacy) version of the MLM Extension, formerly known as
-the *Deep Learning Model Extension* (DLM), please refer to the [DLM LEGACY](./docs/legacy/dlm.md) document.
-DLM was renamed to the current MLM Extension and refactored to form a cohesive definition across all machine
+For details about the earlier (legacy) version of the MLM extension, formerly known as
+the *Deep Learning Model* (DLM) extension, please refer to the [DLM LEGACY](./docs/legacy/dlm.md) document.
+DLM was renamed to the current MLM extension and refactored to form a cohesive definition across all machine
 learning approaches, regardless of whether the approach constitutes a deep neural network or other statistical approach.
 It also combines multiple definitions from the predecessor [ML-Model](https://github.com/stac-extensions/ml-model)
 extension to synthesize common use cases into a single reference for "*Machine Learning Models*". For migration
 details from `ml-model` to `mlm`, please refer to the [ML-Model Legacy](./docs/legacy/ml-model.md) document.
 
+<!-- lint disable no-undefined-references -->
+
 > [!TIP]
-> For more details about the [`stac-model`](./stac_model) Python package, which provides definitions of the MLM extension
-  using both [`Pydantic`](https://docs.pydantic.dev/latest/) and [`PySTAC`](https://pystac.readthedocs.io/en/stable/)
-  connectors, please refer to the [STAC Model](./README_STAC_MODEL.md) document.
+> For more details about the [`stac-model`](./stac_model) Python package, which provides definitions
+> of the MLM extension using both [`Pydantic`](https://docs.pydantic.dev/latest/)
+> and [`PySTAC`](https://pystac.readthedocs.io/en/stable/) connectors,
+> please refer to the [STAC Model](./README_STAC_MODEL.md) document.
+
+<!-- lint enable no-undefined-references -->
 
 ## Resources
 
@@ -838,7 +847,7 @@ In order to provide more context, the following roles are also recommended were 
 | href               | string                                                                 | URI to the model artifact.                                                                                                                                                                                                                                                                                                |
 | type               | string                                                                 | The media type of the artifact (see [Model Artifact Media-Type](#model-artifact-media-type).                                                                                                                                                                                                                              |
 | roles              | \[string]                                                              | **REQUIRED** Specify `mlm:model`. Can include `["mlm:weights", "mlm:checkpoint"]` as applicable.                                                                                                                                                                                                                          |
-| mlm:artifact_type  | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified. |
+| mlm:artifact_type  | [Artifact Type](./best-practices.md#framework-specific-artifact-types) | Specifies the kind of model artifact, any string is allowed. Typically related to a particular ML framework, see [Best Practices - Framework-specific Artifact Types](./best-practices.md#framework-specific-artifact-types) for **RECOMMENDED** values. This field is **REQUIRED** if the `mlm:model` role is specified. |
 | mlm:compile_method | [Compile Method](#compile-method) \| null                              | Describes the method used to compile the ML model either when the model is saved or at model runtime prior to inference.                                                                                                                                                                                                  |
 
 Recommended Asset `roles` include `mlm:weights` or `mlm:checkpoint` for model weights that need to be loaded by a
@@ -872,8 +881,8 @@ is used for the artifact described by the media-type. However, users need to rem
 official. In order to validate the specific framework and artifact type employed by the model, the MLM properties
 `mlm:framework` (see [MLM Fields](#item-properties-and-collection-fields)) and
 `mlm:artifact_type` (see [Model Asset](#model-asset)) should be employed instead to perform this validation if needed.
-See the [Best Practices - Framework Specific Artifact Types](./best-practices.md#framework-specific-artifact-types) on
- suggested fields for framework specific artifact types.
+See the [Best Practices - Framework-specific Artifact Types](./best-practices.md#framework-specific-artifact-types) on
+ suggested fields for common types.
 
 [iana-media-type]: https://www.iana.org/assignments/media-types/media-types.xhtml
 
