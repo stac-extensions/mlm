@@ -309,7 +309,7 @@ educational purposes only.
 
 [stac-ext-version]: https://github.com/stac-extensions/version
 
-## Framework Specific Artifact Types
+## Framework-specific Artifact Types
 
 The `mlm:artifact_type` field can be used to clarify how the model was saved which can help users understand how to
 load it or in which runtime contexts it should be used. Applying this artifact type definition should restrict
