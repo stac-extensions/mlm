@@ -17,12 +17,16 @@ updates:
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
     allow:
       - dependency-type: "all"
     commit-message:
       prefix: ":arrow_up:"
     open-pull-requests-limit: 5
+    groups:
+      uv-dependencies:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     directory: "/"
