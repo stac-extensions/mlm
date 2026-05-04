@@ -11,7 +11,7 @@ authors = [
   { name = "Francis Charette-Migneault", email = "francis.charette-migneault@crim.ca" },
 ]
 license = { text = "Apache Software License 2.0" }
-requires-python = "<4.0,>=3.10"
+requires-python = "<4.0,>=3.11"
 dependencies = [
   "typer<1.0.0,>=0.9.0",
   "rich>=13.7.0,<16.0.0",
@@ -23,17 +23,15 @@ dependencies = [
   "pip>=25.0.0",
 ]
 optional-dependencies.torch = [
-  "torch>=2.8.0; python_version>='3.11'",
-  "torchgeo<0.8.0; python_version=='3.10'",
-  "torchgeo>=0.8.1; python_version>='3.11'",
-  "torchvision>=0.21,<1; python_version>='3.11'"
+  "torch>=2.8.0",
+  "torchgeo>=0.8.1",
+  "torchvision>=0.21,<1"
 ]
 optional-dependencies.torch-cu126 = [
-  "pytorch-triton; python_version>='3.11'",
-  "torch>=2.8.0; python_version>='3.11'",
-  "torchgeo<0.8.0; python_version=='3.10'",
-  "torchgeo>=0.8.1; python_version>='3.11'",
-  "torchvision>=0.21,<1; python_version>='3.11'",
+  "pytorch-triton",
+  "torch>=2.8.0",
+  "torchgeo>=0.8.1",
+  "torchvision>=0.21,<1",
 ]
 
 # important: leave the name and version together for bump resolution
@@ -53,7 +51,6 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -271,7 +268,7 @@ extra-standard-library = ["typing_extensions"]
 [tool.mypy]
 # https://github.com/python/mypy
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = "3.10"
+python_version = "3.11"
 pretty = true
 show_traceback = true
 color_output = true

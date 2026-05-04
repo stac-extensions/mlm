@@ -22,7 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- n/a
+- **BREAKING**: `stac-model>=0.6.0` drops Python 3.10 support. Python 3.11+ is now required.
+  - Removed Python 3.10 from CI test matrix.
+  - Removed Python 3.10 specific dependency constraints for `torch`, `torchgeo`, and `torchvision`.
+  - Updated minimum Python version from `>=3.10` to `>=3.11`.
+  - **Note**: This affects only the `stac-model` package versioning. The MLM specification itself (v1.5.x)
+    remains independently versioned and does not indicate Python version requirements.
 
 ### Fixed
 

@@ -20,6 +20,21 @@
 
 </div>
 
+## Python Version Support
+
+> [!NOTE]
+> `stac-model` package versions and MLM specification versions are independently managed.
+>
+> - **MLM Extension Specification**: Versioned as `vX.Y.Z` (e.g., `v1.5.1`)
+> - **stac-model Package**: Versioned as `stac-model-vX.Y.Z` (e.g., `stac-model-v0.5.2`)
+
+**Python Version Compatibility:**
+
+| `stac-model` Version | Python Version |
+|----------------------| -------------- |
+| `>=0.6.0`            | 3.11+          |
+| `<0.6.0`             | 3.10+          |
+
 ## Installation
 
 ```shell
