@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/stac-extensions/mlm/tree/main)
 
+### Added
+
+- n/a
+
+### Changed
+
+- n/a
+
+### Deprecated
+
+- n/a
+
+### Removed
+
+- n/a
+
+### Fixed
+
+- n/a
+
+## [v1.5.2](https://github.com/stac-extensions/mlm/tree/v1.5.2)
+
 > [!NOTE]
 > This version does not include any specifc change to the MLM specification itself.
 > <br><br>
