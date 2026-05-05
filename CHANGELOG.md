@@ -29,12 +29,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.5.2](https://github.com/stac-extensions/mlm/tree/v1.5.2)
 
+<!-- lint disable no-undefined-references -->
+
 > [!NOTE]
 > This version does not include any specifc change to the MLM specification itself.
 > <br><br>
 > The PATCH version is provided for easier synchornization with pre/post
 > [`stac-model==0.6.0`](https://github.com/stac-extensions/mlm/releases/tag/stac-model-v0.6.0) package
 > implementation and examples, as well as to highlight its breaking change regarding Python 3.10.
+
+<!-- lint enable no-undefined-references -->
 
 ### Added
 
