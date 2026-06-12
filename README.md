@@ -57,11 +57,13 @@ The main objectives of the extension are:
 
 Specifically, this extension records the following information to make ML models searchable and reusable:
 
-1. Sensor band specifications
-2. Model input transforms including resize and normalization
-3. Model output shape, data type, and its semantic interpretation
-4. An optional, flexible description of the runtime environment to be able to run the model
-5. Scientific references
+1. Sensor band specifications, climate variables or other datacube dimensions
+2. Model input/output transforms including resize and normalization
+3. Model input/output shape, data type, and its semantic interpretation
+4. Flexible description of the runtime environment to be able to run the model
+5. Metadata about weights, code, model architecture or other relevant artifacts
+6. Hyperparameters, cross-references to training datasets and task-specific annotations
+7. Scientific references to the original paper or citations associated to the model
 
 The MLM specification is biased towards providing metadata fields for supervised machine learning models.
 However, fields that relate to supervised ML are optional and users can use the fields they need for different tasks.
