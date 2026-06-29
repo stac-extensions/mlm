@@ -22,6 +22,15 @@ security: # configuration for the `safety check` command
               false positive
               safety's own 'marshmallow' dependency that is not a vulnerability
               https://github.com/pyupio/safety/issues/826
+        "SFTY-20250331-30014":
+            reason: |
+              'torch==2.10' CPU/GPU variants
+              Valid vulnerability, but not actively employed by this project.
+              Allow it to avoid breaking changes to backward-compatible 'torch==2.10' versions.
+        98497:
+            reason: |
+              pytoch-lightning<=2.6.0
+              Similar reason as above torch dependency.
     continue-on-vulnerability-error: False
 alert: # configuration for the `safety alert` command
     security:
