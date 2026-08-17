@@ -34,4 +34,9 @@ def test_unet_mlm_matches_example_json(validated_torchgeo_unet_mlm):  # pragma: 
     with open(json_path, "r", encoding="utf-8") as f:
         expected = json.load(f)
 
+    # different versions of torchgeo update model weights source repository
+    # ensure the STAC MLM Item generation is agnostic from these updates when compared to the example
+    from torchgeo.models.unet import Unet_Weights
+    expected["assets"]["model"]["href"] = Unet_Weights.SENTINEL2_2CLASS_NC_FTW.url
+
     assert validated_torchgeo_unet_mlm == expected, "Generated STAC Item does not match the saved example."
