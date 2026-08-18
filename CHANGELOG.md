@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- Ignore U-Net example weights URI update in tests based on `torchgeo` version.
 
 ## [v1.5.2](https://github.com/stac-extensions/mlm/tree/v1.5.2)
 
