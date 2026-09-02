@@ -28,6 +28,24 @@ security: # configuration for the `safety check` command
               safety's own 'nltk' dependency that is not a vulnerability
               CVE-2026-54293
               https://github.com/pyupio/safety/issues/742
+        "SFTY-20260731-83123":
+            reason:
+              false positive
+              safety's own 'nltk' dependency that is not a vulnerability
+              CVE-2026-12061
+              https://github.com/pyupio/safety/issues/742
+        "SFTY-20260731-74449":
+            reason:
+              false positive
+              safety's own 'nltk' dependency that is not a vulnerability
+              CVE-2026-12072
+              https://github.com/pyupio/safety/issues/742
+        "SFTY-20260731-71411":
+            reason:
+              false positive
+              safety's own 'nltk' dependency that is not a vulnerability
+              CVE-2026-12075
+              https://github.com/pyupio/safety/issues/742
         "SFTY-20250331-30014":
             reason: |
               'torch==2.10' CPU/GPU variants
