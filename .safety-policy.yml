@@ -40,6 +40,12 @@ security: # configuration for the `safety check` command
               safety's own 'nltk' dependency that is not a vulnerability
               CVE-2026-12072
               https://github.com/pyupio/safety/issues/742
+        "SFTY-20260731-78787":
+            reason:
+              false positive
+              safety's own 'nltk' dependency that is not a vulnerability
+              CVE-2026-12074
+              https://github.com/pyupio/safety/issues/742
         "SFTY-20260731-71411":
             reason:
               false positive
