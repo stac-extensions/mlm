@@ -61,6 +61,10 @@ security: # configuration for the `safety check` command
             reason: |
               pytoch-lightning<=2.6.0
               Similar reason as above torch dependency.
+        "SFTY-20260715-05023":
+            reason: |
+              lightning<2022.6.15 flagged, but more recent
+              pytoch-lightning==2.6.5 (2026-05-27) already pinned
     continue-on-vulnerability-error: False
 alert: # configuration for the `safety alert` command
     security:
