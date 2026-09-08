@@ -12,6 +12,7 @@ An alias is only (re)generated if the released version is the highest one
 known (from existing git tags) in its bucket (major, or major.minor), so an
 older backported release can't overwrite a newer alias.
 """
+
 import argparse
 import copy
 import json

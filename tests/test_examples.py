@@ -5,6 +5,7 @@ from stac_model.schema import SCHEMA_URI
 # ignore typing errors introduced by generic JSON manipulation errors
 # mypy: disable_error_code="arg-type,call-overload,index,union-attr"
 
+
 def test_model_metadata_to_dict(eurosat_resnet):
     assert eurosat_resnet.item.to_dict()
 

@@ -1,5 +1,4 @@
-from typing import Annotated, Literal, TypeAlias, Union
-from typing_extensions import Self
+from typing import Annotated, Literal, Self, TypeAlias, Union
 
 from pydantic import Field, model_validator
 

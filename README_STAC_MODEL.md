@@ -74,7 +74,7 @@ from stac_model.schema import MLModelProperties
 with open("examples/mlm-metadata.yaml", "r", encoding="utf-8") as f:
     metadata = yaml.safe_load(f)
 
-MLModelProperties.model_validate(metadata["properties"])  
+MLModelProperties.model_validate(metadata["properties"])
 ```
 
 ## Exporting and Packaging PyTorch Models, Transforms, and Model Metadata
@@ -94,8 +94,8 @@ from stac_model.torch.export import save
 
 weights = Unet_Weights.SENTINEL2_3CLASS_FTW
 transforms = torch.nn.Sequential(
-  T.Resize((256, 256)),
-  T.Normalize(mean=[0.0], std=[3000.0])
+    T.Resize((256, 256)),
+    T.Normalize(mean=[0.0], std=[3000.0]),
 )
 model = unet(weights=weights)
 
@@ -154,9 +154,8 @@ model = unet(weights=weights)
 item_ext = MLModelExtension.from_torch(
     model,
     weights=weights,
-    item_id="pytorch_geo_unet"
+    item_id="pytorch_geo_unet",
 )
-
 ```
 
 For a more complete example including STAC Item properties, geometry, and datetime ranges,
