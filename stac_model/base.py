@@ -2,8 +2,7 @@ import os
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
-from typing import Annotated, Any, Literal, TypeAlias, Union
-from typing_extensions import Self
+from typing import Annotated, Any, Literal, Self, TypeAlias, Union
 
 from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 

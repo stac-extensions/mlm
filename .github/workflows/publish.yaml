@@ -10,12 +10,42 @@ jobs:
       - name: Inject env variables
         uses: rlespinasse/github-slug-action@v3.x
       - uses: actions/checkout@v7
+        with:
+          # all 'v*' tags are needed to determine whether this release is the
+          # latest one within its major/minor range (see generate_schema_redirects.py)
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v7.0.0
+        with:
+          python-version: "3.11"
       - name: deploy JSON Schema for version ${{ env.GITHUB_REF_SLUG }}
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: json-schema
           destination_dir: ${{ env.GITHUB_REF_SLUG }}
+      - name: generate partial-version schema redirects (vX, vX.Y)
+        id: redirects
+        run: |
+          python3 .github/scripts/generate_schema_redirects.py \
+            --schema json-schema/schema.json \
+            --tag "${{ env.GITHUB_REF_SLUG }}" \
+            --output-dir "${{ runner.temp }}/schema-redirects" \
+            --github-output "$GITHUB_OUTPUT"
+      - name: deploy minor version redirect ${{ steps.redirects.outputs.minor_alias }}
+        if: steps.redirects.outputs.has_minor_alias == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ runner.temp }}/schema-redirects/${{ steps.redirects.outputs.minor_alias }}
+          destination_dir: ${{ steps.redirects.outputs.minor_alias }}
+      - name: deploy major version redirect ${{ steps.redirects.outputs.major_alias }}
+        if: steps.redirects.outputs.has_major_alias == 'true'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ runner.temp }}/schema-redirects/${{ steps.redirects.outputs.major_alias }}
+          destination_dir: ${{ steps.redirects.outputs.major_alias }}
   publish-pypi:
     if: startsWith(github.ref, 'refs/tags/stac-model-v')
     runs-on: ubuntu-latest

@@ -16,15 +16,18 @@ def validated_torchgeo_unet_mlm():  # pragma: has-torchgeo-unet
     # bands not the same depending on torchgeo version
     # https://github.com/torchgeo/torchgeo/commit/41411d4511e0bd1b135e5ba77af1401d0ee0c6e7
     from torchgeo.models.unet import _ftw_sentinel2_bands
+
     assert _ftw_sentinel2_bands == ["B4", "B3", "B2", "B8", "B4", "B3", "B2", "B8"]
 
     # this part is manually added in the reference example for documentation purpose
-    item.update({
-        "$comment": (
-            "STAC item auto-generated using unet_mlm() in "
-            "https://raw.githubusercontent.com/stac-extensions/mlm/refs/heads/main/stac_model/examples.py"
-        )
-    })
+    item.update(
+        {
+            "$comment": (
+                "STAC item auto-generated using unet_mlm() in "
+                "https://raw.githubusercontent.com/stac-extensions/mlm/refs/heads/main/stac_model/examples.py"
+            )
+        }
+    )
 
     return item
 
@@ -37,6 +40,7 @@ def test_unet_mlm_matches_example_json(validated_torchgeo_unet_mlm):  # pragma: 
     # different versions of torchgeo update model weights source repository
     # ensure the STAC MLM Item generation is agnostic from these updates when compared to the example
     from torchgeo.models.unet import Unet_Weights
+
     expected["assets"]["model"]["href"] = Unet_Weights.SENTINEL2_2CLASS_NC_FTW.url
 
     assert validated_torchgeo_unet_mlm == expected, "Generated STAC Item does not match the saved example."

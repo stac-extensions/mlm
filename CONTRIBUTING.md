@@ -89,6 +89,19 @@ Before submitting your code please do the following steps:
 
 <!-- lint enable no-undefined-references -->
 
+<!-- lint disable no-undefined-references -->
+
+> [!NOTE]
+> Publishing the release tag automatically deploys the strict `v{MAJOR}.{MINOR}.{PATCH}/schema.json` to GitHub Pages.
+> It also generates `v{MAJOR}.{MINOR}/schema.json` and `v{MAJOR}/schema.json` "redirects" which copy the release
+> for matching semantic versions. These version copies replace the explicit version check of the MLM extension URI 
+> in `stac_extensions` to a more lenient pattern matching of corresponding versions.
+> This allows referencing the schemas with permissive ignore of certain changes only related to package maintenance
+> without actual impact on the `mlm:` field definitions and the corresponding JSON schema.
+> See [generate_schema_redirects.py][schema-redirects-script] and [publish.yaml][publish-workflow] for details.
+
+<!-- lint enable no-undefined-references -->
+
 ### Building a new version of `stac-model`
 
 - Apply any relevant changes and `CHANGELOG.md` entries in a PR that modifies `stac-model`.
@@ -123,3 +136,7 @@ Issues for bugs.
 [uv-docs]: https://docs.astral.sh/uv/
 
 [semver]: https://semver.org/
+
+[schema-redirects-script]: ./.github/scripts/generate_schema_redirects.py
+
+[publish-workflow]: ./.github/workflows/publish.yaml

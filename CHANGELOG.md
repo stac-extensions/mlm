@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- n/a
+- Add automatic publication of `v{MAJOR}` and `v{MAJOR}.{MINOR}` partial-version JSON
+  Schema redirects to GitHub Pages alongside the strict `v{MAJOR}.{MINOR}.{PATCH}`
+  schema, always pointing at the latest matching release. These relaxed schemas accept
+  any `stac_extensions` reference within their corresponding version range, while the
+  original exact-version schema remains unchanged
+  (see [generate_schema_redirects.py][schema-redirects-script] and [publish.yaml][publish-workflow]).
 
 ### Changed
 
@@ -26,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Ignore U-Net example weights URI update in tests based on `torchgeo` version.
+
+[schema-redirects-script]: ./.github/scripts/generate_schema_redirects.py
+[publish-workflow]: ./.github/workflows/publish.yaml
 
 ## [v1.5.2](https://github.com/stac-extensions/mlm/tree/v1.5.2)
 
