@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- n/a
+
+### Changed
+
+- n/a
+
+### Deprecated
+
+- n/a
+
+### Removed
+
+- n/a
+
+### Fixed
+
+- n/a
+
+## [v1.5.3](https://github.com/stac-extensions/mlm/tree/v1.5.3)
+
+### Added
+
 - Add automatic publication of `v{MAJOR}` and `v{MAJOR}.{MINOR}` partial-version JSON
   Schema redirects to GitHub Pages alongside the strict `v{MAJOR}.{MINOR}.{PATCH}`
   schema, always pointing at the latest matching release. These relaxed schemas accept
