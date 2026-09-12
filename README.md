@@ -438,8 +438,8 @@ Another distinction is that, depending on the model, statistics could apply to s
 any `bands` definition. In such case, defining statistics under `bands` would not be possible, or would introduce
 ambiguous definitions.
 
-Finally, contrary to the "`statistics`" property name employed by [Band Statistics][stac-1.1-stats], MLM employs the
-distinct property name `value_scaling`, although similar `minimum`, `maximum`, etc. sub-fields are employed.
+Finally, contrary to the `statistics` property name employed by [STAC 1.1 Band Statistics][stac-1.1-stats], MLM employs
+a distinct property name `value_scaling`, although similar sub-fields are employed (i.e., `minimum`, `maximum`, etc.).
 This is done explicitly to disambiguate "informative" band statistics from "applied scaling operations" required
 by the model inputs. This highlights the fact that `value_scaling` are not *necessarily* equal
 to [Band Statistics][stac-1.1-stats] values, although they are often equal in practice due to the applicable
