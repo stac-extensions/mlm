@@ -557,10 +557,10 @@ All definitions should define equivalent and interchangeable `data_type` values.
 | dim_order  | \[[Dimension Order](#dimension-order)] | **REQUIRED** Order of the `shape` dimensions by name.                                                                                                                                                                       |
 | data_type  | [Data Type Enum](#data-type-enum)      | **REQUIRED** The data type of values in the n-dimensional array. For model inputs, this should be the data type of the processed input supplied to the model inference function, not the data type of the source bands.     |
 
-A common use of `-1` for one dimension of `shape` is to indicate a variable batch-size.
-However, this value is not strictly reserved for the `b` dimension.
+A common use of the `-1` value applied to the `shape` of a given dimension is to indicate an
+unconstrained `batch` size. However, this special value is not strictly reserved for the `batch` dimension.
 For example, if the model is capable of automatically adjusting its input layer to adapt to the provided input data,
-then the corresponding dimensions that can be adapted can employ `-1` as well.
+then the corresponding dimensions that can be adapted can employ `-1` to reflect that capability.
 
 #### Dimension Order
 
@@ -575,12 +575,12 @@ Below are some notable common names recommended for use, but others can be emplo
 - `variables` (referring to multiple [Variable Object](#model-band-or-variable-object) definitions)
 - `temperature` (`T`)
 - `pressure` (`P`)
-- `time` (`t`)
+- `time` (`t`) (or `datetime`, `date-time`, etc.)
 - `latitude` (`lat`)
 - `longitude` (`lon`)
 - `altitude` (`alt`)
-- `height` (`h`)
-- `width` (`w`)
+- `height` (`h` or `H`)
+- `width` (`w` or `W`)
 - `depth` (`D`)
 - `x`, `y`, `z` (2D or 3D spatial dimensions)
 - `token`
@@ -598,6 +598,9 @@ indicate `dim_order = ["batch", "channel", "height", "width"]`.
 > When selecting or interpreting dimension names, users should take careful consideration over the multiple
 > interpretations they might introduce based on context. For example, `h`/`height` could either represent the height of
 > the image (often mapped to `y` dimension in geomatics) or it could represent the literal height/altitude of a measure.
+> To disambiguate possible misinterpretation, it is recommended to provide relevant semantic definitions, units and
+> references to those concepts through the appropriate `bands` or `variables` entries defined by other STAC Extensions
+> whenever possible.
 
 <!-- lint enable no-undefined-references -->
 
