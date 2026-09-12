@@ -294,11 +294,11 @@ It is recommended to define `accelerator` with one of the following values:
 <!-- lint disable no-undefined-references -->
 
 > [!WARNING]
-> If `mlm:accelerator = amd64`, this explicitly indicates that the model does not (and will not try to) use any
+> If `mlm:accelerator = "amd64"`, this explicitly indicates that the model does not (and will not try to) use any
 > accelerator, even if some are available from the runtime environment. This is to be distinguished from
 > the value `mlm:accelerator = null`, which means that the model *could* make use of some accelerators if provided,
 > but is not constrained by any specific one. To improve comprehension by users, it is recommended that any model
-> using `mlm:accelerator = amd64` also set explicitly `mlm:accelerator_constrained = true` to illustrate that the
+> using `mlm:accelerator = "amd64"` also set explicitly `mlm:accelerator_constrained = true` to illustrate that the
 > model **WILL NOT** use accelerators, although the hardware resolution should be identical nonetheless.
 
 <!-- lint enable no-undefined-references -->
@@ -428,14 +428,14 @@ explicit object representation.
 
 One distinction from the [STAC 1.1 - Band Object][stac-1.1-band] in MLM is that [Band Statistics][stac-1.1-stats] object
 (or the corresponding [STAC Raster - Statistics][stac-raster-stats] for STAC 1.0) are not
-defined at the "Band Object" level, but at the [Model Input](#model-input-object) level.
+defined at the "*Band Object*" level, but instead at the [Model Input](#model-input-object) level.
 This is because, in machine learning, it is common to need overall statistics for the dataset used to train the model
 to normalize all bands, rather than normalizing the values over a single product. Furthermore, statistics could be
 applied differently for distinct [Model Input](#model-input-object) definitions, in order to adjust for intrinsic
 properties of the model.
 
 Another distinction is that, depending on the model, statistics could apply to some inputs that have no reference to
-any `bands` definition. In such case, defining statistics under `bands` would not be possible, or would intrude
+any `bands` definition. In such case, defining statistics under `bands` would not be possible, or would introduce
 ambiguous definitions.
 
 Finally, contrary to the "`statistics`" property name employed by [Band Statistics][stac-1.1-stats], MLM employs the
