@@ -172,7 +172,8 @@ The fields in the table below can be used in these parts of STAC documents:
 
 ### Notes
 
-<b><sup>[1][1]</sup> Fields allowed only in Item `properties`</b>
+<b><sup>[1][1]</sup> Fields allowed only in Item `properties`</b> (i.e., disallowed in Assets directly). <br>
+Except `mlm:name`, they are also **disallowed in Collection `summaries`**.
 
 <!-- lint disable no-undefined-references -->
 
@@ -198,9 +199,26 @@ For the [Extent Object][stac-extent]
 in STAC Collections and the corresponding spatial and temporal fields in Items, please refer to section
 [Best Practices - Using STAC Common Metadata Fields for the ML Model Extension][stac-mlm-meta].
 
+When the MLM fields are employed under [Collection Summaries][stac-col-summaries], they should provide all the possible
+values of the STAC Items that this Collection contains. Although this is optional, it can greatly help in the discovery
+of possible model configurations provided in the Collection.
+When a field is itself an array, such as `mlm:tasks`, the `summaries` of that field should collapse
+this array across all Items. When the values are numerical, such as for the `mlm:total_parameters`,
+the `summaries` of that field may be represented either as the array of all their possible values or
+a [Range Object][stac-col-range-object] indicating the `minimum` and `maximum` values across the Items.
+The strategy in this case is left up to implementations to decide on the most useful representation for model discovery.
+Complex objects such as `mlm:input`, `mlm:output` and `mlm:hyperparameters` are not allowed in `summaries` since their
+representation across multiple STAC MLM Items are considered too convoluted and specific to various models. Adding them
+as generic information aggregating the details of every model in the Collection will not be meaningful or might even
+introduce misleading or contradictory information.
+
 [stac-mlm-meta]: best-practices.md#using-stac-common-metadata-fields-for-the-mlm-extension
 
 [stac-extent]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#extent-object
+
+[stac-col-summaries]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#summaries
+
+[stac-col-range-object]: https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#range-object
 
 ### Model Architecture
 

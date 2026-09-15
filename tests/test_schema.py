@@ -10,7 +10,8 @@ from pystac.validation.stac_validator import STACValidator
 from stac_model.base import JSON
 from stac_model.schema import SCHEMA_URI
 
-from conftest import get_all_stac_item_examples
+from conftest import get_all_stac_collection_mlm_examples, get_all_stac_item_mlm_examples, load_mlm_example
+
 
 # ignore typing errors introduced by generic JSON manipulation errors
 # mypy: disable_error_code="arg-type,call-overload,index,union-attr,operator"
@@ -27,16 +28,79 @@ def test_collection_include_all_items(mlm_example):
     """
     col_links: list[dict[str, str]] = mlm_example["links"]
     col_items = {os.path.basename(link["href"]) for link in col_links if link["rel"] == "item"}
-    all_items = {os.path.basename(path) for path in get_all_stac_item_examples()}
+    all_items = {os.path.basename(path) for path in get_all_stac_item_mlm_examples()}
     assert all_items == col_items, "Missing STAC Item examples in the example STAC Collection links."
+
+    # ensure that the example collection also contains summaries that include all values of indicated MLM fields
+    mlm_fields: dict[str, set[str]] = {}
+    col_fields = mlm_example["summaries"]
+    for field in col_fields:
+        if not field.startswith("mlm:"):
+            continue
+        mlm_fields[field] = set()
+        for item_file in all_items:
+            item = load_mlm_example(item_file)
+            value = item["properties"][field]
+            if isinstance(value, str):
+                value = [value]
+            mlm_fields[field] |= set(value)
+        assert set(col_fields[field]) == mlm_fields[field]
+    assert mlm_fields, "No MLM field found in collection summaries"
 
 
 @pytest.mark.parametrize(
     "mlm_example",
-    get_all_stac_item_examples(),
+    ["collection.json"],
     indirect=True,
 )
-def test_mlm_schema(
+@pytest.mark.parametrize(
+    ["test_field", "test_value"],
+    [
+        # contents are not important, but they must be in an array of at least one item to respect 'summaries' schema
+        ("mlm:input", [{}]),
+        ("mlm:output", [{}]),
+        ("mlm:hyperparameters", [{"test": {}}]),
+    ],
+)
+def test_collection_no_disallowed_fields(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    test_field: str,
+    test_value: list[JSON],
+):
+    """
+    Ensures that fields disallowed in a STAC Collection with MLM are detected.
+    """
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_data.setdefault("summaries", {})
+    mlm_data["summaries"][test_field] = test_value
+    with pytest.raises(pystac.errors.STACValidationError) as exc:
+        mlm_collection = pystac.Collection.from_dict(mlm_data)
+        pystac.validation.validate(mlm_collection, validator=mlm_validator)
+    assert test_field in str(exc.value.source)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    get_all_stac_collection_mlm_examples(),
+    indirect=True,
+)
+def test_mlm_collection_schema(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    mlm_col = pystac.Collection.from_dict(cast(dict[str, Any], mlm_example))
+    validated = pystac.validation.validate(mlm_col, validator=mlm_validator)
+    assert len(validated) >= len(mlm_col.stac_extensions)  # extra STAC core schemas
+    assert SCHEMA_URI in validated
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    get_all_stac_item_mlm_examples(),
+    indirect=True,
+)
+def test_mlm_item_schema(
     mlm_validator: STACValidator,
     mlm_example: dict[str, JSON],
 ) -> None:
