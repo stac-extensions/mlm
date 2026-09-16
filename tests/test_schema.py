@@ -66,7 +66,7 @@ def test_collection_no_disallowed_fields(
     mlm_example: dict[str, JSON],
     test_field: str,
     test_value: list[JSON],
-):
+) -> None:
     """
     Ensures that fields disallowed in a STAC Collection with MLM are detected.
     """
