@@ -25,7 +25,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- n/a
+- Removed generic `mlmCollectionFields` definition in JSON schema that was misleading about checking all fields when
+  it intended to focus on nested `summaries` fields. A new `mlmCollectionSummaryFields` definition is used instead.
 
 ### Fixed
 

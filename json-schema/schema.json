@@ -83,7 +83,7 @@
             "type": "object",
             "properties": {
               "summaries": {
-                "$ref": "#/$defs/mlmCollectionFields"
+                "$ref": "#/$defs/mlmCollectionSummaryFields"
               },
               "assets": {
                 "type": "object",
@@ -376,15 +376,6 @@
       },
       "additionalProperties": false
     },
-    "mlmCollectionFields": {
-      "description": "Schema to validate the MLM fields permitted under Collection properties.",
-      "type": "object",
-      "properties": {
-        "summaries": {
-          "$ref": "$defs/mlmCollectionSummaryFields"
-        }
-      }
-    },
     "mlmCollectionSummaryFields": {
       "allOf": [
         {
@@ -417,10 +408,9 @@
               }
             },
             "mlm:tasks": {
-              "type": "array",
-              "items": {
-                "$ref": "#/$defs/mlm:tasks"
-              }
+              "description": "MLM tasks are arrays in Items. Collection summaries must collapse their values as flat array.",
+              "$comment": "Since the definition is already an array, reuse it directly rather than nesting in array.",
+              "$ref": "#/$defs/mlm:tasks"
             },
             "mlm:framework": {
               "type": "array",
