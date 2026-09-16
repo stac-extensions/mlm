@@ -12,7 +12,6 @@ from stac_model.schema import SCHEMA_URI
 
 from conftest import get_all_stac_collection_mlm_examples, get_all_stac_item_mlm_examples, load_mlm_example
 
-
 # ignore typing errors introduced by generic JSON manipulation errors
 # mypy: disable_error_code="arg-type,call-overload,index,union-attr,operator"
 
