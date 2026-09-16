@@ -1,3 +1,4 @@
+import functools
 import glob
 import json
 import os
@@ -19,12 +20,28 @@ EXAMPLES_DIR = os.path.abspath(os.path.join(TEST_DIR, "../examples"))
 JSON_SCHEMA_DIR = os.path.abspath(os.path.join(TEST_DIR, "../json-schema"))
 
 
-def get_all_stac_item_examples() -> list[str]:
+@functools.cache
+def get_all_stac_mlm_examples() -> list[str]:
     all_json = glob.glob("**/*.json", root_dir=EXAMPLES_DIR, recursive=True)
     all_geojson = glob.glob("**/*.geojson", root_dir=EXAMPLES_DIR, recursive=True)
+    return all_json + all_geojson
+
+
+@functools.cache
+def get_all_stac_collection_mlm_examples() -> list[str]:
+    all_stac_collections = [
+        path
+        for path in get_all_stac_mlm_examples()
+        if os.path.splitext(os.path.basename(path))[0] == "collection"
+    ]
+    return all_stac_collections
+
+
+@functools.cache
+def get_all_stac_item_mlm_examples() -> list[str]:
     all_stac_items = [
         path
-        for path in all_json + all_geojson
+        for path in get_all_stac_mlm_examples()
         if os.path.splitext(os.path.basename(path))[0] not in ["collection", "catalog"]
     ]
     return all_stac_items
@@ -58,6 +75,18 @@ def mlm_validator(
     return validator
 
 
+@functools.cache
+def load_mlm_example(file_name: str) -> dict[str, JSON]:
+    with open(os.path.join(EXAMPLES_DIR, file_name), mode="r", encoding="utf-8") as example_file:
+        if file_name.endswith(".json"):
+            data = json.load(example_file)
+        elif file_name.endswith(".yaml"):
+            data = yaml.safe_load(example_file)
+        else:
+            raise ValueError(f"Unsupported file format for example: {file_name}")
+    return cast(dict[str, JSON], data)
+
+
 @pytest.fixture
 def mlm_example(request: "SubRequest") -> dict[str, JSON]:
     """
@@ -74,14 +103,7 @@ def mlm_example(request: "SubRequest") -> dict[str, JSON]:
         def test_example(mlm_example: dict[str, JSON]) -> None: ...
         ```
     """
-    with open(os.path.join(EXAMPLES_DIR, request.param), mode="r", encoding="utf-8") as example_file:
-        if request.param.endswith(".json"):
-            data = json.load(example_file)
-        elif request.param.endswith(".yaml"):
-            data = yaml.safe_load(example_file)
-        else:
-            raise ValueError(f"Unsupported file format for example: {request.param}")
-    return cast(dict[str, JSON], data)
+    return load_mlm_example(request.param)
 
 
 @pytest.fixture(name="eurosat_resnet")
