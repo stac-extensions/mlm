@@ -1,6 +1,7 @@
 {
   "stac_version": "1.0.0",
   "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.5.3/schema.json",
     "https://stac-extensions.github.io/item-assets/v1.0.0/schema.json"
   ],
   "type": "Collection",
@@ -41,7 +42,24 @@
     "datetime": {
       "minimum": "1900-01-01T00:00:00Z",
       "maximum": "9999-12-31T23:59:59Z"
-    }
+    },
+    "mlm:name": [
+      "example-model",
+      "Resnet-18 Sentinel-2 ALL MOCO",
+      "UNet ClimateDiffuse ERA5 Downscaling",
+      "U-Net_efficientnet-b3"
+    ],
+    "mlm:tasks": [
+      "classification",
+      "downscaling",
+      "regression",
+      "semantic-segmentation"
+    ],
+    "mlm:architecture": [
+      "ResNet",
+      "U-Net",
+      "segmentation_models_pytorch.decoders.unet.model.Unet"
+    ]
   },
   "links": [
     {

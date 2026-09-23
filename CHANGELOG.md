@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- n/a
+- Add precision about allowed Collection `summaries` fields and their representations in README.
+- Add precision about allowed Item `properties` vs Asset fields in README.
 
 ### Changed
 
-- n/a
+- Adjusted schema for Collection `summaries` to handle per-MLM field checks as enumerated array
+  or min/max range objects of allowed values as applicable to the corresponding field type.
+- Updated the Collection `summaries` example to provide `mlm:name`, `mlm:tasks` and `mlm:architecture` corresponding
+  to all provided MLM Item examples. A test also validates that they are all included for consistency.
 
 ### Deprecated
 
@@ -21,11 +25,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- n/a
+- Removed generic `mlmCollectionFields` definition in JSON schema that was misleading about checking all fields when
+  it intended to focus on nested `summaries` fields. A new `mlmCollectionSummaryFields` definition is used instead.
 
 ### Fixed
 
-- n/a
+- Fix misevaluated Collection `summaries`. They were considered as plain string/numeric/boolean fields when an array of
+  contained values by the collection or min/max range object is required as per the STAC Core Collection specification.
+- Fix misevaluated Collection `summaries` against disallowed fiels that checked if they are all missing simultaneously
+  rather than one by one. This is adjusted with the `not -> anyOf` with distinct `required` for each field individually.
 
 ## [v1.5.3](https://github.com/stac-extensions/mlm/tree/v1.5.3)
 
