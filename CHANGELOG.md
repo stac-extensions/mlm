@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- n/a
+
+### Changed
+
+- n/a
+
+### Deprecated
+
+- n/a
+
+### Removed
+
+- n/a
+
+### Fixed
+
+- n/a
+
+## [v1.6.0](https://github.com/stac-extensions/mlm/tree/v1.6.0)
+
+### Added
+
 - Add precision about allowed Collection `summaries` fields and their representations in README.
 - Add precision about allowed Item `properties` vs Asset fields in README.
 
