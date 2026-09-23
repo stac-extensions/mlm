@@ -83,10 +83,7 @@
             "type": "object",
             "properties": {
               "summaries": {
-                "type": "object",
-                "additionalProperties": {
-                  "$ref": "#/$defs/mlmCollectionFields"
-                }
+                "$ref": "#/$defs/mlmCollectionSummaryFields"
               },
               "assets": {
                 "type": "object",
@@ -380,28 +377,214 @@
       },
       "additionalProperties": false
     },
-    "mlmCollectionFields": {
-      "description": "Schema to validate the MLM fields permitted under Collection summaries.",
+    "mlmCollectionSummaryFields": {
       "allOf": [
-        {
-          "description": "Fields that are mandatory under the Collection summaries.",
-          "type": "object",
-          "required": []
-        },
         {
           "description": "Fields that are disallowed under the Collection summaries.",
           "not": {
-            "required": [
-              "mlm:input",
-              "mlm:output",
-              "mlm:artifact_type",
-              "mlm:compile_method"
+            "anyOf": [
+              {
+                "required": [
+                  "mlm:input"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:output"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:hyperparameters"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:artifact_type"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:compile_method"
+                ]
+              },
+              {
+                "required": [
+                  "mlm:entrypoint"
+                ]
+              }
             ]
           }
         },
         {
-          "description": "Field with known definitions that must be validated.",
-          "$ref": "#/$defs/fields"
+          "description": "Fields that are known under the Collection summaries.",
+          "type": "object",
+          "properties": {
+            "mlm:name": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:name"
+              }
+            },
+            "mlm:architecture": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:architecture"
+              }
+            },
+            "mlm:tasks": {
+              "description": "MLM tasks are arrays in Items. Collection summaries must collapse their values as flat array.",
+              "$comment": "Since the definition is already an array, reuse it directly rather than nesting in array.",
+              "$ref": "#/$defs/mlm:tasks"
+            },
+            "mlm:framework": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:framework"
+              }
+            },
+            "mlm:framework_version": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:framework_version"
+              }
+            },
+            "mlm:memory_size": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/mlm:memory_size"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "minimum",
+                    "maximum"
+                  ],
+                  "properties": {
+                    "minimum": {
+                      "$ref": "#/$defs/mlm:memory_size"
+                    },
+                    "maximum": {
+                      "$ref": "#/$defs/mlm:memory_size"
+                    }
+                  }
+                }
+              ]
+            },
+            "mlm:total_parameters": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/mlm:total_parameters"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "minimum",
+                    "maximum"
+                  ],
+                  "properties": {
+                    "minimum": {
+                      "$ref": "#/$defs/mlm:total_parameters"
+                    },
+                    "maximum": {
+                      "$ref": "#/$defs/mlm:total_parameters"
+                    }
+                  }
+                }
+              ]
+            },
+            "mlm:pretrained": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:pretrained"
+              }
+            },
+            "mlm:pretrained_source": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:pretrained_source"
+              }
+            },
+            "mlm:batch_size_suggestion": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/mlm:batch_size_suggestion"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "minimum",
+                    "maximum"
+                  ],
+                  "properties": {
+                    "minimum": {
+                      "$ref": "#/$defs/mlm:batch_size_suggestion"
+                    },
+                    "maximum": {
+                      "$ref": "#/$defs/mlm:batch_size_suggestion"
+                    }
+                  }
+                }
+              ]
+            },
+            "mlm:accelerator": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:accelerator"
+              }
+            },
+            "mlm:accelerator_constrained": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:accelerator_constrained"
+              }
+            },
+            "mlm:accelerator_summary": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/mlm:accelerator_summary"
+              }
+            },
+            "mlm:accelerator_count": {
+              "oneOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/mlm:accelerator_count"
+                  }
+                },
+                {
+                  "type": "object",
+                  "required": [
+                    "minimum",
+                    "maximum"
+                  ],
+                  "properties": {
+                    "minimum": {
+                      "$ref": "#/$defs/mlm:accelerator_count"
+                    },
+                    "maximum": {
+                      "$ref": "#/$defs/mlm:accelerator_count"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "$comment": "Allow summaries not defined by MLM prefix to work with other extensions and attributes, but disallow undefined MLM fields.",
+          "patternProperties": {
+            "^(?!mlm:)": {}
+          },
+          "additionalProperties": false
         }
       ]
     },
