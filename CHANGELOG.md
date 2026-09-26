@@ -9,11 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- n/a
+- Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 
 ### Changed
 
-- n/a
+- Release of this `stac-model` version automatically bumps the URL reference to use STAC MLM [v1.6.0](#v160).
+  Since the package was not released since, the latest version on PyPI still uses the [v1.5.2](#v152) reference.
+- Allow all `stac_model.base.MLMBaseModel` objects to provide additional properties such as a `description` to align
+  with the JSON schema allowing them. This allows directly creating the objects with those fields rather than manually
+  inserting them after `.model_dump()` call.
 
 ### Deprecated
 
