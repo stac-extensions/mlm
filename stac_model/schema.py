@@ -22,7 +22,7 @@ from pystac.extensions.base import (
     SummariesExtension,
 )
 
-from stac_model.base import ModelTask, OmitIfNone
+from stac_model.base import ModelHyperParameters, ModelTask, OmitIfNone
 from stac_model.input import ModelInput
 from stac_model.output import ModelOutput
 from stac_model.runtime import Runtime
@@ -53,6 +53,7 @@ class MLModelProperties(Runtime):
     input: list[ModelInput]
     output: list[ModelOutput]
 
+    hyperparameters: Annotated[ModelHyperParameters | None, OmitIfNone] = None
     total_parameters: Annotated[int | None, OmitIfNone] = Field(default=None, ge=0)
     pretrained: Annotated[bool | None, OmitIfNone] = Field(default=True)
     pretrained_source: Annotated[str | None, OmitIfNone] = None
