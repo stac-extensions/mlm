@@ -1,4 +1,5 @@
 import os
+import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 from enum import Enum
@@ -41,19 +42,24 @@ class MLMBaseModel(BaseModel):
     def model_serialize(self):
         omit_if_none_fields = {
             key: field
-            for key, field in self.model_fields.items()
+            for key, field in type(self).model_fields.items()
             if any(isinstance(m, _OmitIfNone) for m in field.metadata)
         }
-        fields = getattr(self, "model_fields", self.__fields__)  # noqa
+        fields = type(self).model_fields
         values = {
-            fields[key].alias or key: val  # use the alias if specified
+            (fields[key].alias or key) if key in fields else key: val
             for key, val in self
             if key not in omit_if_none_fields or val is not None
         }
         return values
 
+    __pydantic_extra__: dict[str, Any]
     model_config = ConfigDict(
         populate_by_name=True,
+        # unless explicitly forbidden by a downstream model to limit checks to known MLM fields
+        # (e.g.: 'stac_model.schema.MLModelProperties', other fields to validate by 'STAC Core'),
+        # allow extra fields to be passed through and preserved (e.g.: an additional 'description')
+        extra="allow",
     )
 
 
@@ -229,3 +235,22 @@ class ModelBandsOrVariablesReferences(MLMBaseModel):
             ],
         ],
     )
+
+
+class ModelHyperParameters(MLMBaseModel):
+    model_config = ConfigDict(
+        populate_by_name=True,
+        extra="allow",
+    )
+    __pydantic_extra__: dict[str, Any]
+
+    @model_validator(mode="after")
+    def validate_pattern_properties(self) -> "ModelHyperParameters":
+        allowed_pattern = re.compile(r"^[0-9a-zA-Z_.-]+$")
+        if self.model_extra is not None:
+            if len(self.model_extra) < 1:
+                raise ValueError("MLM hyperparameters must contain at least one property.")
+            for key in self.model_extra:
+                if not allowed_pattern.match(key):
+                    raise ValueError(f"MLM hyperparameter name '{key}' is not valid.")
+        return self

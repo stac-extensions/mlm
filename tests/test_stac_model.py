@@ -5,7 +5,7 @@ from typing import Any
 import pydantic
 import pytest
 
-from stac_model.base import ModelBand, ModelDataVariable
+from stac_model.base import ModelBand, ModelDataVariable, ModelHyperParameters
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import ModelOutput, ModelResult
 
@@ -117,6 +117,63 @@ def test_model_io_processing_expression_variants(processing_expression):
     assert model_json["post_processing_function"] == processing_expression
 
 
+def test_model_extra_fields():
+    """Test extra fields are retained alongside the model's declared defaults."""
+    extras: dict[str, Any] = {
+        "description": "Test model extra field."
+    }
+    model_input = ModelInput(
+        name="test",
+        bands=[],
+        input=InputStructure(
+            shape=[-1, 3, 64, 64],
+            dim_order=["batch", "channel", "height", "width"],
+            data_type="float32",
+        ),
+        **extras,
+    )
+    model_json = model_input.model_dump()
+    assert model_json == {
+        "name": "test",
+        "bands": [],
+        "variables": [],
+        "input": {
+            "shape": [-1, 3, 64, 64],
+            "dim_order": ["batch", "channel", "height", "width"],
+            "data_type": "float32",
+        },
+        "pre_processing_function": None,
+        "description": "Test model extra field.",
+    }
+
+    model_output = ModelOutput(
+        name="test",
+        classes=[],
+        tasks={"classification"},
+        result=ModelResult(
+            shape=[-1, 2, 64, 64],
+            dim_order=["batch", "channel", "height", "width"],
+            data_type="float32",
+        ),
+        **extras,
+    )
+    model_json = model_output.model_dump()
+    assert model_json == {
+        "name": "test",
+        "bands": [],
+        "variables": [],
+        "tasks": {"classification"},
+        "result": {
+            "shape": [-1, 2, 64, 64],
+            "dim_order": ["batch", "channel", "height", "width"],
+            "data_type": "float32",
+        },
+        "classification:classes": [],
+        "post_processing_function": None,
+        "description": "Test model extra field.",
+    }
+
+
 @pytest.mark.parametrize(
     "variables",
     [
@@ -216,3 +273,20 @@ def test_model_bands_or_variables_defaults(
     else:
         mlm_variables = mlm_input_json["variables"]
         assert mlm_variables == expected_variables
+
+
+@pytest.mark.parametrize(
+    ["hyperparameters", "error"],
+    [
+        ({}, "MLM hyperparameters must contain at least one property."),
+        ({"": 123}, "MLM hyperparameter name '' is not valid."),
+        ({"mlm:random": 123}, "MLM hyperparameter name 'mlm:random' is not valid."),
+    ],
+)
+def test_mlm_hyperparameters_disallowed(
+    hyperparameters: dict[str, Any],
+    error: str,
+) -> None:
+    with pytest.raises(pydantic.ValidationError) as exc:
+        ModelHyperParameters(**hyperparameters)
+    assert error in str(exc)

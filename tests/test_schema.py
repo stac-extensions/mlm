@@ -576,3 +576,33 @@ def test_mlm_entrypoint_item_disallowed(
     with pytest.raises(pystac.errors.STACValidationError) as exc:
         pystac.validation.validate(mlm_item, validator=mlm_validator)
     assert "Fields that are disallowed under the Item properties." in str(exc.value.args)
+
+
+@pytest.mark.parametrize(
+    "mlm_example",
+    ["item_basic.json"],
+    indirect=True,
+)
+@pytest.mark.parametrize(
+    ["hyperparameters", "error"],
+    [
+        ({}, "should be non-empty"),
+        ({"": 123}, "does not match any of the regexes"),
+        ({"mlm:random": 123}, "does not match any of the regexes"),
+    ],
+)
+def test_mlm_hyperparameters_disallowed(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    hyperparameters: dict[str, Any],
+    error: str,
+) -> None:
+    mlm_data = copy.deepcopy(mlm_example)
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    pystac.validation.validate(mlm_item, validator=mlm_validator)  # self-check valid beforehand
+
+    mlm_data["properties"]["mlm:hyperparameters"] = hyperparameters
+    mlm_item = pystac.Item.from_dict(mlm_data)
+    with pytest.raises(pystac.errors.STACValidationError) as exc:
+        pystac.validation.validate(mlm_item, validator=mlm_validator)
+    assert error in str(exc.value.args)
