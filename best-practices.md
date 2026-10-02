@@ -7,6 +7,7 @@ implementors and introduce a bit more 'constraint' for those who are creating ST
 models or creating tools to work with STAC.
 
 - [Using STAC Common Metadata Fields for the MLM Extension](#using-stac-common-metadata-fields-for-the-mlm-extension)
+- [Using STAC Collection Fields for the MLM Extension](#using-stac-collection-fields-for-the-mlm-extension)
 - [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-mlm-extension)
   - [STAC Bands, EO, Raster and DataCube Extensions](#stac-bands-eo-raster-and-datacube-extensions)
   - [Processing Extension](#processing-extension)
@@ -66,6 +67,39 @@ be provided instead. Nevertheless, users of the model are still free to apply it
 If specific datasets with training/validation/test splits are known to support the claims of the suggested extent for
 the model, it is recommended that they are included as reference to the STAC Item/Collection using MLM. For more
 information regarding these references, see the [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) details.
+
+## Using STAC Collection Fields for the MLM Extension
+
+STAC Collections allow `item_assets`, either via
+[stac-extensions/item-assets](https://github.com/stac-extensions/item-assets) with STAC 1.0
+or natively with STAC 1.1 using the
+[`item_assets`](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item_assets) Collection field.
+In both cases, the `item_assets` serves to describe which Assets can be expected in *every* Item of the Collection. 
+
+Given that MLM requires at least 1 Asset with the `mlm:model` role
+(see [MLM Assets Objects](./README.md#assets-objects)), a Collection that is purely employed
+for cataloguing a set of models could naturally provide this Asset definition to facilitate discovery.
+Notably, this can help a client detect directly from the Collection level which Asset name is expected
+to contain the `mlm:model` role and definition under every single STAC Item in that Collection.
+
+When leveraging the `item_assets`, the Collection must ensure that the name of this Asset
+(i.e., the key of the JSON object under `assets`) is consistent across the Items.
+The `item_assets` entry should itself include the `roles` with `mlm:model` for identification
+and should provide useful `title` and `description` in a model-agnostic manner to represent the entire Collection.
+
+> [!WARNING]
+> If the Collection employs a mixture of Items where certain ones use multiple Assets annotated with `mlm:model`,
+> the `item_assets` must refer only to the "*main*" or "*preferred*" `mlm:artifact_type` representation of the
+> models where multiple Assets apply. For the same reason, a client browsing STAC Items in search of model assets
+> cannot assume they are the only available definitions, but it may at least rely on that "*preferred*" one
+> being available.
+
+> [!WARNING]
+> If a Collection employs a mixture of Items where some are not providing an MLM definition, the `item_assets`
+> cannot provide that Asset reference. In general, it is not recommended to mix model-based Items and data-based
+> Items under the same Collection, but this is still technically allowed. The best practices recommends instead
+> to have separate Collections for them an cross-reference related data/model entities using link relations
+> (see also [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) recommendations).
 
 ## Recommended Extensions to Compose with the MLM Extension
 
