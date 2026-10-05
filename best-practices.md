@@ -73,7 +73,8 @@ information regarding these references, see the [ML-AOI and Label Extensions](#m
 STAC Collections allow `item_assets`, either via
 [stac-extensions/item-assets](https://github.com/stac-extensions/item-assets) with STAC 1.0
 or natively with STAC 1.1 using the
-[`item_assets`](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item_assets) Collection field.
+[`item_assets`](https://github.com/radiantearth/stac-spec/blob/master/collection-spec/collection-spec.md#item_assets)
+Collection field.
 In both cases, the `item_assets` serves to describe which Assets can be expected in *every* Item of the Collection. 
 
 Given that MLM requires at least 1 Asset with the `mlm:model` role
@@ -86,6 +87,8 @@ When leveraging the `item_assets`, the Collection must ensure that the name of t
 (i.e., the key of the JSON object under `assets`) is consistent across the Items.
 The `item_assets` entry should itself include the `roles` with `mlm:model` for identification
 and should provide useful `title` and `description` in a model-agnostic manner to represent the entire Collection.
+
+<!-- lint disable no-undefined-references -->
 
 > [!WARNING]
 > If the Collection employs a mixture of Items where certain ones use multiple Assets annotated with `mlm:model`,
@@ -100,6 +103,8 @@ and should provide useful `title` and `description` in a model-agnostic manner t
 > Items under the same Collection, but this is still technically allowed. The best practices recommends instead
 > to have separate Collections for them an cross-reference related data/model entities using link relations
 > (see also [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions) recommendations).
+
+<!-- lint enable no-undefined-references -->
 
 ## Recommended Extensions to Compose with the MLM Extension
 
