@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
+- Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
 
 ### Changed
 
