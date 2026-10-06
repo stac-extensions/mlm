@@ -22,6 +22,12 @@ security: # configuration for the `safety check` command
               false positive
               safety's own 'marshmallow' dependency that is not a vulnerability
               https://github.com/pyupio/safety/issues/826
+        "SFTY-20260902-58666":
+            reason:
+              false positive
+              safety's own 'nltk' dependency that is not a vulnerability
+              CVE-2026-54293
+              https://github.com/pyupio/safety/issues/742
         "SFTY-20260616-58930":
             reason:
               false positive
@@ -56,7 +62,7 @@ security: # configuration for the `safety check` command
             reason: |
               'torch==2.10' CPU/GPU variants
               Valid vulnerability, but not actively employed by this project.
-              Allow it to avoid breaking changes to backward-compatible 'torch==2.10' versions.
+              Allow it to avoid breaking changes to backward-compatible 'torch==2.10' version
         98497:
             reason: |
               pytoch-lightning<=2.6.0
