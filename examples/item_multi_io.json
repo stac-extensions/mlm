@@ -232,7 +232,8 @@
       "mlm:artifact_type": "torch.save",
       "raster:bands": [
         {
-          "name": "B02 - blue",
+          "name": "B02",
+          "common_name": "blue",
           "nodata": 0,
           "data_type": "uint16",
           "bits_per_sample": 15,
@@ -242,7 +243,8 @@
           "unit": "m"
         },
         {
-          "name": "B03 - green",
+          "name": "B03",
+          "common_name": "green",
           "nodata": 0,
           "data_type": "uint16",
           "bits_per_sample": 15,
@@ -252,7 +254,8 @@
           "unit": "m"
         },
         {
-          "name": "B04 - red",
+          "name": "B04",
+          "common_name": "red",
           "nodata": 0,
           "data_type": "uint16",
           "bits_per_sample": 15,
@@ -262,7 +265,8 @@
           "unit": "m"
         },
         {
-          "name": "B08 - nir",
+          "name": "B08",
+          "common_name": "nir",
           "nodata": 0,
           "data_type": "uint16",
           "bits_per_sample": 15,
