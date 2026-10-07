@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 - Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
+- Add cross-reference tests for example input/output band and variable names against Item and Asset definitions.
 
 ### Changed
 
@@ -30,7 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- n/a
+- Align the Datacube example's `temperature_2m` variable key with its input/output references.
+- Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.
 
 ## [v1.6.0](https://github.com/stac-extensions/mlm/tree/v1.6.0)
 

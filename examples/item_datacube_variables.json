@@ -178,7 +178,7 @@
         ],
         "definition": "https://codes.ecmwf.int/grib/param-db/129"
       },
-      "2m_temperature": {
+      "temperature_2m": {
         "description": "This parameter is the temperature of air at 2m above the surface of land, sea or in-land waters.",
         "type": "data",
         "data_type": "float32",
