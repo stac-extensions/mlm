@@ -15,7 +15,7 @@ jobs:
           # latest one within its major/minor range (see generate_schema_redirects.py)
           fetch-depth: 0
       - name: Set up Python
-        uses: actions/setup-python@v7.0.0
+        uses: actions/setup-python@v7.1.0
         with:
           python-version: "3.11"
       - name: deploy JSON Schema for version ${{ env.GITHUB_REF_SLUG }}
@@ -52,7 +52,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up Python
-      uses: actions/setup-python@v7.0.0
+      uses: actions/setup-python@v7.1.0
       with:
         python-version: "3.11"
     - name: Install uv
