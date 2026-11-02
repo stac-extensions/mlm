@@ -97,8 +97,8 @@ def test_example_temperature_variable_definition_mismatch(mlm_example: dict[str,
     """
     item = copy.deepcopy(mlm_example)
     variables = item["properties"]["cube:variables"]
-    variables["2m_temperature"] = variables.pop("temperature_2m")
-    with pytest.raises(AssertionError, match="variables reference 'temperature_2m'"):
+    variables["temperature"] = variables.pop("2m_temperature")
+    with pytest.raises(AssertionError, match="variables reference '2m_temperature'"):
         _assert_model_reference_names(item)
 
 
