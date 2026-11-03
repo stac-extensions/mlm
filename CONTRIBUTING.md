@@ -41,8 +41,10 @@ Before submitting your code please do the following steps:
    ```
 
    The dependency vulnerability check runs `safety` from its Docker image, which requires Docker.
-   Use `make check-safety-deps SAFETY_IGNORE="<id> <id>"` for quick tests.
-   Note that CLI ignores replace the exclusions defined in `.safety-policy.yml`.
+   You can use `make check-safety SAFETY_IGNORE="<id> <id>"` for quick tests.
+   However, security problems should be addressed directly whenever possible.
+   If a security problem has no available fix and maintainers agree it can be ignored,
+   the exclusions should instead be defined in `.safety-policy.yml` with the appropriate explaination.
 
 5. Run `tests` (including your new ones) with
 
