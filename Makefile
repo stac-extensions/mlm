@@ -109,7 +109,7 @@ test: setup
 
 #* Linting
 .PHONY: check
-check: check-examples check-markdown check-lint check-mypy check-safety check-citation
+check: check-examples check-markdown check-lint check-mypy check-safety check-bandit check-citation
 
 .PHONY: check-all
 check-all: check
@@ -131,9 +131,25 @@ mypy: setup
 .PHONY: check-mypy
 check-mypy: check-warn-torch check-warn-torchvision mypy
 
+# CLI ignores replace the vulnerability exclusions of the policy file
+SAFETY_IMAGE ?= ghcr.io/pyupio/safety:latest
+SAFETY_IGNORE ?=
+SAFETY_REQUIREMENTS ?= requirements-safety.txt
+
 .PHONY: check-safety
 check-safety: setup
-	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" safety check --full-report
+	@$(UV_COMMAND) export --quiet --format requirements-txt --no-hashes --no-emit-project --extra torch -o "$(SAFETY_REQUIREMENTS)"
+	docker run --rm \
+		-v "$(CURDIR):/target:ro" \
+		-w /target \
+		"$(SAFETY_IMAGE)" check \
+		--full-report \
+		--policy-file /target/.safety-policy.yml \
+		-r "/target/$(SAFETY_REQUIREMENTS)" \
+		$(foreach id,$(SAFETY_IGNORE),-i $(id))
+
+.PHONY: check-bandit
+check-bandit: setup
 	$(UV_COMMAND) run --no-sync --python "$(UV_PYTHON_ROOT)" bandit -ll --recursive stac_model tests
 
 .PHONY: check-citation

@@ -40,6 +40,10 @@ Before submitting your code please do the following steps:
    make lint-all
    ```
 
+   The dependency vulnerability check runs `safety` from its Docker image, which requires Docker.
+   Use `make check-safety-deps SAFETY_IGNORE="<id> <id>"` for quick tests.
+   Note that CLI ignores replace the exclusions defined in `.safety-policy.yml`.
+
 5. Run `tests` (including your new ones) with
 
    ```bash

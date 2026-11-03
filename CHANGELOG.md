@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Run `safety` dependency checks using the `ghcr.io/pyupio/safety` Docker image against the exported `uv.lock`
+  requirements, and remove the Python `safety` development dependency along with its `authlib` workaround.
 - Release of this `stac-model` version automatically bumps the URL reference to use STAC MLM [v1.6.0](#v160).
   Since the package was not released since, the latest version on PyPI still uses the [v1.5.2](#v152) reference.
 - Allow all `stac_model.base.MLMBaseModel` objects to provide additional properties such as a `description` to align
