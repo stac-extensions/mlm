@@ -74,8 +74,8 @@ def test_example_bbox_matches_geometry_bounds(mlm_example: dict[str, Any]) -> No
 
     This tese verifies that edited definitions remain consistent.
     To ensure appropriate rendering by various utilities, the GeoJSON bounding box values are also
-    normlized in their respective `[-180,180]` ranges, to avoid potentially incorrectly reported regions
-    by tools that do not handle the antimeridian properly.
+    normlized in their respective `[-180, 180]` longitude and `[-90, 90]` latitude ranges as per RFC 7946,
+    to avoid potentially incorrectly reported regions by tools that do not handle the antimeridian properly.
     """
     positions: list[list[float]] = []
 
