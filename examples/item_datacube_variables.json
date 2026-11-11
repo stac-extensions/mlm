@@ -12,9 +12,9 @@
   "collection": "ml-model-examples",
   "bbox": [
     233.6,
-    54.2,
+    22.6,
     297.5,
-    22.6
+    54.2
   ],
   "geometry": {
     "type": "Polygon",

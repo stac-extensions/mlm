@@ -67,6 +67,33 @@ def test_example_input_output_reference_names(mlm_example: dict[str, Any]) -> No
     _assert_model_reference_names(mlm_example)
 
 
+@pytest.mark.parametrize("mlm_example", get_all_stac_item_mlm_examples(), indirect=True)
+def test_example_bbox_matches_geometry_bounds(mlm_example: dict[str, Any]) -> None:
+    """
+    Tests [example bounding boxes] that each example's bbox uses the same extent as its geometry.
+    """
+    positions: list[list[float]] = []
+
+    def collect_positions(coordinates: Any) -> None:
+        if isinstance(coordinates, list):
+            if len(coordinates) >= 2 and all(isinstance(value, (int, float)) for value in coordinates[:2]):
+                positions.append(coordinates[:2])
+            else:
+                for coordinate in coordinates:
+                    collect_positions(coordinate)
+
+    collect_positions(mlm_example["geometry"]["coordinates"])
+    expected_bbox = [
+        min(position[0] for position in positions),
+        min(position[1] for position in positions),
+        max(position[0] for position in positions),
+        max(position[1] for position in positions),
+    ]
+    assert mlm_example["bbox"] == expected_bbox, (
+        f"{mlm_example['id']}: bbox {mlm_example['bbox']} does not match geometry bounds {expected_bbox}"
+    )
+
+
 @pytest.mark.parametrize(
     ("mlm_example", "field"),
     [
