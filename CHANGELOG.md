@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Correct the Datacube example bbox to match its geometry's longitude/latitude extent.
+- Correct the Datacube example's bbox and normalize its GeoJSON longitudes.
 - Align the Datacube example's `temperature_2m` variable key with its input/output references.
 - Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.
 - Update locked `torchvision` to 0.29.2 (and `torch` to 2.15.0) to resolve the `SFTY-20260723-60537` out-of-bounds

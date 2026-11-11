@@ -83,6 +83,9 @@ def test_example_bbox_matches_geometry_bounds(mlm_example: dict[str, Any]) -> No
                     collect_positions(coordinate)
 
     collect_positions(mlm_example["geometry"]["coordinates"])
+    assert all(-180 <= position[0] <= 180 for position in positions), (
+        f"{mlm_example['id']}: geometry contains longitude outside the GeoJSON range"
+    )
     expected_bbox = [
         min(position[0] for position in positions),
         min(position[1] for position in positions),
