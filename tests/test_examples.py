@@ -70,7 +70,12 @@ def test_example_input_output_reference_names(mlm_example: dict[str, Any]) -> No
 @pytest.mark.parametrize("mlm_example", get_all_stac_item_mlm_examples(), indirect=True)
 def test_example_bbox_matches_geometry_bounds(mlm_example: dict[str, Any]) -> None:
     """
-    Tests [MLM example bounding boxes] for RFC 7946 coordinate ranges and geometry consistency.
+    Tests MLM example bounding boxes to ensure bbox uses the same extent as its geometry and are normalized.
+
+    This tese verifies that edited definitions remain consistent.
+    To ensure appropriate rendering by various utilities, the GeoJSON bounding box values are also
+    normlized in their respective `[-180, 180]` longitude and `[-90, 90]` latitude ranges as per RFC 7946,
+    to avoid potentially incorrectly reported regions by tools that do not handle the antimeridian properly.
     """
     positions: list[list[float]] = []
 
