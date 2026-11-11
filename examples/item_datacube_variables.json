@@ -11,33 +11,33 @@
   "id": "UNet_ClimateDiffuse_ERA5_Downscaling",
   "collection": "ml-model-examples",
   "bbox": [
-    233.6,
-    54.2,
-    297.5,
-    22.6
+    -126.4,
+    22.6,
+    -62.5,
+    54.2
   ],
   "geometry": {
     "type": "Polygon",
     "coordinates": [
       [
         [
-          233.6,
+          -126.4,
           54.2
         ],
         [
-          297.5,
+          -62.5,
           54.2
         ],
         [
-          297.5,
+          -62.5,
           22.6
         ],
         [
-          233.6,
+          -126.4,
           22.6
         ],
         [
-          233.6,
+          -126.4,
           54.2
         ]
       ]

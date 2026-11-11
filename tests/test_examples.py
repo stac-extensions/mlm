@@ -67,6 +67,44 @@ def test_example_input_output_reference_names(mlm_example: dict[str, Any]) -> No
     _assert_model_reference_names(mlm_example)
 
 
+@pytest.mark.parametrize("mlm_example", get_all_stac_item_mlm_examples(), indirect=True)
+def test_example_bbox_matches_geometry_bounds(mlm_example: dict[str, Any]) -> None:
+    """
+    Tests MLM example bounding boxes to ensure bbox uses the same extent as its geometry and are normalized.
+
+    This tese verifies that edited definitions remain consistent.
+    To ensure appropriate rendering by various utilities, the GeoJSON bounding box values are also
+    normlized in their respective `[-180, 180]` longitude and `[-90, 90]` latitude ranges as per RFC 7946,
+    to avoid potentially incorrectly reported regions by tools that do not handle the antimeridian properly.
+    """
+    positions: list[list[float]] = []
+
+    def collect_positions(coordinates: Any) -> None:
+        if isinstance(coordinates, list):
+            if len(coordinates) >= 2 and all(isinstance(value, (int, float)) for value in coordinates[:2]):
+                positions.append(coordinates[:2])
+            else:
+                for coordinate in coordinates:
+                    collect_positions(coordinate)
+
+    collect_positions(mlm_example["geometry"]["coordinates"])
+    assert all(-180 <= position[0] <= 180 for position in positions), (
+        f"{mlm_example['id']}: geometry contains longitude outside the GeoJSON range"
+    )
+    assert all(-90 <= position[1] <= 90 for position in positions), (
+        f"{mlm_example['id']}: geometry contains latitude outside the GeoJSON range"
+    )
+    expected_bbox = [
+        min(position[0] for position in positions),
+        min(position[1] for position in positions),
+        max(position[0] for position in positions),
+        max(position[1] for position in positions),
+    ]
+    assert mlm_example["bbox"] == expected_bbox, (
+        f"{mlm_example['id']}: bbox {mlm_example['bbox']} does not match geometry bounds {expected_bbox}"
+    )
+
+
 @pytest.mark.parametrize(
     ("mlm_example", "field"),
     [
