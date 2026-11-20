@@ -203,8 +203,10 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 
 The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
 workflows associated with an MLM Item. Use `mlm:entrypoint` on a source-code Asset to identify the model's inference
-function, and Application fields such as `application:languages` to describe the code. The following Item fragment
-also shows a separate weights Asset, an OCI runtime container, and source version metadata:
+function, and Application fields such as `application:languages` to describe the code. Apply these fields to the
+source-code Asset. When code is embedded in a document, use `application:container` for its format and
+`application:languages` for the embedded code language. The following Item fragment also shows a separate weights
+Asset, an OCI runtime container, and source version metadata:
 
 ```json
 {
@@ -247,7 +249,7 @@ also shows a separate weights Asset, an OCI runtime container, and source versio
 
 The source URI and `vcs:revision` should identify the same commit. `mlm:entrypoint` is the model-specific inference
 target, so do not repeat it as `application:entrypoint` unless that field describes a distinct application command.
-`application:container` describes a format embedding code, such as a Jupyter Notebook, not an OCI image. Identify the
+`application:container` describes an embedded format, such as a Jupyter Notebook, not an OCI image. Identify the
 runtime image with its own Asset, media type, and MLM runtime role. The image digest pins the runtime separately from
 the source revision; `file:checksum` identifies the exact bytes of a file Asset.
 
