@@ -407,6 +407,14 @@ representing bands information, including notably the `nodata` value,
 the `data_type` (see also [Data Type Enum](#data-type-enum)),
 and [Common Band Names][stac-band-names].
 
+For STAC 1.1 or later, [examples/item_core-bands.json](examples/item_core-bands.json) demonstrates
+core `bands` without requiring the EO or Raster extension. Full band definitions are provided in Item `properties`,
+with matching names on the `mlm:model` Asset as required by STAC Core. The ordered `mlm:input` band references match
+the input's `"bands"` dimension. Raw band `data_type` values describe the source data, while the input structure
+describes the processed tensor and `value_scaling` specifies its normalization.
+Core `bands` do not satisfy MLM band-reference requirements when `stac_version` is `1.0.x`.
+The example's `self` link is absolute, as required by STAC 1.1.
+
 <!-- lint disable no-undefined-references -->
 
 > [!WARNING]

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add the STAC 1.1 `item_core-bands.json` MLM example and band-reference validation checks
+  ([#30](https://github.com/stac-extensions/mlm/issues/30)).
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 - Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
 - Add cross-reference tests for example input/output band and variable names against Item and Asset definitions.
