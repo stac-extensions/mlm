@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Contribute Application and VCS extension best practices to address [#117](https://github.com/stac-extensions/mlm/issues/117),
+  relating MLM runtime and source-code Assets to model versions and source revisions.
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 - Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
 - Add cross-reference tests for example input/output band and variable names against Item and Asset definitions.
