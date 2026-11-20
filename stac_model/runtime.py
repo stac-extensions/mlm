@@ -36,7 +36,15 @@ AcceleratorType = Union[AcceleratorName, AcceleratorEnum]
 
 class Runtime(MLMBaseModel):
     framework: Annotated[str | None, OmitIfNone] = Field(default=None)
-    framework_version: Annotated[str | None, OmitIfNone] = Field(default=None)
+    framework_version: Annotated[str | None, OmitIfNone] = Field(
+        default=None,
+        pattern=(
+            r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
+            r"(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)"
+            r"(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?"
+            r"(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$"
+        ),
+    )
     file_size: Annotated[int | None, OmitIfNone] = Field(
         alias="file:size",
         validation_alias=AliasChoices("file_size", "file:size"),

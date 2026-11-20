@@ -19,6 +19,8 @@ class InputStructure(MLMBaseModel):
 
     @model_validator(mode="after")
     def validate_dimensions(self) -> Self:
+        if len(set(self.dim_order)) != len(self.dim_order):
+            raise ValueError("Dimension order must not contain duplicate values.")
         if len(self.shape) != len(self.dim_order):
             raise ValueError("Dimension order and shape must be of equal length for corresponding indices.")
         return self
