@@ -11,11 +11,13 @@ models or creating tools to work with STAC.
 - [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-mlm-extension)
   - [STAC Bands, EO, Raster and DataCube Extensions](#stac-bands-eo-raster-and-datacube-extensions)
   - [Processing Extension](#processing-extension)
+  - [Application Extension](#application-extension)
   - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
   - [Classification Extension](#classification-extension)
   - [Scientific Extension](#scientific-extension)
   - [File Extension](#file-extension)
   - [Example Extension](#example-extension)
+  - [VCS Extension](#vcs-extension)
   - [Version Extension](#version-extension)
 - [Framework-specific Artifact Types](#framework-specific-artifact-types)
 
@@ -197,6 +199,60 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 }
 ```
 
+### Application Extension
+
+The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
+workflows associated with an MLM Item. Use `mlm:entrypoint` on a source-code Asset to identify the model's inference
+function, and Application fields such as `application:languages` to describe the code. Apply these fields to the
+source-code Asset. When code is embedded in a document, use `application:container` for its format and
+`application:languages` for the embedded code language. The following Item fragment also shows a separate weights
+Asset, an OCI runtime container, and source version metadata:
+
+```json
+{
+  "properties": {
+    "version": "1.2.0"
+  },
+  "assets": {
+    "model": {
+      "href": "https://example.org/model/weights.pt",
+      "type": "application/x-pytorch",
+      "roles": ["mlm:model", "mlm:weights", "data"],
+      "mlm:artifact_type": "torch.save"
+    },
+    "source_code": {
+      "href": "https://github.com/example/model/raw/<commit-hash>/app.py",
+      "type": "text/x-python",
+      "roles": ["mlm:source_code", "code"],
+      "mlm:entrypoint": "app:predict",
+      "application:languages": ["Python"],
+      "file:checksum": "12209f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    },
+    "container": {
+      "href": "docker://registry.example/model@sha256:<digest>",
+      "type": "application/vnd.oci.image.index.v1+json",
+      "roles": ["mlm:inference-runtime", "runtime"]
+    }
+  },
+  "links": [
+    {
+      "rel": "vcs",
+      "href": "https://github.com/example/model",
+      "vcs:type": "git",
+      "vcs:branch": "main",
+      "vcs:tag": "v1.2.0",
+      "vcs:revision": "<commit-hash>"
+    }
+  ]
+}
+```
+
+The source URI and `vcs:revision` should identify the same commit. `mlm:entrypoint` is the model-specific inference
+target, so do not repeat it as `application:entrypoint` unless that field describes a distinct application command.
+`application:container` describes an embedded format, such as a Jupyter Notebook, not an OCI image. Identify the
+runtime image with its own Asset, media type, and MLM runtime role. The image digest pins the runtime separately from
+the source revision; `file:checksum` identifies the exact bytes of a file Asset.
+
 ### ML-AOI and Label Extensions
 
 Supervised machine learning models will typically employ a dataset of training, validation and test samples.
@@ -323,15 +379,22 @@ the `links` of the STAC Item using MLM.
 
 Typically, a STAC Item using the MLM extension to describe the training or
 inference strategies to apply a model should define the [Source Code Asset](README.md#source-code-asset).
-This code is in itself ideal to guide users how to run it, and should therefore be replicated as an `example` link
-reference to offer more code samples to execute the model.
+This Asset is the executable model code, not just an example link. Use `mlm:entrypoint` for its model inference target
+and Application fields to describe its language or embedded format. Reserve `example` links for separate usage snippets
+or demonstrations rather than duplicating the Source Code Asset.
 
-<!-- lint disable no-undefined-references -->
+### VCS Extension
 
-> [!NOTE]
-> Update according to [stac-extensions/example-links#4](https://github.com/stac-extensions/example-links/issues/4).
+The [VCS Extension](https://github.com/stac-extensions/vcs) describes the source repository and its development
+state. Use `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` to describe code associated with the
+model or application. Put these fields on a `vcs` Link to identify a specific repository, or on the Item when they
+describe its source generally. A `vcs:revision` pins the exact source revision; a branch alone is mutable.
 
-<!-- lint enable no-undefined-references -->
+The model's `version` and source `vcs:tag` often align, but describe different things: the former versions the model
+Item and its artifacts, while the latter marks a source release. Record the exact source revision when reproducibility
+matters. A file Asset's `file:checksum` identifies its bytes, whereas `vcs:revision` identifies the source tree; for
+example, a runtime image built from a commit can be described by the MLM runtime role and an immutable image digest,
+alongside the source revision used to build it (see the [Application Extension example](#application-extension)).
 
 ### Version Extension
 

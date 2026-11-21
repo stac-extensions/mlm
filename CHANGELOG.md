@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Contribute Application and VCS extension best practices to address
+  [#117](https://github.com/stac-extensions/mlm/issues/117) and [#28](https://github.com/stac-extensions/mlm/issues/28),
+  relating MLM runtime and source-code Assets to model versions and source revisions.
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 - Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
 - Add cross-reference tests for example input/output band and variable names against Item and Asset definitions.
@@ -38,6 +41,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.
 - Update locked `torchvision` to 0.29.2 (and `torch` to 2.15.0) to resolve the `SFTY-20260723-60537` out-of-bounds
   read vulnerability in the `torchvision<=0.28.0` GIF decoder.
+- Update locked `pip` to 26.3 to resolve the `SFTY-20261020-17374` vendored `certifi` CA bundle vulnerability
+  in `pip<26.2.2` that failed the `check-safety` CI job.
 
 ## [v1.6.0](https://github.com/stac-extensions/mlm/tree/v1.6.0)
 
