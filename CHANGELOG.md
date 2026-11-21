@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Update locked `pip` to 26.3 (minimum `>=26.2.2`) to resolve the `SFTY-20261020-17374` vulnerability
+  reported by `safety` in `pip<26.2.2`.
 - Correct the Datacube example's bbox and normalize its GeoJSON coordinates as per RFC 7946.
 - Align the Datacube example's `temperature_2m` variable key with its input/output references.
 - Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.
