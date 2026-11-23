@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Update the item bands expression example to use Classification v2 and `classification:classes`.
 - Run `safety` dependency checks using the `ghcr.io/pyupio/safety` Docker image against the exported `uv.lock`
   requirements, and remove the Python `safety` development dependency along with its `authlib` workaround.
 - Release of this `stac-model` version automatically bumps the URL reference to use STAC MLM [v1.6.0](#v160).
