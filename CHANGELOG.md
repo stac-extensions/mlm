@@ -41,8 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.
 - Update locked `torchvision` to 0.29.2 (and `torch` to 2.15.0) to resolve the `SFTY-20260723-60537` out-of-bounds
   read vulnerability in the `torchvision<=0.28.0` GIF decoder.
-- Update locked `pip` to 26.3 to resolve the `SFTY-20261020-17374` vendored `certifi` CA bundle vulnerability
-  in `pip<26.2.2` that failed the `check-safety` CI job.
 
 ## [v1.6.0](https://github.com/stac-extensions/mlm/tree/v1.6.0)
 

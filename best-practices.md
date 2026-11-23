@@ -203,10 +203,10 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 
 The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
 workflows associated with an MLM Item. Use `mlm:entrypoint` on a source-code Asset to identify the model's inference
-function, and Application fields such as `application:languages` to describe the code. Apply these fields to the
-source-code Asset. When code is embedded in a document, use `application:container` for its format and
-`application:languages` for the embedded code language. The following Item fragment also shows a separate weights
-Asset, an OCI runtime container, and source version metadata:
+function, and `application:entrypoint` and `application:languages` to describe the application invocation and language.
+Use `application:container` for the format embedding the code, not for the OCI runtime image.
+The following Item fragment pairs a Python inference script with its Dockerfile and runtime image.
+See the [VCS best practices](#vcs-extension) for source revisions, release tags, and checksums.
 
 ```json
 {
@@ -225,33 +225,28 @@ Asset, an OCI runtime container, and source version metadata:
       "type": "text/x-python",
       "roles": ["mlm:source_code", "code"],
       "mlm:entrypoint": "app:predict",
+      "application:entrypoint": "app:predict",
       "application:languages": ["Python"],
+      "vcs:tag": "v1.2.0",
+      "vcs:revision": "<commit-hash>",
       "file:checksum": "12209f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
     },
     "container": {
+      "href": "https://github.com/example/model/raw/<commit-hash>/Dockerfile",
+      "type": "text/x-dockerfile",
+      "roles": ["code"],
+      "application:languages": ["Python"],
+      "application:container": "Dockerfile",
+      "application:entrypoint": "app:predict"
+    },
+    "runtime": {
       "href": "docker://registry.example/model@sha256:<digest>",
       "type": "application/vnd.oci.image.index.v1+json",
       "roles": ["mlm:inference-runtime", "runtime"]
     }
-  },
-  "links": [
-    {
-      "rel": "vcs",
-      "href": "https://github.com/example/model",
-      "vcs:type": "git",
-      "vcs:branch": "main",
-      "vcs:tag": "v1.2.0",
-      "vcs:revision": "<commit-hash>"
-    }
-  ]
+  }
 }
 ```
-
-The source URI and `vcs:revision` should identify the same commit. `mlm:entrypoint` is the model-specific inference
-target, so do not repeat it as `application:entrypoint` unless that field describes a distinct application command.
-`application:container` describes an embedded format, such as a Jupyter Notebook, not an OCI image. Identify the
-runtime image with its own Asset, media type, and MLM runtime role. The image digest pins the runtime separately from
-the source revision; `file:checksum` identifies the exact bytes of a file Asset.
 
 ### ML-AOI and Label Extensions
 
@@ -388,13 +383,17 @@ or demonstrations rather than duplicating the Source Code Asset.
 The [VCS Extension](https://github.com/stac-extensions/vcs) describes the source repository and its development
 state. Use `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` to describe code associated with the
 model or application. Put these fields on a `vcs` Link to identify a specific repository, or on the Item when they
-describe its source generally. A `vcs:revision` pins the exact source revision; a branch alone is mutable.
+describe its source generally. Prefer Asset-level VCS fields when references differ per Asset, such as source code
+and checkpoints stored in different repositories. A `vcs:revision` pins the exact source revision, while a branch
+alone is mutable. The Asset's source URI and `vcs:revision` should identify the same revision.
 
-The model's `version` and source `vcs:tag` often align, but describe different things: the former versions the model
-Item and its artifacts, while the latter marks a source release. Record the exact source revision when reproducibility
-matters. A file Asset's `file:checksum` identifies its bytes, whereas `vcs:revision` identifies the source tree; for
-example, a runtime image built from a commit can be described by the MLM runtime role and an immutable image digest,
-alongside the source revision used to build it (see the [Application Extension example](#application-extension)).
+The `version` field from the [Version Extension](#version-extension), used in Item `properties` to version the model
+and its artifacts, often aligns with `vcs:tag`, which marks a release in the source repository.
+They need not match when code and model artifacts have independent release cycles.
+
+It is good practice to include `file:checksum` alongside VCS details to identify the exact bytes of each file Asset.
+See the [File Extension best practices](#file-extension). A runtime image digest similarly identifies the built image,
+independently of the source revision used to build it.
 
 ### Version Extension
 
