@@ -388,14 +388,15 @@ Item when they describe its source generally. Asset-level VCS fields should be p
 Asset, such as source code and checkpoints stored in different repositories. A `vcs:revision` pins the exact source
 revision, while a branch alone is mutable. The Asset's source URI and `vcs:revision` should identify the same revision.
 
-The `version` field from the [Version Extension](#version-extension), used in Item `properties` to version the model
-and its artifacts, often aligns with `vcs:tag`, which marks a release in the source repository.
-Different values should reflect distinct model and source releases. For example, a retrained model with
-`"version": "2.0.0"` can still use unchanged source code tagged `"vcs:tag": "v1.2.0"`.
+The `version` field from the [Version Extension](#version-extension) can be used in Item `properties` to version the model
+and its artifacts as a whole. This version often aligns with `vcs:tag`, which should mark a release in the source repository
+containing this model definition. However, different values can be used reflect distinct model and source releases.
+For example, a retrained model with `"version": "2.0.0"` can still use unchanged source code tagged `"vcs:tag": "v1.2.0"`.
+The semantic interpretation of these version references is left up to the providers of the model.
 
-The `file:checksum` field should be included alongside VCS details to identify the exact bytes of each file Asset,
-following the [File Extension best practices](#file-extension). A runtime image digest similarly identifies the built image,
-independently of the source revision used to build it.
+To ensure content integrity, the `file:checksum` field should be included alongside VCS details, notably when applied to the
+[Source Code Asset](README.md#source-code-asset) providing the runtime script to execute the model.
+See the [File Extension best practices](#file-extension) for more details.
 
 ### Version Extension
 
