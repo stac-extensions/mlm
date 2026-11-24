@@ -374,7 +374,8 @@ the `links` of the STAC Item using MLM.
 Typically, a STAC Item using the MLM extension to describe the training or
 inference strategies to apply a model should define the [Source Code Asset](README.md#source-code-asset).
 This Asset is the executable model code, not just an example link. Use `mlm:entrypoint` for its model inference target
-and Application fields to describe its language or embedded format. Reserve `example` links for separate usage snippets
+and [Application](#application-extension) fields to describe its language or embedded format.
+Reserve `example` links for separate usage snippets
 or demonstrations rather than duplicating the Source Code Asset.
 
 ### VCS Extension
