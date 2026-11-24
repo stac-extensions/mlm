@@ -202,10 +202,11 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 ### Application Extension
 
 The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
-workflows associated with an MLM Item. Use `mlm:entrypoint` on a source-code Asset to identify the model's inference
-function, and `application:entrypoint` and `application:languages` to describe the application invocation and language.
+workflows associated with an MLM Item. `mlm:entrypoint` should be used on a source-code Asset to identify the model's
+inference function. `application:entrypoint` and `application:languages` should describe the application invocation
+and language.
 The following Item fragment pairs a Python inference script with its Dockerfile and runtime image.
-See the [VCS best practices](#vcs-extension) for source revisions, release tags, and checksums.
+Source revisions, release tags, and checksums should follow the [VCS best practices](#vcs-extension).
 
 ```json
 {
@@ -373,26 +374,25 @@ the `links` of the STAC Item using MLM.
 
 Typically, a STAC Item using the MLM extension to describe the training or
 inference strategies to apply a model should define the [Source Code Asset](README.md#source-code-asset).
-This Asset is the executable model code, not just an example link. Use `mlm:entrypoint` for its model inference target
-and [Application](#application-extension) fields to describe its language or embedded format.
-Reserve `example` links for separate usage snippets
-or demonstrations rather than duplicating the Source Code Asset.
+This Asset is the executable model code, not just an example link. `mlm:entrypoint` should identify its model inference
+target, and [Application](#application-extension) fields should describe its language or embedded format.
+`example` links should refer to separate usage snippets or demonstrations rather than duplicate the Source Code Asset.
 
 ### VCS Extension
 
 The [VCS Extension](https://github.com/stac-extensions/vcs) describes the source repository and its development
-state. Use `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` to describe code associated with the
-model or application. Put these fields on a `vcs` Link to identify a specific repository, or on the Item when they
-describe its source generally. Prefer Asset-level VCS fields when references differ per Asset, such as source code
-and checkpoints stored in different repositories. A `vcs:revision` pins the exact source revision, while a branch
-alone is mutable. The Asset's source URI and `vcs:revision` should identify the same revision.
+state. `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` should describe code associated with the
+model or application. These fields should be provided on a `vcs` Link to identify a specific repository, or on the
+Item when they describe its source generally. Asset-level VCS fields should be preferred when references differ per
+Asset, such as source code and checkpoints stored in different repositories. A `vcs:revision` pins the exact source
+revision, while a branch alone is mutable. The Asset's source URI and `vcs:revision` should identify the same revision.
 
 The `version` field from the [Version Extension](#version-extension), used in Item `properties` to version the model
 and its artifacts, often aligns with `vcs:tag`, which marks a release in the source repository.
 They need not match when code and model artifacts have independent release cycles.
 
-It is good practice to include `file:checksum` alongside VCS details to identify the exact bytes of each file Asset.
-See the [File Extension best practices](#file-extension). A runtime image digest similarly identifies the built image,
+`file:checksum` should be included alongside VCS details to identify the exact bytes of each file Asset, following the
+[File Extension best practices](#file-extension). A runtime image digest similarly identifies the built image,
 independently of the source revision used to build it.
 
 ### Version Extension
