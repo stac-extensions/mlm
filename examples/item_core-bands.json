@@ -1,0 +1,176 @@
+{
+  "$comment": "Demonstrate MLM band references using STAC 1.1 core bands without EO or Raster extensions.",
+  "stac_version": "1.1.0",
+  "stac_extensions": [
+    "https://stac-extensions.github.io/mlm/v1.6.0/schema.json",
+    "https://stac-extensions.github.io/classification/v2.0.0/schema.json"
+  ],
+  "type": "Feature",
+  "id": "example-model-core-bands",
+  "collection": "ml-model-examples",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          -7.88,
+          37.14
+        ],
+        [
+          -7.88,
+          58.21
+        ],
+        [
+          27.91,
+          58.21
+        ],
+        [
+          27.91,
+          37.14
+        ],
+        [
+          -7.88,
+          37.14
+        ]
+      ]
+    ]
+  },
+  "bbox": [
+    -7.88,
+    37.14,
+    27.91,
+    58.21
+  ],
+  "properties": {
+    "title": "MLM core-bands example",
+    "description": "Illustrative RGB classifier. Raw uint8 inputs are normalized to float32 in [0, 1].",
+    "datetime": null,
+    "start_datetime": "1900-01-01T00:00:00Z",
+    "end_datetime": "9999-12-31T23:59:59Z",
+    "mlm:name": "example-model-core-bands",
+    "mlm:tasks": [
+      "classification"
+    ],
+    "mlm:architecture": "ResNet",
+    "mlm:framework": "pytorch",
+    "bands": [
+      {
+        "name": "red",
+        "description": "Red input channel.",
+        "data_type": "uint8"
+      },
+      {
+        "name": "green",
+        "description": "Green input channel.",
+        "data_type": "uint8"
+      },
+      {
+        "name": "blue",
+        "description": "Blue input channel.",
+        "data_type": "uint8"
+      }
+    ],
+    "mlm:input": [
+      {
+        "name": "RGB image batch",
+        "bands": [
+          "red",
+          "green",
+          "blue"
+        ],
+        "variables": [],
+        "input": {
+          "shape": [
+            -1,
+            3,
+            64,
+            64
+          ],
+          "dim_order": [
+            "batch",
+            "bands",
+            "height",
+            "width"
+          ],
+          "data_type": "float32"
+        },
+        "value_scaling": [
+          {
+            "type": "min-max",
+            "minimum": 0,
+            "maximum": 255
+          }
+        ]
+      }
+    ],
+    "mlm:output": [
+      {
+        "name": "classification scores",
+        "tasks": [
+          "classification"
+        ],
+        "bands": [],
+        "variables": [],
+        "result": {
+          "shape": [
+            -1,
+            2
+          ],
+          "dim_order": [
+            "batch",
+            "class"
+          ],
+          "data_type": "float32"
+        },
+        "classification:classes": [
+          {
+            "value": 0,
+            "name": "BACKGROUND",
+            "description": "Background non-city."
+          },
+          {
+            "value": 1,
+            "name": "CITY",
+            "description": "A city is detected."
+          }
+        ]
+      }
+    ]
+  },
+  "assets": {
+    "weights": {
+      "href": "https://example.com/models/core-bands.pt",
+      "title": "Illustrative PyTorch model weights",
+      "description": "Placeholder weights for the core-bands example, not a downloadable trained model.",
+      "type": "application/octet-stream",
+      "roles": [
+        "mlm:model",
+        "mlm:weights"
+      ],
+      "mlm:artifact_type": "torch.save",
+      "bands": [
+        {
+          "name": "red"
+        },
+        {
+          "name": "green"
+        },
+        {
+          "name": "blue"
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "collection",
+      "href": "./collection.json",
+      "type": "application/json"
+    },
+    {
+      "rel": "self",
+      "href": "https://stac-extensions.github.io/mlm/examples/item_core-bands.json",
+      "type": "application/geo+json"
+    }
+  ]
+}

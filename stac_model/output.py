@@ -1,6 +1,6 @@
 from typing import Annotated, Any, cast
 
-from pydantic import AliasChoices, ConfigDict, Field, model_serializer
+from pydantic import AliasChoices, ConfigDict, Field, model_serializer, model_validator
 from pystac.extensions.classification import Classification
 
 from stac_model.base import (
@@ -17,6 +17,12 @@ class ModelResult(MLMBaseModel):
     shape: list[int | float] = Field(..., min_length=1)
     dim_order: list[str] = Field(..., min_length=1)
     data_type: DataType
+
+    @model_validator(mode="after")
+    def validate_dim_order(self) -> "ModelResult":
+        if len(set(self.dim_order)) != len(self.dim_order):
+            raise ValueError("Dimension order must not contain duplicate values.")
+        return self
 
 
 # MLMClassification: TypeAlias = Annotated[

@@ -539,8 +539,8 @@ name = "contourpy"
 version = "1.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/58/01/1253e6698a07380cd31a736d248a3f2a50a7c88779a1813da27503cadc2a/contourpy-1.3.3.tar.gz", hash = "sha256:083e12155b210502d0bca491432bb04d56dc3432f95a979b429f2848c3dbe880", size = 13466174, upload-time = "2025-07-26T12:03:12.549Z" }
 wheels = [
@@ -795,34 +795,34 @@ wheels = [
 
 [package.optional-dependencies]
 cublas = [
-    { name = "nvidia-cublas-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cublas-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cudart = [
-    { name = "nvidia-cuda-runtime-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cuda-runtime-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cufft = [
-    { name = "nvidia-cufft-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cufft-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cufile = [
-    { name = "nvidia-cufile-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cufile-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cupti = [
-    { name = "nvidia-cuda-cupti-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cuda-cupti-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 curand = [
-    { name = "nvidia-curand-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-curand-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cusolver = [
-    { name = "nvidia-cusolver-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cusolver-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 cusparse = [
-    { name = "nvidia-cusparse-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cusparse-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 nvrtc = [
-    { name = "nvidia-cuda-nvrtc-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cuda-nvrtc-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 nvtx = [
-    { name = "nvidia-nvtx-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-nvtx-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
 ]
 
 [[package]]
@@ -1058,8 +1058,8 @@ name = "geopandas"
 version = "1.1.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "packaging" },
     { name = "pandas" },
     { name = "pyogrio" },
@@ -1548,8 +1548,8 @@ dependencies = [
     { name = "certifi" },
     { name = "hydra-core" },
     { name = "lightly-utils" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "pydantic" },
     { name = "python-dateutil" },
     { name = "pytorch-lightning" },
@@ -1574,8 +1574,8 @@ name = "lightly-utils"
 version = "0.0.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "pillow" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/12/3a/fc1c006440cef68bd618056633aea5ae50c1ceee1b8eeb25e101df8e6ded/lightly_utils-0.0.2.tar.gz", hash = "sha256:a351f3d600f0ab08d12f294725c6457ae000645cb0a1083d0845cb196ccfe698", size = 32683, upload-time = "2021-07-08T13:14:43.134Z" }
@@ -1713,8 +1713,8 @@ dependencies = [
     { name = "cycler" },
     { name = "fonttools" },
     { name = "kiwisolver" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "packaging" },
     { name = "pillow" },
     { name = "pyparsing" },
@@ -2398,8 +2398,8 @@ name = "pandas"
 version = "3.0.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "python-dateutil" },
     { name = "tzdata", marker = "sys_platform == 'emscripten' or sys_platform == 'win32'" },
 ]
@@ -2555,11 +2555,11 @@ wheels = [
 
 [[package]]
 name = "pip"
-version = "26.2.1"
+version = "26.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ae/15/4500e320e6b101ec3b719ae85b697d9940b6cda672bc555bd6016fc60c6f/pip-26.2.1.tar.gz", hash = "sha256:f6ad667e89a1fe78046c8f13232b247200f5258d7828f3f7883d660878e0813f", size = 1848877, upload-time = "2026-08-04T22:51:14.148Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/c7/f8d9e2e0e7c1ed8a22a10eeb3b5bf7860bc07d8446c7a978a882c5c8214b/pip-26.3.tar.gz", hash = "sha256:6c36ae7da8695be67e3cd9f7d87919667ced53f57ce2ede75d89b5912ed2bc4c", size = 1934348, upload-time = "2026-11-02T20:34:27.738Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f3/6e/1736e5b4ae2b778ef2f81c47d797de9f891d4d8acb047a24ca37a60294dd/pip-26.2.1-py3-none-any.whl", hash = "sha256:71138adf1f4ca900cdb7d289c21b7494329f2332b6d85f0e1c42108c0384ed3e", size = 1816632, upload-time = "2026-08-04T22:51:12.472Z" },
+    { url = "https://files.pythonhosted.org/packages/07/25/ee8c38ae72d66b844ce8eb9711ba905dba21ca1a8a0c960057c41cd23337/pip-26.3-py3-none-any.whl", hash = "sha256:f3b60b20ffaadd4415ed7957212a38ac63fa4c5fa375bd0f4a797777940fad13", size = 1950951, upload-time = "2026-11-02T20:34:25.728Z" },
 ]
 
 [[package]]
@@ -2944,8 +2944,8 @@ version = "0.13.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "packaging" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/de/3c/d2268615e8b749ba59f278b14a495883562e961fa3ad55a9def222bfbd4a/pyogrio-0.13.0.tar.gz", hash = "sha256:9614f27a1891113f80653e0b76b4233ea1fb3beeb1ac46d118ab22e1670f8f13", size = 313103, upload-time = "2026-06-26T15:30:17.375Z" }
@@ -3969,8 +3969,8 @@ version = "0.5.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "huggingface-hub" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "pillow" },
     { name = "safetensors" },
     { name = "timm" },
@@ -4110,8 +4110,8 @@ torch = [
 torch-cu126 = [
     { name = "pytorch-triton" },
     { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" } },
-    { name = "torchgeo", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "torchgeo", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "torchgeo", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "torchgeo", version = "0.9.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torchvision", version = "0.29.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" } },
 ]
 
@@ -4149,7 +4149,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "jsonschema", specifier = ">=4.21.1,<5.0.0" },
-    { name = "pip", specifier = ">=26.1.2" },
+    { name = "pip", specifier = ">=26.2.2" },
     { name = "pydantic", specifier = ">=2.6.3,<3.0.0" },
     { name = "pydantic-core", specifier = ">=2,<3" },
     { name = "pystac", specifier = ">=1.9.0,<2.0.0" },
@@ -4330,16 +4330,16 @@ resolution-markers = [
 ]
 dependencies = [
     { name = "cuda-bindings", marker = "(python_full_version < '3.15' and sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "cuda-toolkit", extra = ["cublas", "cudart", "cufft", "cufile", "cupti", "curand", "cusolver", "cusparse", "nvrtc", "nvtx"], marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "cuda-toolkit", extra = ["cublas", "cudart", "cufft", "cufile", "cupti", "curand", "cusolver", "cusparse", "nvrtc", "nvtx"], marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "filelock", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "fsspec", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "jinja2", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "networkx", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
-    { name = "nvidia-cudnn-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "nvidia-cusparselt-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "nvidia-nccl-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "nvidia-nvshmem-cu12", marker = "(sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "nvidia-cudnn-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "nvidia-cusparselt-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "nvidia-nccl-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "nvidia-nvjitlink-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "nvidia-nvshmem-cu12", marker = "(sys_platform == 'linux' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "setuptools", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "sympy", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "triton", marker = "(python_full_version < '3.15' and sys_platform == 'linux' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
@@ -4473,7 +4473,7 @@ resolution-markers = [
 dependencies = [
     { name = "einops", marker = "python_full_version < '3.12'" },
     { name = "geopandas", marker = "python_full_version < '3.12'" },
-    { name = "jsonargparse", extra = ["signatures"], marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "jsonargparse", extra = ["signatures"], marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "kornia", marker = "python_full_version < '3.12'" },
     { name = "lightly", marker = "python_full_version < '3.12'" },
     { name = "lightning", marker = "python_full_version < '3.12'" },
@@ -4486,11 +4486,11 @@ dependencies = [
     { name = "segmentation-models-pytorch", marker = "python_full_version < '3.12'" },
     { name = "shapely", marker = "python_full_version < '3.12'" },
     { name = "timm", marker = "python_full_version < '3.12'" },
-    { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version < '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torch", version = "2.15.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version < '3.12' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torch", version = "2.15.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version < '3.12' and sys_platform != 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torchmetrics", marker = "python_full_version < '3.12'" },
-    { name = "torchvision", version = "0.29.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "torchvision", version = "0.29.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version < '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torchvision", version = "0.29.2", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version < '3.12' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torchvision", version = "0.29.2+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version < '3.12' and sys_platform != 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "typing-extensions", marker = "python_full_version < '3.12'" },
@@ -4530,7 +4530,7 @@ resolution-markers = [
 dependencies = [
     { name = "einops", marker = "python_full_version >= '3.12'" },
     { name = "geopandas", marker = "python_full_version >= '3.12'" },
-    { name = "jsonargparse", extra = ["signatures"], marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "jsonargparse", extra = ["signatures"], marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "kornia", marker = "python_full_version >= '3.12'" },
     { name = "lightly", marker = "python_full_version >= '3.12'" },
     { name = "lightning", marker = "python_full_version >= '3.12'" },
@@ -4543,11 +4543,11 @@ dependencies = [
     { name = "segmentation-models-pytorch", marker = "python_full_version >= '3.12'" },
     { name = "shapely", marker = "python_full_version >= '3.12'" },
     { name = "timm", marker = "python_full_version >= '3.12'" },
-    { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version >= '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torch", version = "2.15.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version >= '3.12' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torch", version = "2.15.0+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version >= '3.12' and sys_platform != 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torchmetrics", marker = "python_full_version >= '3.12'" },
-    { name = "torchvision", version = "0.29.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "torchvision", version = "0.29.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "(python_full_version >= '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torchvision", version = "0.29.2", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version >= '3.12' and sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "torchvision", version = "0.29.2+cpu", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(python_full_version >= '3.12' and sys_platform != 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
     { name = "typing-extensions", marker = "python_full_version >= '3.12'" },
@@ -4563,8 +4563,8 @@ version = "1.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "lightning-utilities" },
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch') or (python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12' and (extra == 'extra-10-stac-model-torch' or extra == 'extra-10-stac-model-torch-cu126') or extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "packaging" },
     { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torch", version = "2.15.0", source = { registry = "https://download.pytorch.org/whl/cpu" }, marker = "(sys_platform == 'darwin' and extra == 'extra-10-stac-model-torch') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
@@ -4594,8 +4594,8 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
-    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' and extra == 'extra-10-stac-model-torch-cu126') or (extra == 'extra-10-stac-model-torch' and extra == 'extra-10-stac-model-torch-cu126')" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
+    { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.12' or extra == 'extra-10-stac-model-torch') and extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "pillow", marker = "extra == 'extra-10-stac-model-torch-cu126'" },
     { name = "torch", version = "2.14.1+cu126", source = { registry = "https://download.pytorch.org/whl/cu126" }, marker = "extra == 'extra-10-stac-model-torch-cu126'" },
 ]

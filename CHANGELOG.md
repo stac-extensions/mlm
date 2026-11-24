@@ -9,15 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Contribute Application and VCS extension best practices to address
-  [#117](https://github.com/stac-extensions/mlm/issues/117) and [#28](https://github.com/stac-extensions/mlm/issues/28),
-  relating MLM runtime and source-code Assets to model versions and source revisions.
+- Add Application and VCS extension best practices
+  relating MLM runtime and Assets to provide model versions and source code revisions
+  ([#117](https://github.com/stac-extensions/mlm/issues/117) and [#28](https://github.com/stac-extensions/mlm/issues/28)).
+- Add the STAC 1.1 `item_core-bands.json` MLM example and band-reference validation checks
+  ([#30](https://github.com/stac-extensions/mlm/issues/30)).
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.
 - Add best practices details for `item_assets` in STAC Collections that summaries available `mlm:model` Item assets.
 - Add cross-reference tests for example input/output band and variable names against Item and Asset definitions.
+- Align Pydantic validation of framework versions and dimension-order uniqueness with the JSON Schema
+  ([#20](https://github.com/stac-extensions/mlm/issues/20)).
 
 ### Changed
 
+- Update the item bands expression example to use Classification v2 and `classification:classes`.
 - Run `safety` dependency checks using the `ghcr.io/pyupio/safety` Docker image against the exported `uv.lock`
   requirements, and remove the Python `safety` development dependency along with its `authlib` workaround.
 - Release of this `stac-model` version automatically bumps the URL reference to use STAC MLM [v1.6.0](#v160).
@@ -36,6 +41,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Require `pip>=26.2.2` to avoid its affected vendored CA bundle.
 - Correct the Datacube example's bbox and normalize its GeoJSON coordinates as per RFC 7946.
 - Align the Datacube example's `temperature_2m` variable key with its input/output references.
 - Align the multi-input example's Raster band names with its input references, retaining colors in `common_name`.

@@ -45,6 +45,7 @@
     },
     "mlm:name": [
       "example-model",
+      "example-model-core-bands",
       "Resnet-18 Sentinel-2 ALL MOCO",
       "UNet ClimateDiffuse ERA5 Downscaling",
       "U-Net_efficientnet-b3"
@@ -72,6 +73,10 @@
     },
     {
       "href": "item_bands_expression.json",
+      "rel": "item"
+    },
+    {
+      "href": "item_core-bands.json",
       "rel": "item"
     },
     {
