@@ -393,7 +393,8 @@ The `version` field from the [Version Extension](#version-extension) can be used
 the model and its artifacts as a whole. This version often aligns with `vcs:tag`, which should mark a release
 in the source repository containing this model definition. However, different values can be used reflect distinct
 model and source releases.
-For example, a retrained model with `"version": "2.0.0"` can still use unchanged source code tagged `"vcs:tag": "v1.2.0"`.
+For example, a retrained model with `"version": "2.0.0"` can still use unchanged source code
+tagged `"vcs:tag": "v1.2.0"`.
 The semantic interpretation of these version references is left up to the providers of the model.
 
 To ensure content integrity, the `file:checksum` field should be included alongside VCS details, notably when applied
