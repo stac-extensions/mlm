@@ -1005,7 +1005,7 @@ It is recommended that the link using `derived_from` referring to another STAC d
 specifies the [`mlm:name`](#item-properties-and-collection-fields) value to make the derived reference more explicit.
 
 Note that a derived product from model inference described by STAC should also consider using
-additional indications that it came of a model, such as described by
+additional indications that it came from a model, such as described by
 the [Best Practices - Processing Extension](best-practices.md#processing-extension).
 
 ## Contributing
