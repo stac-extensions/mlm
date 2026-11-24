@@ -109,6 +109,65 @@ def test_mlm_item_schema(
     assert SCHEMA_URI in validated
 
 
+@pytest.mark.parametrize("mlm_example", ["item_core-bands.json"], indirect=True)
+def test_mlm_core_bands_raw_item_schema(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+) -> None:
+    """
+    Tests the core-bands example against its declared STAC and MLM schemas without PySTAC migration.
+    """
+    validated = mlm_validator.validate(
+        mlm_example,
+        pystac.STACObjectType.ITEM,
+        mlm_example["stac_version"],
+        mlm_example["stac_extensions"],
+    )
+    assert SCHEMA_URI in validated
+
+
+@pytest.mark.parametrize("mlm_example", ["item_core-bands.json"], indirect=True)
+@pytest.mark.parametrize("stac_version", ["1.0.0", "1.1.0", "1.2.0", "1.10.0"])
+def test_mlm_core_bands_stac_version(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    stac_version: str,
+) -> None:
+    """
+    Tests that MLM accepts core band references only for STAC 1.1 and later.
+    """
+    item = copy.deepcopy(mlm_example)
+    item["stac_version"] = stac_version
+    if stac_version == "1.0.0":
+        with pytest.raises(pystac.errors.STACValidationError):
+            mlm_validator.validate_extension(item, pystac.STACObjectType.ITEM, stac_version, SCHEMA_URI)
+    else:
+        validated = mlm_validator.validate_extension(item, pystac.STACObjectType.ITEM, stac_version, SCHEMA_URI)
+        assert validated == SCHEMA_URI
+
+
+@pytest.mark.parametrize("mlm_example", ["item_core-bands.json"], indirect=True)
+@pytest.mark.parametrize("location", ["properties", "asset"])
+def test_mlm_core_bands_definitions_required(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    location: str,
+) -> None:
+    """
+    Tests that core band references require Item definitions and corresponding Asset bands.
+    """
+    item = copy.deepcopy(mlm_example)
+    definition = item["properties"] if location == "properties" else item["assets"]["weights"]
+    definition.pop("bands")
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_validator.validate(
+            item,
+            pystac.STACObjectType.ITEM,
+            item["stac_version"],
+            item["stac_extensions"],
+        )
+
+
 @pytest.mark.parametrize(
     "mlm_example",
     ["item_raster_bands.json"],
