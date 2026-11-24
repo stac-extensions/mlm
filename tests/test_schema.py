@@ -148,7 +148,7 @@ def test_mlm_core_bands_stac_version(
 
 @pytest.mark.parametrize("mlm_example", ["item_basic.json"], indirect=True)
 @pytest.mark.parametrize(
-    "classification_version,class_definition",
+    ["classification_version", "class_definition"],
     [
         ("1.1.0", {"value": 0, "description": "Background"}),
         ("1.1.0", {"value": 0, "description": "Background", "name": "Class with spaces"}),
@@ -171,6 +171,26 @@ def test_mlm_classification_version_compatibility(
         f"https://stac-extensions.github.io/classification/v{classification_version}/schema.json",
     ]
     item["properties"]["mlm:output"][0]["classification:classes"] = [class_definition]
+    validated = mlm_validator.validate_extension(item, pystac.STACObjectType.ITEM, item["stac_version"], SCHEMA_URI)
+    assert validated == SCHEMA_URI
+
+
+@pytest.mark.parametrize("mlm_example", ["item_basic.json"], indirect=True)
+@pytest.mark.parametrize("classification_version", ["1.1.0", "2.0.0"])
+def test_mlm_empty_classification_definitions(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    classification_version: str,
+) -> None:
+    """
+    Tests that predictions without discrete class labels may use an empty class-definition array.
+    """
+    item = copy.deepcopy(mlm_example)
+    item["stac_extensions"] = [
+        SCHEMA_URI,
+        f"https://stac-extensions.github.io/classification/v{classification_version}/schema.json",
+    ]
+    item["properties"]["mlm:output"][0]["classification:classes"] = []
     validated = mlm_validator.validate_extension(item, pystac.STACObjectType.ITEM, item["stac_version"], SCHEMA_URI)
     assert validated == SCHEMA_URI
 
