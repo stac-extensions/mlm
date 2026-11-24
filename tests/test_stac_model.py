@@ -8,8 +8,51 @@ import pytest
 from stac_model.base import ModelBand, ModelDataVariable, ModelHyperParameters
 from stac_model.input import InputStructure, ModelInput
 from stac_model.output import ModelOutput, ModelResult
+from stac_model.runtime import Runtime
 
 ModelClass = type[ModelInput | ModelOutput]
+
+
+@pytest.mark.parametrize(
+    "framework_version",
+    [
+        "1.2.3",
+        "0.0.0-alpha.1",
+        "2.1.2+cu121",
+        "1.2.3-rc.1+build.7",
+    ],
+)
+def test_runtime_accepts_schema_compliant_framework_versions(framework_version: str) -> None:
+    """Tests framework versions supported by the JSON Schema pattern."""
+    assert Runtime(framework_version=framework_version).framework_version == framework_version
+
+
+@pytest.mark.parametrize(
+    "framework_version",
+    [
+        "1.2",
+        "01.2.3",
+        "v1.2.3",
+        "1.2.3-01",
+    ],
+)
+def test_runtime_rejects_schema_noncompliant_framework_versions(framework_version: str) -> None:
+    """Tests framework versions that do not follow the JSON Schema pattern."""
+    with pytest.raises(pydantic.ValidationError):
+        Runtime(framework_version=framework_version)
+
+
+@pytest.mark.parametrize("structure_class", [InputStructure, ModelResult])
+def test_dimension_order_rejects_duplicates(
+    structure_class: type[InputStructure] | type[ModelResult],
+) -> None:
+    """Tests that input and result dimensions cannot repeat dimension names."""
+    with pytest.raises(pydantic.ValidationError, match="must not contain duplicate values"):
+        structure_class(
+            shape=[-1, 3, 64, 64],
+            dim_order=["batch", "channel", "height", "height"],
+            data_type="float32",
+        )
 
 
 def make_struct(model_class: ModelClass, refs: Sized) -> dict[str, Any]:
@@ -119,9 +162,7 @@ def test_model_io_processing_expression_variants(processing_expression):
 
 def test_model_extra_fields():
     """Test extra fields are retained alongside the model's declared defaults."""
-    extras: dict[str, Any] = {
-        "description": "Test model extra field."
-    }
+    extras: dict[str, Any] = {"description": "Test model extra field."}
     model_input = ModelInput(
         name="test",
         bands=[],
