@@ -204,7 +204,6 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
 workflows associated with an MLM Item. Use `mlm:entrypoint` on a source-code Asset to identify the model's inference
 function, and `application:entrypoint` and `application:languages` to describe the application invocation and language.
-Use `application:container` for the format embedding the code, not for the OCI runtime image.
 The following Item fragment pairs a Python inference script with its Dockerfile and runtime image.
 See the [VCS best practices](#vcs-extension) for source revisions, release tags, and checksums.
 
