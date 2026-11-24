@@ -4,6 +4,7 @@ from typing import cast
 import pystac
 import shapely
 from dateutil.parser import parse as parse_dt
+from pystac.extensions.classification import ClassificationExtension
 from pystac.extensions.eo import Band, EOExtension
 from pystac.extensions.file import FileExtension
 
@@ -106,7 +107,8 @@ def eurosat_resnet() -> ItemMLModelExtension:
     class_objects = [
         MLMClassification(
             value=class_value,
-            name=class_name,
+            name=class_name.replace(" ", "_"),
+            description=class_name,
         )
         for class_name, class_value in class_map.items()
     ]
@@ -237,6 +239,7 @@ def eurosat_resnet() -> ItemMLModelExtension:
         eo_bands.append(band)
     eo_model_asset.apply(bands=eo_bands)
 
+    ClassificationExtension.add_to(item)
     item_mlm = MLModelExtension.ext(item, add_if_missing=True)
     item_mlm.apply(ml_model_meta.model_dump(by_alias=True, exclude_unset=True, exclude_defaults=True))
     return item_mlm
@@ -298,6 +301,7 @@ def unet_mlm() -> ItemMLModelExtension:  # pragma: has-torchgeo-unet
 
     # Add additional metadata regarding the examples to have a valid STAC Item
     item = item_ext.item
+    ClassificationExtension.add_to(item)
     item_name = f"item_{item_id}.json"
     item_self_href = f"./{item_name}"
 

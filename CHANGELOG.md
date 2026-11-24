@@ -41,6 +41,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Align classification examples with Classification v2.0.0, including schema references, `classification:classes`,
+  class identifiers and hexadecimal colors. Align the MLM class schema reference and generated examples with v2,
+  and update best practices for nested output validation
+  ([#25](https://github.com/stac-extensions/mlm/issues/25)).
 - Require `pip>=26.2.2` to avoid its affected vendored CA bundle.
 - Correct the Datacube example's bbox and normalize its GeoJSON coordinates as per RFC 7946.
 - Align the Datacube example's `temperature_2m` variable key with its input/output references.

@@ -1,8 +1,9 @@
 {
-  "$comment": "Demonstrate the basic use of MLM with no other extension cross-references.",
+  "$comment": "Demonstrate the basic use of MLM with Classification classes for the model output.",
   "stac_version": "1.0.0",
   "stac_extensions": [
-    "https://stac-extensions.github.io/mlm/v1.6.0/schema.json"
+    "https://stac-extensions.github.io/mlm/v1.6.0/schema.json",
+    "https://stac-extensions.github.io/classification/v2.0.0/schema.json"
   ],
   "type": "Feature",
   "id": "example-model",
@@ -41,7 +42,7 @@
     58.21798141355221
   ],
   "properties": {
-    "description": "Basic STAC Item with only the MLM extension and no other extension cross-references.",
+    "description": "Basic STAC Item with MLM and Classification output classes.",
     "datetime": null,
     "start_datetime": "1900-01-01T00:00:00Z",
     "end_datetime": "9999-12-31T23:59:59Z",
@@ -88,26 +89,18 @@
           ],
           "data_type": "uint8"
         },
-        "classification_classes": [
+        "classification:classes": [
           {
             "value": 0,
             "name": "BACKGROUND",
             "description": "Background non-city.",
-            "color_hint": [
-              0,
-              0,
-              0
-            ]
+            "color_hint": "000000"
           },
           {
             "value": 1,
             "name": "CITY",
             "description": "A city is detected.",
-            "color_hint": [
-              0,
-              0,
-              255
-            ]
+            "color_hint": "0000FF"
           }
         ]
       }

@@ -109,13 +109,13 @@ def test_mlm_item_schema(
     assert SCHEMA_URI in validated
 
 
-@pytest.mark.parametrize("mlm_example", ["item_core-bands.json"], indirect=True)
-def test_mlm_core_bands_raw_item_schema(
+@pytest.mark.parametrize("mlm_example", get_all_stac_item_mlm_examples(), indirect=True)
+def test_mlm_raw_item_schema(
     mlm_validator: STACValidator,
     mlm_example: dict[str, JSON],
 ) -> None:
     """
-    Tests the core-bands example against its declared STAC and MLM schemas without PySTAC migration.
+    Tests all Item examples against their declared schemas without PySTAC migration of extension fields.
     """
     validated = mlm_validator.validate(
         mlm_example,
@@ -144,6 +144,28 @@ def test_mlm_core_bands_stac_version(
     else:
         validated = mlm_validator.validate_extension(item, pystac.STACObjectType.ITEM, stac_version, SCHEMA_URI)
         assert validated == SCHEMA_URI
+
+
+@pytest.mark.parametrize("mlm_example", ["item_basic.json"], indirect=True)
+@pytest.mark.parametrize("field,value", [("name", "Class with spaces"), ("color_hint", [0, 0, 255])])
+def test_mlm_classification_output_validation(
+    mlm_validator: STACValidator,
+    mlm_example: dict[str, JSON],
+    field: str,
+    value: JSON,
+) -> None:
+    """
+    Tests that Classification v2 rejects invalid class metadata nested inside model outputs.
+    """
+    item = copy.deepcopy(mlm_example)
+    item["properties"]["mlm:output"][0]["classification:classes"][0][field] = value
+    with pytest.raises(pystac.errors.STACValidationError):
+        mlm_validator.validate_extension(
+            item,
+            pystac.STACObjectType.ITEM,
+            item["stac_version"],
+            "https://stac-extensions.github.io/classification/v2.0.0/schema.json",
+        )
 
 
 @pytest.mark.parametrize("mlm_example", ["item_core-bands.json"], indirect=True)

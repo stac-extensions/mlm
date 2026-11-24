@@ -26,6 +26,20 @@ def test_validate_model_against_schema(eurosat_resnet, mlm_validator):
     assert SCHEMA_URI in validated
 
 
+@pytest.mark.parametrize("mlm_example", get_all_stac_item_mlm_examples(), indirect=True)
+def test_example_classification_extension(mlm_example: dict[str, Any]) -> None:
+    """
+    Tests that example output classes use the supported field and declare Classification v2 validation.
+    """
+    for output in mlm_example["properties"]["mlm:output"]:
+        assert "classification_classes" not in output, f"{mlm_example['id']}: obsolete output class field"
+        if "classification:classes" in output:
+            assert (
+                "https://stac-extensions.github.io/classification/v2.0.0/schema.json"
+                in (mlm_example["stac_extensions"])
+            ), f"{mlm_example['id']}: output classes are missing Classification v2 validation"
+
+
 def _assert_model_reference_names(item: dict[str, Any]) -> None:
     """
     Check direct input/output names against Item and Asset band/variable definitions.
