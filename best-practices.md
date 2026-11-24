@@ -302,18 +302,15 @@ leading to a new MLM STAC Item definition (see also [STAC Version Extension](#ve
 
 ### Classification Extension
 
-Since it is expected that a model will provide some kind of classification values as output, the
-[Classification Extension](https://github.com/stac-extensions/classification) can be leveraged inside
-MLM definition to indicate which class values can be contained in the resulting output from the model prediction.
+For models producing classification values, the
+[Classification Extension v2.0.0](https://github.com/stac-extensions/classification/tree/v2.0.0)
+should be referenced in `stac_extensions` using
+`https://stac-extensions.github.io/classification/v2.0.0/schema.json`.
+This version validates `classification:classes` inside each `mlm:output` object.
+Class names should use identifiers without spaces, with readable labels in `title` when needed.
+Colors should use six-digit hexadecimal `color_hint` strings, and unspecified optional fields should be omitted.
 
 For more details, see the [Model Output Object](README.md#model-output-object) definition.
-
-<!-- lint disable no-undefined-references -->
-
-> [!NOTE]
-> Update according to [stac-extensions/classification#48](https://github.com/stac-extensions/classification/issues/48).
-
-<!-- lint enable no-undefined-references -->
 
 ### Scientific Extension
 

@@ -1211,14 +1211,18 @@
       ]
     },
     "ClassificationClasses": {
-      "$comment": "Must allow empty array for outputs that provide other predictions than classes.",
-      "oneOf": [
+      "$comment": "Accept Classification v1.1.0 and v2.0.0 definitions. Empty arrays allow predictions without discrete classes.",
+      "anyOf": [
         {
           "$ref": "https://stac-extensions.github.io/classification/v1.1.0/schema.json#/definitions/fields/properties/classification:classes"
         },
         {
+          "$ref": "https://stac-extensions.github.io/classification/v2.0.0/schema.json#/definitions/fields/properties/classification:classes"
+        },
+        {
           "type": "array",
-          "maxItems": 0
+          "maxItems": 0,
+          "description": "Use an empty array when predictions are provided without discrete classification labels."
         }
       ]
     },

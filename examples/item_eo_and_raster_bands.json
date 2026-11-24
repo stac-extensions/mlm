@@ -6,7 +6,8 @@
     "https://stac-extensions.github.io/eo/v1.1.0/schema.json",
     "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
     "https://stac-extensions.github.io/file/v1.0.0/schema.json",
-    "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json"
+    "https://stac-extensions.github.io/ml-aoi/v0.2.0/schema.json",
+    "https://stac-extensions.github.io/classification/v2.0.0/schema.json"
   ],
   "type": "Feature",
   "id": "resnet-18_sentinel-2_all_moco_classification",
@@ -188,85 +189,60 @@
           ],
           "data_type": "float32"
         },
-        "classification_classes": [
+        "classification:classes": [
           {
             "value": 0,
-            "name": "Annual Crop",
-            "description": null,
-            "title": null,
-            "color_hint": null,
-            "nodata": false
+            "name": "Annual_Crop",
+            "nodata": false,
+            "title": "Annual Crop"
           },
           {
             "value": 1,
             "name": "Forest",
-            "description": null,
-            "title": null,
-            "color_hint": null,
             "nodata": false
           },
           {
             "value": 2,
-            "name": "Herbaceous Vegetation",
-            "description": null,
-            "title": null,
-            "color_hint": null,
-            "nodata": false
+            "name": "Herbaceous_Vegetation",
+            "nodata": false,
+            "title": "Herbaceous Vegetation"
           },
           {
             "value": 3,
             "name": "Highway",
-            "description": null,
-            "title": null,
-            "color_hint": null,
             "nodata": false
           },
           {
             "value": 4,
-            "name": "Industrial Buildings",
-            "description": null,
-            "title": null,
-            "color_hint": null,
-            "nodata": false
+            "name": "Industrial_Buildings",
+            "nodata": false,
+            "title": "Industrial Buildings"
           },
           {
             "value": 5,
             "name": "Pasture",
-            "description": null,
-            "title": null,
-            "color_hint": null,
             "nodata": false
           },
           {
             "value": 6,
-            "name": "Permanent Crop",
-            "description": null,
-            "title": null,
-            "color_hint": null,
-            "nodata": false
+            "name": "Permanent_Crop",
+            "nodata": false,
+            "title": "Permanent Crop"
           },
           {
             "value": 7,
-            "name": "Residential Buildings",
-            "description": null,
-            "title": null,
-            "color_hint": null,
-            "nodata": false
+            "name": "Residential_Buildings",
+            "nodata": false,
+            "title": "Residential Buildings"
           },
           {
             "value": 8,
             "name": "River",
-            "description": null,
-            "title": null,
-            "color_hint": null,
             "nodata": false
           },
           {
             "value": 9,
             "name": "SeaLake",
-            "description": null,
-            "title": null,
-            "color_hint": null,
             "nodata": false
           }
         ],
