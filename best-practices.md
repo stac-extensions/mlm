@@ -390,7 +390,8 @@ revision, while a branch alone is mutable. The Asset's source URI and `vcs:revis
 
 The `version` field from the [Version Extension](#version-extension), used in Item `properties` to version the model
 and its artifacts, often aligns with `vcs:tag`, which marks a release in the source repository.
-They need not match when code and model artifacts have independent release cycles.
+Different values should reflect distinct model and source releases. For example, a retrained model with
+`"version": "2.0.0"` can still use unchanged source code tagged `"vcs:tag": "v1.2.0"`.
 
 The `file:checksum` field should be included alongside VCS details to identify the exact bytes of each file Asset,
 following the [File Extension best practices](#file-extension). A runtime image digest similarly identifies the built image,
