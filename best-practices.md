@@ -383,19 +383,21 @@ usage examples discoverable through the Item's links.
 
 The [VCS Extension](https://github.com/stac-extensions/vcs) describes the source repository and its development
 state. The fields `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` should describe code associated
-with the model or application. These fields should be provided on a `vcs` Link to identify a specific repository, or on the
-Item when they describe its source generally. Asset-level VCS fields should be preferred when references differ per
-Asset, such as source code and checkpoints stored in different repositories. A `vcs:revision` pins the exact source
-revision, while a branch alone is mutable. The Asset's source URI and `vcs:revision` should identify the same revision.
+with the model or application. These fields should be provided on a `vcs` Link to identify a specific repository,
+or on the Item when they describe its source generally. Asset-level VCS fields should be preferred when references
+differ per Asset, such as source code and checkpoints stored in different repositories. A `vcs:revision` pins the exact
+source revision, while a branch alone is mutable. The Asset's source URI and `vcs:revision` should identify
+the same revision.
 
-The `version` field from the [Version Extension](#version-extension) can be used in Item `properties` to version the model
-and its artifacts as a whole. This version often aligns with `vcs:tag`, which should mark a release in the source repository
-containing this model definition. However, different values can be used reflect distinct model and source releases.
+The `version` field from the [Version Extension](#version-extension) can be used in Item `properties` to version
+the model and its artifacts as a whole. This version often aligns with `vcs:tag`, which should mark a release
+in the source repository containing this model definition. However, different values can be used reflect distinct
+model and source releases.
 For example, a retrained model with `"version": "2.0.0"` can still use unchanged source code tagged `"vcs:tag": "v1.2.0"`.
 The semantic interpretation of these version references is left up to the providers of the model.
 
-To ensure content integrity, the `file:checksum` field should be included alongside VCS details, notably when applied to the
-[Source Code Asset](README.md#source-code-asset) providing the runtime script to execute the model.
+To ensure content integrity, the `file:checksum` field should be included alongside VCS details, notably when applied
+to the [Source Code Asset](README.md#source-code-asset) providing the runtime script to execute the model.
 See the [File Extension best practices](#file-extension) for more details.
 
 ### Version Extension
