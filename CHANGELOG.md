@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add Application and VCS extension best practices
+  relating MLM runtime and Assets to provide model versions and source code revisions
+  ([#117](https://github.com/stac-extensions/mlm/issues/117) and [#28](https://github.com/stac-extensions/mlm/issues/28)).
 - Add the STAC 1.1 `item_core-bands.json` MLM example and band-reference validation checks
   ([#30](https://github.com/stac-extensions/mlm/issues/30)).
 - Add `stac_model.base.ModelHyperParameters` and include it within `MLModelProperties`.

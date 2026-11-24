@@ -11,11 +11,13 @@ models or creating tools to work with STAC.
 - [Recommended Extensions to Compose with the MLM Extension](#recommended-extensions-to-compose-with-the-mlm-extension)
   - [STAC Bands, EO, Raster and DataCube Extensions](#stac-bands-eo-raster-and-datacube-extensions)
   - [Processing Extension](#processing-extension)
+  - [Application Extension](#application-extension)
   - [ML-AOI and Label Extensions](#ml-aoi-and-label-extensions)
   - [Classification Extension](#classification-extension)
   - [Scientific Extension](#scientific-extension)
   - [File Extension](#file-extension)
   - [Example Extension](#example-extension)
+  - [VCS Extension](#vcs-extension)
   - [Version Extension](#version-extension)
 - [Framework-specific Artifact Types](#framework-specific-artifact-types)
 
@@ -197,6 +199,55 @@ referring back to the MLM definition using `rel: derived_from`, as described in
 }
 ```
 
+### Application Extension
+
+The [Application Extension](https://github.com/stac-extensions/application) can describe executable code and
+workflows associated with an MLM Item. The `mlm:entrypoint` field should identify the model's inference function on a
+source-code Asset. The `application:entrypoint` and `application:languages` fields should describe the application
+invocation and language.
+The following Item fragment pairs a Python inference script with its Dockerfile and runtime image.
+Source revisions, release tags, and checksums should follow the [VCS best practices](#vcs-extension).
+
+```json
+{
+  "properties": {
+    "version": "1.2.0"
+  },
+  "assets": {
+    "model": {
+      "href": "https://example.org/model/weights.pt",
+      "type": "application/x-pytorch",
+      "roles": ["mlm:model", "mlm:weights", "data"],
+      "mlm:artifact_type": "torch.save"
+    },
+    "source_code": {
+      "href": "https://github.com/example/model/raw/<commit-hash>/app.py",
+      "type": "text/x-python",
+      "roles": ["mlm:source_code", "code"],
+      "mlm:entrypoint": "app:predict",
+      "application:entrypoint": "app:predict",
+      "application:languages": ["Python"],
+      "vcs:tag": "v1.2.0",
+      "vcs:revision": "<commit-hash>",
+      "file:checksum": "12209f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
+    },
+    "container": {
+      "href": "https://github.com/example/model/raw/<commit-hash>/Dockerfile",
+      "type": "text/x-dockerfile",
+      "roles": ["code"],
+      "application:languages": ["Python"],
+      "application:container": "Dockerfile",
+      "application:entrypoint": "app:predict"
+    },
+    "runtime": {
+      "href": "docker://registry.example/model@sha256:<digest>",
+      "type": "application/vnd.oci.image.index.v1+json",
+      "roles": ["mlm:inference-runtime", "runtime"]
+    }
+  }
+}
+```
+
 ### ML-AOI and Label Extensions
 
 Supervised machine learning models will typically employ a dataset of training, validation and test samples.
@@ -323,15 +374,32 @@ the `links` of the STAC Item using MLM.
 
 Typically, a STAC Item using the MLM extension to describe the training or
 inference strategies to apply a model should define the [Source Code Asset](README.md#source-code-asset).
-This code is in itself ideal to guide users how to run it, and should therefore be replicated as an `example` link
-reference to offer more code samples to execute the model.
+The source code should provide usage examples to guide users in running the model.
+The `mlm:entrypoint` field should identify its model inference target, and [Application](#application-extension)
+fields should describe its language or embedded format. References with the `example` relation can also make these
+usage examples discoverable through the Item's links.
 
-<!-- lint disable no-undefined-references -->
+### VCS Extension
 
-> [!NOTE]
-> Update according to [stac-extensions/example-links#4](https://github.com/stac-extensions/example-links/issues/4).
+The [VCS Extension](https://github.com/stac-extensions/vcs) describes the source repository and its development
+state. The fields `vcs:type`, `vcs:revision`, `vcs:tag`, and, where useful, `vcs:branch` should describe code associated
+with the model or application. These fields should be provided on a `vcs` Link to identify a specific repository,
+or on the Item when they describe its source generally. Asset-level VCS fields should be preferred when references
+differ per Asset, such as source code and checkpoints stored in different repositories. A `vcs:revision` pins the exact
+source revision, while a branch alone is mutable. The Asset's source URI and `vcs:revision` should identify
+the same revision.
 
-<!-- lint enable no-undefined-references -->
+The `version` field from the [Version Extension](#version-extension) can be used in Item `properties` to version
+the model and its artifacts as a whole. This version often aligns with `vcs:tag`, which should mark a release
+in the source repository containing this model definition. However, different values can be used reflect distinct
+model and source releases.
+For example, a retrained model with `"version": "2.0.0"` can still use unchanged source code
+tagged `"vcs:tag": "v1.2.0"`.
+The semantic interpretation of these version references is left up to the providers of the model.
+
+To ensure content integrity, the `file:checksum` field should be included alongside VCS details, notably when applied
+to the [Source Code Asset](README.md#source-code-asset) providing the runtime script to execute the model.
+See the [File Extension best practices](#file-extension) for more details.
 
 ### Version Extension
 
